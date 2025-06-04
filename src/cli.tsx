@@ -1,0 +1,111 @@
+#!/usr/bin/env node
+import { render } from "ink";
+import meow from "meow";
+import React from "react";
+import Create from "./commands/create.js";
+import Login from "./commands/login.js";
+import Pull from "./commands/pull.js";
+import Push from "./commands/push.js";
+import App from "./components/App.js";
+
+const cli = meow(
+  `
+  Usage
+    $ buttondown <command> [options]
+
+  Commands
+    login           Configure your Buttondown API key
+    logout          Clear stored credentials
+    pull            Download emails and media from Buttondown
+    push            Upload local emails and media to Buttondown
+    create          Create a new draft email locally
+
+  Options
+    --api-key, -k   Your Buttondown API key (for login)
+    --directory, -d Directory to store or read Buttondown content (default: ./buttondown)
+    --force, -f     Force operation without confirmation
+    --title, -t     Title for new email (with create command)
+    --help          Show this help message
+    --version       Show the version number
+
+  Examples
+    $ buttondown login --api-key=your-api-key
+    $ buttondown pull --directory=./my-newsletter
+    $ buttondown push --directory=./my-newsletter
+    $ buttondown create --title="My New Newsletter" --directory=./my-newsletter
+`,
+  {
+    importMeta: import.meta,
+    flags: {
+      apiKey: {
+        type: "string",
+        shortFlag: "k",
+      },
+      directory: {
+        type: "string",
+        shortFlag: "d",
+        default: "./buttondown",
+      },
+      force: {
+        type: "boolean",
+        shortFlag: "f",
+        default: false,
+      },
+      title: {
+        type: "string",
+        shortFlag: "t",
+      },
+      help: {
+        type: "boolean",
+        shortFlag: "h",
+      },
+      version: {
+        type: "boolean",
+        shortFlag: "v",
+      },
+    },
+  }
+);
+
+const [command] = cli.input;
+
+if (!command && !cli.flags.help && !cli.flags.version) {
+  cli.showHelp();
+  process.exit(0);
+}
+
+// Render the appropriate component based on the command
+let app;
+switch (command) {
+  case "login":
+    app = render(<Login apiKey={cli.flags.apiKey} />);
+    break;
+  case "logout":
+    app = render(<App command="logout" options={cli.flags} />);
+    break;
+  case "pull":
+    app = render(
+      <Pull directory={cli.flags.directory} force={cli.flags.force} />
+    );
+    break;
+  case "push":
+    app = render(
+      <Push directory={cli.flags.directory} force={cli.flags.force} />
+    );
+    break;
+  case "create":
+    if (!cli.flags.title) {
+      console.error("Error: --title is required for the create command");
+      process.exit(1);
+    }
+    app = render(
+      <Create directory={cli.flags.directory} title={cli.flags.title} />
+    );
+    break;
+  default:
+    if (command) {
+      console.error(`Unknown command: ${command}`);
+      cli.showHelp();
+      process.exit(1);
+    }
+}
