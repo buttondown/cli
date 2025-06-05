@@ -6,7 +6,7 @@ import Create from "./commands/create.js";
 import Login from "./commands/login.js";
 import Pull from "./commands/pull.js";
 import Push from "./commands/push.js";
-import App from "./components/App.js";
+import Logout from "./commands/logout.js";
 
 const cli = meow(
   `
@@ -22,6 +22,7 @@ const cli = meow(
 
   Options
     --api-key, -k   Your Buttondown API key (for login)
+    --base-url, -b  Your Buttondown API base URL (default: https://api.buttondown.com/v1)
     --directory, -d Directory to store or read Buttondown content (default: ./buttondown)
     --force, -f     Force operation without confirmation
     --title, -t     Title for new email (with create command)
@@ -40,6 +41,11 @@ const cli = meow(
       apiKey: {
         type: "string",
         shortFlag: "k",
+      },
+      baseUrl: {
+        type: "string",
+        shortFlag: "b",
+        default: "https://api.buttondown.com/v1",
       },
       directory: {
         type: "string",
@@ -77,35 +83,57 @@ if (!command && !cli.flags.help && !cli.flags.version) {
 // Render the appropriate component based on the command
 let app;
 switch (command) {
-  case "login":
+  case "login": {
     app = render(<Login apiKey={cli.flags.apiKey} />);
     break;
-  case "logout":
-    app = render(<App command="logout" options={cli.flags} />);
+  }
+
+  case "logout": {
+    app = render(<Logout />);
     break;
-  case "pull":
+  }
+
+  case "pull": {
     app = render(
-      <Pull directory={cli.flags.directory} force={cli.flags.force} />
+      <Pull
+        directory={cli.flags.directory}
+        force={cli.flags.force}
+        baseUrl={cli.flags.baseUrl}
+        apiKey={cli.flags.apiKey}
+      />
     );
     break;
-  case "push":
+  }
+
+  case "push": {
     app = render(
-      <Push directory={cli.flags.directory} force={cli.flags.force} />
+      <Push
+        directory={cli.flags.directory}
+        force={cli.flags.force}
+        baseUrl={cli.flags.baseUrl}
+        apiKey={cli.flags.apiKey}
+      />
     );
     break;
-  case "create":
+  }
+
+  case "create": {
     if (!cli.flags.title) {
       console.error("Error: --title is required for the create command");
       process.exit(1);
     }
+
     app = render(
       <Create directory={cli.flags.directory} title={cli.flags.title} />
     );
     break;
-  default:
+  }
+
+  default: {
     if (command) {
       console.error(`Unknown command: ${command}`);
       cli.showHelp();
       process.exit(1);
     }
+  }
 }

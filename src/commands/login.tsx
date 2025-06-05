@@ -1,15 +1,16 @@
 import { Box, Text } from "ink";
 import TextInput from "ink-text-input";
 import React, { useState } from "react";
-import ButtondownApi from "../api.js";
+import createConfig from "../config.js";
 
-interface LoginProps {
-  apiKey?: string;
-}
-
-export default function Login({ apiKey: initialApiKey }: LoginProps) {
-  const [apiKey, setApiKey] = useState<string>(initialApiKey || "");
-  const [submitted, setSubmitted] = useState<boolean>(Boolean(initialApiKey));
+export default function Login({ apiKey: initialApiKey }: { apiKey?: string }) {
+  const config = createConfig();
+  const [apiKey, setApiKey] = useState<string>(
+    initialApiKey || config.get("apiKey") || ""
+  );
+  const [submitted, setSubmitted] = useState<boolean>(
+    Boolean(config.get("apiKey"))
+  );
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = () => {
@@ -19,17 +20,25 @@ export default function Login({ apiKey: initialApiKey }: LoginProps) {
         return;
       }
 
-      ButtondownApi.configure({ apiKey });
+      config.set("apiKey", apiKey);
+      config.set("baseUrl", "https://api.buttondown.email");
       setSubmitted(true);
       setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+    } catch (error_) {
+      setError(error_ instanceof Error ? error_.message : String(error_));
     }
   };
 
   return (
     <Box flexDirection="column">
-      {!submitted ? (
+      {submitted ? (
+        <>
+          <Text color="green">✓ Successfully configured API key!</Text>
+          <Box marginTop={1}>
+            <Text>To use a different API key, run this command again.</Text>
+          </Box>
+        </>
+      ) : (
         <>
           <Box marginBottom={1}>
             <Text>Please enter your Buttondown API key:</Text>
@@ -49,8 +58,6 @@ export default function Login({ apiKey: initialApiKey }: LoginProps) {
             </Box>
           )}
         </>
-      ) : (
-        <Text color="green">✓ Successfully configured API key!</Text>
       )}
     </Box>
   );

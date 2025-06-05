@@ -1,6 +1,6 @@
 {
   "name": "@buttondown/cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CLI for Buttondown to sync emails and media with a local folder",
   "type": "module",
   "main": "dist/index.js",
@@ -11,9 +11,10 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/cli.js",
-    "test": "tsc && ava",
+    "test": "vitest run",
     "prepare": "npm run build",
-    "lint": "xo --fix"
+    "lint": "xo --fix",
+    "cli": "tsc && node dist/cli.js"
   },
   "keywords": [
     "buttondown",
@@ -36,27 +37,24 @@
     "react": "^18.3.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@types/fs-extra": "^11.0.4",
-    "@types/jest": "^29.5.14",
     "@types/node": "^22.15.2",
     "@types/react": "^19.1.2",
-    "ava": "^6.3.0",
+    "delay": "^6.0.0",
     "ink-testing-library": "^4.0.0",
     "ts-blank-space": "^0.6.1",
     "tsimp": "^2.0.11",
     "typescript": "^5.4.5",
-    "xo": "^1.0.5"
+    "vitest": "^3.0.0"
   },
-  "ava": {
-    "extensions": {
-      "ts": "module",
-      "tsx": "module"
-    },
-    "nodeArguments": [
-      "--import=tsimp"
-    ]
-  },
+
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome"
+    ]
   }
 }

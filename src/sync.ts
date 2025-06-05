@@ -1,51 +1,69 @@
+import path from "node:path";
 import axios from "axios";
 import fs from "fs-extra";
 import { glob } from "glob";
-import path from "path";
-import ButtondownApi, { Email, Newsletter } from "./api.js";
+import createConfig from "./config.js";
+import { type Client, createClient, ok } from "./lib/openapi-wrapper.js";
+import type { components, paths } from "./lib/openapi.js";
 
-interface SyncOptions {
+type Email = components["schemas"]["Email"];
+type Newsletter = components["schemas"]["Newsletter"];
+
+type SyncOptions = {
   directory: string;
   force?: boolean;
-}
+  baseUrl?: string;
+  apiKey?: string;
+};
 
-interface SyncedEmail {
+type SyncedEmail = {
   modified: string;
   localPath: string;
   slug?: string;
   contentHash?: string;
-}
+};
 
-interface SyncedImage {
+type SyncedImage = {
   id: string;
   localPath: string;
   url: string;
   creation_date: string;
   filename: string;
   lastSynced: string;
-}
+};
 
-interface SyncedNewsletter {
+type SyncedNewsletter = {
   id: string;
   lastSynced: string;
   contentHash?: string;
-}
+};
 
 const BRANDING_FILE = "branding.json";
 const CSS_FILE = "custom.css";
 const TEMPLATE_CSS_FILE = "template.css";
 
 export class SyncManager {
-  private api: ButtondownApi;
-  private baseDir: string;
-  private emailsDir: string;
-  private mediaDir: string;
-  private brandingDir: string;
-  private cssDir: string;
-  private configPath: string;
+  private readonly api: Client<paths>;
+  private readonly baseDir: string;
+  private readonly emailsDir: string;
+  private readonly mediaDir: string;
+  private readonly brandingDir: string;
+  private readonly cssDir: string;
+  private readonly configPath: string;
 
   constructor(options: SyncOptions) {
-    this.api = new ButtondownApi();
+    const config = createConfig();
+    const baseUrl = options.baseUrl || config.get("baseUrl");
+    const apiKey = options.apiKey || config.get("apiKey");
+    this.api = createClient<paths>({
+      base: baseUrl,
+      middlewares: [
+        async (request, next) => {
+          request.headers.set("authorization", `Token ${apiKey}`);
+          return next(request);
+        },
+      ],
+    });
     this.baseDir = options.directory;
     this.emailsDir = path.join(this.baseDir, "emails");
     this.mediaDir = path.join(this.baseDir, "media");
@@ -60,23 +78,21 @@ export class SyncManager {
     await fs.ensureDir(this.brandingDir);
     await fs.ensureDir(this.cssDir);
 
-    if (!(await fs.pathExists(this.configPath))) {
+    if (await fs.pathExists(this.configPath)) {
+      // Ensure syncedImages exists in existing config files
+      const config = await fs.readJSON(this.configPath);
+      config.syncedImages ||= {};
+
+      config.syncedNewsletter ||= null;
+
+      await fs.writeJSON(this.configPath, config, { spaces: 2 });
+    } else {
       await fs.writeJSON(this.configPath, {
         lastSync: null,
         syncedEmails: {},
         syncedImages: {},
         syncedNewsletter: null,
       });
-    } else {
-      // Ensure syncedImages exists in existing config files
-      const config = await fs.readJSON(this.configPath);
-      if (!config.syncedImages) {
-        config.syncedImages = {};
-      }
-      if (!config.syncedNewsletter) {
-        config.syncedNewsletter = null;
-      }
-      await fs.writeJSON(this.configPath, config, { spaces: 2 });
     }
   }
 
@@ -97,8 +113,9 @@ export class SyncManager {
     for (let i = 0; i < content.length; i++) {
       const char = content.charCodeAt(i);
       hash = (hash << 5) - hash + char;
-      hash = hash & hash; // Convert to 32bit integer
+      hash &= hash; // Convert to 32bit integer
     }
+
     return hash.toString();
   }
 
@@ -114,11 +131,6 @@ export class SyncManager {
       newsletter.header || "",
       newsletter.footer || "",
       newsletter.from_name || "",
-      newsletter.logo_url || "",
-      newsletter.header_image_url || "",
-      newsletter.accent_color || "",
-      newsletter.font_family || "",
-      newsletter.custom_css || "",
     ].join("|");
 
     // Simple hash function
@@ -126,8 +138,9 @@ export class SyncManager {
     for (let i = 0; i < content.length; i++) {
       const char = content.charCodeAt(i);
       hash = (hash << 5) - hash + char;
-      hash = hash & hash; // Convert to 32bit integer
+      hash &= hash; // Convert to 32bit integer
     }
+
     return hash.toString();
   }
 
@@ -147,7 +160,17 @@ export class SyncManager {
     const syncedEmails = syncConfig.syncedEmails || {};
 
     while (hasMore) {
-      const { results, count } = await this.api.getEmails(page, pageSize);
+      const { results } = await ok(
+        this.api.get("/emails", {
+          params: {
+            query: {
+              // @ts-expect-error
+              page,
+              page_size: pageSize,
+            },
+          },
+        })
+      );
 
       for (const email of results) {
         // Use slug for filename, fallback to ID if no slug
@@ -173,16 +196,37 @@ export class SyncManager {
         let emailContent = "---\n";
 
         // Only add properties that exist and are not undefined
-        if (email.id) emailContent += `id: ${email.id}\n`;
-        if (email.subject) emailContent += `subject: ${email.subject}\n`;
-        if (email.status) emailContent += `status: ${email.status}\n`;
-        if (email.email_type)
+        if (email.id) {
+          emailContent += `id: ${email.id}\n`;
+        }
+
+        if (email.subject) {
+          emailContent += `subject: ${email.subject}\n`;
+        }
+
+        if (email.status) {
+          emailContent += `status: ${email.status}\n`;
+        }
+
+        if (email.email_type) {
           emailContent += `email_type: ${email.email_type}\n`;
-        if (email.slug) emailContent += `slug: ${email.slug}\n`;
-        if (email.publish_date)
+        }
+
+        if (email.slug) {
+          emailContent += `slug: ${email.slug}\n`;
+        }
+
+        if (email.publish_date) {
           emailContent += `publish_date: ${email.publish_date}\n`;
-        if (email.created) emailContent += `created: ${email.created}\n`;
-        if (email.modified) emailContent += `modified: ${email.modified}\n`;
+        }
+
+        if (email.creation_date) {
+          emailContent += `created: ${email.creation_date}\n`;
+        }
+
+        if (email.modification_date) {
+          emailContent += `modified: ${email.modification_date}\n`;
+        }
 
         if (email.attachments && email.attachments.length > 0) {
           emailContent += "attachments:\n";
@@ -197,7 +241,7 @@ export class SyncManager {
         await fs.writeFile(emailPath, emailContent);
 
         syncedEmails[email.id] = {
-          modified: email.modified,
+          modified: email.modification_date,
           localPath: emailPath,
           slug: email.slug,
           contentHash,
@@ -237,10 +281,10 @@ export class SyncManager {
 
     for (const emailFile of emailFiles) {
       const emailPath = path.join(this.emailsDir, emailFile);
-      const content = await fs.readFile(emailPath, "utf-8");
+      const content = await fs.readFile(emailPath, "utf8");
 
       // Parse frontmatter and content
-      const match = content.match(/^---\n([\s\S]*?)\n---\n\n([\s\S]*)$/);
+      const match = /^---\n([\s\S]*?)\n---\n\n([\s\S]*)$/.exec(content);
 
       if (!match) {
         console.warn(
@@ -252,13 +296,13 @@ export class SyncManager {
       const [, frontMatter, body] = match;
       const metadata: Record<string, any> = {};
 
-      frontMatter.split("\n").forEach((line) => {
+      for (const line of frontMatter.split("\n")) {
         const [key, ...valueParts] = line.split(":");
-        if (key && valueParts.length) {
+        if (key && valueParts.length > 0) {
           const value = valueParts.join(":").trim();
           metadata[key.trim()] = value;
         }
-      });
+      }
 
       const emailData: Partial<Email> = {
         body,
@@ -294,7 +338,22 @@ export class SyncManager {
 
         // Update existing email
         try {
-          await this.api.updateEmail(metadata.id, emailData);
+          await ok(
+            this.api.patch("/emails/{id}", {
+              params: {
+                path: {
+                  id: metadata.id,
+                },
+              },
+              body: {
+                subject: emailData.subject,
+                body: emailData.body,
+                status: emailData.status,
+                email_type: emailData.email_type,
+                slug: emailData.slug,
+              },
+            })
+          );
           updated++;
 
           syncedEmails[metadata.id] = {
@@ -309,7 +368,17 @@ export class SyncManager {
       } else {
         // Create new email
         try {
-          const newEmail = await this.api.createEmail(emailData);
+          const newEmail = await ok(
+            this.api.post("/emails", {
+              body: {
+                subject: emailData.subject || "",
+                body: emailData.body,
+                status: emailData.status,
+                email_type: emailData.email_type,
+                slug: emailData.slug,
+              },
+            })
+          );
           added++;
 
           // Update the local file with the new ID and slug
@@ -337,14 +406,14 @@ export class SyncManager {
             await fs.rename(emailPath, newPath);
 
             syncedEmails[newEmail.id] = {
-              modified: newEmail.modified,
+              modified: newEmail.modification_date,
               localPath: newPath,
               slug: newEmail.slug,
               contentHash,
             };
           } else {
             syncedEmails[newEmail.id] = {
-              modified: newEmail.modified,
+              modified: newEmail.modification_date,
               localPath: emailPath,
               slug: newEmail.slug,
               contentHash,
@@ -375,7 +444,16 @@ export class SyncManager {
 
     while (hasMore) {
       try {
-        const { results, count } = await this.api.getImages(page, pageSize);
+        const { results } = await ok(
+          this.api.get("/images", {
+            params: {
+              query: {
+                page,
+                page_size: pageSize,
+              },
+            },
+          })
+        );
 
         for (const image of results) {
           // Check if image already exists locally
@@ -462,10 +540,16 @@ export class SyncManager {
       }
 
       const fileContent = await fs.readFile(filePath);
+      const formData = new FormData();
+      formData.append("file", new Blob([fileContent]), filename);
 
       try {
         // Upload the image
-        const image = await this.api.uploadImage(fileContent, filename);
+        const image = await ok(
+          this.api.post("/images", {
+            body: formData,
+          })
+        );
 
         // Update synced images record
         syncedImages[image.id] = {
@@ -473,7 +557,7 @@ export class SyncManager {
           localPath: filePath,
           url: image.image,
           creation_date: image.creation_date,
-          filename: filename,
+          filename,
           lastSynced: new Date().toISOString(),
         };
 
@@ -495,9 +579,10 @@ export class SyncManager {
       const syncConfig = await fs.readJSON(this.configPath);
 
       // Get newsletter data from API
-      const newsletter = await this.api.getNewsletter();
+      const newsletters = await ok(this.api.get("/newsletters"));
+      const newsletter = newsletters.results[0];
 
-      if (!newsletter || !newsletter.id) {
+      if (!newsletter?.id) {
         console.error("Failed to retrieve newsletter data or missing ID");
         return { updated: false };
       }
@@ -530,9 +615,9 @@ export class SyncManager {
 
   private async saveCssFiles(newsletter: Newsletter): Promise<void> {
     // Save custom CSS to a separate file if it exists
-    if (newsletter.custom_css) {
+    if (newsletter.css) {
       const customCssPath = path.join(this.cssDir, CSS_FILE);
-      await fs.writeFile(customCssPath, newsletter.custom_css);
+      await fs.writeFile(customCssPath, newsletter.css);
     }
 
     // Prepare an empty template file if it doesn't exist yet
@@ -568,13 +653,9 @@ export class SyncManager {
       username: newsletter.username || "",
       branding: {
         tint_color: newsletter.tint_color || null,
-        accent_color: newsletter.accent_color || null,
         header: newsletter.header || null,
         footer: newsletter.footer || null,
         from_name: newsletter.from_name || null,
-        logo_url: newsletter.logo_url || null,
-        header_image_url: newsletter.header_image_url || null,
-        font_family: newsletter.font_family || null,
       },
     };
   }
@@ -600,33 +681,37 @@ export class SyncManager {
 
       // Add branding fields if they exist
       if (brandingConfig.branding) {
-        const branding = brandingConfig.branding;
-        if (branding.tint_color)
+        const { branding } = brandingConfig;
+        if (branding.tint_color) {
           newsletterData.tint_color = branding.tint_color;
-        if (branding.accent_color)
-          newsletterData.accent_color = branding.accent_color;
-        if (branding.header) newsletterData.header = branding.header;
-        if (branding.footer) newsletterData.footer = branding.footer;
-        if (branding.from_name) newsletterData.from_name = branding.from_name;
-        if (branding.logo_url) newsletterData.logo_url = branding.logo_url;
-        if (branding.header_image_url)
-          newsletterData.header_image_url = branding.header_image_url;
-        if (branding.font_family)
-          newsletterData.font_family = branding.font_family;
+        }
+
+        if (branding.header) {
+          newsletterData.header = branding.header;
+        }
+
+        if (branding.footer) {
+          newsletterData.footer = branding.footer;
+        }
+
+        if (branding.from_name) {
+          newsletterData.from_name = branding.from_name;
+        }
       }
 
       // Read CSS from files
       const { customCss } = await this.readCssFiles();
       if (customCss !== null) {
-        newsletterData.custom_css = customCss;
+        newsletterData.css = customCss;
       }
 
       // Calculate content hash
       const contentHash = this.generateNewsletterContentHash(newsletterData);
 
       // Check if newsletter settings have changed since last sync
-      const syncedNewsletter =
-        syncConfig.syncedNewsletter as SyncedNewsletter | null;
+      const syncedNewsletter = syncConfig.syncedNewsletter as
+        | SyncedNewsletter
+        | undefined;
       const hasChanged =
         !syncedNewsletter || syncedNewsletter.contentHash !== contentHash;
 
@@ -635,7 +720,16 @@ export class SyncManager {
       }
 
       // Update newsletter via API
-      const updatedNewsletter = await this.api.updateNewsletter(newsletterData);
+      const updatedNewsletter = await ok(
+        this.api.patch("/newsletters/{id}", {
+          params: {
+            path: {
+              id: syncConfig.syncedNewsletter?.id,
+            },
+          },
+          body: newsletterData,
+        })
+      );
 
       // Update sync config
       syncConfig.syncedNewsletter = {
