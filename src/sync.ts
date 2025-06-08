@@ -144,6 +144,188 @@ export class SyncManager {
     return hash.toString();
   }
 
+  // Find relative image references in markdown content
+  findRelativeImageReferences(content: string): Array<{
+    match: string;
+    altText: string;
+    relativePath: string;
+  }> {
+    const regex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+    const results = [];
+    let match;
+
+    while ((match = regex.exec(content)) !== null) {
+      const [fullMatch, altText, imagePath] = match;
+
+      // Check if it's a relative path (not starting with http/https//)
+      if (!imagePath.startsWith("http") && !imagePath.startsWith("//")) {
+        results.push({
+          match: fullMatch,
+          altText,
+          relativePath: imagePath,
+        });
+      }
+    }
+
+    return results;
+  }
+
+  // Upload image and return the uploaded image info
+  private async uploadImage(imagePath: string): Promise<{
+    id: string;
+    url: string;
+    filename: string;
+  }> {
+    const fileContent = await fs.readFile(imagePath);
+    const filename = path.basename(imagePath);
+
+    console.log(`Uploading image: ${filename} (${fileContent.length} bytes)`);
+
+    // Create FormData with proper file handling for Node.js
+    const formData = new FormData();
+    const blob = new Blob([fileContent], {
+      type: this.getMimeType(filename),
+    });
+    formData.append("image", blob, filename);
+
+    try {
+      const image = await ok(
+        this.api.post("/images", {
+          body: formData,
+        })
+      );
+
+      console.log(`✅ Successfully uploaded image: ${image.id}`);
+      return {
+        id: image.id,
+        url: image.image,
+        filename,
+      };
+    } catch (error) {
+      console.error(`❌ Failed to upload image ${filename}:`, error);
+      throw error;
+    }
+  }
+
+  // Helper method to get MIME type based on file extension
+  private getMimeType(filename: string): string {
+    const ext = path.extname(filename).toLowerCase();
+    const mimeTypes: Record<string, string> = {
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg",
+      ".png": "image/png",
+      ".gif": "image/gif",
+      ".webp": "image/webp",
+      ".svg": "image/svg+xml",
+      ".bmp": "image/bmp",
+      ".ico": "image/x-icon",
+    };
+    return mimeTypes[ext] || "application/octet-stream";
+  }
+
+  // Convert relative image references to absolute URLs
+  private async processRelativeImages(
+    content: string,
+    emailDir: string,
+    syncedImages: Record<string, SyncedImage>
+  ): Promise<{
+    processedContent: string;
+    uploadedImages: Array<{
+      id: string;
+      localPath: string;
+      url: string;
+      filename: string;
+    }>;
+  }> {
+    const relativeImages = this.findRelativeImageReferences(content);
+    const uploadedImages = [];
+    let processedContent = content;
+
+    for (const imageRef of relativeImages) {
+      const absolutePath = path.resolve(emailDir, imageRef.relativePath);
+
+      if (await fs.pathExists(absolutePath)) {
+        // Check if this image has already been uploaded
+        const existingImage = Object.values(syncedImages).find(
+          (img) => img.localPath === absolutePath
+        );
+
+        let imageUrl: string;
+        let imageId: string;
+        let filename: string;
+
+        if (existingImage) {
+          // Use existing uploaded image
+          console.log(`Using existing uploaded image: ${existingImage.filename}`);
+          imageUrl = existingImage.url;
+          imageId = existingImage.id;
+          filename = existingImage.filename;
+        } else {
+          // Upload new image
+          try {
+            const uploadedImage = await this.uploadImage(absolutePath);
+            imageUrl = uploadedImage.url;
+            imageId = uploadedImage.id;
+            filename = uploadedImage.filename;
+            
+            uploadedImages.push({
+              id: imageId,
+              localPath: absolutePath,
+              url: imageUrl,
+              filename,
+            });
+          } catch (error) {
+            console.warn(`Failed to upload image ${absolutePath}:`, error instanceof Error ? error.message : String(error));
+            // Keep the original relative reference if upload fails
+            continue;
+          }
+        }
+        
+        // Replace the relative reference with the absolute URL
+        const newReference = `![${imageRef.altText}](${imageUrl})`;
+        processedContent = processedContent.replace(
+          imageRef.match,
+          newReference
+        );
+      } else {
+        console.warn(`Image not found: ${absolutePath}`);
+      }
+    }
+
+    return { processedContent, uploadedImages };
+  }
+
+  // Convert absolute image URLs back to relative paths
+  private convertAbsoluteToRelativeImages(
+    content: string,
+    emailDir: string,
+    syncedImages: Record<string, SyncedImage>
+  ): string {
+    const regex = /!\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g;
+    let processedContent = content;
+
+    processedContent = processedContent.replace(
+      regex,
+      (match, altText, imageUrl) => {
+        // Find the synced image by URL
+        const syncedImage = Object.values(syncedImages).find(
+          (img) => img.url === imageUrl
+        );
+
+        if (syncedImage) {
+          // Calculate relative path from email directory to the image
+          const relativePath = path.relative(emailDir, syncedImage.localPath);
+          return `![${altText}](${relativePath})`;
+        }
+
+        // If we can't find the image in our sync records, leave it as absolute
+        return match;
+      }
+    );
+
+    return processedContent;
+  }
+
   async pullEmails(): Promise<{
     added: number;
     updated: number;
@@ -158,6 +340,7 @@ export class SyncManager {
 
     const syncConfig = await fs.readJSON(this.configPath);
     const syncedEmails = syncConfig.syncedEmails || {};
+    const syncedImages = syncConfig.syncedImages || {};
 
     while (hasMore) {
       const { results } = await ok(
@@ -236,7 +419,14 @@ export class SyncManager {
         }
 
         emailContent += "---\n\n";
-        emailContent += email.body;
+
+        // Convert absolute image URLs to relative paths
+        const processedBody = this.convertAbsoluteToRelativeImages(
+          email.body,
+          this.emailsDir,
+          syncedImages
+        );
+        emailContent += processedBody;
 
         await fs.writeFile(emailPath, emailContent);
 
@@ -278,6 +468,7 @@ export class SyncManager {
     const emailFiles = await glob("**/*.md", { cwd: this.emailsDir });
     const syncConfig = await fs.readJSON(this.configPath);
     const syncedEmails = syncConfig.syncedEmails || {};
+    const syncedImages = syncConfig.syncedImages || {};
 
     for (const emailFile of emailFiles) {
       const emailPath = path.join(this.emailsDir, emailFile);
@@ -304,8 +495,25 @@ export class SyncManager {
         }
       }
 
+      // Process relative images and convert to absolute URLs
+      const emailDir = path.dirname(emailPath);
+      const { processedContent, uploadedImages } =
+        await this.processRelativeImages(body, emailDir, syncedImages);
+
+      // Update synced images config with newly uploaded images
+      for (const uploadedImage of uploadedImages) {
+        syncedImages[uploadedImage.id] = {
+          id: uploadedImage.id,
+          localPath: uploadedImage.localPath,
+          url: uploadedImage.url,
+          creation_date: new Date().toISOString(),
+          filename: uploadedImage.filename,
+          lastSynced: new Date().toISOString(),
+        };
+      }
+
       const emailData: Partial<Email> = {
-        body,
+        body: processedContent,
         subject: metadata.subject,
         email_type: metadata.email_type || "draft",
         status: metadata.status || "draft",
@@ -428,6 +636,7 @@ export class SyncManager {
     // Update sync config
     syncConfig.lastSync = new Date().toISOString();
     syncConfig.syncedEmails = syncedEmails;
+    syncConfig.syncedImages = syncedImages;
     await fs.writeJSON(this.configPath, syncConfig, { spaces: 2 });
 
     return { added, updated, unchanged };
@@ -539,32 +748,17 @@ export class SyncManager {
         continue;
       }
 
-      const fileContent = await fs.readFile(filePath);
-      const formData = new FormData();
-      formData.append("file", new Blob([fileContent]), filename);
+      const image = await this.uploadImage(filePath);
+      syncedImages[image.id] = {
+        id: image.id,
+        localPath: filePath,
+        url: image.url,
+        creation_date: new Date().toISOString(),
+        filename,
+        lastSynced: new Date().toISOString(),
+      };
 
-      try {
-        // Upload the image
-        const image = await ok(
-          this.api.post("/images", {
-            body: formData,
-          })
-        );
-
-        // Update synced images record
-        syncedImages[image.id] = {
-          id: image.id,
-          localPath: filePath,
-          url: image.image,
-          creation_date: image.creation_date,
-          filename,
-          lastSynced: new Date().toISOString(),
-        };
-
-        uploaded++;
-      } catch (error) {
-        console.error(`Failed to upload ${mediaFile}:`, error);
-      }
+      uploaded++;
     }
 
     // Update sync config
