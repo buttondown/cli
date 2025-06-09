@@ -643,7 +643,7 @@ export interface components {
      * email and in online archives. 
      * @enum {string}
      */
-    EmailType: "public" | "private" | "premium" | "free" | "churned" | "archival" | "hidden";
+    EmailType: "public" | "private" | "premium" | "free" | "churned" | "archival";
     /**
      * Source 
      * @description Represents the original provenance of an email. This value is not exposed
@@ -1477,7 +1477,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    ListSubscribersErrorCode: "invalid_tag" | "date_invalid";
+    ListSubscribersErrorCode: "invalid_tag" | "date_invalid" | "invalid_ordering";
     /** ErrorMessage[ListSubscribersErrorCode] */
     ErrorMessage_ListSubscribersErrorCode_: {
       code: components["schemas"]["ListSubscribersErrorCode"];
