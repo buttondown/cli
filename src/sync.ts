@@ -6,6 +6,9 @@ import createConfig from "./config.js";
 import { type Client, createClient, ok } from "./lib/openapi-wrapper.js";
 import type { components, paths } from "./lib/openapi.js";
 
+// TODO: DRY this with the version in package.json.
+const VERSION = "1.0.2";
+
 type Email = components["schemas"]["Email"];
 type Newsletter = components["schemas"]["Newsletter"];
 
@@ -60,6 +63,7 @@ export class SyncManager {
       middlewares: [
         async (request, next) => {
           request.headers.set("authorization", `Token ${apiKey}`);
+          request.headers.set("user-agent", `buttondown-cli/${VERSION}`);
           return next(request);
         },
       ],
@@ -256,7 +260,9 @@ export class SyncManager {
 
         if (existingImage) {
           // Use existing uploaded image
-          console.log(`Using existing uploaded image: ${existingImage.filename}`);
+          console.log(
+            `Using existing uploaded image: ${existingImage.filename}`
+          );
           imageUrl = existingImage.url;
           imageId = existingImage.id;
           filename = existingImage.filename;
@@ -267,7 +273,7 @@ export class SyncManager {
             imageUrl = uploadedImage.url;
             imageId = uploadedImage.id;
             filename = uploadedImage.filename;
-            
+
             uploadedImages.push({
               id: imageId,
               localPath: absolutePath,
@@ -275,12 +281,15 @@ export class SyncManager {
               filename,
             });
           } catch (error) {
-            console.warn(`Failed to upload image ${absolutePath}:`, error instanceof Error ? error.message : String(error));
+            console.warn(
+              `Failed to upload image ${absolutePath}:`,
+              error instanceof Error ? error.message : String(error)
+            );
             // Keep the original relative reference if upload fails
             continue;
           }
         }
-        
+
         // Replace the relative reference with the absolute URL
         const newReference = `![${imageRef.altText}](${imageUrl})`;
         processedContent = processedContent.replace(
