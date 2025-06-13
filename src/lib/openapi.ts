@@ -679,7 +679,7 @@ export interface components {
      * @description Buttondown's filtering schema can be used for multiple things:
      * 
      * - Filtering [the audience of an email](/api-emails-create) to a specific subset
-     * - Creating [finely-tuned automations](/api-automations-create)
+     * - Creating [finely-tuned automations](/api-automation-introduction)
      */
     FilterGroup: {
       /** Filters */
@@ -2251,7 +2251,7 @@ export interface components {
      * @description The action that is triggered when the automation is successfully run. 
      * @enum {string}
      */
-    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "send_notification" | "forward_reply" | "create_linkedin_post" | "create_twitter_post" | "create_tumblr_post" | "create_bluesky_post" | "create_arena_post" | "create_export" | "send_post_request";
+    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_linkedin_post" | "create_twitter_post" | "create_tumblr_post" | "create_bluesky_post" | "create_arena_post" | "create_export" | "send_post_request";
     /** Action */
     Action: {
       type: components["schemas"]["AutomationActionType"];
@@ -2696,7 +2696,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    APIRequestSource: "api" | "app" | "carrd" | "zapier" | "cli";
+    APIRequestSource: "api" | "app" | "carrd" | "zapier" | "cli" | "make";
     /**
      * APIRequestDetail 
      * @description Represents a request to the API (api.buttondown.com).
