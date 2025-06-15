@@ -291,6 +291,10 @@ export interface paths {
     /** Get Event */
     get: operations["get_event"];
   };
+  "/notes": {
+    /** List Notes */
+    get: operations["list_notes"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -3182,6 +3186,46 @@ export interface components {
       /** Count */
       count: number;
     };
+    /** Note */
+    Note: {
+      /**
+       * Id 
+       * Format: uuid 
+       * @description A unique UUID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was created.
+       */
+      creation_date: string;
+      /** Body */
+      body: string;
+      /** Model Type */
+      model_type: string;
+      /** Model Id */
+      model_id: string;
+      /** Metadata */
+      metadata: Record<string, unknown>;
+      /**
+       * User Id 
+       * Format: uuid
+       */
+      user_id: string;
+      user?: components["schemas"]["User"];
+    };
+    /** Page[Note] */
+    NotePage: {
+      /** Results */
+      results: (components["schemas"]["Note"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
     /** @enum {string} */
     EmailExcludableField: "body";
   };
@@ -5935,6 +5979,33 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+    };
+  };
+  /** List Notes */
+  list_notes: {
+    parameters: {
+      query: {
+        model_type?: string;
+        model_id?: string;
+        /** @description If provided, expand the given field. */
+        expand?: ("user")[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NotePage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
     };
   };
 }
