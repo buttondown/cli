@@ -294,6 +294,8 @@ export interface paths {
   "/notes": {
     /** List Notes */
     get: operations["list_notes"];
+    /** Create Note Endpoint */
+    post: operations["create_note_endpoint"];
   };
 }
 
@@ -3215,6 +3217,29 @@ export interface components {
       user_id: string;
       user?: components["schemas"]["User"];
     };
+    /** NoteInput */
+    NoteInput: {
+      /**
+       * Body 
+       * @description The text content of the note.
+       */
+      body: string;
+      /**
+       * Model Type 
+       * @description The type of object this note is attached to (e.g., 'email', 'subscriber').
+       */
+      model_type: string;
+      /**
+       * Model Id 
+       * @description The ID of the object this note is attached to.
+       */
+      model_id: string;
+      /**
+       * Metadata 
+       * @description Arbitrary metadata as key-value pairs.
+       */
+      metadata?: Record<string, unknown>;
+    };
     /** Page[Note] */
     NotePage: {
       /** Results */
@@ -5996,6 +6021,36 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["NotePage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /** Create Note Endpoint */
+  create_note_endpoint: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NoteInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Note"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
