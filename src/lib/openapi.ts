@@ -12,7 +12,10 @@ export interface paths {
     post: operations["create_export"];
   };
   "/exports/{id}": {
-    /** Retrieve Export */
+    /**
+     * Retrieve Export 
+     * @description Retrieve a specific export by its ID
+     */
     get: operations["retrieve_export"];
   };
   "/tags": {
@@ -22,15 +25,27 @@ export interface paths {
     post: operations["create_tag"];
   };
   "/tags/{id}": {
-    /** Retrieve Tag */
+    /**
+     * Retrieve Tag 
+     * @description Retrieve a specific tag by its ID
+     */
     get: operations["retrieve_tag"];
-    /** Delete Tag */
+    /**
+     * Delete Tag 
+     * @description Delete a tag
+     */
     delete: operations["delete_tag"];
-    /** Update Tag */
+    /**
+     * Update Tag 
+     * @description Update a tag's properties
+     */
     patch: operations["update_tag"];
   };
   "/tags/{id}/analytics": {
-    /** Retrieve Tag Analytics */
+    /**
+     * Retrieve Tag Analytics 
+     * @description Retrieve analytics for a specific tag
+     */
     get: operations["retrieve_tag_analytics"];
   };
   "/ping": {
@@ -48,7 +63,10 @@ export interface paths {
     post: operations["create_image"];
   };
   "/images/{id}": {
-    /** Delete Image */
+    /**
+     * Delete Image 
+     * @description Delete an uploaded image
+     */
     delete: operations["delete_image"];
   };
   "/attachments": {
@@ -58,7 +76,10 @@ export interface paths {
     post: operations["create_attachment"];
   };
   "/attachments/{id}": {
-    /** Delete Attachment */
+    /**
+     * Delete Attachment 
+     * @description Delete an attachment
+     */
     delete: operations["delete_attachment"];
   };
   "/emails": {
@@ -68,25 +89,43 @@ export interface paths {
     post: operations["create_email"];
   };
   "/emails/{id}": {
-    /** Retrieve Email */
+    /**
+     * Retrieve Email 
+     * @description Retrieve a specific email by its ID
+     */
     get: operations["retrieve_email"];
-    /** Update Email */
+    /**
+     * Update Email 
+     * @description Update an email's properties
+     */
     patch: operations["update_email"];
   };
   "/emails/{id}/history": {
-    /** Retrieve Email History */
+    /**
+     * Retrieve Email History 
+     * @description Retrieve the edit history for a specific email
+     */
     get: operations["retrieve_email_history"];
   };
   "/emails/{id}/history/body/{history_id}": {
-    /** Retrieve Email History By Id */
+    /**
+     * Retrieve Email History By Id 
+     * @description Retrieve a specific historical version of an email's body
+     */
     get: operations["retrieve_email_history_by_id"];
   };
   "/emails/{id}/analytics": {
-    /** Retrieve Email Analytics */
+    /**
+     * Retrieve Email Analytics 
+     * @description Retrieve analytics for a specific email
+     */
     get: operations["retrieve_email_analytics"];
   };
   "/emails/{id}/send-draft": {
-    /** Send Draft */
+    /**
+     * Send Draft 
+     * @description Send a draft email to specific recipients
+     */
     post: operations["send_draft"];
   };
   "/subscribers": {
@@ -130,9 +169,15 @@ export interface paths {
     post: operations["create_newsletter"];
   };
   "/newsletters/{id}": {
-    /** Delete Newsletter */
+    /**
+     * Delete Newsletter 
+     * @description Delete a newsletter
+     */
     delete: operations["delete_newsletter"];
-    /** Update Newsletter */
+    /**
+     * Update Newsletter 
+     * @description Update a newsletter's settings
+     */
     patch: operations["update_newsletter"];
   };
   "/bulk_actions": {
@@ -140,7 +185,10 @@ export interface paths {
     post: operations["create_bulk_action"];
   };
   "/bulk_actions/{id}": {
-    /** Retrieve Bulk Action */
+    /**
+     * Retrieve Bulk Action 
+     * @description Retrieve the status of a bulk action
+     */
     get: operations["retrieve_bulk_action"];
   };
   "/external_feeds": {
@@ -150,17 +198,32 @@ export interface paths {
     post: operations["create_external_feed"];
   };
   "/external_feeds/{id}": {
-    /** Retrieve External Feed */
+    /**
+     * Retrieve External Feed 
+     * @description Retrieve a specific external feed by its ID
+     */
     get: operations["retrieve_external_feed"];
-    /** Delete External Feed */
+    /**
+     * Delete External Feed 
+     * @description Delete an external feed
+     */
     delete: operations["delete_external_feed"];
-    /** Update External Feed */
+    /**
+     * Update External Feed 
+     * @description Update an external feed's properties
+     */
     patch: operations["update_external_feed"];
   };
   "/external_feeds/{id}/items": {
-    /** Retrieve Items */
+    /**
+     * Retrieve Items 
+     * @description Retrieve items from an external feed
+     */
     get: operations["retrieve_items"];
-    /** Poll Items */
+    /**
+     * Poll Items 
+     * @description Poll for new items in an external feed
+     */
     post: operations["poll_items"];
   };
   "/automations": {
@@ -170,23 +233,41 @@ export interface paths {
     post: operations["create_automation"];
   };
   "/automations/{id}/subscribers": {
-    /** Retrieve Automation Subscribers */
+    /**
+     * Retrieve Automation Subscribers 
+     * @description Retrieve subscribers associated with an automation
+     */
     get: operations["retrieve_automation_subscribers"];
   };
   "/automations/{id}": {
-    /** Retrieve Automation */
+    /**
+     * Retrieve Automation 
+     * @description Retrieve a specific automation by its ID
+     */
     get: operations["retrieve_automation"];
-    /** Delete Automation */
+    /**
+     * Delete Automation 
+     * @description Delete an automation
+     */
     delete: operations["delete_automation"];
-    /** Update Automation */
+    /**
+     * Update Automation 
+     * @description Update an automation's properties
+     */
     patch: operations["update_automation"];
   };
   "/automations/{id}/invoke": {
-    /** Invoke Automation */
+    /**
+     * Invoke Automation 
+     * @description Manually trigger an automation
+     */
     post: operations["invoke_automation"];
   };
   "/automations/{id}/analytics": {
-    /** Retrieve Automation Analytics */
+    /**
+     * Retrieve Automation Analytics 
+     * @description Retrieve analytics data for an automation
+     */
     get: operations["retrieve_automation_analytics"];
   };
   "/users": {
@@ -196,11 +277,20 @@ export interface paths {
     post: operations["create_user"];
   };
   "/users/{id}": {
-    /** Retrieve User */
+    /**
+     * Retrieve User 
+     * @description Retrieve a specific user by its ID
+     */
     get: operations["retrieve_user"];
-    /** Delete User */
+    /**
+     * Delete User 
+     * @description Delete a user
+     */
     delete: operations["delete_user"];
-    /** Update User */
+    /**
+     * Update User 
+     * @description Update a user's properties
+     */
     patch: operations["update_user"];
   };
   "/prices": {
@@ -220,15 +310,27 @@ export interface paths {
     post: operations["create_survey"];
   };
   "/surveys/{id}": {
-    /** Retrieve Survey */
+    /**
+     * Retrieve Survey 
+     * @description Retrieve a specific survey by its ID
+     */
     get: operations["retrieve_survey"];
-    /** Delete Survey */
+    /**
+     * Delete Survey 
+     * @description Delete a survey
+     */
     delete: operations["delete_survey"];
-    /** Update Survey */
+    /**
+     * Update Survey 
+     * @description Update a survey's properties
+     */
     patch: operations["update_survey"];
   };
   "/api_requests/{id}": {
-    /** Retrieve Api Request */
+    /**
+     * Retrieve Api Request 
+     * @description Retrieve a specific API request by its ID
+     */
     get: operations["retrieve_api_request"];
   };
   "/api_requests": {
@@ -242,9 +344,15 @@ export interface paths {
     post: operations["create_advertising_unit"];
   };
   "/advertising_units/{id}": {
-    /** Delete Advertising Unit */
+    /**
+     * Delete Advertising Unit 
+     * @description Delete an advertising unit
+     */
     delete: operations["delete_advertising_unit"];
-    /** Update Advertising Unit */
+    /**
+     * Update Advertising Unit 
+     * @description Update an advertising unit's properties
+     */
     patch: operations["update_advertising_unit"];
   };
   "/webhooks": {
@@ -254,23 +362,41 @@ export interface paths {
     post: operations["create_webhook"];
   };
   "/webhooks/{id}": {
-    /** Retrieve Webhook */
+    /**
+     * Retrieve Webhook 
+     * @description Retrieve a specific webhook by its ID
+     */
     get: operations["retrieve_webhook"];
-    /** Delete Webhook */
+    /**
+     * Delete Webhook 
+     * @description Delete a webhook
+     */
     delete: operations["delete_webhook"];
-    /** Update Webhook */
+    /**
+     * Update Webhook 
+     * @description Update a webhook's properties
+     */
     patch: operations["update_webhook"];
   };
   "/webhooks/{id}/attempts": {
-    /** Retrieve Webhook Attempts */
+    /**
+     * Retrieve Webhook Attempts 
+     * @description Retrieve webhook attempts for a specific webhook
+     */
     get: operations["retrieve_webhook_attempts"];
   };
   "/webhooks/{id}/test": {
-    /** Test Webhook */
+    /**
+     * Test Webhook 
+     * @description Send a test event to a webhook
+     */
     post: operations["test_webhook"];
   };
   "/comments/{id}": {
-    /** Retrieve Comment */
+    /**
+     * Retrieve Comment 
+     * @description Retrieve a specific comment by its ID
+     */
     get: operations["retrieve_comment"];
   };
   "/comments": {
@@ -288,7 +414,10 @@ export interface paths {
     get: operations["list_events"];
   };
   "/events/{id}": {
-    /** Get Event */
+    /**
+     * Get Event 
+     * @description Retrieve a specific event by its ID
+     */
     get: operations["get_event"];
   };
   "/notes": {
@@ -3320,7 +3449,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Export */
+  /**
+   * Retrieve Export 
+   * @description Retrieve a specific export by its ID
+   */
   retrieve_export: {
     parameters: {
       path: {
@@ -3406,7 +3538,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Tag */
+  /**
+   * Retrieve Tag 
+   * @description Retrieve a specific tag by its ID
+   */
   retrieve_tag: {
     parameters: {
       path: {
@@ -3436,7 +3571,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Delete Tag */
+  /**
+   * Delete Tag 
+   * @description Delete a tag
+   */
   delete_tag: {
     parameters: {
       path: {
@@ -3462,7 +3600,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Update Tag */
+  /**
+   * Update Tag 
+   * @description Update a tag's properties
+   */
   update_tag: {
     parameters: {
       path: {
@@ -3497,7 +3638,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Tag Analytics */
+  /**
+   * Retrieve Tag Analytics 
+   * @description Retrieve analytics for a specific tag
+   */
   retrieve_tag_analytics: {
     parameters: {
       path: {
@@ -3594,7 +3738,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Delete Image */
+  /**
+   * Delete Image 
+   * @description Delete an uploaded image
+   */
   delete_image: {
     parameters: {
       path: {
@@ -3666,7 +3813,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Delete Attachment */
+  /**
+   * Delete Attachment 
+   * @description Delete an attachment
+   */
   delete_attachment: {
     parameters: {
       path: {
@@ -3775,7 +3925,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Email */
+  /**
+   * Retrieve Email 
+   * @description Retrieve a specific email by its ID
+   */
   retrieve_email: {
     parameters: {
       path: {
@@ -3805,7 +3958,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Update Email */
+  /**
+   * Update Email 
+   * @description Update an email's properties
+   */
   update_email: {
     parameters: {
       path: {
@@ -3846,7 +4002,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Email History */
+  /**
+   * Retrieve Email History 
+   * @description Retrieve the edit history for a specific email
+   */
   retrieve_email_history: {
     parameters: {
       query: {
@@ -3885,7 +4044,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Email History By Id */
+  /**
+   * Retrieve Email History By Id 
+   * @description Retrieve a specific historical version of an email's body
+   */
   retrieve_email_history_by_id: {
     parameters: {
       query: {
@@ -3920,7 +4082,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Email Analytics */
+  /**
+   * Retrieve Email Analytics 
+   * @description Retrieve analytics for a specific email
+   */
   retrieve_email_analytics: {
     parameters: {
       path: {
@@ -3950,7 +4115,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Send Draft */
+  /**
+   * Send Draft 
+   * @description Send a draft email to specific recipients
+   */
   send_draft: {
     parameters: {
       path: {
@@ -4437,7 +4605,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Delete Newsletter */
+  /**
+   * Delete Newsletter 
+   * @description Delete a newsletter
+   */
   delete_newsletter: {
     parameters: {
       path: {
@@ -4463,7 +4634,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Update Newsletter */
+  /**
+   * Update Newsletter 
+   * @description Update a newsletter's settings
+   */
   update_newsletter: {
     parameters: {
       path: {
@@ -4534,7 +4708,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Bulk Action */
+  /**
+   * Retrieve Bulk Action 
+   * @description Retrieve the status of a bulk action
+   */
   retrieve_bulk_action: {
     parameters: {
       path: {
@@ -4613,7 +4790,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve External Feed */
+  /**
+   * Retrieve External Feed 
+   * @description Retrieve a specific external feed by its ID
+   */
   retrieve_external_feed: {
     parameters: {
       path: {
@@ -4643,7 +4823,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Delete External Feed */
+  /**
+   * Delete External Feed 
+   * @description Delete an external feed
+   */
   delete_external_feed: {
     parameters: {
       path: {
@@ -4669,7 +4852,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Update External Feed */
+  /**
+   * Update External Feed 
+   * @description Update an external feed's properties
+   */
   update_external_feed: {
     parameters: {
       path: {
@@ -4710,7 +4896,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Items */
+  /**
+   * Retrieve Items 
+   * @description Retrieve items from an external feed
+   */
   retrieve_items: {
     parameters: {
       query: {
@@ -4744,7 +4933,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Poll Items */
+  /**
+   * Poll Items 
+   * @description Poll for new items in an external feed
+   */
   poll_items: {
     parameters: {
       path: {
@@ -4829,7 +5021,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Automation Subscribers */
+  /**
+   * Retrieve Automation Subscribers 
+   * @description Retrieve subscribers associated with an automation
+   */
   retrieve_automation_subscribers: {
     parameters: {
       query: {
@@ -4870,7 +5065,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Automation */
+  /**
+   * Retrieve Automation 
+   * @description Retrieve a specific automation by its ID
+   */
   retrieve_automation: {
     parameters: {
       path: {
@@ -4900,7 +5098,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Delete Automation */
+  /**
+   * Delete Automation 
+   * @description Delete an automation
+   */
   delete_automation: {
     parameters: {
       path: {
@@ -4926,7 +5127,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Update Automation */
+  /**
+   * Update Automation 
+   * @description Update an automation's properties
+   */
   update_automation: {
     parameters: {
       path: {
@@ -4967,7 +5171,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Invoke Automation */
+  /**
+   * Invoke Automation 
+   * @description Manually trigger an automation
+   */
   invoke_automation: {
     parameters: {
       path: {
@@ -4993,7 +5200,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Automation Analytics */
+  /**
+   * Retrieve Automation Analytics 
+   * @description Retrieve analytics data for an automation
+   */
   retrieve_automation_analytics: {
     parameters: {
       path: {
@@ -5078,7 +5288,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve User */
+  /**
+   * Retrieve User 
+   * @description Retrieve a specific user by its ID
+   */
   retrieve_user: {
     parameters: {
       path: {
@@ -5108,7 +5321,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Delete User */
+  /**
+   * Delete User 
+   * @description Delete a user
+   */
   delete_user: {
     parameters: {
       path: {
@@ -5134,7 +5350,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Update User */
+  /**
+   * Update User 
+   * @description Update a user's properties
+   */
   update_user: {
     parameters: {
       path: {
@@ -5318,7 +5537,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Survey */
+  /**
+   * Retrieve Survey 
+   * @description Retrieve a specific survey by its ID
+   */
   retrieve_survey: {
     parameters: {
       path: {
@@ -5348,7 +5570,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Delete Survey */
+  /**
+   * Delete Survey 
+   * @description Delete a survey
+   */
   delete_survey: {
     parameters: {
       path: {
@@ -5374,7 +5599,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Update Survey */
+  /**
+   * Update Survey 
+   * @description Update a survey's properties
+   */
   update_survey: {
     parameters: {
       path: {
@@ -5409,7 +5637,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Api Request */
+  /**
+   * Retrieve Api Request 
+   * @description Retrieve a specific API request by its ID
+   */
   retrieve_api_request: {
     parameters: {
       path: {
@@ -5533,7 +5764,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Delete Advertising Unit */
+  /**
+   * Delete Advertising Unit 
+   * @description Delete an advertising unit
+   */
   delete_advertising_unit: {
     parameters: {
       path: {
@@ -5559,7 +5793,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Update Advertising Unit */
+  /**
+   * Update Advertising Unit 
+   * @description Update an advertising unit's properties
+   */
   update_advertising_unit: {
     parameters: {
       path: {
@@ -5643,7 +5880,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Webhook */
+  /**
+   * Retrieve Webhook 
+   * @description Retrieve a specific webhook by its ID
+   */
   retrieve_webhook: {
     parameters: {
       path: {
@@ -5673,7 +5913,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Delete Webhook */
+  /**
+   * Delete Webhook 
+   * @description Delete a webhook
+   */
   delete_webhook: {
     parameters: {
       path: {
@@ -5699,7 +5942,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Update Webhook */
+  /**
+   * Update Webhook 
+   * @description Update a webhook's properties
+   */
   update_webhook: {
     parameters: {
       path: {
@@ -5734,7 +5980,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Webhook Attempts */
+  /**
+   * Retrieve Webhook Attempts 
+   * @description Retrieve webhook attempts for a specific webhook
+   */
   retrieve_webhook_attempts: {
     parameters: {
       path: {
@@ -5764,7 +6013,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Test Webhook */
+  /**
+   * Test Webhook 
+   * @description Send a test event to a webhook
+   */
   test_webhook: {
     parameters: {
       query: {
@@ -5813,7 +6065,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Retrieve Comment */
+  /**
+   * Retrieve Comment 
+   * @description Retrieve a specific comment by its ID
+   */
   retrieve_comment: {
     parameters: {
       path: {
@@ -5974,7 +6229,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Get Event */
+  /**
+   * Get Event 
+   * @description Retrieve a specific event by its ID
+   */
   get_event: {
     parameters: {
       query: {
