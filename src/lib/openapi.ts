@@ -355,6 +355,13 @@ export interface paths {
      */
     patch: operations["update_advertising_unit"];
   };
+  "/advertising_units/slots/{id}": {
+    /**
+     * Update Advertising Slot 
+     * @description Update an advertising slot's sponsor content
+     */
+    patch: operations["update_advertising_slot"];
+  };
   "/webhooks": {
     /** List Webhooks */
     get: operations["list_webhooks"];
@@ -2930,6 +2937,8 @@ export interface components {
       status: components["schemas"]["AdvertisingSlotStatus"];
       /** Invoice Url */
       invoice_url?: string;
+      /** Content */
+      content: string;
     };
     /** AdvertisingUnit */
     AdvertisingUnit: {
@@ -3001,6 +3010,11 @@ export interface components {
       url?: string;
       /** Price */
       price?: number;
+    };
+    /** AdvertisingSlotUpdateInput */
+    AdvertisingSlotUpdateInput: {
+      /** Content */
+      content?: string;
     };
     /**
      * WebhookStatus 
@@ -5813,6 +5827,44 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["AdvertisingUnit"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Advertising Slot 
+   * @description Update an advertising slot's sponsor content
+   */
+  update_advertising_slot: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AdvertisingSlotUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AdvertisingSlot"];
         };
       };
       /** @description Bad Request */
