@@ -2201,6 +2201,11 @@ export interface components {
       metadata?: {
         [key: string]: string | undefined;
       };
+      /**
+       * Skip Old Items 
+       * @description Skip items with publish date older than one day from when they're discovered
+       */
+      skip_old_items: boolean;
     };
     /** ExternalFeedInput */
     ExternalFeedInput: {
@@ -2237,6 +2242,12 @@ export interface components {
       metadata?: {
         [key: string]: string | undefined;
       };
+      /**
+       * Skip Old Items 
+       * @description Skip items with publish date older than one day from when they're discovered 
+       * @default false
+       */
+      skip_old_items?: boolean;
     };
     /** Page[ExternalFeed] */
     ExternalFeedPage: {
@@ -2277,6 +2288,11 @@ export interface components {
       metadata?: {
         [key: string]: string | undefined;
       };
+      /**
+       * Skip Old Items 
+       * @description Skip items with publish date older than one day from when they're discovered
+       */
+      skip_old_items?: boolean;
     };
     /**
      * Status 
