@@ -1759,7 +1759,7 @@ export interface components {
        */
       source?: "substack" | "buttondown";
     };
-    /** Page[StripeSubscription] */
+    /** Page[UnexpandableStripeSubscription] */
     StripeSubscriptionPage: {
       /** Results */
       results: (components["schemas"]["StripeSubscription"])[];
