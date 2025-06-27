@@ -1758,6 +1758,11 @@ export interface components {
        * @enum {string}
        */
       source?: "substack" | "buttondown";
+      /**
+       * Product 
+       * @description The name of the product which the subscriber is subscribed to. (You can override this by setting the `buttondown_template_facing_id` metadata on the product in Stripe.)
+       */
+      product?: string;
     };
     /** Page[UnexpandableStripeSubscription] */
     StripeSubscriptionPage: {
