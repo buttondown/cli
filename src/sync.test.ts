@@ -185,4 +185,31 @@ describe("SyncManager Image Processing", () => {
       expect(syncedImages['img123'].localPath).toBe('/path/to/media/existing.png');
     });
   });
+
+  describe('generateContentHash', () => {
+    it('should include description and image fields in content hash', () => {
+      const manager = new TestSyncManager();
+      
+      const emailWithoutDescriptionAndImage = {
+        subject: 'Test Subject',
+        body: 'Test Body',
+        status: 'draft',
+        email_type: 'public',
+        slug: 'test-slug',
+        publish_date: '2023-01-01',
+        attachments: []
+      };
+
+      const emailWithDescriptionAndImage = {
+        ...emailWithoutDescriptionAndImage,
+        description: 'Test Description',
+        image: 'https://example.com/image.png'
+      };
+
+      const hash1 = (manager as any).generateContentHash(emailWithoutDescriptionAndImage);
+      const hash2 = (manager as any).generateContentHash(emailWithDescriptionAndImage);
+
+      expect(hash1).not.toBe(hash2);
+    });
+  });
 });

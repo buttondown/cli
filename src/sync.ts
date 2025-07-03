@@ -109,6 +109,8 @@ export class SyncManager {
       email.email_type || "",
       email.slug || "",
       email.publish_date || "",
+      email.description || "",
+      email.image || "",
       JSON.stringify(email.attachments || []),
     ].join("|");
 
@@ -420,6 +422,14 @@ export class SyncManager {
           emailContent += `modified: ${email.modification_date}\n`;
         }
 
+        if (email.description) {
+          emailContent += `description: ${email.description}\n`;
+        }
+
+        if (email.image) {
+          emailContent += `image: ${email.image}\n`;
+        }
+
         if (email.attachments && email.attachments.length > 0) {
           emailContent += "attachments:\n";
           for (const attachment of email.attachments) {
@@ -536,6 +546,14 @@ export class SyncManager {
         emailData.publish_date = metadata.publish_date;
       }
 
+      if (metadata.description) {
+        emailData.description = metadata.description;
+      }
+
+      if (metadata.image) {
+        emailData.image = metadata.image;
+      }
+
       // Calculate content hash
       const contentHash = this.generateContentHash(emailData);
 
@@ -568,6 +586,8 @@ export class SyncManager {
                 status: emailData.status,
                 email_type: emailData.email_type,
                 slug: emailData.slug,
+                description: emailData.description,
+                image: emailData.image,
               },
             })
           );
@@ -593,6 +613,8 @@ export class SyncManager {
                 status: emailData.status,
                 email_type: emailData.email_type,
                 slug: emailData.slug,
+                description: emailData.description,
+                image: emailData.image,
               },
             })
           );
