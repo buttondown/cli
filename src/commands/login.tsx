@@ -21,7 +21,7 @@ export default function Login({ apiKey: initialApiKey }: { apiKey?: string }) {
       }
 
       config.set("apiKey", apiKey);
-      config.set("baseUrl", "https://api.buttondown.email");
+      config.set("baseUrl", "https://api.buttondown.com");
       setSubmitted(true);
       setError(null);
     } catch (error_) {

@@ -1,6 +1,6 @@
 # Buttondown CLI
 
-A command-line interface for [Buttondown](https://buttondown.email/) to sync your newsletters and media with a local folder.
+A command-line interface for [Buttondown](https://buttondown.com/) to sync your newsletters and media with a local folder.
 
 ## Features
 
