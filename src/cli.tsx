@@ -84,7 +84,7 @@ if (!command && !cli.flags.help && !cli.flags.version) {
 let app;
 switch (command) {
   case "login": {
-    app = render(<Login apiKey={cli.flags.apiKey} />);
+    app = render(<Login apiKey={cli.flags.apiKey} force={cli.flags.force} />);
     break;
   }
 

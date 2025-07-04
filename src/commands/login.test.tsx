@@ -39,3 +39,45 @@ test("should persist api key", async () => {
   const config = createConfig();
   expect(config.get("apiKey")).toBe(randomKey);
 });
+
+test("should show already logged in message when API key exists and no force flag", () => {
+  const config = createConfig();
+  config.set("apiKey", "existing-api-key");
+  
+  const { lastFrame } = render(<Login />);
+  expect(lastFrame()).toMatchSnapshot();
+});
+
+test("should show login prompt when API key exists but force flag is true", () => {
+  const config = createConfig();
+  config.set("apiKey", "existing-api-key");
+  
+  const { lastFrame } = render(<Login force={true} />);
+  expect(lastFrame()).toMatchSnapshot();
+});
+
+test("should allow overriding existing API key with force flag", async () => {
+  const config = createConfig();
+  config.set("apiKey", "existing-api-key");
+  
+  const newRandomKey = Math.random().toString(36).slice(2, 15);
+  const { stdin, lastFrame } = render(<Login force={true} />);
+
+  // Wait a bit for the component to be ready
+  await delay(50);
+
+  // Type the new API key
+  stdin.write(newRandomKey);
+
+  // Wait for the input to be processed
+  await delay(50);
+
+  // Submit with Enter
+  stdin.write("\r");
+
+  // Wait for the submit to be processed
+  await delay(200);
+
+  expect(lastFrame()).toMatchSnapshot();
+  expect(config.get("apiKey")).toBe(newRandomKey);
+});

@@ -1,5 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`should allow overriding existing API key with force flag 1`] = `
+"✓ Successfully configured API key!
+
+To use a different API key, run this command again."
+`;
+
 exports[`should display starting status initially 1`] = `
 "Please enter your Buttondown API key:
 
@@ -10,4 +16,16 @@ exports[`should persist api key 1`] = `
 "✓ Successfully configured API key!
 
 To use a different API key, run this command again."
+`;
+
+exports[`should show already logged in message when API key exists and no force flag 1`] = `
+"✓ You're already logged in!
+
+To use a different API key, run: buttondown login --force"
+`;
+
+exports[`should show login prompt when API key exists but force flag is true 1`] = `
+"Please enter your Buttondown API key:
+
+Enter your API key..."
 `;
