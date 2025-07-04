@@ -4249,6 +4249,10 @@ export interface operations {
         utm_campaign?: (string)[];
         /** @description If provided, only return subscribers with the given UTM medium(s). */
         utm_medium?: (string)[];
+        /** @description If provided, only return subscribers whose email domain matches the given domain(s). */
+        domain?: (string)[];
+        /** @description If provided, only return subscribers whose email domain does not match the given domain(s). */
+        "-domain"?: (string)[];
         /** @description If provided, only return subscribers with a risk score greater than or equal to the given value. */
         risk_score__start?: number;
         /** @description If provided, only return subscribers with a risk score less than or equal to the given value. */
