@@ -444,7 +444,7 @@ export interface components {
      * @description A group of data that can be exported in an export. 
      * @enum {string}
      */
-    ExportCollection: "subscribers" | "emails" | "events" | "referrals" | "surveys" | "comments" | "requests" | "mentions" | "conversations" | "images";
+    ExportCollection: "subscribers" | "emails" | "events" | "referrals" | "surveys" | "comments" | "requests" | "mentions" | "conversations" | "images" | "stripe_subscriptions" | "stripe_products" | "stripe_customers" | "stripe_prices" | "stripe_charges";
     /**
      * Format 
      * @description An enumeration. 
@@ -2132,10 +2132,10 @@ export interface components {
     };
     /**
      * Status 
-     * @description Represents the status of the automation, and whether or not it is active. Inactive automations will not be processed. 
+     * @description Represents the status of the automation, and whether or not it is active. Inactive automations will not be processed. Deleted automations will not be processed. 
      * @enum {string}
      */
-    ExternalFeedAutomationStatus: "active" | "failing" | "inactive";
+    ExternalFeedAutomationStatus: "active" | "failing" | "inactive" | "deleted";
     /**
      * Behavior 
      * @description An enumeration. 
