@@ -5,22 +5,26 @@ Thank you for your interest in contributing to the Buttondown CLI!
 ## Development Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/your-username/buttondown-cli.git
    cd buttondown-cli
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Run in development mode:
+
    ```bash
    npm run dev
    ```
 
 4. Build the project:
+
    ```bash
    npm run build
    ```
@@ -74,3 +78,15 @@ Currently, the project uses manual testing. Automated tests will be added in the
 ## License
 
 By contributing, you agree that your contributions will be licensed under the project's MIT License.
+
+## Publishing a new version
+
+(This only applies to members of the @buttondown organization. If you're not one of them and need or want a new version, please open an issue!)
+
+Be sure to bump the version in `package.json` and `package-lock.json` to the "right version", and then:
+
+```bash
+$ bun publish
+```
+
+NPM will ask for authentication; use the credentials for the `engineering@` account, which exists in the 1Password vault.
