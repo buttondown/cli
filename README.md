@@ -37,7 +37,7 @@ buttondown login --api-key=your-api-key
 
 ### Download Content
 
-Pull your emails and media from Buttondown:
+Pull your emails and attachments from Buttondown:
 
 ```bash
 buttondown pull
@@ -94,7 +94,7 @@ The CLI keeps track of all media files in the `.buttondown.json` configuration f
 
 ### Email Format
 
-Emails are stored as Markdown files with frontmatter:
+Emails are stored as `.md` files with frontmatter:
 
 ```markdown
 ---

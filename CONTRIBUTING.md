@@ -14,24 +14,24 @@ Thank you for your interest in contributing to the Buttondown CLI!
 2. Install dependencies:
 
    ```bash
-   npm install
+   bun install
    ```
 
 3. Run in development mode:
 
    ```bash
-   npm run dev
+   bun dev
    ```
 
 4. Build the project:
 
    ```bash
-   npm run build
+   bun build
    ```
 
 5. Link for local testing:
    ```bash
-   npm link
+   bun link
    ```
 
 ## Project Structure
@@ -78,6 +78,7 @@ Currently, the project uses manual testing. Automated tests will be added in the
 ## License
 
 By contributing, you agree that your contributions will be licensed under the project's MIT License.
+
 
 ## Publishing a new version
 

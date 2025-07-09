@@ -43,6 +43,7 @@
     "@types/react": "^19.1.8",
     "delay": "^6.0.0",
     "ink-testing-library": "^4.0.0",
+    "react-devtools-core": "^6.1.5",
     "ts-blank-space": "^0.6.1",
     "tsimp": "^2.0.12",
     "typescript": "^5.8.3",
