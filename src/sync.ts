@@ -127,7 +127,7 @@ export class SyncManager {
 
   // Generate a simple hash of the newsletter content to detect changes
   private generateNewsletterContentHash(
-    newsletter: Newsletter | Partial<Newsletter>
+    newsletter: Newsletter | Partial<Newsletter>,
   ): string {
     const content = [
       newsletter.name || "",
@@ -160,6 +160,7 @@ export class SyncManager {
     const results = [];
     let match;
 
+    // biome-ignore lint/suspicious/noAssignInExpressions: necessary for regex.exec() pattern
     while ((match = regex.exec(content)) !== null) {
       const [fullMatch, altText, imagePath] = match;
 
@@ -198,7 +199,7 @@ export class SyncManager {
       const image = await ok(
         this.api.post("/images", {
           body: formData,
-        })
+        }),
       );
 
       console.log(`✅ Successfully uploaded image: ${image.id}`);
@@ -233,7 +234,7 @@ export class SyncManager {
   private async processRelativeImages(
     content: string,
     emailDir: string,
-    syncedImages: Record<string, SyncedImage>
+    syncedImages: Record<string, SyncedImage>,
   ): Promise<{
     processedContent: string;
     uploadedImages: Array<{
@@ -253,7 +254,7 @@ export class SyncManager {
       if (await fs.pathExists(absolutePath)) {
         // Check if this image has already been uploaded
         const existingImage = Object.values(syncedImages).find(
-          (img) => img.localPath === absolutePath
+          (img) => img.localPath === absolutePath,
         );
 
         let imageUrl: string;
@@ -263,7 +264,7 @@ export class SyncManager {
         if (existingImage) {
           // Use existing uploaded image
           console.log(
-            `Using existing uploaded image: ${existingImage.filename}`
+            `Using existing uploaded image: ${existingImage.filename}`,
           );
           imageUrl = existingImage.url;
           imageId = existingImage.id;
@@ -285,7 +286,7 @@ export class SyncManager {
           } catch (error) {
             console.warn(
               `Failed to upload image ${absolutePath}:`,
-              error instanceof Error ? error.message : String(error)
+              error instanceof Error ? error.message : String(error),
             );
             // Keep the original relative reference if upload fails
             continue;
@@ -296,7 +297,7 @@ export class SyncManager {
         const newReference = `![${imageRef.altText}](${imageUrl})`;
         processedContent = processedContent.replace(
           imageRef.match,
-          newReference
+          newReference,
         );
       } else {
         console.warn(`Image not found: ${absolutePath}`);
@@ -310,7 +311,7 @@ export class SyncManager {
   private convertAbsoluteToRelativeImages(
     content: string,
     emailDir: string,
-    syncedImages: Record<string, SyncedImage>
+    syncedImages: Record<string, SyncedImage>,
   ): string {
     const regex = /!\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g;
     let processedContent = content;
@@ -320,7 +321,7 @@ export class SyncManager {
       (match, altText, imageUrl) => {
         // Find the synced image by URL
         const syncedImage = Object.values(syncedImages).find(
-          (img) => img.url === imageUrl
+          (img) => img.url === imageUrl,
         );
 
         if (syncedImage) {
@@ -331,7 +332,7 @@ export class SyncManager {
 
         // If we can't find the image in our sync records, leave it as absolute
         return match;
-      }
+      },
     );
 
     return processedContent;
@@ -363,7 +364,7 @@ export class SyncManager {
               page_size: pageSize,
             },
           },
-        })
+        }),
       );
 
       for (const email of results) {
@@ -443,7 +444,7 @@ export class SyncManager {
         const processedBody = this.convertAbsoluteToRelativeImages(
           email.body,
           this.emailsDir,
-          syncedImages
+          syncedImages,
         );
         emailContent += processedBody;
 
@@ -498,7 +499,7 @@ export class SyncManager {
 
       if (!match) {
         console.warn(
-          `Skipping ${emailFile}: Invalid format (missing frontmatter)`
+          `Skipping ${emailFile}: Invalid format (missing frontmatter)`,
         );
         continue;
       }
@@ -589,7 +590,7 @@ export class SyncManager {
                 description: emailData.description,
                 image: emailData.image,
               },
-            })
+            }),
           );
           updated++;
 
@@ -616,21 +617,21 @@ export class SyncManager {
                 description: emailData.description,
                 image: emailData.image,
               },
-            })
+            }),
           );
           added++;
 
           // Update the local file with the new ID and slug
           let updatedContent = content.replace(
             /^---\n/,
-            `---\nid: ${newEmail.id}\n`
+            `---\nid: ${newEmail.id}\n`,
           );
 
           if (newEmail.slug && !metadata.slug) {
             // If we have a new slug and didn't have one before, add it to frontmatter
             updatedContent = updatedContent.replace(
               /^---\nid: [^\n]+\n/,
-              `---\nid: ${newEmail.id}\nslug: ${newEmail.slug}\n`
+              `---\nid: ${newEmail.id}\nslug: ${newEmail.slug}\n`,
             );
           }
 
@@ -692,13 +693,13 @@ export class SyncManager {
                 page_size: pageSize,
               },
             },
-          })
+          }),
         );
 
         for (const image of results) {
           // Check if image already exists locally
           const existingImage = Object.values(syncedImages).find(
-            (img: any) => img.id === image.id
+            (img: any) => img.id === image.id,
           ) as SyncedImage | undefined;
 
           // If image exists locally and is up-to-date, skip
@@ -771,7 +772,7 @@ export class SyncManager {
 
       // Check if the file is already tracked in the syncedImages
       const existingImage = Object.values(syncedImages).find(
-        (img: any) => img.localPath === filePath
+        (img: any) => img.localPath === filePath,
       ) as SyncedImage | undefined;
 
       // If we already have this file in our tracking, skip it
@@ -850,11 +851,11 @@ export class SyncManager {
     if (!(await fs.pathExists(templateCssPath))) {
       await fs.writeFile(
         templateCssPath,
-        `/* 
+        `/*
  * This file is for template CSS that will be shared across emails
  * You can include this in your custom CSS by using:
  * @import url('template.css');
- */`
+ */`,
       );
     }
   }
@@ -953,7 +954,7 @@ export class SyncManager {
             },
           },
           body: newsletterData,
-        })
+        }),
       );
 
       // Update sync config

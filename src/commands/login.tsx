@@ -3,13 +3,16 @@ import TextInput from "ink-text-input";
 import React, { useState } from "react";
 import createConfig from "../config.js";
 
-export default function Login({ apiKey: initialApiKey, force }: { apiKey?: string, force?: boolean }) {
+export default function Login({
+  apiKey: initialApiKey,
+  force,
+}: { apiKey?: string; force?: boolean }) {
   const config = createConfig();
   const existingApiKey = config.get("apiKey");
-  
+
   // When force is true, start with empty string; otherwise use existing or initial API key
   const [apiKey, setApiKey] = useState<string>(
-    initialApiKey || (force ? "" : existingApiKey || "")
+    initialApiKey || (force ? "" : existingApiKey || ""),
   );
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);

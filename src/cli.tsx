@@ -4,9 +4,9 @@ import meow from "meow";
 import React from "react";
 import Create from "./commands/create.js";
 import Login from "./commands/login.js";
+import Logout from "./commands/logout.js";
 import Pull from "./commands/pull.js";
 import Push from "./commands/push.js";
-import Logout from "./commands/logout.js";
 
 const cli = meow(
   `
@@ -70,7 +70,7 @@ const cli = meow(
         shortFlag: "v",
       },
     },
-  }
+  },
 );
 
 const [command] = cli.input;
@@ -100,7 +100,7 @@ switch (command) {
         force={cli.flags.force}
         baseUrl={cli.flags.baseUrl}
         apiKey={cli.flags.apiKey}
-      />
+      />,
     );
     break;
   }
@@ -112,7 +112,7 @@ switch (command) {
         force={cli.flags.force}
         baseUrl={cli.flags.baseUrl}
         apiKey={cli.flags.apiKey}
-      />
+      />,
     );
     break;
   }
@@ -124,7 +124,7 @@ switch (command) {
     }
 
     app = render(
-      <Create directory={cli.flags.directory} title={cli.flags.title} />
+      <Create directory={cli.flags.directory} title={cli.flags.title} />,
     );
     break;
   }

@@ -13,7 +13,8 @@
     "start": "node dist/cli.js",
     "test": "vitest run",
     "prepare": "npm run build",
-    "lint": "xo --fix",
+    "lint": "biome check .",
+    "lint:fix": "biome check --fix . --unsafe",
     "cli": "tsc && node dist/cli.js"
   },
   "keywords": [
@@ -51,10 +52,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome"
-    ]
   }
 }

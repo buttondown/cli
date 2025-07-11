@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { SyncManager } from "./sync.js";
 
 describe("SyncManager Image Processing", () => {
@@ -16,21 +16,25 @@ describe("SyncManager Image Processing", () => {
     public testConvertAbsoluteToRelativeImages(
       content: string,
       emailDir: string,
-      syncedImages: any
+      syncedImages: any,
     ) {
       return (this as any).convertAbsoluteToRelativeImages(
         content,
         emailDir,
-        syncedImages
+        syncedImages,
       );
     }
 
     public async testProcessRelativeImages(
       content: string,
       emailDir: string,
-      syncedImages: any
+      syncedImages: any,
     ) {
-      return (this as any).processRelativeImages(content, emailDir, syncedImages);
+      return (this as any).processRelativeImages(
+        content,
+        emailDir,
+        syncedImages,
+      );
     }
   }
 
@@ -101,7 +105,7 @@ describe("SyncManager Image Processing", () => {
       const result = manager.testConvertAbsoluteToRelativeImages(
         content,
         emailDir,
-        syncedImages
+        syncedImages,
       );
 
       expect(result).toBe("Check this image: ![test](../media/image.png)");
@@ -117,11 +121,11 @@ describe("SyncManager Image Processing", () => {
       const result = manager.testConvertAbsoluteToRelativeImages(
         content,
         emailDir,
-        syncedImages
+        syncedImages,
       );
 
       expect(result).toBe(
-        "Check this image: ![test](https://example.com/uploads/unknown.png)"
+        "Check this image: ![test](https://example.com/uploads/unknown.png)",
       );
     });
 
@@ -155,7 +159,7 @@ describe("SyncManager Image Processing", () => {
       const result = manager.testConvertAbsoluteToRelativeImages(
         content,
         emailDir,
-        syncedImages
+        syncedImages,
       );
 
       expect(result).toContain("![test1](../media/image1.png)");
@@ -164,50 +168,54 @@ describe("SyncManager Image Processing", () => {
     });
   });
 
-  describe('processRelativeImages', () => {
-    it('should skip upload for images that already exist in syncedImages', async () => {
+  describe("processRelativeImages", () => {
+    it("should skip upload for images that already exist in syncedImages", async () => {
       const manager = new TestSyncManager();
-      const content = 'Test image: ![test](../media/existing.png)';
-      const emailDir = '/path/to/emails';
+      const content = "Test image: ![test](../media/existing.png)";
+      const emailDir = "/path/to/emails";
       const syncedImages = {
-        'img123': {
-          id: 'img123',
-          url: 'https://example.com/uploads/existing.png',
-          localPath: '/path/to/media/existing.png',
-          filename: 'existing.png',
-          creation_date: '2023-01-01',
-          lastSynced: '2023-01-01'
-        }
+        img123: {
+          id: "img123",
+          url: "https://example.com/uploads/existing.png",
+          localPath: "/path/to/media/existing.png",
+          filename: "existing.png",
+          creation_date: "2023-01-01",
+          lastSynced: "2023-01-01",
+        },
       };
 
       // This test would require mocking file system operations
       // For now, just test the logic conceptually
-      expect(syncedImages['img123'].localPath).toBe('/path/to/media/existing.png');
+      expect(syncedImages.img123.localPath).toBe("/path/to/media/existing.png");
     });
   });
 
-  describe('generateContentHash', () => {
-    it('should include description and image fields in content hash', () => {
+  describe("generateContentHash", () => {
+    it("should include description and image fields in content hash", () => {
       const manager = new TestSyncManager();
-      
+
       const emailWithoutDescriptionAndImage = {
-        subject: 'Test Subject',
-        body: 'Test Body',
-        status: 'draft',
-        email_type: 'public',
-        slug: 'test-slug',
-        publish_date: '2023-01-01',
-        attachments: []
+        subject: "Test Subject",
+        body: "Test Body",
+        status: "draft",
+        email_type: "public",
+        slug: "test-slug",
+        publish_date: "2023-01-01",
+        attachments: [],
       };
 
       const emailWithDescriptionAndImage = {
         ...emailWithoutDescriptionAndImage,
-        description: 'Test Description',
-        image: 'https://example.com/image.png'
+        description: "Test Description",
+        image: "https://example.com/image.png",
       };
 
-      const hash1 = (manager as any).generateContentHash(emailWithoutDescriptionAndImage);
-      const hash2 = (manager as any).generateContentHash(emailWithDescriptionAndImage);
+      const hash1 = (manager as any).generateContentHash(
+        emailWithoutDescriptionAndImage,
+      );
+      const hash2 = (manager as any).generateContentHash(
+        emailWithDescriptionAndImage,
+      );
 
       expect(hash1).not.toBe(hash2);
     });

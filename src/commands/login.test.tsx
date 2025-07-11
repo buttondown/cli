@@ -43,7 +43,7 @@ test("should persist api key", async () => {
 test("should show already logged in message when API key exists and no force flag", () => {
   const config = createConfig();
   config.set("apiKey", "existing-api-key");
-  
+
   const { lastFrame } = render(<Login />);
   expect(lastFrame()).toMatchSnapshot();
 });
@@ -51,7 +51,7 @@ test("should show already logged in message when API key exists and no force fla
 test("should show login prompt when API key exists but force flag is true", () => {
   const config = createConfig();
   config.set("apiKey", "existing-api-key");
-  
+
   const { lastFrame } = render(<Login force={true} />);
   expect(lastFrame()).toMatchSnapshot();
 });
@@ -59,7 +59,7 @@ test("should show login prompt when API key exists but force flag is true", () =
 test("should allow overriding existing API key with force flag", async () => {
   const config = createConfig();
   config.set("apiKey", "existing-api-key");
-  
+
   const newRandomKey = Math.random().toString(36).slice(2, 15);
   const { stdin, lastFrame } = render(<Login force={true} />);
 
