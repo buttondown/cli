@@ -1385,7 +1385,7 @@ export interface components {
      * Undeliverable subscribers are not sent emails, and may be periodically removed from the system (or restored, if the reason is no longer valid.) 
      * @enum {string}
      */
-    SubscriberUndeliverabilityReason: "email_blocked" | "ip_blocked" | "out_of_storage" | "disabled" | "unreachable" | "access_denied" | "does_not_exist" | "rate_limited" | "spam" | "problematic_url" | "on_esp_denylist" | "domain_blocked" | "spf_failed" | "other";
+    SubscriberUndeliverabilityReason: "email_blocked" | "ip_blocked" | "ip_undeliverable" | "out_of_storage" | "disabled" | "unreachable" | "access_denied" | "does_not_exist" | "rate_limited" | "spam" | "problematic_url" | "on_esp_denylist" | "domain_blocked" | "spf_failed" | "other";
     /** Transition */
     Transition: {
       /**
@@ -2057,7 +2057,7 @@ export interface components {
      * (Not to be coy, but these names should be self-explanatory.) 
      * @enum {string}
      */
-    BulkActionType: "apply_tags" | "apply_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "delete_tags" | "delete_surveys" | "delete_survey_responses" | "replay_events" | "delete_comments" | "update_survey_statuses";
+    BulkActionType: "apply_tags" | "apply_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "delete_tags" | "delete_surveys" | "delete_survey_responses" | "replay_events" | "delete_comments" | "update_survey_statuses" | "modify_stripe_subscriptions";
     /**
      * Status 
      * @description Represents the status of a bulk action.
