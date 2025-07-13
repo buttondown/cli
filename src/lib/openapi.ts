@@ -1044,6 +1044,11 @@ export interface components {
        * @description Designated whether or not this email should be highlighted within the archives. (Currently unused.)
        */
       featured: boolean;
+      /**
+       * Should Trigger Pay Per Email Billing 
+       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
+       */
+      should_trigger_pay_per_email_billing: boolean;
     };
     /**
      * EmailCreationErrorCode 
@@ -1144,6 +1149,12 @@ export interface components {
        * @default false
        */
       featured?: boolean;
+      /**
+       * Should Trigger Pay Per Email Billing 
+       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters. 
+       * @default false
+       */
+      should_trigger_pay_per_email_billing?: boolean;
     };
     /** Page[Email] */
     EmailPage: {
@@ -1243,6 +1254,11 @@ export interface components {
        * @description Designated whether or not this email should be highlighted within the archives. (Currently unused.)
        */
       featured?: boolean;
+      /**
+       * Should Trigger Pay Per Email Billing 
+       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
+       */
+      should_trigger_pay_per_email_billing?: boolean;
     };
     /**
      * AccessLevel 
