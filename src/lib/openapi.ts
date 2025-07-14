@@ -4273,6 +4273,8 @@ export interface operations {
         risk_score__start?: number;
         /** @description If provided, only return subscribers with a risk score less than or equal to the given value. */
         risk_score__end?: number;
+        /** @description If provided, only return subscribers with the given source(s). */
+        source?: (components["schemas"]["SubscriberSource"])[];
       };
     };
     responses: {
