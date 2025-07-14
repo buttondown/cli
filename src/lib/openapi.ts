@@ -3320,7 +3320,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    EmailEventType: "activation_clicked" | "activation_delivered" | "activation_opened" | "bounced" | "complained" | "clicked" | "dropped" | "delivered" | "opened" | "sent" | "rejected" | "replied" | "unsubscribed";
+    EmailEventType: "activation_clicked" | "activation_delivered" | "activation_opened" | "activation_reminder_clicked" | "activation_reminder_delivered" | "activation_reminder_opened" | "bounced" | "complained" | "clicked" | "dropped" | "delivered" | "opened" | "sent" | "rejected" | "replied" | "unsubscribed";
     /** EmailEvent */
     EmailEvent: {
       /**
@@ -4221,8 +4221,10 @@ export interface operations {
         tag?: (string)[];
         "-tag"?: string;
         ordering?: string;
-        /** @description If provided, only return subscribers with the given price ID(s). */
+        /** @description If provided, only return subscribers who have at one point subscribed to the given price ID(s). */
         price?: (string)[];
+        /** @description If provided, only return subscribers who are currently subscribed to the given price ID(s). */
+        current_price?: (string)[];
         /** @description If provided, only return subscribers with the given coupon ID(s). */
         coupon?: (string)[];
         /** @description If provided, only return subscribers with the given referral code(s). */
