@@ -1,10 +1,11 @@
 {
   "name": "@buttondown/cli",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "CLI for Buttondown to sync emails and media with a local folder",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
+    "cli": "dist/cli.js",
     "buttondown": "dist/cli.js"
   },
   "scripts": {
