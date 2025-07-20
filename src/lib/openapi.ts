@@ -2618,6 +2618,8 @@ export interface components {
       style: "pay-what-you-want" | "fixed" | "usage-based";
       /** Amount */
       amount?: number;
+      /** Suggested Amount */
+      suggested_amount?: number;
       /** Currency */
       currency: string;
       /**
@@ -2695,6 +2697,8 @@ export interface components {
       style: "pay-what-you-want" | "fixed" | "usage-based";
       /** Amount */
       amount?: number;
+      /** Suggested Amount */
+      suggested_amount?: number;
       /** Currency */
       currency: string;
       /**
