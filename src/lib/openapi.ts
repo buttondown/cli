@@ -4263,7 +4263,7 @@ export interface operations {
         undeliverability_reason?: (components["schemas"]["SubscriberUndeliverabilityReason"])[];
         /** @description If provided, only return subscribers with the given unsubscription reason(s). */
         unsubscription_reason?: (string)[];
-        /** @description If provided, only return subscribers with the given referrer URL(s). */
+        /** @description If provided, only return subscribers whose referrer URL(s) contain the given string. */
         referrer_url?: (string)[];
         /** @description If provided, only return subscribers with the given UTM source(s). */
         utm_source?: (string)[];
