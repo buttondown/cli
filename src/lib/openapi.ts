@@ -888,20 +888,20 @@ export interface components {
        */
       webmentions?: number;
       /**
-       * Page Views  Lifetime 
+       * Page Views Lifetime 
        * @default 0
        */
-      page_views__lifetime?: number;
+      page_views_lifetime?: number;
       /**
-       * Page Views  30 
+       * Page Views 30 
        * @default 0
        */
-      page_views__30?: number;
+      page_views_30?: number;
       /**
-       * Page Views  7 
+       * Page Views 7 
        * @default 0
        */
-      page_views__7?: number;
+      page_views_7?: number;
       /**
        * Subscriptions 
        * @default 0
@@ -3908,7 +3908,7 @@ export interface operations {
         automations?: (string)[];
         /** @description If provided, only return emails with the given ids. */
         ids?: (string)[];
-        ordering?: "creation_date" | "-creation_date" | "status" | "-status" | "publish_date" | "-publish_date" | "subject" | "-subject" | "email_type" | "-email_type" | "modification_date" | "-modification_date" | "clicks" | "-clicks" | "opens" | "-opens" | "click_rate" | "-click_rate" | "open_rate" | "-open_rate" | "page_views__lifetime" | "-page_views__lifetime" | "page_views__30" | "-page_views__30" | "page_views__7" | "-page_views__7" | "webmentions" | "-webmentions" | "subscriptions" | "-subscriptions" | "paid_subscriptions" | "-paid_subscriptions" | "unsubscriptions" | "-unsubscriptions" | "replies" | "-replies" | "comments" | "-comments" | "social_mentions" | "-social_mentions" | "permanent_failure_rate" | "-permanent_failure_rate" | "complaint_rate" | "-complaint_rate";
+        ordering?: "creation_date" | "-creation_date" | "status" | "-status" | "publish_date" | "-publish_date" | "subject" | "-subject" | "email_type" | "-email_type" | "modification_date" | "-modification_date" | "clicks" | "-clicks" | "opens" | "-opens" | "click_rate" | "-click_rate" | "open_rate" | "-open_rate" | "page_views_lifetime" | "-page_views_lifetime" | "page_views_30" | "-page_views_30" | "page_views_7" | "-page_views_7" | "webmentions" | "-webmentions" | "subscriptions" | "-subscriptions" | "paid_subscriptions" | "-paid_subscriptions" | "unsubscriptions" | "-unsubscriptions" | "replies" | "-replies" | "comments" | "-comments" | "social_mentions" | "-social_mentions" | "permanent_failure_rate" | "-permanent_failure_rate" | "complaint_rate" | "-complaint_rate";
         /** @description If provided, only return emails created after the given date. */
         creation_date__start?: string;
         /** @description If provided, only return emails created before the given date. */
