@@ -503,7 +503,10 @@ export interface components {
        * @description The date and time at which the object was created.
        */
       creation_date: string;
-      /** Url */
+      /**
+       * Url 
+       * @description The URL of the export file. This is only available after the export has completed.
+       */
       url?: string;
       /**
        * Completion Date 
@@ -1009,7 +1012,7 @@ export interface components {
       description: string;
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: {
@@ -1119,7 +1122,7 @@ export interface components {
       status?: components["schemas"]["EmailStatus"];
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: {
@@ -1226,7 +1229,7 @@ export interface components {
       status?: components["schemas"]["EmailStatus"];
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object.
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata))
        */
       metadata?: {
         [key: string]: string | undefined;
@@ -1449,7 +1452,7 @@ export interface components {
       notes?: string;
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: {
@@ -1570,7 +1573,7 @@ export interface components {
       notes?: string;
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: {
@@ -2232,10 +2235,14 @@ export interface components {
     ExternalFeedInput: {
       /**
        * Url 
+       * @description The URL of the RSS feed to poll for new items. 
        * @example http://lorem-rss.herokuapp.com/feed
        */
       url: string;
-      /** @example draft */
+      /**
+       * @description The [behavior](https://docs.buttondown.com/api-external-feed-behavior) of the external feed. 
+       * @example draft
+       */
       behavior: components["schemas"]["ExternalFeedAutomationBehavior"];
       /** @example daily */
       cadence: components["schemas"]["ExternalFeedAutomationCadence"];
@@ -3324,7 +3331,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    EmailEventType: "activation_clicked" | "activation_delivered" | "activation_opened" | "activation_reminder_clicked" | "activation_reminder_delivered" | "activation_reminder_opened" | "bounced" | "complained" | "clicked" | "dropped" | "delivered" | "opened" | "sent" | "rejected" | "replied" | "unsubscribed";
+    EmailEventType: "activation_clicked" | "activation_delivered" | "activation_opened" | "activation_reminder_clicked" | "activation_reminder_delivered" | "activation_reminder_opened" | "attempted" | "bounced" | "complained" | "clicked" | "dropped" | "delivered" | "opened" | "sent" | "rejected" | "replied" | "unsubscribed";
     /** EmailEvent */
     EmailEvent: {
       /**
