@@ -1377,7 +1377,7 @@ export interface components {
      * be set programmatically. 
      * @enum {string}
      */
-    SubscriberType: "regular" | "premium" | "churning" | "past_due" | "gifted" | "unpaid" | "churned" | "unactivated" | "unsubscribed" | "malformed" | "complained" | "undeliverable" | "spammy" | "removed" | "trialed" | "disabled" | "paused" | "disposable" | "blocked";
+    SubscriberType: "regular" | "premium" | "churning" | "past_due" | "gifted" | "unpaid" | "churned" | "unactivated" | "unsubscribed" | "complained" | "undeliverable" | "removed" | "trialed" | "paused" | "disposable" | "blocked";
     /**
      * Source 
      * @description Represents the original provenance of a subscriber. This value is not exposed
@@ -1404,7 +1404,7 @@ export interface components {
      * Undeliverable subscribers are not sent emails, and may be periodically removed from the system (or restored, if the reason is no longer valid.) 
      * @enum {string}
      */
-    SubscriberUndeliverabilityReason: "email_blocked" | "ip_blocked" | "ip_undeliverable" | "out_of_storage" | "disabled" | "unreachable" | "access_denied" | "does_not_exist" | "rate_limited" | "spam" | "problematic_url" | "on_esp_denylist" | "domain_blocked" | "spf_failed" | "other";
+    SubscriberUndeliverabilityReason: "email_blocked" | "ip_blocked" | "ip_undeliverable" | "out_of_storage" | "disabled" | "unreachable" | "access_denied" | "does_not_exist" | "rate_limited" | "spam" | "problematic_url" | "on_esp_denylist" | "domain_blocked" | "spf_failed" | "malformed" | "other";
     /** Transition */
     Transition: {
       /**
