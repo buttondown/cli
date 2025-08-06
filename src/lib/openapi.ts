@@ -510,9 +510,11 @@ export interface components {
       url?: string;
       /**
        * Completion Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time the export completed.
        */
       completion_date?: string;
+      /** @description The status of the export. */
       status: components["schemas"]["ExportStatus"];
     };
     /** ErrorMessage */
@@ -2916,12 +2918,12 @@ export interface components {
        * @enum {string}
        */
       version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01";
+      /** Ip Address */
+      ip_address: string;
       /** Request Data */
       request_data: string;
       /** Response Data */
       response_data: string;
-      /** Ip Address */
-      ip_address: string;
     };
     /**
      * APIRequest 
@@ -2952,6 +2954,8 @@ export interface components {
        * @enum {string}
        */
       version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01";
+      /** Ip Address */
+      ip_address: string;
     };
     /** APIRequestList */
     APIRequestList: {
@@ -3393,11 +3397,20 @@ export interface components {
        * @description The date and time at which the object was created.
        */
       creation_date: string;
-      /** Body */
+      /**
+       * Body 
+       * @description The text content of the note.
+       */
       body: string;
-      /** Model Type */
+      /**
+       * Model Type 
+       * @description The type of object this note is attached to (e.g., 'email', 'subscriber').
+       */
       model_type: string;
-      /** Model Id */
+      /**
+       * Model Id 
+       * @description The ID of the object this note is attached to.
+       */
       model_id: string;
       /** Metadata */
       metadata: Record<string, unknown>;
@@ -3427,7 +3440,7 @@ export interface components {
       model_id: string;
       /**
        * Metadata 
-       * @description Arbitrary metadata as key-value pairs.
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata))
        */
       metadata?: Record<string, unknown>;
     };
@@ -4074,6 +4087,7 @@ export interface operations {
         /** @description If provided, expand the given field. */
         expand?: ("user")[];
         field: string;
+        /** @description The page number of the paginated response. */
         page?: number;
         ordering?: "creation_date" | "-creation_date";
         query?: string;
