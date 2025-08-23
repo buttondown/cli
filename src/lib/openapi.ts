@@ -740,11 +740,8 @@ export interface components {
      * Supported file types include documents, images, audio files, and more.
      */
     Attachment: {
-      /**
-       * Id 
-       * Format: uuid
-       */
-      id: string;
+      /** Id */
+      id: string | string;
       /**
        * Creation Date 
        * Format: date-time
@@ -1038,7 +1035,7 @@ export interface components {
        * Attachments 
        * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
        */
-      attachments?: (string)[];
+      attachments?: (string | string)[];
       /**
        * Related Email Ids 
        * @description A list of email IDs that are related to this email. Related emails are shown at the bottom of the email and archive pages.
@@ -1083,7 +1080,7 @@ export interface components {
        * Attachments 
        * @default []
        */
-      attachments?: (string)[];
+      attachments?: (string | string)[];
       /**
        * Publish Date 
        * Format: date-time
@@ -1200,7 +1197,7 @@ export interface components {
        * Attachments 
        * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
        */
-      attachments?: (string)[];
+      attachments?: (string | string)[];
       /** Publish Date */
       publish_date?: string | "none";
       /**
@@ -1379,7 +1376,7 @@ export interface components {
      * be set programmatically. 
      * @enum {string}
      */
-    SubscriberType: "regular" | "premium" | "churning" | "past_due" | "gifted" | "unpaid" | "churned" | "unactivated" | "unsubscribed" | "complained" | "undeliverable" | "removed" | "trialed" | "paused" | "disposable" | "blocked";
+    SubscriberType: "regular" | "premium" | "churning" | "past_due" | "gifted" | "unpaid" | "churned" | "unactivated" | "unsubscribed" | "complained" | "undeliverable" | "removed" | "trialed" | "paused" | "blocked";
     /**
      * Source 
      * @description Represents the original provenance of a subscriber. This value is not exposed
@@ -3895,7 +3892,7 @@ export interface operations {
   delete_attachment: {
     parameters: {
       path: {
-        id: string;
+        id: string | string;
       };
     };
     responses: {
