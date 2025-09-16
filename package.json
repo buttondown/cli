@@ -1,6 +1,6 @@
 {
   "name": "@buttondown/cli",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "CLI for Buttondown to sync emails and media with a local folder",
   "type": "module",
   "main": "dist/index.js",
@@ -18,7 +18,12 @@
     "lint:fix": "biome check --fix . --unsafe",
     "cli": "tsc && node dist/cli.js"
   },
-  "keywords": ["buttondown", "cli", "newsletter", "sync"],
+  "keywords": [
+    "buttondown",
+    "cli",
+    "newsletter",
+    "sync"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {

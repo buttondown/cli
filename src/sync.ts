@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
+import PACKAGE_JSON from "../package.json" with { type: "json" };
 import createConfig from "./config.js";
 import { type Client, createClient, ok } from "./lib/openapi-wrapper.js";
 import type { components, paths } from "./lib/openapi.js";
@@ -13,9 +14,6 @@ import {
   serialize,
 } from "./lib/serde/email.js";
 import { hash as genericHash } from "./lib/utils.js";
-
-// TODO: DRY this with the version in package.json.
-const VERSION = "1.0.3";
 
 type Email = components["schemas"]["Email"];
 type Newsletter = components["schemas"]["Newsletter"];
@@ -141,7 +139,7 @@ export class SyncManager {
       middlewares: [
         async (request, next) => {
           request.headers.set("authorization", `Token ${apiKey}`);
-          request.headers.set("user-agent", `buttondown-cli/${VERSION}`);
+          request.headers.set("user-agent", `buttondown-cli/${PACKAGE_JSON.version}`);
           return next(request);
         },
       ],
