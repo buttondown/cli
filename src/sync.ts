@@ -1,22 +1,33 @@
+import { existsSync } from "node:fs";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
-import axios from "axios";
-import fs from "fs-extra";
-import { glob } from "glob";
 import createConfig from "./config.js";
 import { type Client, createClient, ok } from "./lib/openapi-wrapper.js";
 import type { components, paths } from "./lib/openapi.js";
+import {
+  type FrontMatterFields,
+  deserialize,
+  findRelativeImageReferences,
+  hash,
+  replaceImageReference,
+  serialize,
+} from "./lib/serde/email.js";
+import { hash as genericHash } from "./lib/utils.js";
 
 // TODO: DRY this with the version in package.json.
-const VERSION = "1.0.2";
+const VERSION = "1.0.3";
 
 type Email = components["schemas"]["Email"];
 type Newsletter = components["schemas"]["Newsletter"];
+
+const PAGE_SIZE = 100;
 
 type SyncOptions = {
   directory: string;
   force?: boolean;
   baseUrl?: string;
   apiKey?: string;
+  verbose?: boolean;
 };
 
 type SyncedEmail = {
@@ -41,9 +52,75 @@ type SyncedNewsletter = {
   contentHash?: string;
 };
 
+export type Output = {
+  emails: { added: number; updated: number; unchanged: number };
+  media: { downloaded: number; uploaded: number };
+  branding: { updated: boolean };
+};
+
+const DEFAULT_OUTPUT: Output = {
+  emails: { added: 0, updated: 0, unchanged: 0 },
+  media: { downloaded: 0, uploaded: 0 },
+  branding: { updated: false },
+};
+
 const BRANDING_FILE = "branding.json";
 const CSS_FILE = "custom.css";
 const TEMPLATE_CSS_FILE = "template.css";
+
+const EXTENSION_TO_MIME_TYPE = {
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".gif": "image/gif",
+  ".webp": "image/webp",
+  ".svg": "image/svg+xml",
+  ".bmp": "image/bmp",
+  ".ico": "image/x-icon",
+};
+
+const ABSOLUTE_IMAGE_URL_REGEX = /!\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g;
+
+export const convertAbsoluteToRelativeImages = (
+  content: string,
+  emailDir: string,
+  syncedImages: Record<string, SyncedImage>
+): string => {
+  const regex = ABSOLUTE_IMAGE_URL_REGEX;
+  let processedContent = content;
+
+  processedContent = processedContent.replace(
+    regex,
+    (match, altText, imageUrl) => {
+      const syncedImage = Object.values(syncedImages).find(
+        (img) => img.url === imageUrl
+      );
+
+      if (syncedImage) {
+        const relativePath = path.relative(emailDir, syncedImage.localPath);
+        return `![${altText}](${relativePath})`;
+      }
+
+      return match;
+    }
+  );
+
+  return processedContent;
+};
+
+type SyncConfig = {
+  lastSync: string | null;
+  syncedEmails: Record<string, SyncedEmail>;
+  syncedImages: Record<string, SyncedImage>;
+  syncedNewsletter: SyncedNewsletter | null;
+};
+
+const DEFAULT_SYNC_CONFIG: SyncConfig = {
+  lastSync: null,
+  syncedEmails: {},
+  syncedImages: {},
+  syncedNewsletter: null,
+};
 
 export class SyncManager {
   private readonly api: Client<paths>;
@@ -53,6 +130,7 @@ export class SyncManager {
   private readonly brandingDir: string;
   private readonly cssDir: string;
   private readonly configPath: string;
+  private readonly verbose: boolean;
 
   constructor(options: SyncOptions) {
     const config = createConfig();
@@ -74,132 +152,57 @@ export class SyncManager {
     this.brandingDir = path.join(this.baseDir, "branding");
     this.cssDir = path.join(this.brandingDir, "css");
     this.configPath = path.join(this.baseDir, ".buttondown.json");
+    this.verbose = options.verbose || false;
   }
 
   async initialize(): Promise<void> {
-    await fs.ensureDir(this.emailsDir);
-    await fs.ensureDir(this.mediaDir);
-    await fs.ensureDir(this.brandingDir);
-    await fs.ensureDir(this.cssDir);
+    await mkdir(this.emailsDir, { recursive: true });
+    await mkdir(this.mediaDir, { recursive: true });
+    await mkdir(this.brandingDir, { recursive: true });
+    await mkdir(this.cssDir, { recursive: true });
 
-    if (await fs.pathExists(this.configPath)) {
-      // Ensure syncedImages exists in existing config files
-      const config = await fs.readJSON(this.configPath);
+    if (await existsSync(this.configPath)) {
+      const config = await Bun.file(this.configPath).json();
       config.syncedImages ||= {};
 
       config.syncedNewsletter ||= null;
 
-      await fs.writeJSON(this.configPath, config, { spaces: 2 });
+      await Bun.file(this.configPath).write(JSON.stringify(config, null, 2));
     } else {
-      await fs.writeJSON(this.configPath, {
-        lastSync: null,
-        syncedEmails: {},
-        syncedImages: {},
-        syncedNewsletter: null,
-      });
+      await Bun.file(this.configPath).write(
+        JSON.stringify(DEFAULT_SYNC_CONFIG, null, 2)
+      );
     }
   }
 
-  // Generate a simple hash of the email content to detect changes
-  private generateContentHash(email: Email | Partial<Email>): string {
-    const content = [
-      email.subject || "",
-      email.body || "",
-      email.status || "",
-      email.email_type || "",
-      email.slug || "",
-      email.publish_date || "",
-      email.description || "",
-      email.image || "",
-      JSON.stringify(email.attachments || []),
-    ].join("|");
-
-    // Simple hash function
-    let hash = 0;
-    for (let i = 0; i < content.length; i++) {
-      const char = content.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash &= hash; // Convert to 32bit integer
-    }
-
-    return hash.toString();
-  }
-
-  // Generate a simple hash of the newsletter content to detect changes
-  private generateNewsletterContentHash(
-    newsletter: Newsletter | Partial<Newsletter>,
-  ): string {
-    const content = [
-      newsletter.name || "",
-      newsletter.description || "",
-      newsletter.username || "",
-      newsletter.tint_color || "",
-      newsletter.header || "",
-      newsletter.footer || "",
-      newsletter.from_name || "",
-    ].join("|");
-
-    // Simple hash function
-    let hash = 0;
-    for (let i = 0; i < content.length; i++) {
-      const char = content.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash &= hash; // Convert to 32bit integer
-    }
-
-    return hash.toString();
-  }
-
-  // Find relative image references in markdown content
-  findRelativeImageReferences(content: string): Array<{
-    match: string;
-    altText: string;
-    relativePath: string;
-  }> {
-    const regex = /!\[([^\]]*)\]\(([^)]+)\)/g;
-    const results = [];
-    let match;
-
-    // biome-ignore lint/suspicious/noAssignInExpressions: necessary for regex.exec() pattern
-    while ((match = regex.exec(content)) !== null) {
-      const [fullMatch, altText, imagePath] = match;
-
-      // Check if it's a relative path (not starting with http/https//)
-      if (!imagePath.startsWith("http") && !imagePath.startsWith("//")) {
-        results.push({
-          match: fullMatch,
-          altText,
-          relativePath: imagePath,
-        });
-      }
-    }
-
-    return results;
-  }
-
-  // Upload image and return the uploaded image info
   private async uploadImage(imagePath: string): Promise<{
     id: string;
     url: string;
     filename: string;
   }> {
-    const fileContent = await fs.readFile(imagePath);
+    const fileContent = await readFile(imagePath);
     const filename = path.basename(imagePath);
 
     console.log(`Uploading image: ${filename} (${fileContent.length} bytes)`);
 
-    // Create FormData with proper file handling for Node.js
     const formData = new FormData();
-    const blob = new Blob([fileContent], {
-      type: this.getMimeType(filename),
+    const blob = new Blob([Buffer.from(fileContent)], {
+      type: EXTENSION_TO_MIME_TYPE[
+        path
+          .extname(filename)
+          .toLowerCase() as keyof typeof EXTENSION_TO_MIME_TYPE
+      ],
     });
+    if (!blob.type) {
+      throw new Error(`Unknown file type: ${filename}`);
+    }
     formData.append("image", blob, filename);
 
     try {
       const image = await ok(
         this.api.post("/images", {
           body: formData,
-        }),
+        })
       );
 
       console.log(`✅ Successfully uploaded image: ${image.id}`);
@@ -214,143 +217,12 @@ export class SyncManager {
     }
   }
 
-  // Helper method to get MIME type based on file extension
-  private getMimeType(filename: string): string {
-    const ext = path.extname(filename).toLowerCase();
-    const mimeTypes: Record<string, string> = {
-      ".jpg": "image/jpeg",
-      ".jpeg": "image/jpeg",
-      ".png": "image/png",
-      ".gif": "image/gif",
-      ".webp": "image/webp",
-      ".svg": "image/svg+xml",
-      ".bmp": "image/bmp",
-      ".ico": "image/x-icon",
-    };
-    return mimeTypes[ext] || "application/octet-stream";
-  }
-
-  // Convert relative image references to absolute URLs
-  private async processRelativeImages(
-    content: string,
-    emailDir: string,
-    syncedImages: Record<string, SyncedImage>,
-  ): Promise<{
-    processedContent: string;
-    uploadedImages: Array<{
-      id: string;
-      localPath: string;
-      url: string;
-      filename: string;
-    }>;
-  }> {
-    const relativeImages = this.findRelativeImageReferences(content);
-    const uploadedImages = [];
-    let processedContent = content;
-
-    for (const imageRef of relativeImages) {
-      const absolutePath = path.resolve(emailDir, imageRef.relativePath);
-
-      if (await fs.pathExists(absolutePath)) {
-        // Check if this image has already been uploaded
-        const existingImage = Object.values(syncedImages).find(
-          (img) => img.localPath === absolutePath,
-        );
-
-        let imageUrl: string;
-        let imageId: string;
-        let filename: string;
-
-        if (existingImage) {
-          // Use existing uploaded image
-          console.log(
-            `Using existing uploaded image: ${existingImage.filename}`,
-          );
-          imageUrl = existingImage.url;
-          imageId = existingImage.id;
-          filename = existingImage.filename;
-        } else {
-          // Upload new image
-          try {
-            const uploadedImage = await this.uploadImage(absolutePath);
-            imageUrl = uploadedImage.url;
-            imageId = uploadedImage.id;
-            filename = uploadedImage.filename;
-
-            uploadedImages.push({
-              id: imageId,
-              localPath: absolutePath,
-              url: imageUrl,
-              filename,
-            });
-          } catch (error) {
-            console.warn(
-              `Failed to upload image ${absolutePath}:`,
-              error instanceof Error ? error.message : String(error),
-            );
-            // Keep the original relative reference if upload fails
-            continue;
-          }
-        }
-
-        // Replace the relative reference with the absolute URL
-        const newReference = `![${imageRef.altText}](${imageUrl})`;
-        processedContent = processedContent.replace(
-          imageRef.match,
-          newReference,
-        );
-      } else {
-        console.warn(`Image not found: ${absolutePath}`);
-      }
-    }
-
-    return { processedContent, uploadedImages };
-  }
-
-  // Convert absolute image URLs back to relative paths
-  private convertAbsoluteToRelativeImages(
-    content: string,
-    emailDir: string,
-    syncedImages: Record<string, SyncedImage>,
-  ): string {
-    const regex = /!\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g;
-    let processedContent = content;
-
-    processedContent = processedContent.replace(
-      regex,
-      (match, altText, imageUrl) => {
-        // Find the synced image by URL
-        const syncedImage = Object.values(syncedImages).find(
-          (img) => img.url === imageUrl,
-        );
-
-        if (syncedImage) {
-          // Calculate relative path from email directory to the image
-          const relativePath = path.relative(emailDir, syncedImage.localPath);
-          return `![${altText}](${relativePath})`;
-        }
-
-        // If we can't find the image in our sync records, leave it as absolute
-        return match;
-      },
-    );
-
-    return processedContent;
-  }
-
-  async pullEmails(): Promise<{
-    added: number;
-    updated: number;
-    unchanged: number;
-  }> {
+  async pullEmails(): Promise<Output["emails"]> {
     let page = 1;
-    const pageSize = 100;
     let hasMore = true;
-    let added = 0;
-    let updated = 0;
-    let unchanged = 0;
+    const syncResults: Output["emails"] = DEFAULT_OUTPUT.emails;
 
-    const syncConfig = await fs.readJSON(this.configPath);
+    const syncConfig = await Bun.file(this.configPath).json();
     const syncedEmails = syncConfig.syncedEmails || {};
     const syncedImages = syncConfig.syncedImages || {};
 
@@ -361,94 +233,38 @@ export class SyncManager {
             query: {
               // @ts-expect-error
               page,
-              page_size: pageSize,
+              page_size: PAGE_SIZE,
             },
           },
-        }),
+        })
       );
 
       for (const email of results) {
-        // Use slug for filename, fallback to ID if no slug
         const filenameBase = email.slug || email.id;
         const emailPath = path.join(this.emailsDir, `${filenameBase}.md`);
-        const emailExists = await fs.pathExists(emailPath);
+        const emailExists = await existsSync(emailPath);
 
-        // Calculate content hash
-        const contentHash = this.generateContentHash(email);
+        const contentHash = hash(email);
 
-        // Check if this email has changed since last sync
         const previousSync = syncedEmails[email.id] as SyncedEmail | undefined;
         const hasChanged =
           !previousSync || previousSync.contentHash !== contentHash;
 
         if (emailExists && !hasChanged) {
-          // Email exists locally and hasn't changed, skip updating
-          unchanged++;
+          syncResults.unchanged++;
           continue;
         }
 
-        // Create email markdown with front matter
-        let emailContent = "---\n";
-
-        // Only add properties that exist and are not undefined
-        if (email.id) {
-          emailContent += `id: ${email.id}\n`;
-        }
-
-        if (email.subject) {
-          emailContent += `subject: ${email.subject}\n`;
-        }
-
-        if (email.status) {
-          emailContent += `status: ${email.status}\n`;
-        }
-
-        if (email.email_type) {
-          emailContent += `email_type: ${email.email_type}\n`;
-        }
-
-        if (email.slug) {
-          emailContent += `slug: ${email.slug}\n`;
-        }
-
-        if (email.publish_date) {
-          emailContent += `publish_date: ${email.publish_date}\n`;
-        }
-
-        if (email.creation_date) {
-          emailContent += `created: ${email.creation_date}\n`;
-        }
-
-        if (email.modification_date) {
-          emailContent += `modified: ${email.modification_date}\n`;
-        }
-
-        if (email.description) {
-          emailContent += `description: ${email.description}\n`;
-        }
-
-        if (email.image) {
-          emailContent += `image: ${email.image}\n`;
-        }
-
-        if (email.attachments && email.attachments.length > 0) {
-          emailContent += "attachments:\n";
-          for (const attachment of email.attachments) {
-            emailContent += `  - ${attachment}\n`;
-          }
-        }
-
-        emailContent += "---\n\n";
-
-        // Convert absolute image URLs to relative paths
-        const processedBody = this.convertAbsoluteToRelativeImages(
+        const processedBody = convertAbsoluteToRelativeImages(
           email.body,
           this.emailsDir,
-          syncedImages,
+          syncedImages
         );
-        emailContent += processedBody;
 
-        await fs.writeFile(emailPath, emailContent);
+        const emailWithProcessedBody = { ...email, body: processedBody };
+        const emailContent = serialize(emailWithProcessedBody);
+
+        await writeFile(emailPath, emailContent);
 
         syncedEmails[email.id] = {
           modified: email.modification_date,
@@ -458,69 +274,107 @@ export class SyncManager {
         };
 
         if (emailExists) {
-          updated++;
+          syncResults.updated++;
         } else {
-          added++;
+          syncResults.added++;
         }
       }
 
-      hasMore = results.length === pageSize;
+      hasMore = results.length === PAGE_SIZE;
       page++;
     }
 
-    // Update sync config
     syncConfig.lastSync = new Date().toISOString();
     syncConfig.syncedEmails = syncedEmails;
-    await fs.writeJSON(this.configPath, syncConfig, { spaces: 2 });
+    await Bun.file(this.configPath).write(JSON.stringify(syncConfig, null, 2));
 
-    return { added, updated, unchanged };
+    return syncResults;
   }
 
-  async pushEmails(): Promise<{
-    added: number;
-    updated: number;
-    unchanged: number;
-  }> {
-    let added = 0;
-    let updated = 0;
-    let unchanged = 0;
+  async pushEmails(): Promise<Output["emails"]> {
+    const syncResults: Output["emails"] = DEFAULT_OUTPUT.emails;
 
-    const emailFiles = await glob("**/*.md", { cwd: this.emailsDir });
-    const syncConfig = await fs.readJSON(this.configPath);
+    const glob = new Bun.Glob("**/*.md");
+    const emailFiles = await glob.scan(this.emailsDir);
+    const syncConfig = (await Bun.file(this.configPath).json()) as SyncConfig;
     const syncedEmails = syncConfig.syncedEmails || {};
     const syncedImages = syncConfig.syncedImages || {};
 
-    for (const emailFile of emailFiles) {
+    for await (const emailFile of emailFiles) {
       const emailPath = path.join(this.emailsDir, emailFile);
-      const content = await fs.readFile(emailPath, "utf8");
+      const content = await readFile(emailPath, "utf8");
 
-      // Parse frontmatter and content
-      const match = /^---\n([\s\S]*?)\n---\n\n([\s\S]*)$/.exec(content);
+      const parsed = deserialize(content);
 
-      if (!match) {
-        console.warn(
-          `Skipping ${emailFile}: Invalid format (missing frontmatter)`,
-        );
+      if (!parsed.isValid) {
+        console.warn(`Skipping ${emailFile}: ${parsed.error}`);
         continue;
       }
 
-      const [, frontMatter, body] = match;
-      const metadata: Record<string, any> = {};
+      const { email } = parsed;
 
-      for (const line of frontMatter.split("\n")) {
-        const [key, ...valueParts] = line.split(":");
-        if (key && valueParts.length > 0) {
-          const value = valueParts.join(":").trim();
-          metadata[key.trim()] = value;
+      if (this.verbose) {
+        console.log(`Processing email: ${emailFile}`);
+      }
+
+      const emailDir = path.dirname(emailPath);
+
+      const relativeImages = findRelativeImageReferences(content);
+      const uploadedImages = [];
+      let processedContent = content;
+
+      for (const imageRef of relativeImages) {
+        const absolutePath = path.resolve(emailDir, imageRef.relativePath);
+
+        if (await existsSync(absolutePath)) {
+          const existingImage = Object.values(syncedImages).find(
+            (img: SyncedImage) => img.localPath === absolutePath
+          ) as SyncedImage | undefined;
+
+          let imageUrl: string;
+          let imageId: string;
+          let filename: string;
+
+          if (existingImage) {
+            console.log(
+              `Using existing uploaded image: ${existingImage.filename}`
+            );
+            imageUrl = existingImage.url;
+            imageId = existingImage.id;
+            filename = existingImage.filename;
+          } else {
+            try {
+              const uploadedImage = await this.uploadImage(absolutePath);
+              imageUrl = uploadedImage.url;
+              imageId = uploadedImage.id;
+              filename = uploadedImage.filename;
+
+              uploadedImages.push({
+                id: imageId,
+                localPath: absolutePath,
+                url: imageUrl,
+                filename,
+              });
+            } catch (error) {
+              console.warn(
+                `Failed to upload image ${absolutePath}:`,
+                error instanceof Error ? error.message : String(error)
+              );
+              continue;
+            }
+          }
+
+          processedContent = replaceImageReference(
+            processedContent,
+            imageRef.match,
+            imageUrl,
+            imageRef.altText
+          );
+        } else {
+          console.warn(`Image not found: ${absolutePath}`);
         }
       }
 
-      // Process relative images and convert to absolute URLs
-      const emailDir = path.dirname(emailPath);
-      const { processedContent, uploadedImages } =
-        await this.processRelativeImages(body, emailDir, syncedImages);
-
-      // Update synced images config with newly uploaded images
       for (const uploadedImage of uploadedImages) {
         syncedImages[uploadedImage.id] = {
           id: uploadedImage.id,
@@ -532,131 +386,77 @@ export class SyncManager {
         };
       }
 
-      const emailData: Partial<Email> = {
+      const updatedEmail: Partial<Email & FrontMatterFields> = {
+        ...email,
         body: processedContent,
-        subject: metadata.subject,
-        email_type: metadata.email_type || "draft",
-        status: metadata.status || "draft",
       };
 
-      if (metadata.slug) {
-        emailData.slug = metadata.slug;
-      }
-
-      if (metadata.publish_date) {
-        emailData.publish_date = metadata.publish_date;
-      }
-
-      if (metadata.description) {
-        emailData.description = metadata.description;
-      }
-
-      if (metadata.image) {
-        emailData.image = metadata.image;
-      }
-
-      // Calculate content hash
-      const contentHash = this.generateContentHash(emailData);
-
-      if (metadata.id) {
-        // Check if content has changed before updating
-        const previousSync = syncedEmails[metadata.id] as
-          | SyncedEmail
-          | undefined;
+      if (email.id) {
+        const previousSync = syncedEmails[email.id] as SyncedEmail | undefined;
         const hasChanged =
-          !previousSync || previousSync.contentHash !== contentHash;
+          !previousSync || previousSync.contentHash !== hash(updatedEmail);
 
         if (!hasChanged) {
-          // Content hasn't changed, skip updating
-          unchanged++;
+          syncResults.unchanged++;
           continue;
         }
 
-        // Update existing email
         try {
           await ok(
             this.api.patch("/emails/{id}", {
               params: {
                 path: {
-                  id: metadata.id,
+                  id: email.id,
                 },
               },
               body: {
-                subject: emailData.subject,
-                body: emailData.body,
-                status: emailData.status,
-                email_type: emailData.email_type,
-                slug: emailData.slug,
-                description: emailData.description,
-                image: emailData.image,
+                ...updatedEmail,
               },
-            }),
+            })
           );
-          updated++;
+          syncResults.updated++;
 
-          syncedEmails[metadata.id] = {
+          syncedEmails[email.id] = {
             modified: new Date().toISOString(),
             localPath: emailPath,
-            slug: metadata.slug || path.basename(emailFile, ".md"),
-            contentHash,
+            slug: email.slug || path.basename(emailFile, ".md"),
+            contentHash: hash(updatedEmail),
           };
         } catch (error) {
-          console.error(`Failed to update email ${metadata.id}:`, error);
+          console.error(`Failed to update email ${email.id}:`, error);
         }
       } else {
-        // Create new email
         try {
           const newEmail = await ok(
             this.api.post("/emails", {
               body: {
-                subject: emailData.subject || "",
-                body: emailData.body,
-                status: emailData.status,
-                email_type: emailData.email_type,
-                slug: emailData.slug,
-                description: emailData.description,
-                image: emailData.image,
+                ...updatedEmail,
+                subject: updatedEmail.subject || "",
               },
-            }),
+            })
           );
-          added++;
+          syncResults.added++;
+          await writeFile(emailPath, serialize(updatedEmail));
 
-          // Update the local file with the new ID and slug
-          let updatedContent = content.replace(
-            /^---\n/,
-            `---\nid: ${newEmail.id}\n`,
-          );
-
-          if (newEmail.slug && !metadata.slug) {
-            // If we have a new slug and didn't have one before, add it to frontmatter
-            updatedContent = updatedContent.replace(
-              /^---\nid: [^\n]+\n/,
-              `---\nid: ${newEmail.id}\nslug: ${newEmail.slug}\n`,
-            );
-          }
-
-          await fs.writeFile(emailPath, updatedContent);
-
-          // If the email has a slug, rename the file to use it
           if (
             newEmail.slug &&
             path.basename(emailFile, ".md") !== newEmail.slug
           ) {
             const newPath = path.join(this.emailsDir, `${newEmail.slug}.md`);
-            await fs.rename(emailPath, newPath);
+            await rename(emailPath, newPath);
 
             syncedEmails[newEmail.id] = {
               modified: newEmail.modification_date,
               localPath: newPath,
               slug: newEmail.slug,
-              contentHash,
+              contentHash: hash(updatedEmail),
             };
           } else {
             syncedEmails[newEmail.id] = {
               modified: newEmail.modification_date,
               localPath: emailPath,
               slug: newEmail.slug,
-              contentHash,
+              contentHash: hash(updatedEmail),
             };
           }
         } catch (error) {
@@ -665,22 +465,20 @@ export class SyncManager {
       }
     }
 
-    // Update sync config
     syncConfig.lastSync = new Date().toISOString();
     syncConfig.syncedEmails = syncedEmails;
     syncConfig.syncedImages = syncedImages;
-    await fs.writeJSON(this.configPath, syncConfig, { spaces: 2 });
+    await Bun.file(this.configPath).write(JSON.stringify(syncConfig, null, 2));
 
-    return { added, updated, unchanged };
+    return syncResults;
   }
 
-  async pullMedia(): Promise<{ downloaded: number }> {
+  async pullMedia(): Promise<Output["media"]> {
     let downloaded = 0;
     let page = 1;
-    const pageSize = 100;
     let hasMore = true;
 
-    const syncConfig = await fs.readJSON(this.configPath);
+    const syncConfig = (await Bun.file(this.configPath).json()) as SyncConfig;
     const syncedImages = syncConfig.syncedImages || {};
 
     while (hasMore) {
@@ -690,41 +488,37 @@ export class SyncManager {
             params: {
               query: {
                 page,
-                page_size: pageSize,
+                page_size: PAGE_SIZE,
               },
             },
-          }),
+          })
         );
 
         for (const image of results) {
-          // Check if image already exists locally
           const existingImage = Object.values(syncedImages).find(
-            (img: any) => img.id === image.id,
+            (img: any) => img.id === image.id
           ) as SyncedImage | undefined;
 
-          // If image exists locally and is up-to-date, skip
-          if (existingImage && (await fs.pathExists(existingImage.localPath))) {
+          if (existingImage && (await existsSync(existingImage.localPath))) {
             continue;
           }
 
-          // Extract filename from image URL or use the image ID
           let filename = path.basename(image.image);
           if (!filename.includes(".")) {
-            // If URL doesn't have an extension, use ID with jpg extension
             filename = `${image.id}.jpg`;
           }
 
           const localPath = path.join(this.mediaDir, filename);
 
           try {
-            // Download the image file
-            const response = await axios.get(image.image, {
-              responseType: "arraybuffer",
-            });
+            const response = await fetch(image.image);
+            if (!response.ok) {
+              throw new Error(`Failed to fetch image: ${response.statusText}`);
+            }
+            const arrayBuffer = await response.arrayBuffer();
 
-            await fs.writeFile(localPath, Buffer.from(response.data));
+            await writeFile(localPath, Buffer.from(arrayBuffer));
 
-            // Update synced images record
             syncedImages[image.id] = {
               id: image.id,
               localPath,
@@ -740,7 +534,7 @@ export class SyncManager {
           }
         }
 
-        hasMore = results.length === pageSize;
+        hasMore = results.length === PAGE_SIZE;
         page++;
       } catch (error) {
         console.error("Error fetching images:", error);
@@ -748,34 +542,28 @@ export class SyncManager {
       }
     }
 
-    // Update sync config with downloaded images
     syncConfig.syncedImages = syncedImages;
-    await fs.writeJSON(this.configPath, syncConfig, { spaces: 2 });
+    await Bun.file(this.configPath).write(JSON.stringify(syncConfig, null, 2));
 
-    return { downloaded };
+    return { downloaded, uploaded: 0 };
   }
 
-  async pushMedia(): Promise<{ uploaded: number }> {
+  async pushMedia(): Promise<Output["media"]> {
     let uploaded = 0;
 
-    const mediaFiles = await glob("**/*", {
-      cwd: this.mediaDir,
-      nodir: true,
-    });
+    const glob = new Bun.Glob("**/*");
 
-    const syncConfig = await fs.readJSON(this.configPath);
+    const syncConfig = (await Bun.file(this.configPath).json()) as SyncConfig;
     const syncedImages = syncConfig.syncedImages || {};
 
-    for (const mediaFile of mediaFiles) {
+    for await (const mediaFile of glob.scan(this.mediaDir)) {
       const filePath = path.join(this.mediaDir, mediaFile);
       const filename = path.basename(mediaFile);
 
-      // Check if the file is already tracked in the syncedImages
       const existingImage = Object.values(syncedImages).find(
-        (img: any) => img.localPath === filePath,
+        (img: any) => img.localPath === filePath
       ) as SyncedImage | undefined;
 
-      // If we already have this file in our tracking, skip it
       if (existingImage) {
         continue;
       }
@@ -793,18 +581,16 @@ export class SyncManager {
       uploaded++;
     }
 
-    // Update sync config
     syncConfig.syncedImages = syncedImages;
-    await fs.writeJSON(this.configPath, syncConfig, { spaces: 2 });
+    await Bun.file(this.configPath).write(JSON.stringify(syncConfig, null, 2));
 
-    return { uploaded };
+    return { uploaded, downloaded: 0 };
   }
 
   async pullNewsletterMetadata(): Promise<{ updated: boolean }> {
     try {
-      const syncConfig = await fs.readJSON(this.configPath);
+      const syncConfig = await Bun.file(this.configPath).json();
 
-      // Get newsletter data from API
       const newsletters = await ok(this.api.get("/newsletters"));
       const newsletter = newsletters.results[0];
 
@@ -813,24 +599,60 @@ export class SyncManager {
         return { updated: false };
       }
 
-      // Calculate content hash
-      const contentHash = this.generateNewsletterContentHash(newsletter);
+      const contentHash = genericHash([
+        newsletter.name || "",
+        newsletter.description || "",
+        newsletter.username || "",
+        newsletter.tint_color || "",
+        newsletter.header || "",
+        newsletter.footer || "",
+        newsletter.from_name || "",
+      ]);
 
-      // Create user-friendly branding config
-      const brandingConfig = this.createBrandingConfig(newsletter);
       const brandingPath = path.join(this.brandingDir, BRANDING_FILE);
-      await fs.writeJSON(brandingPath, brandingConfig, { spaces: 2 });
+      await Bun.file(brandingPath).write(
+        JSON.stringify(
+          {
+            name: newsletter.name || "",
+            description: newsletter.description || "",
+            username: newsletter.username || "",
+            branding: {
+              tint_color: newsletter.tint_color || null,
+              header: newsletter.header || null,
+              footer: newsletter.footer || null,
+              from_name: newsletter.from_name || null,
+            },
+          },
+          null,
+          2
+        )
+      );
 
-      // Save CSS files separately for easier editing
-      await this.saveCssFiles(newsletter);
+      if (newsletter.css) {
+        const customCssPath = path.join(this.cssDir, CSS_FILE);
+        await writeFile(customCssPath, newsletter.css);
+      }
 
-      // Update sync config
+      const templateCssPath = path.join(this.cssDir, TEMPLATE_CSS_FILE);
+      if (!(await existsSync(templateCssPath))) {
+        await writeFile(
+          templateCssPath,
+          `/*
+ * This file is for template CSS that will be shared across emails
+ * You can include this in your custom CSS by using:
+ * @import url('template.css');
+ */`
+        );
+      }
+
       syncConfig.syncedNewsletter = {
         id: newsletter.id,
         lastSynced: new Date().toISOString(),
         contentHash,
       };
-      await fs.writeJSON(this.configPath, syncConfig, { spaces: 2 });
+      await Bun.file(this.configPath).write(
+        JSON.stringify(syncConfig, null, 2)
+      );
 
       return { updated: true };
     } catch (error) {
@@ -839,73 +661,23 @@ export class SyncManager {
     }
   }
 
-  private async saveCssFiles(newsletter: Newsletter): Promise<void> {
-    // Save custom CSS to a separate file if it exists
-    if (newsletter.css) {
-      const customCssPath = path.join(this.cssDir, CSS_FILE);
-      await fs.writeFile(customCssPath, newsletter.css);
-    }
-
-    // Prepare an empty template file if it doesn't exist yet
-    const templateCssPath = path.join(this.cssDir, TEMPLATE_CSS_FILE);
-    if (!(await fs.pathExists(templateCssPath))) {
-      await fs.writeFile(
-        templateCssPath,
-        `/*
- * This file is for template CSS that will be shared across emails
- * You can include this in your custom CSS by using:
- * @import url('template.css');
- */`,
-      );
-    }
-  }
-
-  private async readCssFiles(): Promise<{ customCss: string | null }> {
-    const customCssPath = path.join(this.cssDir, CSS_FILE);
-
-    let customCss = null;
-    if (await fs.pathExists(customCssPath)) {
-      customCss = await fs.readFile(customCssPath, "utf8");
-    }
-
-    return { customCss };
-  }
-
-  private createBrandingConfig(newsletter: Newsletter): any {
-    // Remove CSS from branding.json since it will be in separate files
-    return {
-      name: newsletter.name || "",
-      description: newsletter.description || "",
-      username: newsletter.username || "",
-      branding: {
-        tint_color: newsletter.tint_color || null,
-        header: newsletter.header || null,
-        footer: newsletter.footer || null,
-        from_name: newsletter.from_name || null,
-      },
-    };
-  }
-
   async pushNewsletterMetadata(): Promise<{ updated: boolean }> {
     try {
       const brandingPath = path.join(this.brandingDir, BRANDING_FILE);
 
-      // If branding file doesn't exist, nothing to push
-      if (!(await fs.pathExists(brandingPath))) {
+      if (!(await existsSync(brandingPath))) {
         return { updated: false };
       }
 
-      const syncConfig = await fs.readJSON(this.configPath);
-      const brandingConfig = await fs.readJSON(brandingPath);
+      const syncConfig = await Bun.file(this.configPath).json();
+      const brandingConfig = await Bun.file(brandingPath).json();
 
-      // Extract branding data from config
       const newsletterData: Partial<Newsletter> = {
         name: brandingConfig.name,
         description: brandingConfig.description,
         username: brandingConfig.username,
       };
 
-      // Add branding fields if they exist
       if (brandingConfig.branding) {
         const { branding } = brandingConfig;
         if (branding.tint_color) {
@@ -925,16 +697,27 @@ export class SyncManager {
         }
       }
 
-      // Read CSS from files
-      const { customCss } = await this.readCssFiles();
+      const customCssPath = path.join(this.cssDir, CSS_FILE);
+
+      let customCss = null;
+      if (await existsSync(customCssPath)) {
+        customCss = await readFile(customCssPath, "utf8");
+      }
+
       if (customCss !== null) {
         newsletterData.css = customCss;
       }
 
-      // Calculate content hash
-      const contentHash = this.generateNewsletterContentHash(newsletterData);
+      const contentHash = genericHash([
+        newsletterData.name || "",
+        newsletterData.description || "",
+        newsletterData.username || "",
+        newsletterData.tint_color || "",
+        newsletterData.header || "",
+        newsletterData.footer || "",
+        newsletterData.from_name || "",
+      ]);
 
-      // Check if newsletter settings have changed since last sync
       const syncedNewsletter = syncConfig.syncedNewsletter as
         | SyncedNewsletter
         | undefined;
@@ -945,7 +728,6 @@ export class SyncManager {
         return { updated: false };
       }
 
-      // Update newsletter via API
       const updatedNewsletter = await ok(
         this.api.patch("/newsletters/{id}", {
           params: {
@@ -954,16 +736,17 @@ export class SyncManager {
             },
           },
           body: newsletterData,
-        }),
+        })
       );
 
-      // Update sync config
       syncConfig.syncedNewsletter = {
         id: updatedNewsletter.id,
         lastSynced: new Date().toISOString(),
         contentHash,
       };
-      await fs.writeJSON(this.configPath, syncConfig, { spaces: 2 });
+      await Bun.file(this.configPath).write(
+        JSON.stringify(syncConfig, null, 2)
+      );
 
       return { updated: true };
     } catch (error) {

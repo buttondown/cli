@@ -1,6 +1,6 @@
 import { Box, Text, useApp } from "ink";
 import React, { useEffect, useState } from "react";
-import { SyncManager } from "../sync.js";
+import { type Output, SyncManager } from "../sync.js";
 
 type PullProps = {
   directory: string;
@@ -18,11 +18,7 @@ export default function Pull({
   const { exit } = useApp();
   const [status, setStatus] = useState<string>("Starting pull...");
   const [error, setError] = useState<string | null>(null);
-  const [stats, setStats] = useState<{
-    emails: { added: number; updated: number; unchanged: number };
-    media: { downloaded: number };
-    branding: { updated: boolean };
-  } | null>(null);
+  const [stats, setStats] = useState<Output | null>(null);
 
   useEffect(() => {
     const performPull = async () => {

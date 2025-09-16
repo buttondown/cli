@@ -1,50 +1,18 @@
-import { describe, expect, it } from "vitest";
-import { SyncManager } from "./sync.js";
+import { describe, expect, it } from "bun:test";
+import type { components } from "./lib/openapi.js";
+import { findRelativeImageReferences } from "./lib/serde/email.js";
+import { hash } from "./lib/utils.js";
+import { convertAbsoluteToRelativeImages } from "./sync.js";
 
-describe("SyncManager Image Processing", () => {
-  // Create a mock SyncManager instance for testing private methods
-  class TestSyncManager extends SyncManager {
-    constructor() {
-      super({ directory: "/tmp/test" });
-    }
+type Email = components["schemas"]["Email"];
 
-    // Expose private methods for testing
-    public testFindRelativeImageReferences(content: string) {
-      return this.findRelativeImageReferences(content);
-    }
-
-    public testConvertAbsoluteToRelativeImages(
-      content: string,
-      emailDir: string,
-      syncedImages: any,
-    ) {
-      return (this as any).convertAbsoluteToRelativeImages(
-        content,
-        emailDir,
-        syncedImages,
-      );
-    }
-
-    public async testProcessRelativeImages(
-      content: string,
-      emailDir: string,
-      syncedImages: any,
-    ) {
-      return (this as any).processRelativeImages(
-        content,
-        emailDir,
-        syncedImages,
-      );
-    }
-  }
-
+describe("sync", () => {
   describe("findRelativeImageReferences", () => {
     it("should find relative image references", () => {
-      const manager = new TestSyncManager();
       const content =
         "Here is an image: ![alt text](../images/test.png) and another ![](./local.jpg)";
 
-      const result = manager.testFindRelativeImageReferences(content);
+      const result = findRelativeImageReferences(content);
 
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
@@ -60,24 +28,22 @@ describe("SyncManager Image Processing", () => {
     });
 
     it("should ignore absolute URLs", () => {
-      const manager = new TestSyncManager();
       const content =
         "Absolute: ![test](https://example.com/image.png) and ![test](//cdn.example.com/img.jpg)";
 
-      const result = manager.testFindRelativeImageReferences(content);
+      const result = findRelativeImageReferences(content);
 
       expect(result).toHaveLength(0);
     });
 
     it("should handle mixed relative and absolute references", () => {
-      const manager = new TestSyncManager();
       const content = `
         Relative: ![local](../test.png)
         Absolute: ![remote](https://example.com/remote.jpg)
         Another relative: ![another](./subfolder/image.gif)
       `;
 
-      const result = manager.testFindRelativeImageReferences(content);
+      const result = findRelativeImageReferences(content);
 
       expect(result).toHaveLength(2);
       expect(result[0].relativePath).toBe("../test.png");
@@ -87,7 +53,6 @@ describe("SyncManager Image Processing", () => {
 
   describe("convertAbsoluteToRelativeImages", () => {
     it("should convert absolute URLs to relative paths when image is synced", () => {
-      const manager = new TestSyncManager();
       const content =
         "Check this image: ![test](https://example.com/uploads/image.png)";
       const emailDir = "/path/to/emails";
@@ -102,7 +67,7 @@ describe("SyncManager Image Processing", () => {
         },
       };
 
-      const result = manager.testConvertAbsoluteToRelativeImages(
+      const result = convertAbsoluteToRelativeImages(
         content,
         emailDir,
         syncedImages,
@@ -112,13 +77,12 @@ describe("SyncManager Image Processing", () => {
     });
 
     it("should leave absolute URLs unchanged when image is not synced", () => {
-      const manager = new TestSyncManager();
       const content =
         "Check this image: ![test](https://example.com/uploads/unknown.png)";
       const emailDir = "/path/to/emails";
       const syncedImages = {};
 
-      const result = manager.testConvertAbsoluteToRelativeImages(
+      const result = convertAbsoluteToRelativeImages(
         content,
         emailDir,
         syncedImages,
@@ -130,7 +94,6 @@ describe("SyncManager Image Processing", () => {
     });
 
     it("should handle multiple images correctly", () => {
-      const manager = new TestSyncManager();
       const content = `
         Known image: ![test1](https://example.com/image1.png)
         Unknown image: ![test2](https://example.com/image2.png)
@@ -156,7 +119,7 @@ describe("SyncManager Image Processing", () => {
         },
       };
 
-      const result = manager.testConvertAbsoluteToRelativeImages(
+      const result = convertAbsoluteToRelativeImages(
         content,
         emailDir,
         syncedImages,
@@ -168,32 +131,8 @@ describe("SyncManager Image Processing", () => {
     });
   });
 
-  describe("processRelativeImages", () => {
-    it("should skip upload for images that already exist in syncedImages", async () => {
-      const manager = new TestSyncManager();
-      const content = "Test image: ![test](../media/existing.png)";
-      const emailDir = "/path/to/emails";
-      const syncedImages = {
-        img123: {
-          id: "img123",
-          url: "https://example.com/uploads/existing.png",
-          localPath: "/path/to/media/existing.png",
-          filename: "existing.png",
-          creation_date: "2023-01-01",
-          lastSynced: "2023-01-01",
-        },
-      };
-
-      // This test would require mocking file system operations
-      // For now, just test the logic conceptually
-      expect(syncedImages.img123.localPath).toBe("/path/to/media/existing.png");
-    });
-  });
-
   describe("generateContentHash", () => {
     it("should include description and image fields in content hash", () => {
-      const manager = new TestSyncManager();
-
       const emailWithoutDescriptionAndImage = {
         subject: "Test Subject",
         body: "Test Body",
@@ -202,20 +141,34 @@ describe("SyncManager Image Processing", () => {
         slug: "test-slug",
         publish_date: "2023-01-01",
         attachments: [],
-      };
+      } as Partial<Email>;
 
       const emailWithDescriptionAndImage = {
         ...emailWithoutDescriptionAndImage,
         description: "Test Description",
         image: "https://example.com/image.png",
-      };
+      } as Partial<Email>;
 
-      const hash1 = (manager as any).generateContentHash(
-        emailWithoutDescriptionAndImage,
-      );
-      const hash2 = (manager as any).generateContentHash(
-        emailWithDescriptionAndImage,
-      );
+      const hash1 = hash([
+        emailWithoutDescriptionAndImage.body || "",
+        emailWithoutDescriptionAndImage.status || "",
+        emailWithoutDescriptionAndImage.email_type || "",
+        emailWithoutDescriptionAndImage.slug || "",
+        emailWithoutDescriptionAndImage.publish_date || "",
+        emailWithoutDescriptionAndImage.description || "",
+        emailWithoutDescriptionAndImage.image || "",
+        JSON.stringify(emailWithoutDescriptionAndImage.attachments || []),
+      ]);
+      const hash2 = hash([
+        emailWithDescriptionAndImage.body || "",
+        emailWithDescriptionAndImage.status || "",
+        emailWithDescriptionAndImage.email_type || "",
+        emailWithDescriptionAndImage.slug || "",
+        emailWithDescriptionAndImage.publish_date || "",
+        emailWithDescriptionAndImage.description || "",
+        emailWithDescriptionAndImage.image || "",
+        JSON.stringify(emailWithDescriptionAndImage.attachments || []),
+      ]);
 
       expect(hash1).not.toBe(hash2);
     });

@@ -1,10 +1,11 @@
 import { Box, Text, useApp } from "ink";
 import React, { useEffect, useState } from "react";
-import { SyncManager } from "../sync.js";
+import { type Output, SyncManager } from "../sync.js";
 
 type PushProps = {
   directory: string;
   force?: boolean;
+  verbose?: boolean;
   baseUrl?: string;
   apiKey?: string;
 };
@@ -12,17 +13,14 @@ type PushProps = {
 export default function Push({
   directory,
   force = false,
+  verbose = false,
   baseUrl,
   apiKey,
 }: PushProps) {
   const { exit } = useApp();
   const [status, setStatus] = useState<string>("Starting push...");
   const [error, setError] = useState<string | null>(null);
-  const [stats, setStats] = useState<{
-    emails: { added: number; updated: number; unchanged: number };
-    media: { uploaded: number };
-    branding: { updated: boolean };
-  } | null>(null);
+  const [stats, setStats] = useState<Output | null>(null);
 
   useEffect(() => {
     const performPush = async () => {
@@ -62,7 +60,6 @@ export default function Push({
 
   useEffect(() => {
     if (stats || error) {
-      // Exit process after a short delay to ensure output is visible
       const timer = setTimeout(() => {
         exit();
       }, 500);
@@ -90,7 +87,8 @@ export default function Push({
               </Box>
               <Box>
                 <Text color="green">
-                  ✓ {stats.media.uploaded} media files uploaded
+                  ✓ {stats.media.downloaded} media files downloaded,{" "}
+                  {stats.media.uploaded} media files uploaded
                 </Text>
               </Box>
               <Box>

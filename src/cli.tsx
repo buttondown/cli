@@ -26,6 +26,7 @@ const cli = meow(
     --directory, -d Directory to store or read Buttondown content (default: ./buttondown)
     --force, -f     Force operation without confirmation
     --title, -t     Title for new email (with create command)
+    --verbose, -v   Verbose output
     --help          Show this help message
     --version       Show the version number
 
@@ -60,6 +61,10 @@ const cli = meow(
       title: {
         type: "string",
         shortFlag: "t",
+      },
+      verbose: {
+        type: "boolean",
+        shortFlag: "v",
       },
       help: {
         type: "boolean",
@@ -112,6 +117,7 @@ switch (command) {
         force={cli.flags.force}
         baseUrl={cli.flags.baseUrl}
         apiKey={cli.flags.apiKey}
+        verbose={cli.flags.verbose}
       />,
     );
     break;
