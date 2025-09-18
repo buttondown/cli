@@ -780,7 +780,13 @@ export interface components {
      * observability purposes only. 
      * @enum {string}
      */
-    EmailStatus: "draft" | "managed_by_rss" | "about_to_send" | "scheduled" | "in_flight" | "paused" | "deleted" | "errored" | "sent" | "imported" | "throttled" | "resending" | "transactional";
+    EmailStatus: "draft" | "managed_by_rss" | "about_to_send" | "scheduled" | "in_flight" | "paused" | "deleted" | "errored" | "sent" | "imported" | "throttled" | "resending" | "transactional" | "suppressed";
+    /**
+     * SuppressionReason 
+     * @description Represents the reason an email was suppressed. 
+     * @enum {string}
+     */
+    EmailSuppressionReason: "law_enforcement" | "internal_auditing";
     /**
      * Type 
      * @description Represents the audience of an email, and to whom it is visible both in the initial
@@ -987,6 +993,8 @@ export interface components {
       body: string;
       /** @description The current status of the email. */
       status: components["schemas"]["EmailStatus"];
+      /** @description Reason for suppression, if email is suppressed. */
+      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
       /**
        * Slug 
        * @description A short, human-readable identifier for the email. (Used in the URL of the email, and in the 'slug' field of the email object.)
@@ -1226,6 +1234,7 @@ export interface components {
       /** @description The type of email to create. Defaults to `PUBLIC`. */
       email_type?: components["schemas"]["EmailType"];
       status?: components["schemas"]["EmailStatus"];
+      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
       /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata))
@@ -2614,6 +2623,8 @@ export interface components {
       creation_date: string;
       /** Active */
       active: boolean;
+      /** Default Price */
+      default_price?: string;
     };
     /** Price */
     Price: {
@@ -3199,6 +3210,12 @@ export interface components {
       count: number;
     };
     /**
+     * Type 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    CommentType: "reviewer" | "subscriber";
+    /**
      * Comment 
      * @description Comments are a way for subscribers to interact with newsletters. They're a way to
      * provide feedback, ask questions, and generally engage with the content of an email.
@@ -3236,6 +3253,9 @@ export interface components {
       parent_id?: string;
       /** Text */
       text: string;
+      comment_type: components["schemas"]["CommentType"];
+      /** Annotation Data */
+      annotation_data?: Record<string, unknown>;
       subscriber?: components["schemas"]["Subscriber"];
       email?: components["schemas"]["Email"];
     };
@@ -6221,6 +6241,8 @@ export interface operations {
   list_comments: {
     parameters: {
       query: {
+        /** @description If provided, only return comments of the given type. */
+        comment_type: "reviewer" | "subscriber";
         /** @description If provided, only return comments for the given email. */
         email_id?: string;
         /** @description If provided, only return comments for the given subscriber. */
