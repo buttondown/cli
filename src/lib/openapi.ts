@@ -4293,6 +4293,10 @@ export interface operations {
         upgrade_date__start?: string;
         /** @description If provided, only return subscribers with the given upgrade date(s). */
         upgrade_date__end?: string;
+        /** @description If provided, only return subscribers with the given churn date(s). */
+        churn_date__start?: string;
+        /** @description If provided, only return subscribers with the given churn date(s). */
+        churn_date__end?: string;
         /** @description If provided, only return subscribers with the given undeliverability date(s). */
         undeliverability_date__start?: string;
         /** @description If provided, only return subscribers with the given undeliverability date(s). */
