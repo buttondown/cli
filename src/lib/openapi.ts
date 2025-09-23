@@ -943,7 +943,7 @@ export interface components {
      * Each template has a different layout/style; you can view screenshots and examples [in the docs](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates). 
      * @enum {string}
      */
-    NewsletterEmailTemplate: "classic" | "modern" | "airy" | "plaintext" | "naked";
+    NewsletterEmailTemplate: "classic" | "modern" | "plaintext" | "naked";
     /**
      * Email 
      * @description Emails are why you're here on Buttondown, right?
