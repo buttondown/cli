@@ -1542,6 +1542,11 @@ export interface components {
        * @description The risk score of the subscriber. Positive numbers represent a higher risk; negative numbers represent a lower risk.
        */
       risk_score?: number;
+      /**
+       * Gift Subscription Message 
+       * @description A custom message that was sent to the subscriber when the gift subscription was created.
+       */
+      gift_subscription_message?: string;
       /** Stripe Customer */
       stripe_customer?: Record<string, unknown>;
     };
