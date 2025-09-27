@@ -433,6 +433,13 @@ export interface paths {
     /** Create Note Endpoint */
     post: operations["create_note_endpoint"];
   };
+  "/notes/{id}": {
+    /**
+     * Delete Note Endpoint 
+     * @description Delete a note
+     */
+    delete: operations["delete_note_endpoint"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -816,7 +823,20 @@ export interface components {
      * @enum {string}
      */
     Operator: "equals" | "not_equals" | "contains" | "not_contains" | "is_empty" | "is_not_empty" | "greater_than" | "less_than";
-    /** Filter */
+    /**
+     * Filter 
+     * @description A filter is a single condition that can be evaluated against a [Subscriber](/api-subscribers-retrieve). It has a field, an operator, and a value:
+     * 
+     * ```json
+     * {
+     *     "field": "subscriber.tags",
+     *     "operator": "contains",
+     *     "value": "executive"
+     * }
+     * ```
+     * 
+     * The field is the path to the field on the subscriber to evaluate. The operator is the operator to use when evaluating the filter. The value is the value to compare the field to.
+     */
     Filter: {
       /** Field */
       field: string;
@@ -830,11 +850,67 @@ export interface components {
      * 
      * - Filtering [the audience of an email](/api-emails-create) to a specific subset
      * - Creating [finely-tuned automations](/api-automation-introduction)
+     * 
+     * Filters are fractal; they can be nested in groups, and groups can be nested in other groups. This is accomplished through a tree-like structure. Every "FilterGroup" has a "predicate" field, which is either "and" or "or", which determines how the filters and groups within the group are combined, a "groups" field, which is a list of "FilterGroup" objects (that's that recursive bit!), and a "filters" field, which are the leaf-level filters themselves.
+     * 
+     * Let's say you want a simple filter: all subscribers who have a tag called "executive". You can do that like this:
+     * 
+     * ```json
+     * {
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}],
+     *     "groups": [],
+     *     "predicate": "and"
+     * }
+     * ```
+     * 
+     * Now, let's say you want to filter for subscribers who have a tag called "executive" and a tag called "general-electric". You can do that like this:
+     * 
+     * ```json
+     * {
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
+     *     "groups": [],
+     *     "predicate": "and"
+     * }
+     * ```
+     * 
+     * If you wanted to change that `and` to an `or`, you can do that like this:
+     * 
+     * ```json
+     * {
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
+     *     "groups": [],
+     *     "predicate": "or"
+     * }
+     * ```
+     * 
+     * Now, let's say you want to filter for subscribers who have a tag called "executive" _or_ a tag called "general-electric" and a tag called "admin". This is where the whole nested thing comes in handy. You can do that like this:
+     * 
+     * ```json
+     * {
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}],
+     *     "groups": [
+     *         {
+     *             "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "admin"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
+     *             "groups": [],
+     *             "predicate": "and"
+     *         }
+     *     ],
+     *     "predicate": "or"
+     * }
+     * ```
+     * 
+     * You can read more about the specific filter construction in the [Filter documentation](/api-emails-filter).
      */
     FilterGroup: {
-      /** Filters */
+      /**
+       * Filters 
+       * @description The leaf-level filters to apply to the audience.
+       */
       filters: (components["schemas"]["Filter"])[];
-      /** Groups */
+      /**
+       * Groups 
+       * @description The nested groups to apply to the audience.
+       */
       groups: (components["schemas"]["FilterGroup"])[];
       /**
        * Predicate 
@@ -3427,9 +3503,11 @@ export interface components {
       body: string;
       /**
        * Model Type 
-       * @description The type of object this note is attached to (e.g., 'email', 'subscriber').
+       * @description The type of object this note is attached to (e.g., 'email', 'subscriber'). 
+       * @example email 
+       * @enum {string}
        */
-      model_type: string;
+      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag";
       /**
        * Model Id 
        * @description The ID of the object this note is attached to.
@@ -3453,9 +3531,11 @@ export interface components {
       body: string;
       /**
        * Model Type 
-       * @description The type of object this note is attached to (e.g., 'email', 'subscriber').
+       * @description The type of object this note is attached to (e.g., 'email', 'subscriber'). 
+       * @example email 
+       * @enum {string}
        */
-      model_type: string;
+      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag";
       /**
        * Model Id 
        * @description The ID of the object this note is attached to.
@@ -6466,6 +6546,35 @@ export interface operations {
       };
       /** @description Forbidden */
       403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Note Endpoint 
+   * @description Delete a note
+   */
+  delete_note_endpoint: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
