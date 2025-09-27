@@ -6500,7 +6500,7 @@ export interface operations {
     parameters: {
       query: {
         /** @description Filter notes by the type of object they are attached to. */
-        model_type?: string;
+        model_type?: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag";
         /** @description Filter notes by the ID of the object they are attached to. */
         model_id?: string;
         /** @description If provided, expand the given field. */
