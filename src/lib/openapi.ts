@@ -1885,6 +1885,12 @@ export interface components {
       count: number;
     };
     /**
+     * AuditingMode 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    NewsletterAuditingMode: "disabled" | "enabled" | "aggressive";
+    /**
      * Newsletter 
      * @description You will likely not need to interact with your newsletter settings
      * programmatically, but if you do, this is the endpoint for you. You can
@@ -1976,6 +1982,11 @@ export interface components {
        * @description URL to your newsletter's header or branding image
        */
       image?: string;
+      /**
+       * @description The auditing mode for your newsletter. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
+       * @enum {unknown}
+       */
+      auditing_mode?: "disabled" | "enabled" | "aggressive";
     };
     /** Page[Newsletter] */
     NewsletterPage: {
@@ -2092,6 +2103,7 @@ export interface components {
        * @example https://example.com/header.jpg
        */
       image?: string;
+      auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
     };
     /** NewsletterUpdateInput */
     NewsletterUpdateInput: {
@@ -2130,6 +2142,7 @@ export interface components {
        * @example mail.sheinhardt.com
        */
       email_domain?: string;
+      auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
       /** Enabled Features */
       enabled_features?: (string)[];
       /** Custom Email Template */
