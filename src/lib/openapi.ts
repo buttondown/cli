@@ -2201,7 +2201,10 @@ export interface components {
      * in of itself.
      */
     BulkAction: {
-      /** @example delete_emails */
+      /**
+       * @description The type of bulk action to perform. 
+       * @example delete_emails
+       */
       type: components["schemas"]["BulkActionType"];
       /**
        * Metadata 
@@ -2237,7 +2240,10 @@ export interface components {
     };
     /** BulkActionInput */
     BulkActionInput: {
-      /** @example delete_emails */
+      /**
+       * @description The type of bulk action to perform. 
+       * @example delete_emails
+       */
       type: components["schemas"]["BulkActionType"];
       /**
        * Metadata 
