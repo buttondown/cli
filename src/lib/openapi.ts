@@ -3026,7 +3026,7 @@ export interface components {
        * Version 
        * @enum {string}
        */
-      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01";
+      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01";
       /** Ip Address */
       ip_address: string;
       /** Request Data */
@@ -3062,7 +3062,7 @@ export interface components {
        * Version 
        * @enum {string}
        */
-      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01";
+      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01";
       /** Ip Address */
       ip_address: string;
     };
@@ -4364,7 +4364,7 @@ export interface operations {
         /** @description If provided, only return subscribers with the given IDs. */
         ids?: (string)[];
         /** @description If provided, only return subscribers whose email address contains the given string. */
-        email_address?: string;
+        email_address?: string | (string)[];
         tag?: (string)[];
         "-tag"?: string;
         ordering?: string;
@@ -4410,6 +4410,10 @@ export interface operations {
         undeliverability_reason?: (components["schemas"]["SubscriberUndeliverabilityReason"])[];
         /** @description If provided, only return subscribers with the given unsubscription reason(s). */
         unsubscription_reason?: (string)[];
+        /** @description If provided, only return subscribers with the given unsubscription date(s). */
+        unsubscription_date__start?: string;
+        /** @description If provided, only return subscribers with the given unsubscription date(s). */
+        unsubscription_date__end?: string;
         /** @description If provided, only return subscribers whose referrer URL(s) contain the given string. */
         referrer_url?: (string)[];
         /** @description If provided, only return subscribers with the given UTM source(s). */
@@ -5887,7 +5891,7 @@ export interface operations {
         status_code?: (string)[];
         method?: (string)[];
         source?: (components["schemas"]["APIRequestSource"])[];
-        version?: ("2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01")[];
+        version?: ("2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01")[];
         date__start?: string;
         date__end?: string;
         creation_date__lt?: string;
