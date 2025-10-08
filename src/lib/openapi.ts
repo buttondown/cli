@@ -1634,7 +1634,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    SubscriberInputValidationErrorCode: "email_already_exists" | "email_invalid" | "tag_invalid" | "metadata_invalid" | "ip_address_spammy" | "email_blocked" | "rate_limited" | "subscriber_already_exists" | "subscriber_blocked" | "subscriber_suppressed";
+    SubscriberInputValidationErrorCode: "email_already_exists" | "email_blocked" | "email_empty" | "email_invalid" | "ip_address_spammy" | "metadata_invalid" | "rate_limited" | "subscriber_already_exists" | "subscriber_blocked" | "subscriber_suppressed" | "tag_invalid";
     /** ErrorMessage[ValidationErrorCode] */
     ErrorMessage_ValidationErrorCode_: {
       code: components["schemas"]["SubscriberInputValidationErrorCode"];
