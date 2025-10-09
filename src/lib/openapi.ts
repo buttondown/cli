@@ -2850,6 +2850,12 @@ export interface components {
      * @enum {string}
      */
     SurveyStatus: "active" | "inactive";
+    /**
+     * InputType 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SurveyInputType: "radio" | "checkbox" | "text";
     /** Survey */
     Survey: {
       /**
@@ -2878,6 +2884,7 @@ export interface components {
       status: components["schemas"]["SurveyStatus"];
       /** Is Freeform Response Enabled */
       is_freeform_response_enabled: boolean;
+      input_type: components["schemas"]["SurveyInputType"];
     };
     /**
      * CreateSurveyErrorCode 
@@ -2935,6 +2942,11 @@ export interface components {
        */
       is_freeform_response_enabled?: boolean;
       /**
+       * @default radio 
+       * @example radio
+       */
+      input_type?: components["schemas"]["SurveyInputType"];
+      /**
        * @default once 
        * @example once
        */
@@ -2991,6 +3003,7 @@ export interface components {
        * @default false
        */
       is_freeform_response_enabled?: boolean;
+      input_type?: components["schemas"]["SurveyInputType"];
     };
     /**
      * Source 
