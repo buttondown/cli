@@ -1987,6 +1987,23 @@ export interface components {
        * @enum {unknown}
        */
       auditing_mode?: "disabled" | "enabled" | "aggressive";
+      /**
+       * Custom Churn Email Subject 
+       * @description Custom subject line for churn emails 
+       * @default
+       */
+      custom_churn_email_subject?: string;
+      /**
+       * Custom Churn Email Body 
+       * @description Custom body content for churn emails 
+       * @default
+       */
+      custom_churn_email_body?: string;
+      /**
+       * Custom Churn Email Template 
+       * @description Custom template for churn emails
+       */
+      custom_churn_email_template?: string;
     };
     /** Page[Newsletter] */
     NewsletterPage: {
@@ -2171,6 +2188,25 @@ export interface components {
        * @example https://example.com/header.jpg
        */
       image?: string;
+      /**
+       * Custom Churn Email Subject 
+       * @description Custom subject line for churn emails. 
+       * @example You've canceled your premium subscription to {{ newsletter.name }}
+       */
+      custom_churn_email_subject?: string;
+      /**
+       * Custom Churn Email Body 
+       * @description Custom body content for churn emails. 
+       * @example Hi {{ subscriber.email }},
+       * 
+       * We're sorry to see you go!
+       */
+      custom_churn_email_body?: string;
+      /**
+       * Custom Churn Email Template 
+       * @description Custom template for churn emails.
+       */
+      custom_churn_email_template?: string;
     };
     /**
      * Type 
@@ -3046,6 +3082,10 @@ export interface components {
       request_data: string;
       /** Response Data */
       response_data: string;
+      /** Headers */
+      headers: {
+        [key: string]: string | undefined;
+      };
     };
     /**
      * APIRequest 
@@ -3466,7 +3506,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    EmailEventType: "activation_clicked" | "activation_delivered" | "activation_opened" | "activation_reminder_clicked" | "activation_reminder_delivered" | "activation_reminder_opened" | "attempted" | "bounced" | "complained" | "clicked" | "dropped" | "delivered" | "opened" | "sent" | "rejected" | "replied" | "unsubscribed";
+    EmailEventType: "activation_clicked" | "activation_delivered" | "activation_opened" | "activation_bounced" | "activation_rejected" | "activation_complained" | "activation_reminder_clicked" | "activation_reminder_delivered" | "activation_reminder_opened" | "activation_reminder_bounced" | "activation_reminder_rejected" | "attempted" | "bounced" | "complained" | "clicked" | "dropped" | "delivered" | "opened" | "sent" | "rejected" | "replied" | "unsubscribed";
     /** EmailEvent */
     EmailEvent: {
       /**
