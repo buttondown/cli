@@ -618,7 +618,8 @@ export interface components {
       secondary_id: number;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
     };
@@ -719,7 +720,8 @@ export interface components {
       id: string;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /**
@@ -751,7 +753,8 @@ export interface components {
       id: string | string;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /**
@@ -778,37 +781,99 @@ export interface components {
       /** Count */
       count: number;
     };
-    /**
-     * Status 
-     * @description Represents the state of an email.
-     * 
-     * No action is required to move from one state or another; Buttondown
-     * internally handles the transitions, and exposing the status is for
-     * observability purposes only. 
-     * @enum {string}
-     */
-    EmailStatus: "draft" | "managed_by_rss" | "about_to_send" | "scheduled" | "in_flight" | "paused" | "deleted" | "errored" | "sent" | "imported" | "throttled" | "resending" | "transactional" | "suppressed";
-    /**
-     * SuppressionReason 
-     * @description Represents the reason an email was suppressed. 
-     * @enum {string}
-     */
-    EmailSuppressionReason: "law_enforcement" | "internal_auditing";
-    /**
-     * Type 
-     * @description Represents the audience of an email, and to whom it is visible both in the initial
-     * email and in online archives. 
-     * @enum {string}
-     */
-    EmailType: "public" | "private" | "premium" | "free" | "churned" | "archival";
-    /**
-     * Source 
-     * @description Represents the original provenance of an email. This value is not exposed
-     * to subscribers, but does determine some behavior of the email (e.g. whether
-     * or not analytics can be calculated.) 
-     * @enum {string}
-     */
-    EmailSource: "api" | "import" | "app" | "external_feed";
+    /** Analytics */
+    Analytics: {
+      /**
+       * Recipients 
+       * @default 0
+       */
+      recipients?: number;
+      /**
+       * Deliveries 
+       * @default 0
+       */
+      deliveries?: number;
+      /**
+       * Opens 
+       * @default 0
+       */
+      opens?: number;
+      /**
+       * Clicks 
+       * @default 0
+       */
+      clicks?: number;
+      /**
+       * Temporary Failures 
+       * @default 0
+       */
+      temporary_failures?: number;
+      /**
+       * Permanent Failures 
+       * @default 0
+       */
+      permanent_failures?: number;
+      /**
+       * Unsubscriptions 
+       * @default 0
+       */
+      unsubscriptions?: number;
+      /**
+       * Complaints 
+       * @default 0
+       */
+      complaints?: number;
+      /**
+       * Survey Responses 
+       * @default 0
+       */
+      survey_responses?: number;
+      /**
+       * Webmentions 
+       * @default 0
+       */
+      webmentions?: number;
+      /**
+       * Page Views Lifetime 
+       * @default 0
+       */
+      page_views_lifetime?: number;
+      /**
+       * Page Views 30 
+       * @default 0
+       */
+      page_views_30?: number;
+      /**
+       * Page Views 7 
+       * @default 0
+       */
+      page_views_7?: number;
+      /**
+       * Subscriptions 
+       * @default 0
+       */
+      subscriptions?: number;
+      /**
+       * Paid Subscriptions 
+       * @default 0
+       */
+      paid_subscriptions?: number;
+      /**
+       * Replies 
+       * @default 0
+       */
+      replies?: number;
+      /**
+       * Comments 
+       * @default 0
+       */
+      comments?: number;
+      /**
+       * Social Mentions 
+       * @default 0
+       */
+      social_mentions?: number;
+    };
     /**
      * CommentingMode 
      * @description Governs who can comment on this email.
@@ -817,6 +882,13 @@ export interface components {
      * @enum {string}
      */
     EmailCommentingMode: "disabled" | "enabled" | "enabled_for_paid_subscribers";
+    /**
+     * Type 
+     * @description Represents the audience of an email, and to whom it is visible both in the initial
+     * email and in online archives. 
+     * @enum {string}
+     */
+    EmailType: "public" | "private" | "premium" | "free" | "churned" | "archival";
     /**
      * Operator 
      * @description An enumeration. 
@@ -919,99 +991,30 @@ export interface components {
        */
       predicate: "and" | "or";
     };
-    /** Analytics */
-    Analytics: {
-      /**
-       * Recipients 
-       * @default 0
-       */
-      recipients?: number;
-      /**
-       * Deliveries 
-       * @default 0
-       */
-      deliveries?: number;
-      /**
-       * Opens 
-       * @default 0
-       */
-      opens?: number;
-      /**
-       * Clicks 
-       * @default 0
-       */
-      clicks?: number;
-      /**
-       * Temporary Failures 
-       * @default 0
-       */
-      temporary_failures?: number;
-      /**
-       * Permanent Failures 
-       * @default 0
-       */
-      permanent_failures?: number;
-      /**
-       * Unsubscriptions 
-       * @default 0
-       */
-      unsubscriptions?: number;
-      /**
-       * Complaints 
-       * @default 0
-       */
-      complaints?: number;
-      /**
-       * Survey Responses 
-       * @default 0
-       */
-      survey_responses?: number;
-      /**
-       * Webmentions 
-       * @default 0
-       */
-      webmentions?: number;
-      /**
-       * Page Views Lifetime 
-       * @default 0
-       */
-      page_views_lifetime?: number;
-      /**
-       * Page Views 30 
-       * @default 0
-       */
-      page_views_30?: number;
-      /**
-       * Page Views 7 
-       * @default 0
-       */
-      page_views_7?: number;
-      /**
-       * Subscriptions 
-       * @default 0
-       */
-      subscriptions?: number;
-      /**
-       * Paid Subscriptions 
-       * @default 0
-       */
-      paid_subscriptions?: number;
-      /**
-       * Replies 
-       * @default 0
-       */
-      replies?: number;
-      /**
-       * Comments 
-       * @default 0
-       */
-      comments?: number;
-      /**
-       * Social Mentions 
-       * @default 0
-       */
-      social_mentions?: number;
-    };
+    /**
+     * Source 
+     * @description Represents the original provenance of an email. This value is not exposed
+     * to subscribers, but does determine some behavior of the email (e.g. whether
+     * or not analytics can be calculated.) 
+     * @enum {string}
+     */
+    EmailSource: "api" | "import" | "app" | "external_feed";
+    /**
+     * Status 
+     * @description Represents the state of an email.
+     * 
+     * No action is required to move from one state or another; Buttondown
+     * internally handles the transitions, and exposing the status is for
+     * observability purposes only. 
+     * @enum {string}
+     */
+    EmailStatus: "draft" | "managed_by_rss" | "about_to_send" | "scheduled" | "in_flight" | "paused" | "deleted" | "errored" | "sent" | "imported" | "throttled" | "resending" | "transactional" | "suppressed";
+    /**
+     * SuppressionReason 
+     * @description Represents the reason an email was suppressed. 
+     * @enum {string}
+     */
+    EmailSuppressionReason: "law_enforcement" | "internal_auditing";
     /**
      * EmailTemplate 
      * @description Represents the template of an email.
@@ -1034,18 +1037,64 @@ export interface components {
      * - [2025-09-23](https://docs.buttondown.com/api-changelog-2025-09-23): increased the maximum length of the `subject` field from 1000 to 2000 characters.
      */
     Email: {
+      /** Absolute Url */
+      absolute_url: string;
+      analytics?: components["schemas"]["Analytics"];
       /**
-       * Id 
-       * Format: uuid 
-       * @description The unique identifier for the email.
+       * Attachments 
+       * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
        */
-      id: string;
+      attachments?: (string | string)[];
+      /**
+       * Body 
+       * @description The body of the email. Can be either HTML or markdown.
+       */
+      body: string;
+      /**
+       * Canonical Url 
+       * @description The URL of the original source of the content.
+       */
+      canonical_url: string;
+      commenting_mode: components["schemas"]["EmailCommentingMode"];
       /**
        * Creation Date 
        * Format: date-time 
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
+      /**
+       * Description 
+       * @description A human-readable description of the email, used for archives and SEO.
+       */
+      description: string;
+      /** @default public */
+      email_type?: components["schemas"]["EmailType"];
+      /**
+       * Featured 
+       * @description Designated whether or not this email should be highlighted within the archives. (Currently unused.)
+       */
+      featured: boolean;
+      filters: components["schemas"]["FilterGroup"];
+      /**
+       * Id 
+       * Format: uuid 
+       * @description The unique identifier for the email. 
+       * @example 497f6eca-6276-4993-bfeb-53cbbbba6f08
+       */
+      id: string;
+      /**
+       * Image 
+       * @description A primary image to be used when previewing the email on the web or in other contexts.
+       */
+      image: string;
+      /**
+       * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
       /**
        * Modification Date 
        * Format: date-time 
@@ -1059,83 +1108,45 @@ export interface components {
        */
       publish_date?: string;
       /**
-       * Subject 
-       * @description The subject line for the email.
-       */
-      subject: string;
-      /**
-       * Body 
-       * @description The body of the email. Can be either HTML or markdown.
-       */
-      body: string;
-      /** @description The current status of the email. */
-      status: components["schemas"]["EmailStatus"];
-      /** @description Reason for suppression, if email is suppressed. */
-      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
-      /**
-       * Slug 
-       * @description A short, human-readable identifier for the email. (Used in the URL of the email, and in the 'slug' field of the email object.)
-       */
-      slug?: string;
-      /**
-       * Canonical Url 
-       * @description The URL of the original source of the content.
-       */
-      canonical_url: string;
-      /** @default public */
-      email_type?: components["schemas"]["EmailType"];
-      /**
-       * Image 
-       * @description A primary image to be used when previewing the email on the web or in other contexts.
-       */
-      image: string;
-      /**
-       * Description 
-       * @description A human-readable description of the email, used for archives and SEO.
-       */
-      description: string;
-      /**
-       * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
-       * @default {}
-       */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
-      /** @description The source of the email. */
-      source: components["schemas"]["EmailSource"];
-      /**
-       * Secondary Id 
-       * @description An informal 'number' for the email, used in some templates ('This was issue #123').
-       */
-      secondary_id?: number;
-      commenting_mode: components["schemas"]["EmailCommentingMode"];
-      /** Absolute Url */
-      absolute_url: string;
-      filters: components["schemas"]["FilterGroup"];
-      analytics?: components["schemas"]["Analytics"];
-      /** @description If present, this template overrides your newsletter's default template. */
-      template?: components["schemas"]["NewsletterEmailTemplate"];
-      /**
-       * Attachments 
-       * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
-       */
-      attachments?: (string | string)[];
-      /**
        * Related Email Ids 
        * @description A list of email IDs that are related to this email. Related emails are shown at the bottom of the email and archive pages.
        */
       related_email_ids: (string)[];
       /**
-       * Featured 
-       * @description Designated whether or not this email should be highlighted within the archives. (Currently unused.)
+       * Secondary Id 
+       * @description An informal 'number' for the email, used in some templates ('This was issue #123').
        */
-      featured: boolean;
+      secondary_id?: number;
       /**
        * Should Trigger Pay Per Email Billing 
        * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
        */
       should_trigger_pay_per_email_billing: boolean;
+      /**
+       * Slug 
+       * @description A short, human-readable identifier for the email. (Used in the URL of the email, and in the 'slug' field of the email object.) 
+       * @example welcome-to-the-newsletter
+       */
+      slug?: string;
+      /**
+       * @description The source of the email. 
+       * @example app
+       */
+      source: components["schemas"]["EmailSource"];
+      /**
+       * @description The current status of the email. 
+       * @example draft
+       */
+      status: components["schemas"]["EmailStatus"];
+      /**
+       * Subject 
+       * @description The subject line for the email.
+       */
+      subject: string;
+      /** @description Reason for suppression, if email is suppressed. */
+      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
+      /** @description If present, this template overrides your newsletter's default template. */
+      template?: components["schemas"]["NewsletterEmailTemplate"];
     };
     /**
      * EmailCreationErrorCode 
@@ -1314,7 +1325,8 @@ export interface components {
       suppression_reason?: components["schemas"]["EmailSuppressionReason"];
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata))
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
        */
       metadata?: {
         [key: string]: string | undefined;
@@ -1407,7 +1419,8 @@ export interface components {
       history_id: number;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /** Value */
@@ -1451,19 +1464,6 @@ export interface components {
       recipients?: (string)[];
     };
     /**
-     * Type 
-     * @description Represents the state of a subscriber and what emails they
-     * should or should not be receiving. This type is meant to be fully expressive
-     * so as to consolidate the logic of determining what emails a subscriber should
-     * receive into a single place.
-     * 
-     * Note that the only types that can be set programmatically are REGULAR, UNSUBSCRIBED,
-     * GIFTED and UNPAID. All other types are meant to be user-visible and cannot
-     * be set programmatically. 
-     * @enum {string}
-     */
-    SubscriberType: "regular" | "premium" | "churning" | "past_due" | "gifted" | "unpaid" | "churned" | "unactivated" | "unsubscribed" | "complained" | "undeliverable" | "removed" | "trialed" | "paused" | "blocked";
-    /**
      * Source 
      * @description Represents the original provenance of a subscriber. This value is not exposed
      * to subscribers; it's only used for internal tracking purposes and governs some
@@ -1484,12 +1484,18 @@ export interface components {
       name?: string;
     };
     /**
-     * UndeliverabilityReason 
-     * @description The reason Buttondown has marked the subscriber as undeliverable.
-     * Undeliverable subscribers are not sent emails, and may be periodically removed from the system (or restored, if the reason is no longer valid.) 
+     * Type 
+     * @description Represents the state of a subscriber and what emails they
+     * should or should not be receiving. This type is meant to be fully expressive
+     * so as to consolidate the logic of determining what emails a subscriber should
+     * receive into a single place.
+     * 
+     * Note that the only types that can be set programmatically are REGULAR, UNSUBSCRIBED,
+     * GIFTED and UNPAID. All other types are meant to be user-visible and cannot
+     * be set programmatically. 
      * @enum {string}
      */
-    SubscriberUndeliverabilityReason: "email_blocked" | "ip_blocked" | "ip_undeliverable" | "out_of_storage" | "disabled" | "unreachable" | "access_denied" | "does_not_exist" | "rate_limited" | "spam" | "problematic_url" | "on_esp_denylist" | "domain_blocked" | "spf_failed" | "malformed" | "other";
+    SubscriberType: "regular" | "premium" | "churning" | "past_due" | "gifted" | "unpaid" | "churned" | "unactivated" | "unsubscribed" | "complained" | "undeliverable" | "removed" | "trialed" | "paused" | "blocked";
     /** Transition */
     Transition: {
       /**
@@ -1499,6 +1505,13 @@ export interface components {
       date: string;
       type: components["schemas"]["SubscriberType"];
     };
+    /**
+     * UndeliverabilityReason 
+     * @description The reason Buttondown has marked the subscriber as undeliverable.
+     * Undeliverable subscribers are not sent emails, and may be periodically removed from the system (or restored, if the reason is no longer valid.) 
+     * @enum {string}
+     */
+    SubscriberUndeliverabilityReason: "email_blocked" | "ip_blocked" | "ip_undeliverable" | "out_of_storage" | "disabled" | "unreachable" | "access_denied" | "does_not_exist" | "rate_limited" | "spam" | "problematic_url" | "on_esp_denylist" | "domain_blocked" | "spf_failed" | "malformed" | "other";
     /**
      * Subscriber 
      * @description Subscribers are the main way you collect email addresses and
@@ -1523,6 +1536,13 @@ export interface components {
        * @description The date and time at which the object was created.
        */
       creation_date: string;
+      /** Avatar Url */
+      avatar_url?: string;
+      /**
+       * Churn Date 
+       * Format: date-time
+       */
+      churn_date?: string;
       /**
        * Email Address 
        * @description The email address of the subscriber. 
@@ -1530,11 +1550,22 @@ export interface components {
        */
       email_address: string;
       /**
-       * Notes 
-       * @description Any notes you want to attach to the subscriber. These are not publicly visible. 
-       * @default
+       * Gift Subscription Message 
+       * @description A custom message that was sent to the subscriber when the gift subscription was created.
        */
-      notes?: string;
+      gift_subscription_message?: string;
+      /** Ip Address */
+      ip_address?: string;
+      /**
+       * Last Click Date 
+       * Format: date-time
+       */
+      last_click_date?: string;
+      /**
+       * Last Open Date 
+       * Format: date-time
+       */
+      last_open_date?: string;
       /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
@@ -1543,38 +1574,43 @@ export interface components {
       metadata?: {
         [key: string]: string | undefined;
       };
-      /** Tags */
-      tags: (string)[];
+      /**
+       * Notes 
+       * @description Any notes you want to attach to the subscriber. These are not publicly visible. 
+       * @default
+       */
+      notes?: string;
+      /** Referral Code */
+      referral_code: string;
       /**
        * Referrer Url 
        * @default
        */
       referrer_url?: string;
+      /**
+       * Risk Score 
+       * @description The risk score of the subscriber. Positive numbers represent a higher risk; negative numbers represent a lower risk.
+       */
+      risk_score?: number;
       /** Secondary Id */
       secondary_id: number;
-      type: components["schemas"]["SubscriberType"];
       source: components["schemas"]["SubscriberSource"];
-      /** Utm Campaign */
-      utm_campaign: string;
-      /** Utm Medium */
-      utm_medium: string;
-      /** Utm Source */
-      utm_source: string;
-      /** Referral Code */
-      referral_code: string;
-      /** Avatar Url */
-      avatar_url?: string;
       stripe_coupon?: components["schemas"]["StripeCoupon"];
+      /** Stripe Customer Id */
+      stripe_customer_id?: string;
       /**
-       * Unsubscription Date 
-       * Format: date-time
+       * Subscriber Import Id 
+       * Format: uuid
        */
-      unsubscription_date?: string;
+      subscriber_import_id?: string;
+      /** Tags */
+      tags: (string)[];
       /**
-       * Churn Date 
-       * Format: date-time
+       * Transitions 
+       * @default []
        */
-      churn_date?: string;
+      transitions?: (components["schemas"]["Transition"])[];
+      type: components["schemas"]["SubscriberType"];
       /**
        * Undeliverability Date 
        * Format: date-time
@@ -1583,46 +1619,23 @@ export interface components {
       /** @description The reason the subscriber is undeliverable. (Only populated for undeliverable subscribers.) */
       undeliverability_reason?: components["schemas"]["SubscriberUndeliverabilityReason"];
       /**
+       * Unsubscription Date 
+       * Format: date-time
+       */
+      unsubscription_date?: string;
+      /** Unsubscription Reason */
+      unsubscription_reason?: string;
+      /**
        * Upgrade Date 
        * Format: date-time
        */
       upgrade_date?: string;
-      /** Unsubscription Reason */
-      unsubscription_reason?: string;
-      /**
-       * Transitions 
-       * @default []
-       */
-      transitions?: (components["schemas"]["Transition"])[];
-      /** Ip Address */
-      ip_address?: string;
-      /**
-       * Last Open Date 
-       * Format: date-time
-       */
-      last_open_date?: string;
-      /**
-       * Last Click Date 
-       * Format: date-time
-       */
-      last_click_date?: string;
-      /** Stripe Customer Id */
-      stripe_customer_id?: string;
-      /**
-       * Subscriber Import Id 
-       * Format: uuid
-       */
-      subscriber_import_id?: string;
-      /**
-       * Risk Score 
-       * @description The risk score of the subscriber. Positive numbers represent a higher risk; negative numbers represent a lower risk.
-       */
-      risk_score?: number;
-      /**
-       * Gift Subscription Message 
-       * @description A custom message that was sent to the subscriber when the gift subscription was created.
-       */
-      gift_subscription_message?: string;
+      /** Utm Campaign */
+      utm_campaign: string;
+      /** Utm Medium */
+      utm_medium: string;
+      /** Utm Source */
+      utm_source: string;
       /** Stripe Customer */
       stripe_customer?: Record<string, unknown>;
     };
@@ -1652,6 +1665,7 @@ export interface components {
     SubscriberInput: {
       /**
        * Email Address 
+       * @description The email address of the subscriber. 
        * @example telemachus@buttondown.email
        */
       email_address: string;
@@ -1768,6 +1782,7 @@ export interface components {
     SubscriberUpdateInput: {
       /**
        * Email Address 
+       * @description The email address of the subscriber. 
        * @example telemachus@buttondown.email
        */
       email_address?: string;
@@ -1777,7 +1792,11 @@ export interface components {
        * @example One of our first subscribers!
        */
       notes?: string;
-      /** Metadata */
+      /**
+       * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
+       */
       metadata?: {
         [key: string]: string | undefined;
       };
@@ -1840,7 +1859,8 @@ export interface components {
       url: string;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /**
@@ -1915,7 +1935,8 @@ export interface components {
       description: string;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /**
@@ -2336,7 +2357,8 @@ export interface components {
       id: string;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /**
@@ -2487,7 +2509,8 @@ export interface components {
       id: string;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       status: components["schemas"]["ExternalFeedItemStatus"];
@@ -2598,7 +2621,8 @@ export interface components {
       id: string;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /** Name */
@@ -3163,7 +3187,8 @@ export interface components {
       id: string;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       status: components["schemas"]["AdvertisingSKUStatus"];
@@ -3531,7 +3556,8 @@ export interface components {
       automation_id?: string;
       /**
        * Creation Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /** Metadata */
@@ -3615,7 +3641,8 @@ export interface components {
       model_id: string;
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata))
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
        */
       metadata?: Record<string, unknown>;
     };
