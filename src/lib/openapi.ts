@@ -3506,7 +3506,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    EmailEventType: "activation_clicked" | "activation_delivered" | "activation_opened" | "activation_bounced" | "activation_rejected" | "activation_complained" | "activation_reminder_clicked" | "activation_reminder_delivered" | "activation_reminder_opened" | "activation_reminder_bounced" | "activation_reminder_rejected" | "attempted" | "bounced" | "complained" | "clicked" | "dropped" | "delivered" | "opened" | "sent" | "rejected" | "replied" | "unsubscribed";
+    EmailEventType: "activation_clicked" | "activation_delivered" | "activation_opened" | "activation_bounced" | "activation_rejected" | "activation_complained" | "activation_reminder_clicked" | "activation_reminder_delivered" | "activation_reminder_opened" | "activation_reminder_bounced" | "activation_reminder_complained" | "activation_reminder_rejected" | "attempted" | "bounced" | "complained" | "clicked" | "dropped" | "delivered" | "opened" | "sent" | "rejected" | "replied" | "unsubscribed";
     /** EmailEvent */
     EmailEvent: {
       /**
