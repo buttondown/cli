@@ -2236,7 +2236,7 @@ export interface components {
      * (Not to be coy, but these names should be self-explanatory.) 
      * @enum {string}
      */
-    BulkActionType: "apply_tags" | "apply_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "delete_tags" | "delete_surveys" | "delete_survey_responses" | "replay_events" | "delete_comments" | "update_survey_statuses" | "modify_stripe_subscriptions";
+    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "delete_tags" | "delete_surveys" | "delete_survey_responses" | "replay_events" | "delete_comments" | "update_survey_statuses" | "modify_stripe_subscriptions";
     /**
      * Status 
      * @description Represents the status of a bulk action.
