@@ -3596,7 +3596,8 @@ export interface components {
       creation_date: string;
       /**
        * Body 
-       * @description The text content of the note.
+       * @description The text content of the note. 
+       * @example This subscriber upgraded to a paid plan.
        */
       body: string;
       /**
@@ -3608,7 +3609,8 @@ export interface components {
       model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag";
       /**
        * Model Id 
-       * @description The ID of the object this note is attached to.
+       * @description The ID of the object this note is attached to. 
+       * @example 13121cd6-0dfc-424c-bb12-988b0a32fcb3
        */
       model_id: string;
       /** Metadata */
@@ -3624,7 +3626,8 @@ export interface components {
     NoteInput: {
       /**
        * Body 
-       * @description The text content of the note.
+       * @description The text content of the note. 
+       * @example This subscriber upgraded to a paid plan.
        */
       body: string;
       /**
@@ -3636,7 +3639,8 @@ export interface components {
       model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag";
       /**
        * Model Id 
-       * @description The ID of the object this note is attached to.
+       * @description The ID of the object this note is attached to. 
+       * @example 13121cd6-0dfc-424c-bb12-988b0a32fcb3
        */
       model_id: string;
       /**
