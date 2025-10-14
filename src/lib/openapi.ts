@@ -3616,6 +3616,13 @@ export interface components {
       /** Metadata */
       metadata: Record<string, unknown>;
       /**
+       * Source 
+       * @description The source of the note. If the note was created by a Buttondown admin, this will be 'admin'; otherwise, it will be 'user'. 
+       * @example admin 
+       * @enum {string}
+       */
+      source: "admin" | "user";
+      /**
        * User Id 
        * Format: uuid
        */
