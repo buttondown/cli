@@ -3531,7 +3531,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    EmailEventType: "activation_clicked" | "activation_delivered" | "activation_opened" | "activation_bounced" | "activation_rejected" | "activation_complained" | "activation_reminder_clicked" | "activation_reminder_delivered" | "activation_reminder_opened" | "activation_reminder_bounced" | "activation_reminder_complained" | "activation_reminder_rejected" | "subscription_confirmed_clicked" | "subscription_confirmed_delivered" | "subscription_confirmed_opened" | "subscription_confirmed_bounced" | "subscription_confirmed_rejected" | "subscription_confirmed_complained" | "attempted" | "bounced" | "complained" | "clicked" | "dropped" | "delivered" | "opened" | "sent" | "rejected" | "replied" | "unsubscribed";
+    EmailEventType: "activation_clicked" | "activation_delivered" | "activation_opened" | "activation_bounced" | "activation_rejected" | "activation_complained" | "activation_reminder_clicked" | "activation_reminder_delivered" | "activation_reminder_opened" | "activation_reminder_bounced" | "activation_reminder_complained" | "activation_reminder_rejected" | "subscription_confirmed_clicked" | "subscription_confirmed_delivered" | "subscription_confirmed_opened" | "subscription_confirmed_bounced" | "subscription_confirmed_rejected" | "subscription_confirmed_complained" | "attempted" | "bounced" | "complained" | "clicked" | "delivered" | "opened" | "sent" | "rejected" | "replied" | "unsubscribed";
     /** EmailEvent */
     EmailEvent: {
       /**
