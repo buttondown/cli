@@ -4448,81 +4448,81 @@ export interface operations {
   list_subscribers: {
     parameters: {
       query: {
-        /** @description If provided, only return subscribers with the given type. */
-        type?: (components["schemas"]["SubscriberType"])[];
-        /** @description If provided, only return subscribers without the given type. */
-        "-type"?: (components["schemas"]["SubscriberType"])[];
-        /** @description If provided, only return subscribers with the given IDs. */
-        ids?: (string)[];
+        /** @description If provided, only return subscribers with the given churn date(s). */
+        churn_date__end?: string;
+        /** @description If provided, only return subscribers with the given churn date(s). */
+        churn_date__start?: string;
+        /** @description If provided, only return subscribers with the given coupon ID(s). */
+        coupon?: (string)[];
+        /** @description If provided, only return subscribers who are currently subscribed to the given price ID(s). */
+        current_price?: (string)[];
+        /** @description If provided, only return subscribers created before the given date. */
+        date__end?: string;
+        /** @description If provided, only return subscribers created on or after the given date. */
+        date__start?: string;
+        /** @description If provided, only return subscribers whose email domain matches the given domain(s). */
+        domain?: (string)[];
         /** @description If provided, only return subscribers whose email address contains the given string. */
         email_address?: string | (string)[];
-        tag?: (string)[];
+        /** @description If provided, expand the given field. (Only supported fields: 'stripe_customer') */
+        expand?: ("stripe_customer")[];
+        /** @description If provided, only return subscribers with the given IDs. */
+        ids?: (string)[];
+        /** @description If provided, only return subscribers with the given IP address(es). */
+        ip_address?: (string)[];
+        /** @description If provided, only return subscribers with the given last click date(s). */
+        last_click_date__end?: string;
+        /** @description If provided, only return subscribers with the given last click date(s). */
+        last_click_date__start?: string;
+        /** @description If provided, only return subscribers with the given last open date(s). */
+        last_open_date__end?: string;
+        /** @description If provided, only return subscribers with the given last open date(s). */
+        last_open_date__start?: string;
+        /** @description If provided, only return subscribers whose email domain does not match the given domain(s). */
+        "-domain"?: (string)[];
         "-tag"?: string;
+        /** @description If provided, only return subscribers without the given type. */
+        "-type"?: (components["schemas"]["SubscriberType"])[];
         ordering?: string;
         /** @description If provided, only return subscribers who have at one point subscribed to the given price ID(s). */
         price?: (string)[];
-        /** @description If provided, only return subscribers who are currently subscribed to the given price ID(s). */
-        current_price?: (string)[];
-        /** @description If provided, only return subscribers with the given coupon ID(s). */
-        coupon?: (string)[];
         /** @description If provided, only return subscribers with the given referral code(s). */
         referral_code?: (string)[];
-        /** @description If provided, only return subscribers created on or after the given date. */
-        date__start?: string;
-        /** @description If provided, only return subscribers created before the given date. */
-        date__end?: string;
-        /** @description If provided, only return subscribers with the given last open date(s). */
-        last_open_date__start?: string;
-        /** @description If provided, only return subscribers with the given last open date(s). */
-        last_open_date__end?: string;
-        /** @description If provided, only return subscribers with the given last click date(s). */
-        last_click_date__start?: string;
-        /** @description If provided, only return subscribers with the given last click date(s). */
-        last_click_date__end?: string;
-        /** @description If provided, only return subscribers that were imported by the given subscriber import. */
-        subscriber_import?: (string)[];
-        /** @description If provided, expand the given field. (Only supported fields: 'stripe_customer') */
-        expand?: ("stripe_customer")[];
-        /** @description If provided, only return subscribers with the given IP address(es). */
-        ip_address?: (string)[];
-        /** @description If provided, only return subscribers with the given upgrade date(s). */
-        upgrade_date__start?: string;
-        /** @description If provided, only return subscribers with the given upgrade date(s). */
-        upgrade_date__end?: string;
-        /** @description If provided, only return subscribers with the given churn date(s). */
-        churn_date__start?: string;
-        /** @description If provided, only return subscribers with the given churn date(s). */
-        churn_date__end?: string;
-        /** @description If provided, only return subscribers with the given undeliverability date(s). */
-        undeliverability_date__start?: string;
-        /** @description If provided, only return subscribers with the given undeliverability date(s). */
-        undeliverability_date__end?: string;
-        /** @description If provided, only return subscribers with the given undeliverability reason(s). */
-        undeliverability_reason?: (components["schemas"]["SubscriberUndeliverabilityReason"])[];
-        /** @description If provided, only return subscribers with the given unsubscription reason(s). */
-        unsubscription_reason?: (string)[];
-        /** @description If provided, only return subscribers with the given unsubscription date(s). */
-        unsubscription_date__start?: string;
-        /** @description If provided, only return subscribers with the given unsubscription date(s). */
-        unsubscription_date__end?: string;
         /** @description If provided, only return subscribers whose referrer URL(s) contain the given string. */
         referrer_url?: (string)[];
-        /** @description If provided, only return subscribers with the given UTM source(s). */
-        utm_source?: (string)[];
+        /** @description If provided, only return subscribers with a risk score less than or equal to the given value. */
+        risk_score__end?: number;
+        /** @description If provided, only return subscribers with a risk score greater than or equal to the given value. */
+        risk_score__start?: number;
+        /** @description If provided, only return subscribers with the given source(s). */
+        source?: (components["schemas"]["SubscriberSource"])[];
+        /** @description If provided, only return subscribers that were imported by the given subscriber import. */
+        subscriber_import?: (string)[];
+        tag?: (string)[];
+        /** @description If provided, only return subscribers with the given type. */
+        type?: (components["schemas"]["SubscriberType"])[];
+        /** @description If provided, only return subscribers with the given undeliverability date(s). */
+        undeliverability_date__end?: string;
+        /** @description If provided, only return subscribers with the given undeliverability date(s). */
+        undeliverability_date__start?: string;
+        /** @description If provided, only return subscribers with the given undeliverability reason(s). */
+        undeliverability_reason?: (components["schemas"]["SubscriberUndeliverabilityReason"])[];
+        /** @description If provided, only return subscribers with the given unsubscription date(s). */
+        unsubscription_date__end?: string;
+        /** @description If provided, only return subscribers with the given unsubscription date(s). */
+        unsubscription_date__start?: string;
+        /** @description If provided, only return subscribers with the given unsubscription reason(s). */
+        unsubscription_reason?: (string)[];
+        /** @description If provided, only return subscribers with the given upgrade date(s). */
+        upgrade_date__end?: string;
+        /** @description If provided, only return subscribers with the given upgrade date(s). */
+        upgrade_date__start?: string;
         /** @description If provided, only return subscribers with the given UTM campaign(s). */
         utm_campaign?: (string)[];
         /** @description If provided, only return subscribers with the given UTM medium(s). */
         utm_medium?: (string)[];
-        /** @description If provided, only return subscribers whose email domain matches the given domain(s). */
-        domain?: (string)[];
-        /** @description If provided, only return subscribers whose email domain does not match the given domain(s). */
-        "-domain"?: (string)[];
-        /** @description If provided, only return subscribers with a risk score greater than or equal to the given value. */
-        risk_score__start?: number;
-        /** @description If provided, only return subscribers with a risk score less than or equal to the given value. */
-        risk_score__end?: number;
-        /** @description If provided, only return subscribers with the given source(s). */
-        source?: (components["schemas"]["SubscriberSource"])[];
+        /** @description If provided, only return subscribers with the given UTM source(s). */
+        utm_source?: (string)[];
       };
     };
     responses: {
