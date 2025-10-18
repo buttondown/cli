@@ -1495,7 +1495,7 @@ export interface components {
      * be set programmatically. 
      * @enum {string}
      */
-    SubscriberType: "regular" | "premium" | "churning" | "past_due" | "gifted" | "unpaid" | "churned" | "unactivated" | "unsubscribed" | "complained" | "undeliverable" | "removed" | "trialed" | "paused" | "blocked";
+    SubscriberType: "blocked" | "complained" | "churning" | "churned" | "gifted" | "unactivated" | "unpaid" | "undeliverable" | "premium" | "past_due" | "paused" | "regular" | "removed" | "trialed" | "unsubscribed" | "upcoming";
     /** Transition */
     Transition: {
       /**
