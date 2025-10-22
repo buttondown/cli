@@ -4156,6 +4156,8 @@ export interface operations {
         email_type?: (components["schemas"]["EmailType"])[];
         /** @description If provided, only return emails with a subject that contains the given string. */
         subject?: string;
+        /** @description If provided, only return emails with the given attachments. */
+        attachments?: (string)[];
       };
     };
     responses: {
