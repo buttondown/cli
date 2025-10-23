@@ -769,6 +769,12 @@ export interface components {
        * @example https://buttondown.s3.amazonaws.com/attachments/newsletter-guide.pdf
        */
       file: string;
+      /**
+       * Size 
+       * @description The size of the attachment in bytes. 
+       * @example 1000
+       */
+      size: number;
     };
     /** Page[Attachment] */
     AttachmentPage: {
