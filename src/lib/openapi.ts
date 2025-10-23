@@ -1580,6 +1580,16 @@ export interface components {
        * @default
        */
       notes?: string;
+      /**
+       * Purchased By 
+       * @description The email address of the individual who purchased this subscription on behalf of the subscriber.
+       */
+      purchased_by?: string;
+      /**
+       * Purchased Message 
+       * @description A custom message that was sent to the subscriber when the subscription was purchased on behalf of the subscriber.
+       */
+      purchased_message?: string;
       /** Referral Code */
       referral_code: string;
       /**
