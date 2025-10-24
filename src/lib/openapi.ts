@@ -1053,7 +1053,7 @@ export interface components {
       attachments?: (string | string)[];
       /**
        * Body 
-       * @description The body of the email. Can be either HTML or markdown.
+       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`.
        */
       body: string;
       /**
@@ -1212,7 +1212,7 @@ export interface components {
       image?: string;
       /**
        * Body 
-       * @description Can be either HTML or markdown. 
+       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`. 
        * @default  
        * @example This is an example of the body of an email.
        */
@@ -1321,7 +1321,7 @@ export interface components {
       canonical_url?: string;
       /**
        * Body 
-       * @description Can be either HTML or markdown. 
+       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`. 
        * @example This is an example of the body of an email.
        */
       body?: string;
