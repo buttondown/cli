@@ -3324,6 +3324,13 @@ export interface components {
        * @example Trigger when an email is created to notify in Slack.
        */
       description?: string;
+      /**
+       * Signing Key 
+       * @description Optional HMAC signing key for webhook verification. When set, webhook requests will include an X-Buttondown-Signature header with sha256=<signature>. 
+       * @default  
+       * @example
+       */
+      signing_key?: string;
     };
     /** WebhookInput */
     WebhookInput: {
@@ -3355,6 +3362,13 @@ export interface components {
        * @example Trigger when an email is created to notify in Slack.
        */
       description?: string;
+      /**
+       * Signing Key 
+       * @description Optional HMAC signing key for webhook verification. When set, webhook requests will include an X-Buttondown-Signature header with sha256=<signature>. 
+       * @default  
+       * @example
+       */
+      signing_key?: string;
     };
     /** Page[Webhook] */
     WebhookPage: {
