@@ -1077,7 +1077,7 @@ export interface components {
       email_type?: components["schemas"]["EmailType"];
       /**
        * Featured 
-       * @description Designated whether or not this email should be highlighted within the archives. (Currently unused.)
+       * @description Designated whether or not this email should be highlighted within the archives.
        */
       featured: boolean;
       filters: components["schemas"]["FilterGroup"];
@@ -1249,7 +1249,7 @@ export interface components {
       related_email_ids?: (string)[];
       /**
        * Featured 
-       * @description Designated whether or not this email should be highlighted within the archives. (Currently unused.) 
+       * @description Designated whether or not this email should be highlighted within the archives. 
        * @default false
        */
       featured?: boolean;
@@ -1357,7 +1357,7 @@ export interface components {
       related_email_ids?: (string)[];
       /**
        * Featured 
-       * @description Designated whether or not this email should be highlighted within the archives. (Currently unused.)
+       * @description Designated whether or not this email should be highlighted within the archives.
        */
       featured?: boolean;
       /**
