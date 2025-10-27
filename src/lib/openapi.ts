@@ -500,14 +500,13 @@ export interface components {
       columns?: (string)[];
       /**
        * Id 
-       * Format: uuid 
-       * @description A unique UUID associated with the object.
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
        * Creation Date 
        * Format: date-time 
-       * @description The date and time at which the object was created.
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /**
@@ -611,17 +610,17 @@ export interface components {
       description?: string;
       /**
        * Id 
-       * Format: uuid
+       * @description A unique TypeID associated with the object.
        */
       id: string;
-      /** Secondary Id */
-      secondary_id: number;
       /**
        * Creation Date 
        * Format: date-time 
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
+      /** Secondary Id */
+      secondary_id: number;
     };
     /** TagInput */
     TagInput: {
