@@ -2251,7 +2251,7 @@ export interface components {
      * (Not to be coy, but these names should be self-explanatory.) 
      * @enum {string}
      */
-    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "delete_tags" | "delete_surveys" | "delete_survey_responses" | "replay_events" | "delete_comments" | "update_survey_statuses" | "modify_stripe_subscriptions";
+    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "delete_tags" | "delete_surveys" | "delete_survey_responses" | "replay_events" | "delete_comments" | "update_survey_statuses" | "modify_stripe_subscriptions";
     /**
      * Status 
      * @description Represents the status of a bulk action.
@@ -3635,7 +3635,7 @@ export interface components {
        * @example email 
        * @enum {string}
        */
-      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag";
+      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
       /**
        * Model Id 
        * @description The ID of the object this note is attached to. 
@@ -3672,7 +3672,7 @@ export interface components {
        * @example email 
        * @enum {string}
        */
-      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag";
+      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
       /**
        * Model Id 
        * @description The ID of the object this note is attached to. 
@@ -6645,7 +6645,7 @@ export interface operations {
     parameters: {
       query: {
         /** @description Filter notes by the type of object they are attached to. */
-        model_type?: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag";
+        model_type?: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
         /** @description Filter notes by the ID of the object they are attached to. */
         model_id?: string;
         /** @description If provided, expand the given field. */
