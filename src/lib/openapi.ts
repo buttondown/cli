@@ -714,7 +714,7 @@ export interface components {
     Image: {
       /**
        * Id 
-       * Format: uuid
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
@@ -5824,6 +5824,7 @@ export interface operations {
         status?: (components["schemas"]["SurveyStatus"])[];
         /** @description If provided, only return surveys without the given status. */
         "-status"?: (components["schemas"]["SurveyStatus"])[];
+        ordering?: "creation_date" | "-creation_date" | "question" | "-question" | "identifier" | "-identifier" | "status" | "-status" | "response_count" | "-response_count";
       };
     };
     responses: {
