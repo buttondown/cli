@@ -1,6 +1,6 @@
 {
   "name": "@buttondown/cli",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "CLI for Buttondown to sync emails and media with a local folder",
   "type": "module",
   "main": "dist/index.js",
@@ -18,20 +18,18 @@
     "lint:fix": "biome check --fix . --unsafe",
     "cli": "tsc && node dist/cli.js"
   },
-  "keywords": [
-    "buttondown",
-    "cli",
-    "newsletter",
-    "sync"
-  ],
+  "keywords": ["buttondown", "cli", "newsletter", "sync"],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "conf": "^13.1.0",
+    "fast-glob": "^3.3.2",
+    "fs-extra": "^11.3.2",
     "ink": "^5.2.1",
     "ink-text-input": "^6.0.0",
     "meow": "^13.2.0",
-    "react": "^18.3.1"
+    "react": "^18.3.1",
+    "yaml": "^2.6.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

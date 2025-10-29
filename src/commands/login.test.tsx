@@ -1,7 +1,7 @@
+import { beforeEach, describe, expect, test } from "bun:test";
 import delay from "delay";
 import { render } from "ink-testing-library";
 import React from "react";
-import { beforeEach, describe, expect, test } from "bun:test";
 import createConfig from "../config.js";
 import Login from "./login.js";
 

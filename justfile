@@ -2,8 +2,7 @@ install:
     bun install
 
 build:
-    bun build src/cli.tsx --compile
-
+    bun run build
 
 lint:
     bun lint:fix
@@ -12,10 +11,9 @@ lint:
 test:
     FORCE_COLOR=1 bun test src/*
 
-
 build-and-pull:
     just build
-    ./cli pull
+    node ./dist/cli.js pull
 
 release version="patch":
     npm version {{version}} --no-git-tag-version
@@ -24,5 +22,4 @@ release version="patch":
     git push
 
 publish:
-    bun run build
-    npm publish --access public
+    bun publish

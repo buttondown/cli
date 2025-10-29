@@ -1,4 +1,4 @@
-import Bun from "bun";
+import { parse as parseYAML, stringify as stringifyYAML } from "yaml";
 import type { components } from "../openapi.js";
 import { hash as genericHash } from "../utils.js";
 
@@ -71,7 +71,7 @@ export function deserialize(content: string): {
 } {
   const [_, frontmatter, body] = content.split("---");
 
-  const parsedYAML = Bun.YAML.parse(frontmatter) as Record<string, any>;
+  const parsedYAML = parseYAML(frontmatter) as Record<string, any>;
   if (Object.keys(parsedYAML).length === 0) {
     return {
       email: { body: content },
@@ -127,16 +127,19 @@ export function serialize(email: Partial<Email & FrontMatterFields>): string {
           JSON.stringify(
             FRONT_MATTER_FIELD_TO_DEFAULT_VALUE[
               field as keyof FrontMatterFields
-            ]
-          )
-    ) as [keyof FrontMatterFields, any][]
+            ],
+          ),
+    ) as [keyof FrontMatterFields, any][],
   );
-  return (
-    "---\n" +
-    Bun.YAML.stringify(restObject, undefined, 2) +
-    "\n---\n\n" +
-    cleanedBody
-  );
+  let yamlContent = stringifyYAML(restObject, { indent: 2 });
+  // Remove trailing newline to match Bun's YAML.stringify behavior
+  yamlContent = yamlContent.endsWith("\n")
+    ? yamlContent.slice(0, -1)
+    : yamlContent;
+  // Add trailing space after keys that have nested objects to match Bun's format
+  // This regex matches "key:" followed by a newline and indent (indicating nested value)
+  yamlContent = yamlContent.replace(/^(\S+):(\n(?:  |\t))/gm, "$1: $2");
+  return "---\n" + yamlContent + "\n---\n\n" + cleanedBody;
 }
 
 const RELATIVE_IMAGE_REFERENCE_REGEX = /!\[([^\]]*)\]\(([^)]+)\)/g;
@@ -158,7 +161,7 @@ export function hash(email: Partial<Email & FrontMatterFields>): string {
  * Find relative image references in markdown content
  */
 export function findRelativeImageReferences(
-  content: string
+  content: string,
 ): RelativeImageReference[] {
   const regex = RELATIVE_IMAGE_REFERENCE_REGEX;
   const results: RelativeImageReference[] = [];
@@ -187,7 +190,7 @@ export function replaceImageReference(
   content: string,
   originalReference: string,
   newUrl: string,
-  altText: string
+  altText: string,
 ): string {
   const newReference = `![${altText}](${newUrl})`;
   return content.replace(originalReference, newReference);

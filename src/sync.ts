@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
+import fg from "fast-glob";
 import PACKAGE_JSON from "../package.json" with { type: "json" };
 import createConfig from "./config.js";
 import { type Client, createClient, ok } from "./lib/openapi-wrapper.js";
@@ -82,7 +83,7 @@ const ABSOLUTE_IMAGE_URL_REGEX = /!\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g;
 export const convertAbsoluteToRelativeImages = (
   content: string,
   emailDir: string,
-  syncedImages: Record<string, SyncedImage>
+  syncedImages: Record<string, SyncedImage>,
 ): string => {
   const regex = ABSOLUTE_IMAGE_URL_REGEX;
   let processedContent = content;
@@ -91,7 +92,7 @@ export const convertAbsoluteToRelativeImages = (
     regex,
     (match, altText, imageUrl) => {
       const syncedImage = Object.values(syncedImages).find(
-        (img) => img.url === imageUrl
+        (img) => img.url === imageUrl,
       );
 
       if (syncedImage) {
@@ -100,7 +101,7 @@ export const convertAbsoluteToRelativeImages = (
       }
 
       return match;
-    }
+    },
   );
 
   return processedContent;
@@ -139,7 +140,10 @@ export class SyncManager {
       middlewares: [
         async (request, next) => {
           request.headers.set("authorization", `Token ${apiKey}`);
-          request.headers.set("user-agent", `buttondown-cli/${PACKAGE_JSON.version}`);
+          request.headers.set(
+            "user-agent",
+            `buttondown-cli/${PACKAGE_JSON.version}`,
+          );
           return next(request);
         },
       ],
@@ -160,15 +164,18 @@ export class SyncManager {
     await mkdir(this.cssDir, { recursive: true });
 
     if (await existsSync(this.configPath)) {
-      const config = await Bun.file(this.configPath).json();
+      const config = JSON.parse(
+        await readFile(this.configPath, "utf8"),
+      ) as SyncConfig;
       config.syncedImages ||= {};
 
       config.syncedNewsletter ||= null;
 
-      await Bun.file(this.configPath).write(JSON.stringify(config, null, 2));
+      await writeFile(this.configPath, JSON.stringify(config, null, 2));
     } else {
-      await Bun.file(this.configPath).write(
-        JSON.stringify(DEFAULT_SYNC_CONFIG, null, 2)
+      await writeFile(
+        this.configPath,
+        JSON.stringify(DEFAULT_SYNC_CONFIG, null, 2),
       );
     }
   }
@@ -200,7 +207,7 @@ export class SyncManager {
       const image = await ok(
         this.api.post("/images", {
           body: formData,
-        })
+        }),
       );
 
       console.log(`✅ Successfully uploaded image: ${image.id}`);
@@ -220,7 +227,9 @@ export class SyncManager {
     let hasMore = true;
     const syncResults: Output["emails"] = DEFAULT_OUTPUT.emails;
 
-    const syncConfig = await Bun.file(this.configPath).json();
+    const syncConfig = JSON.parse(
+      await readFile(this.configPath, "utf8"),
+    ) as SyncConfig;
     const syncedEmails = syncConfig.syncedEmails || {};
     const syncedImages = syncConfig.syncedImages || {};
 
@@ -234,7 +243,7 @@ export class SyncManager {
               page_size: PAGE_SIZE,
             },
           },
-        })
+        }),
       );
 
       for (const email of results) {
@@ -256,7 +265,7 @@ export class SyncManager {
         const processedBody = convertAbsoluteToRelativeImages(
           email.body,
           this.emailsDir,
-          syncedImages
+          syncedImages,
         );
 
         const emailWithProcessedBody = { ...email, body: processedBody };
@@ -284,7 +293,7 @@ export class SyncManager {
 
     syncConfig.lastSync = new Date().toISOString();
     syncConfig.syncedEmails = syncedEmails;
-    await Bun.file(this.configPath).write(JSON.stringify(syncConfig, null, 2));
+    await writeFile(this.configPath, JSON.stringify(syncConfig, null, 2));
 
     return syncResults;
   }
@@ -292,13 +301,17 @@ export class SyncManager {
   async pushEmails(): Promise<Output["emails"]> {
     const syncResults: Output["emails"] = DEFAULT_OUTPUT.emails;
 
-    const glob = new Bun.Glob("**/*.md");
-    const emailFiles = await glob.scan(this.emailsDir);
-    const syncConfig = (await Bun.file(this.configPath).json()) as SyncConfig;
+    const emailFiles = await fg("**/*.md", {
+      cwd: this.emailsDir,
+      absolute: false,
+    });
+    const syncConfig = JSON.parse(
+      await readFile(this.configPath, "utf8"),
+    ) as SyncConfig;
     const syncedEmails = syncConfig.syncedEmails || {};
     const syncedImages = syncConfig.syncedImages || {};
 
-    for await (const emailFile of emailFiles) {
+    for (const emailFile of emailFiles) {
       const emailPath = path.join(this.emailsDir, emailFile);
       const content = await readFile(emailPath, "utf8");
 
@@ -326,7 +339,7 @@ export class SyncManager {
 
         if (await existsSync(absolutePath)) {
           const existingImage = Object.values(syncedImages).find(
-            (img: SyncedImage) => img.localPath === absolutePath
+            (img: SyncedImage) => img.localPath === absolutePath,
           ) as SyncedImage | undefined;
 
           let imageUrl: string;
@@ -335,7 +348,7 @@ export class SyncManager {
 
           if (existingImage) {
             console.log(
-              `Using existing uploaded image: ${existingImage.filename}`
+              `Using existing uploaded image: ${existingImage.filename}`,
             );
             imageUrl = existingImage.url;
             imageId = existingImage.id;
@@ -356,7 +369,7 @@ export class SyncManager {
             } catch (error) {
               console.warn(
                 `Failed to upload image ${absolutePath}:`,
-                error instanceof Error ? error.message : String(error)
+                error instanceof Error ? error.message : String(error),
               );
               continue;
             }
@@ -366,7 +379,7 @@ export class SyncManager {
             processedContent,
             imageRef.match,
             imageUrl,
-            imageRef.altText
+            imageRef.altText,
           );
         } else {
           console.warn(`Image not found: ${absolutePath}`);
@@ -410,7 +423,7 @@ export class SyncManager {
               body: {
                 ...updatedEmail,
               },
-            })
+            }),
           );
           syncResults.updated++;
 
@@ -431,7 +444,7 @@ export class SyncManager {
                 ...updatedEmail,
                 subject: updatedEmail.subject || "",
               },
-            })
+            }),
           );
           syncResults.added++;
           await writeFile(emailPath, serialize(updatedEmail));
@@ -466,7 +479,7 @@ export class SyncManager {
     syncConfig.lastSync = new Date().toISOString();
     syncConfig.syncedEmails = syncedEmails;
     syncConfig.syncedImages = syncedImages;
-    await Bun.file(this.configPath).write(JSON.stringify(syncConfig, null, 2));
+    await writeFile(this.configPath, JSON.stringify(syncConfig, null, 2));
 
     return syncResults;
   }
@@ -476,7 +489,9 @@ export class SyncManager {
     let page = 1;
     let hasMore = true;
 
-    const syncConfig = (await Bun.file(this.configPath).json()) as SyncConfig;
+    const syncConfig = JSON.parse(
+      await readFile(this.configPath, "utf8"),
+    ) as SyncConfig;
     const syncedImages = syncConfig.syncedImages || {};
 
     while (hasMore) {
@@ -489,12 +504,12 @@ export class SyncManager {
                 page_size: PAGE_SIZE,
               },
             },
-          })
+          }),
         );
 
         for (const image of results) {
           const existingImage = Object.values(syncedImages).find(
-            (img: any) => img.id === image.id
+            (img: any) => img.id === image.id,
           ) as SyncedImage | undefined;
 
           if (existingImage && (await existsSync(existingImage.localPath))) {
@@ -541,7 +556,7 @@ export class SyncManager {
     }
 
     syncConfig.syncedImages = syncedImages;
-    await Bun.file(this.configPath).write(JSON.stringify(syncConfig, null, 2));
+    await writeFile(this.configPath, JSON.stringify(syncConfig, null, 2));
 
     return { downloaded, uploaded: 0 };
   }
@@ -549,17 +564,22 @@ export class SyncManager {
   async pushMedia(): Promise<Output["media"]> {
     let uploaded = 0;
 
-    const glob = new Bun.Glob("**/*");
-
-    const syncConfig = (await Bun.file(this.configPath).json()) as SyncConfig;
+    const syncConfig = JSON.parse(
+      await readFile(this.configPath, "utf8"),
+    ) as SyncConfig;
     const syncedImages = syncConfig.syncedImages || {};
 
-    for await (const mediaFile of glob.scan(this.mediaDir)) {
+    const mediaFiles = await fg("**/*", {
+      cwd: this.mediaDir,
+      absolute: false,
+    });
+
+    for (const mediaFile of mediaFiles) {
       const filePath = path.join(this.mediaDir, mediaFile);
       const filename = path.basename(mediaFile);
 
       const existingImage = Object.values(syncedImages).find(
-        (img: any) => img.localPath === filePath
+        (img: any) => img.localPath === filePath,
       ) as SyncedImage | undefined;
 
       if (existingImage) {
@@ -580,14 +600,16 @@ export class SyncManager {
     }
 
     syncConfig.syncedImages = syncedImages;
-    await Bun.file(this.configPath).write(JSON.stringify(syncConfig, null, 2));
+    await writeFile(this.configPath, JSON.stringify(syncConfig, null, 2));
 
     return { uploaded, downloaded: 0 };
   }
 
   async pullNewsletterMetadata(): Promise<{ updated: boolean }> {
     try {
-      const syncConfig = await Bun.file(this.configPath).json();
+      const syncConfig = JSON.parse(
+        await readFile(this.configPath, "utf8"),
+      ) as SyncConfig;
 
       const newsletters = await ok(this.api.get("/newsletters"));
       const newsletter = newsletters.results[0];
@@ -608,7 +630,8 @@ export class SyncManager {
       ]);
 
       const brandingPath = path.join(this.brandingDir, BRANDING_FILE);
-      await Bun.file(brandingPath).write(
+      await writeFile(
+        brandingPath,
         JSON.stringify(
           {
             name: newsletter.name || "",
@@ -622,8 +645,8 @@ export class SyncManager {
             },
           },
           null,
-          2
-        )
+          2,
+        ),
       );
 
       if (newsletter.css) {
@@ -639,7 +662,7 @@ export class SyncManager {
  * This file is for template CSS that will be shared across emails
  * You can include this in your custom CSS by using:
  * @import url('template.css');
- */`
+ */`,
         );
       }
 
@@ -648,9 +671,7 @@ export class SyncManager {
         lastSynced: new Date().toISOString(),
         contentHash,
       };
-      await Bun.file(this.configPath).write(
-        JSON.stringify(syncConfig, null, 2)
-      );
+      await writeFile(this.configPath, JSON.stringify(syncConfig, null, 2));
 
       return { updated: true };
     } catch (error) {
@@ -667,8 +688,12 @@ export class SyncManager {
         return { updated: false };
       }
 
-      const syncConfig = await Bun.file(this.configPath).json();
-      const brandingConfig = await Bun.file(brandingPath).json();
+      const syncConfig = JSON.parse(
+        await readFile(this.configPath, "utf8"),
+      ) as SyncConfig;
+      const brandingConfig = JSON.parse(
+        await readFile(brandingPath, "utf8"),
+      ) as Record<string, any>;
 
       const newsletterData: Partial<Newsletter> = {
         name: brandingConfig.name,
@@ -726,15 +751,21 @@ export class SyncManager {
         return { updated: false };
       }
 
+      const newsletterId = syncConfig.syncedNewsletter?.id;
+      if (!newsletterId) {
+        console.error("Newsletter ID not found in sync config");
+        return { updated: false };
+      }
+
       const updatedNewsletter = await ok(
         this.api.patch("/newsletters/{id}", {
           params: {
             path: {
-              id: syncConfig.syncedNewsletter?.id,
+              id: newsletterId,
             },
           },
           body: newsletterData,
-        })
+        }),
       );
 
       syncConfig.syncedNewsletter = {
@@ -742,9 +773,7 @@ export class SyncManager {
         lastSynced: new Date().toISOString(),
         contentHash,
       };
-      await Bun.file(this.configPath).write(
-        JSON.stringify(syncConfig, null, 2)
-      );
+      await writeFile(this.configPath, JSON.stringify(syncConfig, null, 2));
 
       return { updated: true };
     } catch (error) {

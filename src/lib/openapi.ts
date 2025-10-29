@@ -95,6 +95,11 @@ export interface paths {
      */
     get: operations["retrieve_email"];
     /**
+     * Delete Email 
+     * @description Delete an email
+     */
+    delete: operations["delete_email"];
+    /**
      * Update Email 
      * @description Update an email's properties
      */
@@ -748,8 +753,11 @@ export interface components {
      * Supported file types include documents, images, audio files, and more.
      */
     Attachment: {
-      /** Id */
-      id: string | string;
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
       /**
        * Creation Date 
        * Format: date-time 
@@ -1049,7 +1057,7 @@ export interface components {
        * Attachments 
        * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
        */
-      attachments?: (string | string)[];
+      attachments?: (string)[];
       /**
        * Body 
        * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`.
@@ -1181,7 +1189,7 @@ export interface components {
        * Attachments 
        * @default []
        */
-      attachments?: (string | string)[];
+      attachments?: (string)[];
       /**
        * Publish Date 
        * Format: date-time
@@ -1298,7 +1306,7 @@ export interface components {
        * Attachments 
        * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
        */
-      attachments?: (string | string)[];
+      attachments?: (string)[];
       /** Publish Date */
       publish_date?: string | "none";
       /**
@@ -2040,6 +2048,12 @@ export interface components {
        * @description Custom template for churn emails
        */
       custom_churn_email_template?: string;
+      /**
+       * Test Mode 
+       * @description Whether test mode is enabled for this newsletter 
+       * @default false
+       */
+      test_mode?: boolean;
     };
     /** Page[Newsletter] */
     NewsletterPage: {
@@ -2157,6 +2171,11 @@ export interface components {
        */
       image?: string;
       auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
+      /**
+       * Test Mode 
+       * @description Whether test mode is enabled for this newsletter.
+       */
+      test_mode?: boolean;
     };
     /** NewsletterUpdateInput */
     NewsletterUpdateInput: {
@@ -2243,6 +2262,11 @@ export interface components {
        * @description Custom template for churn emails.
        */
       custom_churn_email_template?: string;
+      /**
+       * Test Mode 
+       * @description Whether test mode is enabled for this newsletter.
+       */
+      test_mode?: boolean;
     };
     /**
      * Type 
@@ -4137,7 +4161,7 @@ export interface operations {
   delete_attachment: {
     parameters: {
       path: {
-        id: string | string;
+        id: string;
       };
     };
     responses: {
@@ -4261,6 +4285,35 @@ export interface operations {
           "application/json": components["schemas"]["Email"];
         };
       };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Email 
+   * @description Delete an email
+   */
+  delete_email: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
       /** @description Forbidden */
       403: {
         content: {
