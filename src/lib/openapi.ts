@@ -2107,40 +2107,62 @@ export interface components {
       description: string;
       /**
        * Tint Color 
-       * @default #0069FF
+       * @description The accent color for your newsletter. 
+       * @default #0069FF 
+       * @example #0069FF
        */
       tint_color?: string;
       /**
        * From Name 
-       * @default
+       * @description The name displayed in the 'From' field of your emails. 
+       * @default  
+       * @example Sheinhardt Wig Company
        */
       from_name?: string;
       /**
        * Header 
-       * @default
+       * @description HTML content displayed at the top of your newsletter emails. 
+       * @default  
+       * @example <p>Welcome to our newsletter!</p>
        */
       header?: string;
       /**
        * Footer 
-       * @default
+       * @description HTML content displayed at the bottom of your newsletter emails. 
+       * @default  
+       * @example <p>Thanks for reading!</p>
        */
       footer?: string;
       /**
        * Domain 
-       * @default
+       * @description The domain of the newsletter on which archives are hosted. 
+       * @default  
+       * @example sheinhardt.com
        */
       domain?: string;
       /**
        * Email Domain 
-       * @default
+       * @description The domain of the newsletter from which emails are sent. 
+       * @default  
+       * @example mail.sheinhardt.com
        */
       email_domain?: string;
       /**
        * Enabled Features 
-       * @default []
+       * @description List of enabled features for your newsletter. 
+       * @default [] 
+       * @example [
+       *   "archives",
+       *   "portal",
+       *   "surveys"
+       * ]
        */
       enabled_features?: (string)[];
-      /** Custom Email Template */
+      /**
+       * Custom Email Template 
+       * @description Custom email template identifier. 
+       * @example custom-template
+       */
       custom_email_template?: string;
       /**
        * Css 
@@ -2194,13 +2216,29 @@ export interface components {
        * @example Stay up to date with the latest trends in wigs and hairpieces
        */
       description?: string;
-      /** Tint Color */
+      /**
+       * Tint Color 
+       * @description The accent color for your newsletter. 
+       * @example #0069FF
+       */
       tint_color?: string;
-      /** From Name */
+      /**
+       * From Name 
+       * @description The name displayed in the 'From' field of your emails. 
+       * @example Sheinhardt Wig Company
+       */
       from_name?: string;
-      /** Header */
+      /**
+       * Header 
+       * @description HTML content displayed at the top of your newsletter emails. 
+       * @example <p>Welcome to our newsletter!</p>
+       */
       header?: string;
-      /** Footer */
+      /**
+       * Footer 
+       * @description HTML content displayed at the bottom of your newsletter emails. 
+       * @example <p>Thanks for reading!</p>
+       */
       footer?: string;
       /**
        * Domain 
@@ -2214,10 +2252,26 @@ export interface components {
        * @example mail.sheinhardt.com
        */
       email_domain?: string;
+      /**
+       * @description The auditing mode for your newsletter. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
+       * @example enabled
+       */
       auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
-      /** Enabled Features */
+      /**
+       * Enabled Features 
+       * @description List of enabled features for your newsletter. 
+       * @example [
+       *   "archives",
+       *   "portal",
+       *   "surveys"
+       * ]
+       */
       enabled_features?: (string)[];
-      /** Custom Email Template */
+      /**
+       * Custom Email Template 
+       * @description Custom email template identifier. 
+       * @example custom-template
+       */
       custom_email_template?: string;
       /**
        * Css 
@@ -2259,7 +2313,8 @@ export interface components {
       custom_churn_email_body?: string;
       /**
        * Custom Churn Email Template 
-       * @description Custom template for churn emails.
+       * @description Custom template for churn emails. 
+       * @example churn-template
        */
       custom_churn_email_template?: string;
       /**
