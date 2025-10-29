@@ -1,6 +1,6 @@
 {
   "name": "@buttondown/cli",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "CLI for Buttondown to sync emails and media with a local folder",
   "type": "module",
   "main": "dist/index.js",
@@ -13,7 +13,7 @@
     "dev": "tsc --watch",
     "start": "node dist/cli.js",
     "test": "bun test src/*",
-    "prepare": "npm run build",
+    "prepare": "bun run build",
     "lint": "biome check .",
     "lint:fix": "biome check --fix . --unsafe",
     "cli": "tsc && node dist/cli.js"
