@@ -2134,7 +2134,7 @@ export interface components {
        * Email Address 
        * @example newsletter@sheinhardt.com
        */
-      email_address: string;
+      email_address?: string;
       /**
        * Email Domain 
        * @description The domain of the newsletter from which emails are sent. 
