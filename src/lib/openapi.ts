@@ -1995,6 +1995,12 @@ export interface components {
        */
       domain?: string;
       /**
+       * Email Address 
+       * @description The email address used by your newsletter for sending messages. 
+       * @default
+       */
+      email_address?: string;
+      /**
        * Email Domain 
        * @default
        */
@@ -2056,6 +2062,12 @@ export interface components {
        * @default false
        */
       test_mode?: boolean;
+      /**
+       * Sort 
+       * @description The sorting method to apply to newsletter subscribers or messages. Example values: 'creation_date', '-creation_date', 'email_address', etc. 
+       * @default creation_date
+       */
+      sort?: string;
     };
     /** Page[Newsletter] */
     NewsletterPage: {
@@ -2092,49 +2104,25 @@ export interface components {
     };
     /** NewsletterInput */
     NewsletterInput: {
+      auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
       /**
-       * Username 
-       * @example sheinhardt
+       * Css 
+       * @description Custom CSS styling for your newsletter emails. 
+       * @default  
+       * @example .header { color: #000; }
        */
-      username: string;
+      css?: string;
       /**
-       * Name 
-       * @example Sheinhardt Wig Company
+       * Custom Email Template 
+       * @description Custom email template identifier. 
+       * @example custom-template
        */
-      name: string;
+      custom_email_template?: string;
       /**
        * Description 
        * @example Stay up to date with the latest trends in wigs and hairpieces
        */
       description: string;
-      /**
-       * Tint Color 
-       * @description The accent color for your newsletter. 
-       * @default #0069FF 
-       * @example #0069FF
-       */
-      tint_color?: string;
-      /**
-       * From Name 
-       * @description The name displayed in the 'From' field of your emails. 
-       * @default  
-       * @example Sheinhardt Wig Company
-       */
-      from_name?: string;
-      /**
-       * Header 
-       * @description HTML content displayed at the top of your newsletter emails. 
-       * @default  
-       * @example <p>Welcome to our newsletter!</p>
-       */
-      header?: string;
-      /**
-       * Footer 
-       * @description HTML content displayed at the bottom of your newsletter emails. 
-       * @default  
-       * @example <p>Thanks for reading!</p>
-       */
-      footer?: string;
       /**
        * Domain 
        * @description The domain of the newsletter on which archives are hosted. 
@@ -2142,6 +2130,11 @@ export interface components {
        * @example sheinhardt.com
        */
       domain?: string;
+      /**
+       * Email Address 
+       * @example newsletter@sheinhardt.com
+       */
+      email_address: string;
       /**
        * Email Domain 
        * @description The domain of the newsletter from which emails are sent. 
@@ -2161,25 +2154,26 @@ export interface components {
        */
       enabled_features?: (string)[];
       /**
-       * Custom Email Template 
-       * @description Custom email template identifier. 
-       * @example custom-template
-       */
-      custom_email_template?: string;
-      /**
-       * Css 
-       * @description Custom CSS styling for your newsletter emails. 
+       * Footer 
+       * @description HTML content displayed at the bottom of your newsletter emails. 
        * @default  
-       * @example .header { color: #000; }
+       * @example <p>Thanks for reading!</p>
        */
-      css?: string;
+      footer?: string;
       /**
-       * Web Css 
-       * @description Custom CSS styling for your newsletter's web presence. 
+       * From Name 
+       * @description The name displayed in the 'From' field of your emails. 
        * @default  
-       * @example .container { max-width: 800px; }
+       * @example Sheinhardt Wig Company
        */
-      web_css?: string;
+      from_name?: string;
+      /**
+       * Header 
+       * @description HTML content displayed at the top of your newsletter emails. 
+       * @default  
+       * @example <p>Welcome to our newsletter!</p>
+       */
+      header?: string;
       /**
        * Icon 
        * @description URL to your newsletter's icon image. 
@@ -2194,36 +2188,114 @@ export interface components {
        * @example https://example.com/header.jpg
        */
       image?: string;
-      auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
+      /**
+       * Name 
+       * @example Sheinhardt Wig Company
+       */
+      name: string;
       /**
        * Test Mode 
        * @description Whether test mode is enabled for this newsletter.
        */
       test_mode?: boolean;
-    };
-    /** NewsletterUpdateInput */
-    NewsletterUpdateInput: {
+      /**
+       * Tint Color 
+       * @description The accent color for your newsletter. 
+       * @default #0069FF 
+       * @example #0069FF
+       */
+      tint_color?: string;
       /**
        * Username 
        * @example sheinhardt
        */
-      username?: string;
+      username: string;
       /**
-       * Name 
-       * @example Sheinhardt Wig Company
+       * Web Css 
+       * @description Custom CSS styling for your newsletter's web presence. 
+       * @default  
+       * @example .container { max-width: 800px; }
        */
-      name?: string;
+      web_css?: string;
+    };
+    /** NewsletterUpdateInput */
+    NewsletterUpdateInput: {
+      /**
+       * @description The auditing mode for your newsletter. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
+       * @example enabled
+       */
+      auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
+      /**
+       * Css 
+       * @description Custom CSS styling for your newsletter emails. 
+       * @example .header { color: #000; }
+       */
+      css?: string;
+      /**
+       * Custom Churn Email Body 
+       * @description Custom body content for churn emails. 
+       * @example Hi {{ subscriber.email }},
+       * 
+       * We're sorry to see you go!
+       */
+      custom_churn_email_body?: string;
+      /**
+       * Custom Churn Email Subject 
+       * @description Custom subject line for churn emails. 
+       * @example You've canceled your premium subscription to {{ newsletter.name }}
+       */
+      custom_churn_email_subject?: string;
+      /**
+       * Custom Churn Email Template 
+       * @description Custom template for churn emails. 
+       * @example churn-template
+       */
+      custom_churn_email_template?: string;
+      /**
+       * Custom Email Template 
+       * @description Custom email template identifier. 
+       * @example custom-template
+       */
+      custom_email_template?: string;
       /**
        * Description 
        * @example Stay up to date with the latest trends in wigs and hairpieces
        */
       description?: string;
       /**
-       * Tint Color 
-       * @description The accent color for your newsletter. 
-       * @example #0069FF
+       * Domain 
+       * @description The domain of the newsletter on which archives are hosted. 
+       * @example sheinhardt.com
        */
-      tint_color?: string;
+      domain?: string;
+      /**
+       * Email Address 
+       * @description The email address of the newsletter. 
+       * @example newsletter@sheinhardt.com
+       */
+      email_address?: string;
+      /**
+       * Email Domain 
+       * @description The domain of the newsletter from which emails are sent. 
+       * @example mail.sheinhardt.com
+       */
+      email_domain?: string;
+      /**
+       * Enabled Features 
+       * @description List of enabled features for your newsletter. 
+       * @example [
+       *   "archives",
+       *   "portal",
+       *   "surveys"
+       * ]
+       */
+      enabled_features?: (string)[];
+      /**
+       * Footer 
+       * @description HTML content displayed at the bottom of your newsletter emails. 
+       * @example <p>Thanks for reading!</p>
+       */
+      footer?: string;
       /**
        * From Name 
        * @description The name displayed in the 'From' field of your emails. 
@@ -2237,57 +2309,6 @@ export interface components {
        */
       header?: string;
       /**
-       * Footer 
-       * @description HTML content displayed at the bottom of your newsletter emails. 
-       * @example <p>Thanks for reading!</p>
-       */
-      footer?: string;
-      /**
-       * Domain 
-       * @description The domain of the newsletter on which archives are hosted. 
-       * @example sheinhardt.com
-       */
-      domain?: string;
-      /**
-       * Email Domain 
-       * @description The domain of the newsletter from which emails are sent. 
-       * @example mail.sheinhardt.com
-       */
-      email_domain?: string;
-      /**
-       * @description The auditing mode for your newsletter. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
-       * @example enabled
-       */
-      auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
-      /**
-       * Enabled Features 
-       * @description List of enabled features for your newsletter. 
-       * @example [
-       *   "archives",
-       *   "portal",
-       *   "surveys"
-       * ]
-       */
-      enabled_features?: (string)[];
-      /**
-       * Custom Email Template 
-       * @description Custom email template identifier. 
-       * @example custom-template
-       */
-      custom_email_template?: string;
-      /**
-       * Css 
-       * @description Custom CSS styling for your newsletter emails. 
-       * @example .header { color: #000; }
-       */
-      css?: string;
-      /**
-       * Web Css 
-       * @description Custom CSS styling for your newsletter's web presence. 
-       * @example .container { max-width: 800px; }
-       */
-      web_css?: string;
-      /**
        * Icon 
        * @description URL to your newsletter's icon image. 
        * @example https://example.com/icon.png
@@ -2300,30 +2321,32 @@ export interface components {
        */
       image?: string;
       /**
-       * Custom Churn Email Subject 
-       * @description Custom subject line for churn emails. 
-       * @example You've canceled your premium subscription to {{ newsletter.name }}
+       * Name 
+       * @example Sheinhardt Wig Company
        */
-      custom_churn_email_subject?: string;
-      /**
-       * Custom Churn Email Body 
-       * @description Custom body content for churn emails. 
-       * @example Hi {{ subscriber.email }},
-       * 
-       * We're sorry to see you go!
-       */
-      custom_churn_email_body?: string;
-      /**
-       * Custom Churn Email Template 
-       * @description Custom template for churn emails. 
-       * @example churn-template
-       */
-      custom_churn_email_template?: string;
+      name?: string;
       /**
        * Test Mode 
        * @description Whether test mode is enabled for this newsletter.
        */
       test_mode?: boolean;
+      /**
+       * Tint Color 
+       * @description The accent color for your newsletter. 
+       * @example #0069FF
+       */
+      tint_color?: string;
+      /**
+       * Username 
+       * @example sheinhardt
+       */
+      username?: string;
+      /**
+       * Web Css 
+       * @description Custom CSS styling for your newsletter's web presence. 
+       * @example .container { max-width: 800px; }
+       */
+      web_css?: string;
     };
     /**
      * Type 
