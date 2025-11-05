@@ -1787,7 +1787,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    UpdateSubscriberErrorCode: "email_already_exists" | "email_invalid" | "email_has_been_changed_too_many_times" | "subscriber_type_invalid" | "tag_invalid";
+    UpdateSubscriberErrorCode: "email_already_exists" | "email_invalid" | "email_has_been_changed_too_many_times" | "firewall_blocked" | "subscriber_type_invalid" | "tag_invalid";
     /** ErrorMessage[UpdateSubscriberErrorCode] */
     ErrorMessage_UpdateSubscriberErrorCode_: {
       code: components["schemas"]["UpdateSubscriberErrorCode"];
