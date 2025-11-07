@@ -237,13 +237,6 @@ export interface paths {
     /** Create Automation */
     post: operations["create_automation"];
   };
-  "/automations/{id}/subscribers": {
-    /**
-     * Retrieve Automation Subscribers 
-     * @description Retrieve subscribers associated with an automation
-     */
-    get: operations["retrieve_automation_subscribers"];
-  };
   "/automations/{id}": {
     /**
      * Retrieve Automation 
@@ -1409,14 +1402,13 @@ export interface components {
       email_address: string;
       /**
        * Id 
-       * Format: uuid 
-       * @description A unique UUID associated with the object.
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
        * Creation Date 
        * Format: date-time 
-       * @description The date and time at which the object was created.
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       status: components["schemas"]["InvitationStatus"];
@@ -2806,29 +2798,6 @@ export interface components {
       metadata?: {
         [key: string]: string | undefined;
       };
-    };
-    /** SubscriberForAutomation */
-    SubscriberForAutomation: {
-      /**
-       * Id 
-       * Format: uuid
-       */
-      id: string;
-      status: components["schemas"]["AutomationAttemptStatus"];
-      /** Subscriber Id */
-      subscriber_id?: string;
-      subscriber?: components["schemas"]["Subscriber"];
-    };
-    /** Page[SubscriberForAutomation] */
-    SubscriberForAutomationPage: {
-      /** Results */
-      results: (components["schemas"]["SubscriberForAutomation"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
     };
     /** AutomationUpdateInput */
     AutomationUpdateInput: {
@@ -5482,50 +5451,6 @@ export interface operations {
       };
       /** @description Forbidden */
       403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Retrieve Automation Subscribers 
-   * @description Retrieve subscribers associated with an automation
-   */
-  retrieve_automation_subscribers: {
-    parameters: {
-      query: {
-        /** @description If provided, expand the given field. (Only supported field: 'subscriber'). */
-        expand?: ("subscriber")[];
-        page?: number;
-      };
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SubscriberForAutomationPage"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
