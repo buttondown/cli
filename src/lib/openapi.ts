@@ -2877,24 +2877,26 @@ export interface components {
     };
     /** Price */
     Price: {
-      /**
-       * Style 
-       * @enum {string}
-       */
-      style: "pay-what-you-want" | "fixed" | "usage-based";
       /** Amount */
       amount?: number;
-      /** Suggested Amount */
-      suggested_amount?: number;
-      /** Currency */
-      currency: string;
       /**
        * Cadence 
        * @enum {string}
        */
       cadence: "year" | "month" | "one-time" | "email" | "week";
+      /** Currency */
+      currency: string;
+      /** Description */
+      description?: string;
       /** Product Id */
       product_id?: string;
+      /**
+       * Style 
+       * @enum {string}
+       */
+      style: "pay-what-you-want" | "fixed" | "usage-based";
+      /** Suggested Amount */
+      suggested_amount?: number;
       /** Id */
       id: string;
       product?: components["schemas"]["Product"];
@@ -2956,24 +2958,26 @@ export interface components {
     };
     /** PriceInput */
     PriceInput: {
-      /**
-       * Style 
-       * @enum {string}
-       */
-      style: "pay-what-you-want" | "fixed" | "usage-based";
       /** Amount */
       amount?: number;
-      /** Suggested Amount */
-      suggested_amount?: number;
-      /** Currency */
-      currency: string;
       /**
        * Cadence 
        * @enum {string}
        */
       cadence: "year" | "month" | "one-time" | "email" | "week";
+      /** Currency */
+      currency: string;
+      /** Description */
+      description?: string;
       /** Product Id */
       product_id?: string;
+      /**
+       * Style 
+       * @enum {string}
+       */
+      style: "pay-what-you-want" | "fixed" | "usage-based";
+      /** Suggested Amount */
+      suggested_amount?: number;
     };
     /** Page[StripeCoupon] */
     StripeCouponPage: {
