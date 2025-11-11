@@ -3170,14 +3170,13 @@ export interface components {
     APIRequestDetail: {
       /**
        * Id 
-       * Format: uuid 
-       * @description A unique UUID associated with the object.
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
        * Creation Date 
        * Format: date-time 
-       * @description The date and time at which the object was created.
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /** Status Code */
@@ -3210,14 +3209,13 @@ export interface components {
     APIRequest: {
       /**
        * Id 
-       * Format: uuid 
-       * @description A unique UUID associated with the object.
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
        * Creation Date 
        * Format: date-time 
-       * @description The date and time at which the object was created.
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /** Status Code */
@@ -3690,14 +3688,13 @@ export interface components {
     Note: {
       /**
        * Id 
-       * Format: uuid 
-       * @description A unique UUID associated with the object.
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
        * Creation Date 
        * Format: date-time 
-       * @description The date and time at which the object was created.
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /**
@@ -3728,11 +3725,8 @@ export interface components {
        * @enum {string}
        */
       source: "admin" | "user";
-      /**
-       * User Id 
-       * Format: uuid
-       */
-      user_id: string;
+      /** User Id */
+      user_id?: string;
       user?: components["schemas"]["User"];
     };
     /** NoteInput */
@@ -4709,6 +4703,8 @@ export interface operations {
          * - "add", which will add the new subscriber data to the existing one.
          */
         "X-Buttondown-Collision-Behavior"?: "no_op" | "add" | "overwrite" | "fail";
+        /** @description Bypass the firewall for this subscriber creation. Subject to aggressive rate limiting (5 per hour per newsletter). */
+        "X-Buttondown-Bypass-Firewall"?: boolean;
       };
     };
     requestBody: {
@@ -4737,6 +4733,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /** Retrieve Subscriber */
