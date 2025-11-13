@@ -6574,9 +6574,9 @@ export interface operations {
     parameters: {
       query: {
         /** @description If provided, only return responses made to the given email. */
-        email?: string;
+        email_id?: string;
         /** @description If provided, only return responses made by the given subscriber. */
-        subscriber?: string;
+        subscriber_id?: string;
         /** @description If provided, only return responses made to the given survey(s). */
         survey?: (string)[];
         /** @description If provided, only return responses made after the given date. */
