@@ -397,16 +397,21 @@ export interface paths {
      */
     post: operations["test_webhook"];
   };
+  "/comments": {
+    /** List Comments */
+    get: operations["list_comments"];
+    /**
+     * Create Comment 
+     * @description Create a new comment or reply to an existing comment. Authors can respond to comments at the given author.
+     */
+    post: operations["create_comment"];
+  };
   "/comments/{id}": {
     /**
      * Retrieve Comment 
      * @description Retrieve a specific comment by its ID
      */
     get: operations["retrieve_comment"];
-  };
-  "/comments": {
-    /** List Comments */
-    get: operations["list_comments"];
   };
   "/survey_responses": {
     /** Retrieve Survey Responses */
@@ -3542,6 +3547,26 @@ export interface components {
       subscriber?: components["schemas"]["Subscriber"];
       email?: components["schemas"]["Email"];
     };
+    /** CommentInput */
+    CommentInput: {
+      /**
+       * Text 
+       * @description The text content of the comment
+       */
+      text: string;
+      /**
+       * Parent Id 
+       * Format: uuid 
+       * @description The ID of the parent comment, if this comment is a reply to another comment.
+       */
+      parent_id?: string;
+      /**
+       * Email Id 
+       * Format: uuid 
+       * @description The ID of the email this comment is for. Required if parent_id is not provided.
+       */
+      email_id?: string;
+    };
     /** Page[Comment] */
     CommentPage: {
       /** Results */
@@ -6504,6 +6529,79 @@ export interface operations {
       409: never;
     };
   };
+  /** List Comments */
+  list_comments: {
+    parameters: {
+      query: {
+        /** @description If provided, only return comments of the given type. */
+        comment_type: "reviewer" | "subscriber";
+        /** @description If provided, only return comments for the given email. */
+        email_id?: string;
+        /** @description If provided, only return comments for the given subscriber. */
+        subscriber_id?: string;
+        /** @description If provided, only return comments that are replies to the given parent comment. */
+        parent_id?: string;
+        /** @description If provided, expand the given field. (Only supported fields: 'subscriber', 'email'). */
+        expand?: ("subscriber" | "email")[];
+        ordering?: "creation_date" | "-creation_date" | "email" | "-email" | "subscriber" | "-subscriber";
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CommentPage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Create Comment 
+   * @description Create a new comment or reply to an existing comment. Authors can respond to comments at the given author.
+   */
+  create_comment: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CommentInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Comment"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
   /**
    * Retrieve Comment 
    * @description Retrieve a specific comment by its ID
@@ -6529,38 +6627,6 @@ export interface operations {
       };
       /** @description Not Found */
       404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** List Comments */
-  list_comments: {
-    parameters: {
-      query: {
-        /** @description If provided, only return comments of the given type. */
-        comment_type: "reviewer" | "subscriber";
-        /** @description If provided, only return comments for the given email. */
-        email_id?: string;
-        /** @description If provided, only return comments for the given subscriber. */
-        subscriber_id?: string;
-        /** @description If provided, expand the given field. (Only supported fields: 'subscriber', 'email'). */
-        expand?: ("subscriber" | "email")[];
-        ordering?: "creation_date" | "-creation_date" | "email" | "-email" | "subscriber" | "-subscriber";
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CommentPage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
