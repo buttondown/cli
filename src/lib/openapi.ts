@@ -1830,7 +1830,10 @@ export interface components {
       type?: components["schemas"]["SubscriberType"];
       /** Unsubscription Reason */
       unsubscription_reason?: string;
-      /** Email Which Prompted Unsubscription Id */
+      /**
+       * Email Which Prompted Unsubscription Id 
+       * Format: uuid
+       */
       email_which_prompted_unsubscription_id?: string;
     };
     /**
