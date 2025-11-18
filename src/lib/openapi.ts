@@ -3245,6 +3245,8 @@ export interface components {
     APIRequestList: {
       /** Results */
       results: (components["schemas"]["APIRequest"])[];
+      /** Cursor */
+      cursor?: string;
     };
     /**
      * Status 
