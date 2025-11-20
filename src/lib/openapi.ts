@@ -3128,7 +3128,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    UpdateSurveyErrorCode: "answers_empty";
+    UpdateSurveyErrorCode: "answers_empty" | "survey_has_responses";
     /** ErrorMessage[UpdateSurveyErrorCode] */
     ErrorMessage_UpdateSurveyErrorCode_: {
       code: components["schemas"]["UpdateSurveyErrorCode"];
