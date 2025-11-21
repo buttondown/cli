@@ -77,6 +77,11 @@ export interface paths {
   };
   "/attachments/{id}": {
     /**
+     * Retrieve Attachment 
+     * @description Retrieve an attachment
+     */
+    get: operations["retrieve_attachment"];
+    /**
      * Delete Attachment 
      * @description Delete an attachment
      */
@@ -4187,6 +4192,13 @@ export interface operations {
   };
   /** List Attachments */
   list_attachments: {
+    parameters: {
+      query: {
+        /** @description If provided, only return attachments matching the given IDs. */
+        ids?: (string)[];
+        page_size?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -4229,6 +4241,37 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+    };
+  };
+  /**
+   * Retrieve Attachment 
+   * @description Retrieve an attachment
+   */
+  retrieve_attachment: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Attachment"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
