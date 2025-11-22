@@ -440,12 +440,24 @@ export interface paths {
      * @description Retrieve a specific comment by its ID
      */
     get: operations["retrieve_comment"];
+    /**
+     * Delete Comment 
+     * @description Delete a comment. Only the comment owner (subscriber) or the newsletter author can delete a comment.
+     */
+    delete: operations["delete_comment"];
   };
   "/survey_responses": {
     /** Retrieve Survey Responses */
     get: operations["retrieve_survey_responses"];
     /** Create Survey Response */
     post: operations["create_survey_response"];
+  };
+  "/survey_responses/{id}": {
+    /**
+     * Update Survey Response 
+     * @description Update a survey response's text. Only the response owner (subscriber) can update their response.
+     */
+    patch: operations["update_survey_response"];
   };
   "/events": {
     /** List Events */
@@ -3824,6 +3836,14 @@ export interface components {
       /** Answer */
       answer: number;
     };
+    /** ResponseUpdateInput */
+    ResponseUpdateInput: {
+      /**
+       * Text 
+       * @description The text response to update. Only applicable if the survey has freeform responses enabled.
+       */
+      text?: string;
+    };
     /**
      * EmailEventType 
      * @description An enumeration. 
@@ -7002,6 +7022,33 @@ export interface operations {
       409: never;
     };
   };
+  /**
+   * Delete Comment 
+   * @description Delete a comment. Only the comment owner (subscriber) or the newsletter author can delete a comment.
+   */
+  delete_comment: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
   /** Retrieve Survey Responses */
   retrieve_survey_responses: {
     parameters: {
@@ -7071,6 +7118,48 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+    };
+  };
+  /**
+   * Update Survey Response 
+   * @description Update a survey response's text. Only the response owner (subscriber) can update their response.
+   */
+  update_survey_response: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResponseUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /** List Events */
