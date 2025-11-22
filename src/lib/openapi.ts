@@ -329,6 +329,29 @@ export interface paths {
      */
     patch: operations["update_survey"];
   };
+  "/forms": {
+    /** List Forms */
+    get: operations["list_forms"];
+    /** Create Form */
+    post: operations["create_form"];
+  };
+  "/forms/{id}": {
+    /**
+     * Retrieve Form 
+     * @description Retrieve a specific form by its ID
+     */
+    get: operations["retrieve_form"];
+    /**
+     * Delete Form 
+     * @description Delete a form
+     */
+    delete: operations["delete_form"];
+    /**
+     * Update Form 
+     * @description Update a form's properties
+     */
+    patch: operations["update_form"];
+  };
   "/api_requests/{id}": {
     /**
      * Retrieve Api Request 
@@ -1398,6 +1421,8 @@ export interface components {
       automations?: components["schemas"]["AccessLevel"];
       /** @default none */
       surveys?: components["schemas"]["AccessLevel"];
+      /** @default none */
+      forms?: components["schemas"]["AccessLevel"];
     };
     /**
      * Status 
@@ -2699,7 +2724,7 @@ export interface components {
      * For instance, an email being sent to a subscriber is `subscriber.delivered`, not `email.sent`. 
      * @enum {string}
      */
-    ExternalEventType: "advertising_slot.purchased" | "automation.invoked" | "date.day.started" | "date.month.started" | "date.week.started" | "date.year.started" | "email.created" | "email.deleted" | "email.sent" | "email.status.changed" | "email.updated" | "external_feed_item.created" | "export.completed" | "export.created" | "export.failed" | "firewall.blocked" | "mention.created" | "memberful.member.updated" | "memberful.subscription.created" | "memberful.subscription.deleted" | "note.created" | "note.deleted" | "patreon.member.updated" | "patreon.membership.created" | "patreon.membership.deleted" | "shopify.customer.created" | "shopify.customer.updated" | "social_mention.created" | "stripe.checkout.session.completed" | "stripe.customer.updated" | "stripe.subscription.activated" | "stripe.subscription.churning" | "stripe.subscription.deactivated" | "subscriber.bounced" | "subscriber.changed_email" | "subscriber.churned" | "subscriber.clicked" | "subscriber.commented" | "subscriber.complained" | "subscriber.confirmed" | "subscriber.created" | "subscriber.deleted" | "subscriber.delivered" | "subscriber.opened" | "subscriber.paid" | "subscriber.paused" | "subscriber.resumed" | "subscriber.referred" | "subscriber.referred.paid" | "subscriber.rejected" | "subscriber.replied" | "subscriber.responded_to_survey" | "subscriber.tags.changed" | "subscriber.trial_ended" | "subscriber.trial_started" | "subscriber.type.changed" | "subscriber.unsubscribed" | "subscriber.updated" | "subscriber.viewed_checkout_page" | "survey.cleared_responses" | "survey.created" | "survey.deleted" | "survey.updated";
+    ExternalEventType: "advertising_slot.purchased" | "automation.invoked" | "date.day.started" | "date.month.started" | "date.week.started" | "date.year.started" | "email.created" | "email.deleted" | "email.sent" | "email.status.changed" | "email.updated" | "external_feed_item.created" | "export.completed" | "export.created" | "export.failed" | "firewall.blocked" | "mention.created" | "memberful.member.updated" | "memberful.subscription.created" | "memberful.subscription.deleted" | "note.created" | "note.deleted" | "patreon.member.updated" | "patreon.membership.created" | "patreon.membership.deleted" | "shopify.customer.created" | "shopify.customer.updated" | "social_mention.created" | "stripe.checkout.session.completed" | "stripe.customer.updated" | "stripe.subscription.activated" | "stripe.subscription.churning" | "stripe.subscription.deactivated" | "subscriber.bounced" | "subscriber.changed_email" | "subscriber.churned" | "subscriber.clicked" | "subscriber.commented" | "subscriber.complained" | "subscriber.confirmed" | "subscriber.created" | "subscriber.deleted" | "subscriber.delivered" | "subscriber.opened" | "subscriber.paid" | "subscriber.paused" | "subscriber.resumed" | "subscriber.referred" | "subscriber.referred.paid" | "subscriber.rejected" | "subscriber.replied" | "subscriber.responded_to_survey" | "subscriber.tags.changed" | "subscriber.trial_ended" | "subscriber.trial_started" | "subscriber.type.changed" | "subscriber.unsubscribed" | "subscriber.updated" | "subscriber.viewed_checkout_page" | "survey.cleared_responses" | "survey.created" | "survey.deleted" | "survey.updated" | "form.created" | "form.deleted" | "form.updated";
     /** Delay */
     Delay: {
       /** Value */
@@ -3169,6 +3194,140 @@ export interface components {
        */
       is_freeform_response_enabled?: boolean;
       input_type?: components["schemas"]["SurveyInputType"];
+    };
+    /**
+     * Status 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    FormStatus: "active" | "inactive";
+    /** Form */
+    Form: {
+      /**
+       * Id 
+       * Format: uuid 
+       * @description A unique UUID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was created.
+       */
+      creation_date: string;
+      /** Title */
+      title: string;
+      /** Slug */
+      slug: string;
+      /** Body */
+      body: string;
+      /** Css */
+      css: string;
+      /** Success Body */
+      success_body: string;
+      /** Surveys */
+      surveys: (string)[];
+      /** Admin */
+      admin: boolean;
+      status: components["schemas"]["FormStatus"];
+    };
+    /**
+     * CreateFormErrorCode 
+     * @description Represents the type of error that occurred when creating a form.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    CreateFormErrorCode: "slug_already_exists";
+    /** ErrorMessage[CreateFormErrorCode] */
+    ErrorMessage_CreateFormErrorCode_: {
+      code: components["schemas"]["CreateFormErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /** FormInput */
+    FormInput: {
+      /**
+       * Title 
+       * @example Contact Form
+       */
+      title: string;
+      /**
+       * Slug 
+       * @example contact
+       */
+      slug: string;
+      /**
+       * Body 
+       * @default  
+       * @example
+       */
+      body?: string;
+      /**
+       * Css 
+       * @default  
+       * @example
+       */
+      css?: string;
+      /**
+       * Success Body 
+       * @default  
+       * @example Thank you for your submission!
+       */
+      success_body?: string;
+      /**
+       * Surveys 
+       * @example []
+       */
+      surveys?: (string)[];
+      /**
+       * Admin 
+       * @default false 
+       * @example false
+       */
+      admin?: boolean;
+      /**
+       * @default active 
+       * @example active
+       */
+      status?: components["schemas"]["FormStatus"];
+    };
+    /** Page[Form] */
+    FormPage: {
+      /** Results */
+      results: (components["schemas"]["Form"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** FormUpdateInput */
+    FormUpdateInput: {
+      /** Title */
+      title?: string;
+      /** Slug */
+      slug?: string;
+      /** Body */
+      body?: string;
+      /** Css */
+      css?: string;
+      /** Success Body */
+      success_body?: string;
+      /** Surveys */
+      surveys?: (string)[];
+      /** Admin */
+      admin?: boolean;
+      status?: components["schemas"]["FormStatus"];
     };
     /**
      * Source 
@@ -6111,6 +6270,166 @@ export interface operations {
       409: never;
     };
   };
+  /** List Forms */
+  list_forms: {
+    parameters: {
+      query: {
+        /** @description If provided, only return forms with the given status. */
+        status?: (components["schemas"]["FormStatus"])[];
+        /** @description If provided, only return forms without the given status. */
+        "-status"?: (components["schemas"]["FormStatus"])[];
+        /** @description If provided, filter by admin-only flag. */
+        admin?: boolean;
+        ordering?: "creation_date" | "-creation_date" | "title" | "-title" | "slug" | "-slug" | "status" | "-status";
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["FormPage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /** Create Form */
+  create_form: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FormInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Form"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_CreateFormErrorCode_"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Form 
+   * @description Retrieve a specific form by its ID
+   */
+  retrieve_form: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Form"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Form 
+   * @description Delete a form
+   */
+  delete_form: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Form 
+   * @description Update a form's properties
+   */
+  update_form: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FormUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Form"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
   /**
    * Retrieve Api Request 
    * @description Retrieve a specific API request by its ID
@@ -6552,7 +6871,7 @@ export interface operations {
          * 
          * For instance, an email being sent to a subscriber is `subscriber.delivered`, not `email.sent`.
          */
-        event_type?: "advertising_slot.purchased" | "automation.invoked" | "date.day.started" | "date.month.started" | "date.week.started" | "date.year.started" | "email.created" | "email.deleted" | "email.sent" | "email.status.changed" | "email.updated" | "external_feed_item.created" | "export.completed" | "export.created" | "export.failed" | "firewall.blocked" | "mention.created" | "memberful.member.updated" | "memberful.subscription.created" | "memberful.subscription.deleted" | "note.created" | "note.deleted" | "patreon.member.updated" | "patreon.membership.created" | "patreon.membership.deleted" | "shopify.customer.created" | "shopify.customer.updated" | "social_mention.created" | "stripe.checkout.session.completed" | "stripe.customer.updated" | "stripe.subscription.activated" | "stripe.subscription.churning" | "stripe.subscription.deactivated" | "subscriber.bounced" | "subscriber.changed_email" | "subscriber.churned" | "subscriber.clicked" | "subscriber.commented" | "subscriber.complained" | "subscriber.confirmed" | "subscriber.created" | "subscriber.deleted" | "subscriber.delivered" | "subscriber.opened" | "subscriber.paid" | "subscriber.paused" | "subscriber.resumed" | "subscriber.referred" | "subscriber.referred.paid" | "subscriber.rejected" | "subscriber.replied" | "subscriber.responded_to_survey" | "subscriber.tags.changed" | "subscriber.trial_ended" | "subscriber.trial_started" | "subscriber.type.changed" | "subscriber.unsubscribed" | "subscriber.updated" | "subscriber.viewed_checkout_page" | "survey.cleared_responses" | "survey.created" | "survey.deleted" | "survey.updated";
+        event_type?: "advertising_slot.purchased" | "automation.invoked" | "date.day.started" | "date.month.started" | "date.week.started" | "date.year.started" | "email.created" | "email.deleted" | "email.sent" | "email.status.changed" | "email.updated" | "external_feed_item.created" | "export.completed" | "export.created" | "export.failed" | "firewall.blocked" | "mention.created" | "memberful.member.updated" | "memberful.subscription.created" | "memberful.subscription.deleted" | "note.created" | "note.deleted" | "patreon.member.updated" | "patreon.membership.created" | "patreon.membership.deleted" | "shopify.customer.created" | "shopify.customer.updated" | "social_mention.created" | "stripe.checkout.session.completed" | "stripe.customer.updated" | "stripe.subscription.activated" | "stripe.subscription.churning" | "stripe.subscription.deactivated" | "subscriber.bounced" | "subscriber.changed_email" | "subscriber.churned" | "subscriber.clicked" | "subscriber.commented" | "subscriber.complained" | "subscriber.confirmed" | "subscriber.created" | "subscriber.deleted" | "subscriber.delivered" | "subscriber.opened" | "subscriber.paid" | "subscriber.paused" | "subscriber.resumed" | "subscriber.referred" | "subscriber.referred.paid" | "subscriber.rejected" | "subscriber.replied" | "subscriber.responded_to_survey" | "subscriber.tags.changed" | "subscriber.trial_ended" | "subscriber.trial_started" | "subscriber.type.changed" | "subscriber.unsubscribed" | "subscriber.updated" | "subscriber.viewed_checkout_page" | "survey.cleared_responses" | "survey.created" | "survey.deleted" | "survey.updated" | "form.created" | "form.deleted" | "form.updated";
       };
       path: {
         id: string;
