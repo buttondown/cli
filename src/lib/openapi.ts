@@ -483,6 +483,13 @@ export interface paths {
      */
     delete: operations["delete_note_endpoint"];
   };
+  "/public/emails/{username}": {
+    /**
+     * Search public emails 
+     * @description Search and list public emails for a newsletter. No authentication required.
+     */
+    get: operations["list_public_emails"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -3982,6 +3989,46 @@ export interface components {
       /** Count */
       count: number;
     };
+    /**
+     * PublicEmail 
+     * @description Public email schema for email search results.
+     */
+    PublicEmail: {
+      /**
+       * Id 
+       * Format: uuid
+       */
+      id: string;
+      /** Subject */
+      subject: string;
+      /** Slug */
+      slug?: string;
+      /**
+       * Publish Date 
+       * Format: date-time
+       */
+      publish_date?: string;
+      /**
+       * Creation Date 
+       * Format: date-time
+       */
+      creation_date: string;
+      /** Description */
+      description: string;
+      /** Absolute Url */
+      absolute_url: string;
+    };
+    /** Page[PublicEmail] */
+    PublicEmailPage: {
+      /** Results */
+      results: (components["schemas"]["PublicEmail"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
     /** @enum {string} */
     EmailExcludableField: "body";
   };
@@ -7313,6 +7360,29 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+    };
+  };
+  /**
+   * Search public emails 
+   * @description Search and list public emails for a newsletter. No authentication required.
+   */
+  list_public_emails: {
+    parameters: {
+      query: {
+        q?: string;
+        page?: number;
+      };
+      path: {
+        username: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PublicEmailPage"];
+        };
+      };
     };
   };
 }
