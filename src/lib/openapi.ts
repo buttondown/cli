@@ -1564,6 +1564,18 @@ export interface components {
       date: string;
       type: components["schemas"]["SubscriberType"];
     };
+    /** EmailTransition */
+    EmailTransition: {
+      /**
+       * Date 
+       * Format: date-time
+       */
+      date: string;
+      /** Old Email Address */
+      old_email_address?: string;
+      /** New Email Address */
+      new_email_address: string;
+    };
     /**
      * UndeliverabilityReason 
      * @description The reason Buttondown has marked the subscriber as undeliverable.
@@ -1679,6 +1691,11 @@ export interface components {
        * @default []
        */
       transitions?: (components["schemas"]["Transition"])[];
+      /**
+       * Email Transitions 
+       * @default []
+       */
+      email_transitions?: (components["schemas"]["EmailTransition"])[];
       type: components["schemas"]["SubscriberType"];
       /**
        * Undeliverability Date 
