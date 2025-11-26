@@ -4,11 +4,11 @@ import path from "node:path";
 import fg from "fast-glob";
 import PACKAGE_JSON from "../package.json" with { type: "json" };
 import createConfig from "./config.js";
-import { type Client, createClient, ok } from "./lib/openapi-wrapper.js";
 import type { components, paths } from "./lib/openapi.js";
+import { type Client, createClient, ok } from "./lib/openapi-wrapper.js";
 import {
-  type FrontMatterFields,
   deserialize,
+  type FrontMatterFields,
   findRelativeImageReferences,
   hash,
   replaceImageReference,

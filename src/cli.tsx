@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import { render } from "ink";
 import meow from "meow";
-import React from "react";
 import Create from "./commands/create.js";
 import Login from "./commands/login.js";
 import Logout from "./commands/logout.js";
@@ -86,20 +85,20 @@ if (!command && !cli.flags.help && !cli.flags.version) {
 }
 
 // Render the appropriate component based on the command
-let app;
+let _app;
 switch (command) {
   case "login": {
-    app = render(<Login apiKey={cli.flags.apiKey} force={cli.flags.force} />);
+    _app = render(<Login apiKey={cli.flags.apiKey} force={cli.flags.force} />);
     break;
   }
 
   case "logout": {
-    app = render(<Logout />);
+    _app = render(<Logout />);
     break;
   }
 
   case "pull": {
-    app = render(
+    _app = render(
       <Pull
         directory={cli.flags.directory}
         force={cli.flags.force}
@@ -111,7 +110,7 @@ switch (command) {
   }
 
   case "push": {
-    app = render(
+    _app = render(
       <Push
         directory={cli.flags.directory}
         force={cli.flags.force}
@@ -129,7 +128,7 @@ switch (command) {
       process.exit(1);
     }
 
-    app = render(
+    _app = render(
       <Create directory={cli.flags.directory} title={cli.flags.title} />,
     );
     break;

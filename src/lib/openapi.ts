@@ -3086,14 +3086,13 @@ export interface components {
     Survey: {
       /**
        * Id 
-       * Format: uuid 
-       * @description A unique UUID associated with the object.
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
        * Creation Date 
        * Format: date-time 
-       * @description The date and time at which the object was created.
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /** Identifier */
@@ -3462,10 +3461,7 @@ export interface components {
     AdvertisingSlotStatus: "open" | "sold" | "finalized" | "executed" | "expired";
     /** AdvertisingSlot */
     AdvertisingSlot: {
-      /**
-       * Id 
-       * Format: uuid
-       */
+      /** Id */
       id: string;
       /**
        * Date 
@@ -3482,7 +3478,7 @@ export interface components {
     AdvertisingUnit: {
       /**
        * Id 
-       * Format: uuid
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
@@ -3787,14 +3783,13 @@ export interface components {
     Response: {
       /**
        * Id 
-       * Format: uuid 
-       * @description A unique UUID associated with the object.
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
        * Creation Date 
        * Format: date-time 
-       * @description The date and time at which the object was created.
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /**
@@ -3807,25 +3802,13 @@ export interface components {
        * @description Optional text included by the subscriber with the response. Subscribers are only prompted to supply a text response if the `is_freeform_response_enabled` field is set to `true` on the survey.
        */
       text: string;
-      /**
-       * Survey Id 
-       * Format: uuid
-       */
+      /** Survey Id */
       survey_id: string;
-      /**
-       * Subscriber Id 
-       * Format: uuid
-       */
+      /** Subscriber Id */
       subscriber_id: string;
-      /**
-       * Email Id 
-       * Format: uuid
-       */
+      /** Email Id */
       email_id?: string;
-      /**
-       * Automation Id 
-       * Format: uuid
-       */
+      /** Automation Id */
       automation_id?: string;
       subscriber?: components["schemas"]["Subscriber"];
       survey?: components["schemas"]["Survey"];
@@ -3845,15 +3828,9 @@ export interface components {
     };
     /** ResponseInput */
     ResponseInput: {
-      /**
-       * Subscriber Id 
-       * Format: uuid
-       */
+      /** Subscriber Id */
       subscriber_id: string;
-      /**
-       * Survey Id 
-       * Format: uuid
-       */
+      /** Survey Id */
       survey_id: string;
       /** Email Id */
       email_id: string;

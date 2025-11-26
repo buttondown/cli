@@ -1,5 +1,5 @@
 import { Box, Text, useApp } from "ink";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { type Output, SyncManager } from "../sync.js";
 
 type PushProps = {
@@ -13,7 +13,6 @@ type PushProps = {
 export default function Push({
   directory,
   force = false,
-  verbose = false,
   baseUrl,
   apiKey,
 }: PushProps) {

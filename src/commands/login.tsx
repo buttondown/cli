@@ -1,12 +1,15 @@
 import { Box, Text } from "ink";
 import TextInput from "ink-text-input";
-import React, { useState } from "react";
+import { useState } from "react";
 import createConfig from "../config.js";
 
 export default function Login({
   apiKey: initialApiKey,
   force,
-}: { apiKey?: string; force?: boolean }) {
+}: {
+  apiKey?: string;
+  force?: boolean;
+}) {
   const config = createConfig();
   const existingApiKey = config.get("apiKey");
 

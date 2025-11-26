@@ -1,5 +1,5 @@
 import { Box, Text, useApp } from "ink";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { type Output, SyncManager } from "../sync.js";
 
 type PullProps = {

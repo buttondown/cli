@@ -1,5 +1,5 @@
 import { Box, Text } from "ink";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import createConfig from "../config.js";
 
 type State = "not_started" | "logging_out" | "logged_out";

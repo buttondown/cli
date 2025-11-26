@@ -5,7 +5,7 @@
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "strict": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "outDir": "dist",
     "rootDir": "src",
     "declaration": true,

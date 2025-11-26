@@ -1,7 +1,7 @@
 import path from "node:path";
 import fs from "fs-extra";
 import { Box, Text, useApp } from "ink";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 type CreateProps = {
   directory: string;
