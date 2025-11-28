@@ -87,6 +87,35 @@ export interface paths {
      */
     delete: operations["delete_attachment"];
   };
+  "/books": {
+    /**
+     * List Books 
+     * @description List all books for the authenticated newsletter
+     */
+    get: operations["list_books"];
+    /**
+     * Create Book 
+     * @description Create a new book
+     */
+    post: operations["create_book"];
+  };
+  "/books/{id}": {
+    /**
+     * Retrieve Book 
+     * @description Retrieve a specific book by its ID
+     */
+    get: operations["retrieve_book"];
+    /**
+     * Delete Book 
+     * @description Delete a book
+     */
+    delete: operations["delete_book"];
+    /**
+     * Update Book 
+     * @description Update a book's properties
+     */
+    patch: operations["update_book"];
+  };
   "/emails": {
     /** List Emails */
     get: operations["list_emails"];
@@ -838,6 +867,127 @@ export interface components {
       previous?: string;
       /** Count */
       count: number;
+    };
+    /** Book */
+    Book: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /**
+       * Title 
+       * @description The title of the book.
+       */
+      title: string;
+      /**
+       * Url 
+       * @description The URL where the book can be purchased or viewed.
+       */
+      url?: string;
+      /**
+       * Image Url 
+       * @description The URL of the book's cover image.
+       */
+      image_url?: string;
+      /**
+       * Description 
+       * @description A description of the book.
+       */
+      description?: string;
+      /**
+       * Year 
+       * @description The year the book was published.
+       */
+      year?: number;
+      /**
+       * Isbn 
+       * @description The ISBN of the book.
+       */
+      isbn?: string;
+    };
+    /** BookInput */
+    BookInput: {
+      /**
+       * Title 
+       * @description The title of the book.
+       */
+      title: string;
+      /**
+       * Url 
+       * @description The URL where the book can be purchased or viewed.
+       */
+      url?: string;
+      /**
+       * Image Url 
+       * @description The URL of the book's cover image.
+       */
+      image_url?: string;
+      /**
+       * Description 
+       * @description A description of the book.
+       */
+      description?: string;
+      /**
+       * Year 
+       * @description The year the book was published.
+       */
+      year?: number;
+      /**
+       * Isbn 
+       * @description The ISBN of the book.
+       */
+      isbn?: string;
+    };
+    /** Page[Book] */
+    BookPage: {
+      /** Results */
+      results: (components["schemas"]["Book"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** BookUpdateInput */
+    BookUpdateInput: {
+      /**
+       * Title 
+       * @description The title of the book.
+       */
+      title?: string;
+      /**
+       * Url 
+       * @description The URL where the book can be purchased or viewed.
+       */
+      url?: string;
+      /**
+       * Image Url 
+       * @description The URL of the book's cover image.
+       */
+      image_url?: string;
+      /**
+       * Description 
+       * @description A description of the book.
+       */
+      description?: string;
+      /**
+       * Year 
+       * @description The year the book was published.
+       */
+      year?: number;
+      /**
+       * Isbn 
+       * @description The ISBN of the book.
+       */
+      isbn?: string;
     };
     /** Analytics */
     Analytics: {
@@ -4509,6 +4659,161 @@ export interface operations {
       204: never;
       /** @description Forbidden */
       403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * List Books 
+   * @description List all books for the authenticated newsletter
+   */
+  list_books: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BookPage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Create Book 
+   * @description Create a new book
+   */
+  create_book: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["BookInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Book"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Book 
+   * @description Retrieve a specific book by its ID
+   */
+  retrieve_book: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Book"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Book 
+   * @description Delete a book
+   */
+  delete_book: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Book 
+   * @description Update a book's properties
+   */
+  update_book: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["BookUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Book"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
