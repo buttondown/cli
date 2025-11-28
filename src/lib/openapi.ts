@@ -1300,9 +1300,7 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
+      metadata?: Record<string, unknown>;
       /**
        * Modification Date 
        * Format: date-time 
@@ -1428,9 +1426,7 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
+      metadata?: Record<string, unknown>;
       /** Secondary Id */
       secondary_id?: number;
       /**
@@ -1536,9 +1532,7 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
+      metadata?: Record<string, unknown>;
       /**
        * Image 
        * @default
@@ -1792,9 +1786,7 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
+      metadata?: Record<string, unknown>;
       /**
        * Notes 
        * @description Any notes you want to attach to the subscriber. These are not publicly visible. 
@@ -1916,9 +1908,7 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
+      metadata?: Record<string, unknown>;
       /**
        * Tags 
        * @default []
@@ -2033,9 +2023,7 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
+      metadata?: Record<string, unknown>;
       /** Tags */
       tags?: (string)[];
       /**
@@ -2724,9 +2712,7 @@ export interface components {
        *   "foo": "bar"
        * }
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
+      metadata?: Record<string, unknown>;
       /**
        * Skip Old Items 
        * @description Skip items with publish date older than one day from when they're discovered
@@ -2769,9 +2755,7 @@ export interface components {
        *   "foo": "bar"
        * }
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
+      metadata?: Record<string, unknown>;
       /**
        * Skip Old Items 
        * @description Skip items with publish date older than one day from when they're discovered 
@@ -2815,9 +2799,7 @@ export interface components {
        *   "foo": "bar"
        * }
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
+      metadata?: Record<string, unknown>;
       /**
        * Skip Old Items 
        * @description Skip items with publish date older than one day from when they're discovered
@@ -2969,9 +2951,7 @@ export interface components {
       actions: (components["schemas"]["Action"])[];
       filters: components["schemas"]["FilterGroup"];
       /** Metadata */
-      metadata: {
-        [key: string]: string | undefined;
-      };
+      metadata: Record<string, unknown>;
     };
     /** Page[Automation] */
     AutomationPage: {
@@ -3034,9 +3014,7 @@ export interface components {
       actions?: (Record<string, unknown>)[];
       filters?: components["schemas"]["FilterGroup"];
       /** Metadata */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
+      metadata?: Record<string, unknown>;
     };
     /**
      * Failure 
