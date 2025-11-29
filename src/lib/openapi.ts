@@ -1674,7 +1674,7 @@ export interface components {
      * opt-in.) 
      * @enum {string}
      */
-    SubscriberSource: "admin" | "api" | "carrd" | "comment" | "import" | "organic" | "stripe" | "user" | "zapier";
+    SubscriberSource: "admin" | "api" | "carrd" | "comment" | "embedded_form" | "import" | "organic" | "stripe" | "user" | "zapier";
     /** StripeCoupon */
     StripeCoupon: {
       /** Coupon Id */
