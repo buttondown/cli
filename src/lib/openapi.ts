@@ -1297,7 +1297,7 @@ export interface components {
       image: string;
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: Record<string, unknown>;
@@ -1423,7 +1423,7 @@ export interface components {
       status?: components["schemas"]["EmailStatus"];
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: Record<string, unknown>;
@@ -1529,7 +1529,7 @@ export interface components {
       suppression_reason?: components["schemas"]["EmailSuppressionReason"];
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: Record<string, unknown>;
@@ -1783,7 +1783,7 @@ export interface components {
       last_open_date?: string;
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: Record<string, unknown>;
@@ -1905,7 +1905,7 @@ export interface components {
       notes?: string;
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: Record<string, unknown>;
@@ -2020,7 +2020,7 @@ export interface components {
       notes?: string;
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: Record<string, unknown>;
@@ -4095,7 +4095,7 @@ export interface components {
       model_id: string;
       /**
        * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: Record<string, unknown>;
