@@ -160,6 +160,13 @@ export interface paths {
      */
     get: operations["retrieve_email_analytics"];
   };
+  "/emails/{id}/renders": {
+    /**
+     * Retrieve Email Renders 
+     * @description Retrieve rendered HTML for a specific email
+     */
+    get: operations["retrieve_email_renders"];
+  };
   "/emails/{id}/send-draft": {
     /**
      * Send Draft 
@@ -1645,6 +1652,14 @@ export interface components {
       previous?: string;
       /** Count */
       count: number;
+    };
+    /** Render */
+    Render: {
+      /**
+       * Content 
+       * @description The rendered HTML for the specified target format.
+       */
+      content: string;
     };
     /** SendDraftInput */
     SendDraftInput: {
@@ -5093,6 +5108,49 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Analytics"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Email Renders 
+   * @description Retrieve rendered HTML for a specific email
+   */
+  retrieve_email_renders: {
+    parameters: {
+      query: {
+        /** @description The target format for the rendered HTML. Use 'email' for rendered_html_for_email or 'html' for rendered_html_for_web. */
+        target: "email" | "html";
+      };
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Render"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
