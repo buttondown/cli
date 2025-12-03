@@ -3076,10 +3076,7 @@ export interface components {
     };
     /** Product */
     Product: {
-      /**
-       * Id 
-       * Format: uuid
-       */
+      /** Id */
       id: string;
       /** Product Id */
       product_id: string;
