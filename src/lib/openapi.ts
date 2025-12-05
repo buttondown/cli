@@ -3245,6 +3245,8 @@ export interface components {
       answers: (string)[];
       /** Notes */
       notes: string;
+      /** Randomize Answers */
+      randomize_answers: boolean;
       response_cadence: components["schemas"]["SurveyResponseCadence"];
       status: components["schemas"]["SurveyStatus"];
       /** Is Freeform Response Enabled */
@@ -3312,6 +3314,12 @@ export interface components {
        */
       input_type?: components["schemas"]["SurveyInputType"];
       /**
+       * Randomize Answers 
+       * @default false 
+       * @example false
+       */
+      randomize_answers?: boolean;
+      /**
        * @default once 
        * @example once
        */
@@ -3369,6 +3377,8 @@ export interface components {
        */
       is_freeform_response_enabled?: boolean;
       input_type?: components["schemas"]["SurveyInputType"];
+      /** Randomize Answers */
+      randomize_answers?: boolean;
     };
     /**
      * Status 
