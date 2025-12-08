@@ -2238,6 +2238,14 @@ export interface components {
        */
       css?: string;
       /**
+       * Css Tokens 
+       * @description Custom CSS tokens for your newsletter emails. 
+       * @default {}
+       */
+      css_tokens?: {
+        [key: string]: string | undefined;
+      };
+      /**
        * Web Css 
        * @description Custom CSS styling for your newsletter's web presence 
        * @default
@@ -2331,6 +2339,17 @@ export interface components {
        * @example .header { color: #000; }
        */
       css?: string;
+      /**
+       * Css Tokens 
+       * @description Custom CSS tokens for your newsletter emails. 
+       * @default {} 
+       * @example {
+       *   "primary-color": "#0069FF"
+       * }
+       */
+      css_tokens?: {
+        [key: string]: string | undefined;
+      };
       /**
        * Custom Email Template 
        * @description Custom email template identifier. 
@@ -2450,6 +2469,16 @@ export interface components {
        * @example .header { color: #000; }
        */
       css?: string;
+      /**
+       * Css Tokens 
+       * @description Custom CSS tokens for your newsletter emails. 
+       * @example {
+       *   "primary-color": "#0069FF"
+       * }
+       */
+      css_tokens?: {
+        [key: string]: string | undefined;
+      };
       /**
        * Custom Churn Email Body 
        * @description Custom body content for churn emails. 
