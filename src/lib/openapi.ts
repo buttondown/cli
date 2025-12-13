@@ -812,7 +812,7 @@ export interface components {
       /**
        * Image 
        * @description The URL of the image. 
-       * @example https://placekitten.com/408/287
+       * @example https://placecats.com/408/287
        */
       image: string;
     };
