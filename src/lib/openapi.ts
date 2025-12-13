@@ -2173,6 +2173,12 @@ export interface components {
       /** Name */
       name: string;
       /**
+       * Metadata 
+       * @description Arbitrary user-defined key/value data for this newsletter. 
+       * @default {}
+       */
+      metadata?: Record<string, unknown>;
+      /**
        * Description 
        * @description A brief description of your newsletter
        */
@@ -2432,6 +2438,16 @@ export interface components {
        */
       name: string;
       /**
+       * Metadata 
+       * @description Arbitrary user-defined key/value data for this newsletter. 
+       * @default {} 
+       * @example {
+       *   "source": "my-app",
+       *   "tier": "pro"
+       * }
+       */
+      metadata?: Record<string, unknown>;
+      /**
        * Test Mode 
        * @description Whether test mode is enabled for this newsletter.
        */
@@ -2573,6 +2589,15 @@ export interface components {
        * @example Sheinhardt Wig Company
        */
       name?: string;
+      /**
+       * Metadata 
+       * @description Arbitrary user-defined key/value data for this newsletter. 
+       * @example {
+       *   "source": "my-app",
+       *   "tier": "pro"
+       * }
+       */
+      metadata?: Record<string, unknown>;
       /**
        * Test Mode 
        * @description Whether test mode is enabled for this newsletter.
