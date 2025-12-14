@@ -3002,7 +3002,7 @@ export interface components {
     Automation: {
       /**
        * Id 
-       * Format: uuid
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
