@@ -3156,6 +3156,10 @@ export interface components {
       currency: string;
       /** Description */
       description?: string;
+      /** Maximum Amount */
+      maximum_amount?: number;
+      /** Minimum Amount */
+      minimum_amount?: number;
       /** Product Id */
       product_id?: string;
       /**
@@ -3237,6 +3241,10 @@ export interface components {
       currency: string;
       /** Description */
       description?: string;
+      /** Maximum Amount */
+      maximum_amount?: number;
+      /** Minimum Amount */
+      minimum_amount?: number;
       /** Product Id */
       product_id?: string;
       /**

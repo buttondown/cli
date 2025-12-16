@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#MISE description="Build and run pull command"
+#MISE depends=["build"]
+node ./dist/cli.js pull
