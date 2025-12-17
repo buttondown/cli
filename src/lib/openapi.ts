@@ -2744,7 +2744,7 @@ export interface components {
     ExternalFeed: {
       /**
        * Id 
-       * Format: uuid
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
@@ -2890,7 +2890,7 @@ export interface components {
     ExternalFeedItem: {
       /**
        * Id 
-       * Format: uuid
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
@@ -2915,10 +2915,7 @@ export interface components {
       content: string;
       /** Author */
       author: string;
-      /**
-       * Email Id 
-       * Format: uuid
-       */
+      /** Email Id */
       email_id?: string;
       email?: components["schemas"]["Email"];
     };
