@@ -4062,30 +4062,21 @@ export interface components {
     EmailEvent: {
       /**
        * Id 
-       * Format: uuid
+       * @description A unique TypeID associated with the object.
        */
       id: string;
-      /**
-       * Subscriber Id 
-       * Format: uuid
-       */
-      subscriber_id?: string;
-      /**
-       * Email Id 
-       * Format: uuid
-       */
-      email_id?: string;
-      /**
-       * Automation Id 
-       * Format: uuid
-       */
-      automation_id?: string;
       /**
        * Creation Date 
        * Format: date-time 
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
+      /** Subscriber Id */
+      subscriber_id?: string;
+      /** Email Id */
+      email_id?: string;
+      /** Automation Id */
+      automation_id?: string;
       /** Metadata */
       metadata: {
         [key: string]: string | undefined;
