@@ -996,6 +996,22 @@ export interface components {
        */
       isbn?: string;
     };
+    /**
+     * FailureBreakdownItem 
+     * @description A single failure reason with its count.
+     */
+    FailureBreakdownItem: {
+      /**
+       * Code 
+       * @description The failure reason code (e.g. 'hard_bounce', 'spam')
+       */
+      code: string;
+      /**
+       * Count 
+       * @description Number of failures with this reason
+       */
+      count: number;
+    };
     /** Analytics */
     Analytics: {
       /**
@@ -1088,6 +1104,16 @@ export interface components {
        * @default 0
        */
       social_mentions?: number;
+      /**
+       * Temporary Failure Breakdown 
+       * @description Breakdown of temporary failures, sorted by count descending
+       */
+      temporary_failure_breakdown?: (components["schemas"]["FailureBreakdownItem"])[];
+      /**
+       * Permanent Failure Breakdown 
+       * @description Breakdown of permanent failures, sorted by count descending
+       */
+      permanent_failure_breakdown?: (components["schemas"]["FailureBreakdownItem"])[];
     };
     /**
      * CommentingMode 
@@ -1738,10 +1764,19 @@ export interface components {
     /**
      * UndeliverabilityReason 
      * @description The reason Buttondown has marked the subscriber as undeliverable.
-     * Undeliverable subscribers are not sent emails, and may be periodically removed from the system (or restored, if the reason is no longer valid.) 
+     * Undeliverable subscribers are not sent emails, and may be periodically removed from the system (or restored, if the reason is no longer valid.)
+     * 
+     * These reasons are grouped into three categories:
+     * - PermanentFailure ("Failed (recipient)"): Address-based issues where the recipient is truly unreachable.
+     *   Includes: HARD_BOUNCE
+     * - MessageFailure ("Failed (message)"): Message/sender problems where future emails may succeed.
+     *   Includes: ACCESS_DENIED, AUTHENTICATION_ISSUE, DELIVERY_EXPIRED, DOMAIN_BLOCKED, EMAIL_BLOCKED,
+     *             IP_BLOCKED, ON_ESP_DENYLIST, OUT_OF_STORAGE, PROBLEMATIC_URL, SPAM
+     * - Deferral (not shown to customers): Transient delivery issues that will be retried.
+     *   Includes: RATE_LIMITED, TRANSIENT 
      * @enum {string}
      */
-    SubscriberUndeliverabilityReason: "email_blocked" | "ip_blocked" | "ip_undeliverable" | "out_of_storage" | "disabled" | "unreachable" | "access_denied" | "does_not_exist" | "rate_limited" | "spam" | "problematic_url" | "on_esp_denylist" | "domain_blocked" | "spf_failed" | "malformed" | "other";
+    SubscriberUndeliverabilityReason: "access_denied" | "authentication_issue" | "delivery_expired" | "domain_blocked" | "email_blocked" | "hard_bounce" | "ip_blocked" | "ip_undeliverable" | "malformed" | "on_esp_denylist" | "other" | "out_of_storage" | "problematic_url" | "rate_limited" | "spam" | "transient" | "disabled" | "does_not_exist" | "spf_failed" | "unreachable";
     /**
      * Subscriber 
      * @description Subscribers are the main way you collect email addresses and
@@ -3211,7 +3246,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    CreatePriceErrorCode: "paid_subscriptions_uninitialized" | "invalid_amount";
+    CreatePriceErrorCode: "invalid_amount" | "maximum_amount_too_high" | "paid_subscriptions_uninitialized" | "product_deleted";
     /** ErrorMessage[CreatePriceErrorCode] */
     ErrorMessage_CreatePriceErrorCode_: {
       code: components["schemas"]["CreatePriceErrorCode"];
@@ -6049,6 +6084,12 @@ export interface operations {
           "application/json": components["schemas"]["ExternalFeedItemPage"];
         };
       };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -6643,6 +6684,12 @@ export interface operations {
           "application/json": components["schemas"]["Survey"];
         };
       };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -6672,6 +6719,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
