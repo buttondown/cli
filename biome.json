@@ -1,33 +1,33 @@
 {
-  "root": false,
-  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
-  "extends": ["../biome.json"],
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "correctness": {
-        "useExhaustiveDependencies": "off"
-      },
-      "suspicious": {
-        "noImplicitAnyLet": "off",
-        "noExplicitAny": "off"
-      },
-      "style": {
-        "noParameterAssign": "error",
-        "useAsConstAssertion": "error",
-        "useDefaultParameterLast": "error",
-        "useEnumInitializers": "error",
-        "useSelfClosingElements": "error",
-        "useSingleVarDeclarator": "error",
-        "noUnusedTemplateLiteral": "error",
-        "useNumberNamespace": "error",
-        "noInferrableTypes": "error",
-        "noUselessElse": "error"
-      }
-    }
-  },
-  "files": {
-    "includes": ["**", "!**/node_modules/**", "!**/dist/**", "!**/src/lib/**"]
-  }
+	"root": false,
+	"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+	"extends": ["../biome.json"],
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"correctness": {
+				"useExhaustiveDependencies": "off"
+			},
+			"suspicious": {
+				"noImplicitAnyLet": "off",
+				"noExplicitAny": "off"
+			},
+			"style": {
+				"noParameterAssign": "error",
+				"useAsConstAssertion": "error",
+				"useDefaultParameterLast": "error",
+				"useEnumInitializers": "error",
+				"useSelfClosingElements": "error",
+				"useSingleVarDeclarator": "error",
+				"noUnusedTemplateLiteral": "error",
+				"useNumberNamespace": "error",
+				"noInferrableTypes": "error",
+				"noUselessElse": "error"
+			}
+		}
+	},
+	"files": {
+		"includes": ["**", "!**/node_modules/**", "!**/dist/**", "!**/src/lib/**"]
+	}
 }

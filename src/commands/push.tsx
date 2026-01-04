@@ -1,108 +1,133 @@
 import { Box, Text, useApp } from "ink";
-import { useEffect, useState } from "react";
-import { type Output, SyncManager } from "../sync.js";
+import { useEffect, useReducer } from "react";
+import { type Configuration, RESOURCES } from "../sync/index.js";
+import type { OperationResult } from "../sync/types.js";
 
-type PushProps = {
-  directory: string;
-  force?: boolean;
-  verbose?: boolean;
-  baseUrl?: string;
-  apiKey?: string;
+type State =
+	| {
+			status: "not_started";
+	  }
+	| {
+			status: "pushing";
+			stats: {
+				[resource: string]: OperationResult;
+			};
+	  }
+	| {
+			status: "pushed";
+			stats: {
+				[resource: string]: OperationResult;
+			};
+	  }
+	| {
+			status: "error";
+			error: string;
+	  };
+
+type Action =
+	| {
+			type: "start_pushing";
+	  }
+	| {
+			type: "register_new_push";
+			resource: string;
+			result: OperationResult;
+	  }
+	| {
+			type: "finish_pushing";
+	  }
+	| {
+			type: "register_error";
+			error: string;
+	  };
+
+const reducer = (state: State, action: Action): State => {
+	switch (action.type) {
+		case "start_pushing":
+			return { status: "pushing", stats: {} };
+		case "register_new_push":
+			if (state.status !== "pushing") {
+				throw new Error("Cannot register new push if not pushing");
+			}
+			return {
+				status: "pushing",
+				stats: { ...state.stats, [action.resource]: action.result },
+			};
+		case "finish_pushing":
+			if (state.status !== "pushing") {
+				throw new Error("Cannot finish pushing if not pushing");
+			}
+			return { status: "pushed", stats: { ...state.stats } };
+		case "register_error":
+			return { status: "error", error: action.error };
+	}
 };
 
-export default function Push({
-  directory,
-  force = false,
-  baseUrl,
-  apiKey,
-}: PushProps) {
-  const { exit } = useApp();
-  const [status, setStatus] = useState<string>("Starting push...");
-  const [error, setError] = useState<string | null>(null);
-  const [stats, setStats] = useState<Output | null>(null);
+export default function Push(configuration: Configuration) {
+	const { exit } = useApp();
+	const [state, dispatch] = useReducer(reducer, {
+		status: "not_started",
+	});
 
-  useEffect(() => {
-    const performPush = async () => {
-      try {
-        setStatus("Initializing sync manager...");
-        const syncManager = new SyncManager({
-          directory,
-          force,
-          baseUrl,
-          apiKey,
-        });
-        await syncManager.initialize();
+	useEffect(() => {
+		const performPush = async () => {
+			try {
+				for (const resource of RESOURCES) {
+					const data = await resource.local.get(configuration);
+					if (data) {
+						const output = await resource.remote.set(
+							data as any,
+							configuration,
+						);
+						dispatch({
+							type: "register_new_push",
+							resource: resource.name,
+							result: output,
+						});
+					}
+				}
 
-        setStatus("Pushing media files...");
-        const mediaStats = await syncManager.pushMedia();
+				dispatch({
+					type: "finish_pushing",
+				});
+			} catch (error_) {
+				dispatch({
+					type: "register_error",
+					error: error_ instanceof Error ? error_.message : String(error_),
+				});
+			}
+		};
 
-        setStatus("Pushing emails...");
-        const emailStats = await syncManager.pushEmails();
+		performPush();
+	}, [configuration]);
 
-        setStatus("Pushing newsletter branding...");
-        const brandingStats = await syncManager.pushNewsletterMetadata();
+	useEffect(() => {
+		if (state.status !== "not_started") {
+			const timer = setTimeout(() => {
+				exit();
+			}, 500);
+			return () => {
+				clearTimeout(timer);
+			};
+		}
+	}, [state.status, exit]);
 
-        setStats({
-          emails: emailStats,
-          media: mediaStats,
-          branding: brandingStats,
-        });
+	return (
+		<Box flexDirection="column">
+			{state.status === "error" ? (
+				<Text color="red">Error: {state.error}</Text>
+			) : (
+				<>
+					<Text color="blue">{state.status}</Text>
 
-        setStatus("Push complete!");
-      } catch (error_) {
-        setError(error_ instanceof Error ? error_.message : String(error_));
-      }
-    };
-
-    performPush();
-  }, [directory, force]);
-
-  useEffect(() => {
-    if (stats || error) {
-      const timer = setTimeout(() => {
-        exit();
-      }, 500);
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [stats, error, exit]);
-
-  return (
-    <Box flexDirection="column">
-      {error ? (
-        <Text color="red">Error: {error}</Text>
-      ) : (
-        <>
-          <Text color="blue">{status}</Text>
-
-          {stats && (
-            <>
-              <Box marginTop={1}>
-                <Text color="green">
-                  ✓ {stats.emails.added} emails created, {stats.emails.updated}{" "}
-                  emails updated, {stats.emails.unchanged} unchanged
-                </Text>
-              </Box>
-              <Box>
-                <Text color="green">
-                  ✓ {stats.media.downloaded} media files downloaded,{" "}
-                  {stats.media.uploaded} media files uploaded
-                </Text>
-              </Box>
-              <Box>
-                <Text color="green">
-                  ✓ Newsletter branding{" "}
-                  {stats.branding.updated ? "updated" : "unchanged"}
-                </Text>
-              </Box>
-              <Box marginTop={1}>
-                <Text>Content pushed from: {directory}</Text>
-              </Box>
-            </>
-          )}
-        </>
-      )}
-    </Box>
-  );
+					{state.status === "pushing" &&
+						Object.entries(state.stats).map(([resource, result]) => (
+							<Box key={resource}>
+								<Text color="green">{`${resource} pushed: ${result.updated} updated, ${result.created} created, ${result.deleted} deleted, ${result.failed} failed`}</Text>
+							</Box>
+						))}
+				</>
+			)}
+		</Box>
+	);
 }

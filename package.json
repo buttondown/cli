@@ -1,53 +1,53 @@
 {
-  "name": "@buttondown/cli",
-  "version": "1.0.9",
-  "description": "CLI for Buttondown to sync emails and media with a local folder",
-  "type": "module",
-  "main": "dist/index.js",
-  "bin": {
-    "cli": "dist/cli.js",
-    "buttondown": "dist/cli.js"
-  },
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "start": "node dist/cli.js",
-    "test": "bun test src/*",
-    "prepare": "bun run build",
-    "lint": "biome check .",
-    "lint:fix": "biome check --fix . --unsafe",
-    "cli": "tsc && node dist/cli.js"
-  },
-  "keywords": [
-    "buttondown",
-    "cli",
-    "newsletter",
-    "sync"
-  ],
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "conf": "^13.1.0",
-    "fast-glob": "^3.3.2",
-    "fs-extra": "^11.3.2",
-    "ink": "^5.2.1",
-    "ink-text-input": "^6.0.0",
-    "meow": "^13.2.0",
-    "react": "^18.3.1",
-    "yaml": "^2.6.1"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.0.6",
-    "@types/fs-extra": "^11.0.4",
-    "@types/node": "^22.18.3",
-    "@types/react": "^19.1.13",
-    "bun-types": "^1.2.22",
-    "delay": "^6.0.0",
-    "ink-testing-library": "^4.0.0",
-    "react-devtools-core": "^6.1.5",
-    "typescript": "^5.9.2"
-  },
-  "engines": {
-    "node": ">=18"
-  }
+	"name": "@buttondown/cli",
+	"version": "1.0.9",
+	"description": "CLI for Buttondown to sync emails and media with a local folder",
+	"type": "module",
+	"main": "dist/index.js",
+	"bin": {
+		"cli": "dist/cli.js",
+		"buttondown": "dist/cli.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"start": "node dist/cli.js",
+		"test": "bun test src/*",
+		"prepare": "bun run build",
+		"lint": "biome check .",
+		"lint:fix": "biome check --fix . --unsafe",
+		"cli": "tsc && node dist/cli.js"
+	},
+	"keywords": [
+		"buttondown",
+		"cli",
+		"newsletter",
+		"sync"
+	],
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"conf": "^13.1.0",
+		"fast-glob": "^3.3.2",
+		"fs-extra": "^11.3.2",
+		"ink": "^5.2.1",
+		"ink-text-input": "^6.0.0",
+		"meow": "^13.2.0",
+		"react": "^18.3.1",
+		"yaml": "^2.6.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.0.6",
+		"@types/fs-extra": "^11.0.4",
+		"@types/node": "^22.18.3",
+		"@types/react": "^19.1.13",
+		"bun-types": "^1.2.22",
+		"delay": "^6.0.0",
+		"ink-testing-library": "^4.0.0",
+		"react-devtools-core": "^6.1.5",
+		"typescript": "^5.9.2"
+	},
+	"engines": {
+		"node": ">=18"
+	}
 }

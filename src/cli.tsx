@@ -8,7 +8,7 @@ import Pull from "./commands/pull.js";
 import Push from "./commands/push.js";
 
 const cli = meow(
-  `
+	`
   Usage
     $ buttondown <command> [options]
 
@@ -35,110 +35,111 @@ const cli = meow(
     $ buttondown push --directory=./my-newsletter
     $ buttondown create --title="My New Newsletter" --directory=./my-newsletter
 `,
-  {
-    importMeta: import.meta,
-    flags: {
-      apiKey: {
-        type: "string",
-        shortFlag: "k",
-      },
-      baseUrl: {
-        type: "string",
-        shortFlag: "b",
-        default: "https://api.buttondown.com/v1",
-      },
-      directory: {
-        type: "string",
-        shortFlag: "d",
-        default: "./buttondown",
-      },
-      force: {
-        type: "boolean",
-        shortFlag: "f",
-        default: false,
-      },
-      title: {
-        type: "string",
-        shortFlag: "t",
-      },
-      verbose: {
-        type: "boolean",
-        shortFlag: "v",
-      },
-      help: {
-        type: "boolean",
-        shortFlag: "h",
-      },
-      version: {
-        type: "boolean",
-        shortFlag: "v",
-      },
-    },
-  },
+	{
+		importMeta: import.meta,
+		flags: {
+			apiKey: {
+				type: "string",
+				shortFlag: "k",
+			},
+			baseUrl: {
+				type: "string",
+				shortFlag: "b",
+				default: "https://api.buttondown.com/v1",
+			},
+			directory: {
+				type: "string",
+				shortFlag: "d",
+				default: "./buttondown",
+			},
+			force: {
+				type: "boolean",
+				shortFlag: "f",
+				default: false,
+			},
+			title: {
+				type: "string",
+				shortFlag: "t",
+			},
+			verbose: {
+				type: "boolean",
+				shortFlag: "v",
+			},
+			help: {
+				type: "boolean",
+				shortFlag: "h",
+			},
+			version: {
+				type: "boolean",
+				shortFlag: "v",
+			},
+		},
+	},
 );
 
 const [command] = cli.input;
 
 if (!command && !cli.flags.help && !cli.flags.version) {
-  cli.showHelp();
-  process.exit(0);
+	cli.showHelp();
+	process.exit(0);
 }
 
-// Render the appropriate component based on the command
-let _app;
 switch (command) {
-  case "login": {
-    _app = render(<Login apiKey={cli.flags.apiKey} force={cli.flags.force} />);
-    break;
-  }
+	case "login": {
+		render(<Login apiKey={cli.flags.apiKey} force={cli.flags.force} />);
+		break;
+	}
 
-  case "logout": {
-    _app = render(<Logout />);
-    break;
-  }
+	case "logout": {
+		render(<Logout />);
+		break;
+	}
 
-  case "pull": {
-    _app = render(
-      <Pull
-        directory={cli.flags.directory}
-        force={cli.flags.force}
-        baseUrl={cli.flags.baseUrl}
-        apiKey={cli.flags.apiKey}
-      />,
-    );
-    break;
-  }
+	case "pull": {
+		if (!cli.flags.apiKey) {
+			console.error("Error: --api-key is required for the pull command");
+			process.exit(1);
+		}
+		render(
+			<Pull
+				directory={cli.flags.directory}
+				baseUrl={cli.flags.baseUrl}
+				apiKey={cli.flags.apiKey}
+			/>,
+		);
+		break;
+	}
 
-  case "push": {
-    _app = render(
-      <Push
-        directory={cli.flags.directory}
-        force={cli.flags.force}
-        baseUrl={cli.flags.baseUrl}
-        apiKey={cli.flags.apiKey}
-        verbose={cli.flags.verbose}
-      />,
-    );
-    break;
-  }
+	case "push": {
+		if (!cli.flags.apiKey) {
+			console.error("Error: --api-key is required for the push command");
+			process.exit(1);
+		}
+		render(
+			<Push
+				directory={cli.flags.directory}
+				baseUrl={cli.flags.baseUrl}
+				apiKey={cli.flags.apiKey}
+			/>,
+		);
+		break;
+	}
 
-  case "create": {
-    if (!cli.flags.title) {
-      console.error("Error: --title is required for the create command");
-      process.exit(1);
-    }
+	case "create": {
+		if (!cli.flags.title) {
+			console.error("Error: --title is required for the create command");
+			process.exit(1);
+		}
 
-    _app = render(
-      <Create directory={cli.flags.directory} title={cli.flags.title} />,
-    );
-    break;
-  }
+		render(<Create directory={cli.flags.directory} title={cli.flags.title} />);
+		break;
+	}
 
-  default: {
-    if (command) {
-      console.error(`Unknown command: ${command}`);
-      cli.showHelp();
-      process.exit(1);
-    }
-  }
+	default: {
+		if (command) {
+			console.error(`Unknown command: ${command}`);
+			cli.showHelp();
+			process.exit(1);
+		}
+	}
 }
