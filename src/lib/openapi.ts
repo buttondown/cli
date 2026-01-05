@@ -778,8 +778,6 @@ export interface components {
       click_rate: number;
       /** Open Rate */
       open_rate: number;
-      /** Retention */
-      retention: number;
     };
     /** Empty */
     Empty: Record<string, unknown>;
@@ -2663,7 +2661,7 @@ export interface components {
      * (Not to be coy, but these names should be self-explanatory.) 
      * @enum {string}
      */
-    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "delete_tags" | "change_tags_colors" | "delete_surveys" | "delete_survey_responses" | "replay_events" | "delete_comments" | "update_survey_statuses" | "modify_stripe_subscriptions";
+    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "delete_tags" | "change_tags_colors" | "delete_surveys" | "delete_survey_responses" | "replay_events" | "delete_comments" | "update_survey_statuses" | "modify_stripe_subscriptions";
     /**
      * Status 
      * @description Represents the status of a bulk action.
