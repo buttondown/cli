@@ -1276,6 +1276,17 @@ export interface components {
      * - [2025-09-23](https://docs.buttondown.com/api-changelog-2025-09-23): increased the maximum length of the `subject` field from 1000 to 2000 characters.
      */
     Email: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
       /** Absolute Url */
       absolute_url: string;
       analytics?: components["schemas"]["Analytics"];
@@ -1296,12 +1307,6 @@ export interface components {
       canonical_url: string;
       commenting_mode: components["schemas"]["EmailCommentingMode"];
       /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /**
        * Description 
        * @description A human-readable description of the email, used for archives and SEO.
        */
@@ -1314,13 +1319,6 @@ export interface components {
        */
       featured: boolean;
       filters: components["schemas"]["FilterGroup"];
-      /**
-       * Id 
-       * Format: uuid 
-       * @description The unique identifier for the email. 
-       * @example 497f6eca-6276-4993-bfeb-53cbbbba6f08
-       */
-      id: string;
       /**
        * Image 
        * @description A primary image to be used when previewing the email on the web or in other contexts.
@@ -1659,10 +1657,7 @@ export interface components {
       creation_date: string;
       /** Value */
       value: string;
-      /**
-       * User Id 
-       * Format: uuid
-       */
+      /** User Id */
       user_id?: string;
       user?: components["schemas"]["User"];
     };
@@ -2197,25 +2192,16 @@ export interface components {
      */
     Newsletter: {
       /**
-       * Id 
-       * Format: uuid
+       * Api Key 
+       * Format: uuid 
+       * @description The API key for this newsletter, used for authenticating API requests.
        */
-      id: string;
-      /** Username */
-      username: string;
-      /** Name */
-      name: string;
+      api_key: string;
       /**
-       * Metadata 
-       * @description Arbitrary user-defined key/value data for this newsletter. 
-       * @default {}
+       * @description The auditing mode for your newsletter, which controls spam and abuse protection. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
+       * @enum {unknown}
        */
-      metadata?: Record<string, unknown>;
-      /**
-       * Description 
-       * @description A brief description of your newsletter
-       */
-      description: string;
+      auditing_mode?: "disabled" | "enabled" | "aggressive";
       /**
        * Creation Date 
        * Format: date-time 
@@ -2223,117 +2209,144 @@ export interface components {
        */
       creation_date: string;
       /**
-       * Api Key 
-       * Format: uuid
-       */
-      api_key: string;
-      /**
-       * Tint Color 
-       * @default #0069FF
-       */
-      tint_color?: string;
-      /**
-       * From Name 
-       * @default
-       */
-      from_name?: string;
-      /**
-       * Header 
-       * @default
-       */
-      header?: string;
-      /**
-       * Footer 
-       * @default
-       */
-      footer?: string;
-      /**
-       * Domain 
-       * @default
-       */
-      domain?: string;
-      /**
-       * Email Address 
-       * @description The email address used by your newsletter for sending messages. 
-       * @default
-       */
-      email_address?: string;
-      /**
-       * Email Domain 
-       * @default
-       */
-      email_domain?: string;
-      /**
-       * Enabled Features 
-       * @default []
-       */
-      enabled_features?: (string)[];
-      /** Custom Email Template */
-      custom_email_template?: string;
-      /**
        * Css 
-       * @description Custom CSS styling for your newsletter emails 
+       * @description Custom CSS styling applied to your newsletter emails. See [CSS customization](https://docs.buttondown.com/customizing-email-design#adding-custom-css) for more information. 
        * @default
        */
       css?: string;
       /**
        * Css Tokens 
-       * @description Custom CSS tokens for your newsletter emails. 
+       * @description Custom CSS tokens (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
        * @default {}
        */
       css_tokens?: {
         [key: string]: string | undefined;
       };
       /**
-       * Web Css 
-       * @description Custom CSS styling for your newsletter's web presence 
-       * @default
-       */
-      web_css?: string;
-      /**
-       * Icon 
-       * @description URL to your newsletter's icon image
-       */
-      icon?: string;
-      /**
-       * Image 
-       * @description URL to your newsletter's header or branding image
-       */
-      image?: string;
-      /**
-       * @description The auditing mode for your newsletter. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
-       * @enum {unknown}
-       */
-      auditing_mode?: "disabled" | "enabled" | "aggressive";
-      /**
-       * Custom Churn Email Subject 
-       * @description Custom subject line for churn emails 
-       * @default
-       */
-      custom_churn_email_subject?: string;
-      /**
        * Custom Churn Email Body 
-       * @description Custom body content for churn emails 
+       * @description Custom body content for the email sent when a paid subscriber cancels. Supports template tags like `{{ subscriber.email }}` and `{{ newsletter.name }}`. 
        * @default
        */
       custom_churn_email_body?: string;
       /**
+       * Custom Churn Email Subject 
+       * @description Custom subject line for the email sent when a paid subscriber cancels. Supports template tags like `{{ newsletter.name }}`. 
+       * @default
+       */
+      custom_churn_email_subject?: string;
+      /**
        * Custom Churn Email Template 
-       * @description Custom template for churn emails
+       * @description The email template to use for churn emails. If not set, uses the newsletter's default template.
        */
       custom_churn_email_template?: string;
       /**
+       * Custom Email Template 
+       * @description The identifier for a custom email template. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options.
+       */
+      custom_email_template?: string;
+      /**
+       * Description 
+       * @description A brief description of your newsletter, displayed on your public archive page and used for SEO.
+       */
+      description: string;
+      /**
+       * Domain 
+       * @description The custom domain where your newsletter archives are hosted (e.g., 'newsletter.example.com'). See [custom domains](https://docs.buttondown.com/hosting-on-a-custom-domain) for setup instructions. 
+       * @default
+       */
+      domain?: string;
+      /**
+       * Email Address 
+       * @description The 'From' email address used when sending your newsletter. Must be verified before use. 
+       * @default
+       */
+      email_address?: string;
+      /**
+       * Email Domain 
+       * @description The custom domain from which your newsletter emails are sent (e.g., 'mail.example.com'). See [sending domains](https://docs.buttondown.com/sending-from-a-custom-domain) for setup instructions. 
+       * @default
+       */
+      email_domain?: string;
+      /**
+       * Enabled Features 
+       * @description A list of features enabled for your newsletter. Common values include 'archives', 'portal', 'surveys', 'comments', 'paid_subscriptions', 'automations', 'webhooks', 'tracking', and 'referrals'. 
+       * @default []
+       */
+      enabled_features?: (string)[];
+      /**
+       * Footer 
+       * @description HTML content displayed at the bottom of your newsletter emails. Supports [template tags](https://docs.buttondown.com/template-tags). 
+       * @default
+       */
+      footer?: string;
+      /**
+       * From Name 
+       * @description The display name shown in the 'From' field of your emails (e.g., 'Jane from Acme Newsletter'). 
+       * @default
+       */
+      from_name?: string;
+      /**
+       * Header 
+       * @description HTML content displayed at the top of your newsletter emails. Supports [template tags](https://docs.buttondown.com/template-tags). 
+       * @default
+       */
+      header?: string;
+      /**
+       * Icon 
+       * @description URL to your newsletter's icon image, used as a favicon and in various UI contexts.
+       */
+      icon?: string;
+      /**
+       * Id 
+       * Format: uuid 
+       * @description The unique identifier for this newsletter.
+       */
+      id: string;
+      /**
+       * Image 
+       * @description URL to your newsletter's header or branding image, displayed on archive pages and in social previews.
+       */
+      image?: string;
+      /**
+       * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
+       */
+      metadata?: Record<string, unknown>;
+      /**
+       * Name 
+       * @description The display name of your newsletter, shown to subscribers and on your archive page.
+       */
+      name: string;
+      /**
+       * Sort 
+       * @description The default sorting method for listing subscribers or messages. Example values: 'creation_date', '-creation_date', 'email_address'. 
+       * @default creation_date
+       */
+      sort?: string;
+      /**
        * Test Mode 
-       * @description Whether test mode is enabled for this newsletter 
+       * @description Whether test mode is enabled. When enabled, emails are not actually sent to subscribers, useful for testing automations and workflows. 
        * @default false
        */
       test_mode?: boolean;
       /**
-       * Sort 
-       * @description The sorting method to apply to newsletter subscribers or messages. Example values: 'creation_date', '-creation_date', 'email_address', etc. 
-       * @default creation_date
+       * Tint Color 
+       * @description The accent color for your newsletter, used in emails and on your archive page. Must be a valid hex color code. 
+       * @default #0069FF
        */
-      sort?: string;
+      tint_color?: string;
+      /**
+       * Username 
+       * @description The unique URL-safe identifier for your newsletter, used in your archive URL (e.g., 'buttondown.com/username').
+       */
+      username: string;
+      /**
+       * Web Css 
+       * @description Custom CSS styling applied to your newsletter's web presence (archive pages, subscription forms, etc.). 
+       * @default
+       */
+      web_css?: string;
     };
     /** Page[Newsletter] */
     NewsletterPage: {
@@ -2370,17 +2383,21 @@ export interface components {
     };
     /** NewsletterInput */
     NewsletterInput: {
+      /**
+       * @description The auditing mode for your newsletter, which controls spam and abuse protection. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
+       * @example enabled
+       */
       auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
       /**
        * Css 
-       * @description Custom CSS styling for your newsletter emails. 
+       * @description Custom CSS styling applied to your newsletter emails. See [CSS customization](https://docs.buttondown.com/customizing-email-design#adding-custom-css) for more information. 
        * @default  
        * @example .header { color: #000; }
        */
       css?: string;
       /**
        * Css Tokens 
-       * @description Custom CSS tokens for your newsletter emails. 
+       * @description Custom CSS tokens (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
        * @default {} 
        * @example {
        *   "primary-color": "#0069FF"
@@ -2391,37 +2408,39 @@ export interface components {
       };
       /**
        * Custom Email Template 
-       * @description Custom email template identifier. 
-       * @example custom-template
+       * @description The identifier for a custom email template. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options. 
+       * @example modern
        */
       custom_email_template?: string;
       /**
        * Description 
+       * @description A brief description of your newsletter, displayed on your public archive page and used for SEO. 
        * @example Stay up to date with the latest trends in wigs and hairpieces
        */
       description: string;
       /**
        * Domain 
-       * @description The domain of the newsletter on which archives are hosted. 
+       * @description The custom domain where your newsletter archives are hosted (e.g., 'newsletter.example.com'). See [custom domains](https://docs.buttondown.com/hosting-on-a-custom-domain) for setup instructions. 
        * @default  
        * @example sheinhardt.com
        */
       domain?: string;
       /**
        * Email Address 
+       * @description The 'From' email address used when sending your newsletter. Must be verified before use. 
        * @example newsletter@sheinhardt.com
        */
       email_address?: string;
       /**
        * Email Domain 
-       * @description The domain of the newsletter from which emails are sent. 
+       * @description The custom domain from which your newsletter emails are sent (e.g., 'mail.example.com'). See [sending domains](https://docs.buttondown.com/sending-from-a-custom-domain) for setup instructions. 
        * @default  
        * @example mail.sheinhardt.com
        */
       email_domain?: string;
       /**
        * Enabled Features 
-       * @description List of enabled features for your newsletter. 
+       * @description A list of features enabled for your newsletter. Common values include 'archives', 'portal', 'surveys', 'comments', 'paid_subscriptions', 'automations', 'webhooks', 'tracking', and 'referrals'. 
        * @default [] 
        * @example [
        *   "archives",
@@ -2432,74 +2451,72 @@ export interface components {
       enabled_features?: (string)[];
       /**
        * Footer 
-       * @description HTML content displayed at the bottom of your newsletter emails. 
+       * @description HTML content displayed at the bottom of your newsletter emails. Supports [template tags](https://docs.buttondown.com/template-tags). 
        * @default  
        * @example <p>Thanks for reading!</p>
        */
       footer?: string;
       /**
        * From Name 
-       * @description The name displayed in the 'From' field of your emails. 
+       * @description The display name shown in the 'From' field of your emails (e.g., 'Jane from Acme Newsletter'). 
        * @default  
        * @example Sheinhardt Wig Company
        */
       from_name?: string;
       /**
        * Header 
-       * @description HTML content displayed at the top of your newsletter emails. 
+       * @description HTML content displayed at the top of your newsletter emails. Supports [template tags](https://docs.buttondown.com/template-tags). 
        * @default  
        * @example <p>Welcome to our newsletter!</p>
        */
       header?: string;
       /**
        * Icon 
-       * @description URL to your newsletter's icon image. 
+       * @description URL to your newsletter's icon image, used as a favicon and in various UI contexts. 
        * @default  
        * @example https://example.com/icon.png
        */
       icon?: string;
       /**
        * Image 
-       * @description URL to your newsletter's header or branding image. 
+       * @description URL to your newsletter's header or branding image, displayed on archive pages and in social previews. 
        * @default  
        * @example https://example.com/header.jpg
        */
       image?: string;
       /**
+       * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
+       */
+      metadata?: Record<string, unknown>;
+      /**
        * Name 
+       * @description The display name of your newsletter, shown to subscribers and on your archive page. 
        * @example Sheinhardt Wig Company
        */
       name: string;
       /**
-       * Metadata 
-       * @description Arbitrary user-defined key/value data for this newsletter. 
-       * @default {} 
-       * @example {
-       *   "source": "my-app",
-       *   "tier": "pro"
-       * }
-       */
-      metadata?: Record<string, unknown>;
-      /**
        * Test Mode 
-       * @description Whether test mode is enabled for this newsletter.
+       * @description Whether test mode is enabled. When enabled, emails are not actually sent to subscribers, useful for testing automations and workflows.
        */
       test_mode?: boolean;
       /**
        * Tint Color 
-       * @description The accent color for your newsletter. 
+       * @description The accent color for your newsletter, used in emails and on your archive page. Must be a valid hex color code. 
        * @default #0069FF 
        * @example #0069FF
        */
       tint_color?: string;
       /**
        * Username 
+       * @description The unique URL-safe identifier for your newsletter, used in your archive URL (e.g., 'buttondown.com/username'). 
        * @example sheinhardt
        */
       username: string;
       /**
        * Web Css 
-       * @description Custom CSS styling for your newsletter's web presence. 
+       * @description Custom CSS styling applied to your newsletter's web presence (archive pages, subscription forms, etc.). 
        * @default  
        * @example .container { max-width: 800px; }
        */
@@ -2508,19 +2525,19 @@ export interface components {
     /** NewsletterUpdateInput */
     NewsletterUpdateInput: {
       /**
-       * @description The auditing mode for your newsletter. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
+       * @description The auditing mode for your newsletter, which controls spam and abuse protection. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
        * @example enabled
        */
       auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
       /**
        * Css 
-       * @description Custom CSS styling for your newsletter emails. 
+       * @description Custom CSS styling applied to your newsletter emails. See [CSS customization](https://docs.buttondown.com/customizing-email-design#adding-custom-css) for more information. 
        * @example .header { color: #000; }
        */
       css?: string;
       /**
        * Css Tokens 
-       * @description Custom CSS tokens for your newsletter emails. 
+       * @description Custom CSS tokens (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
        * @example {
        *   "primary-color": "#0069FF"
        * }
@@ -2530,7 +2547,7 @@ export interface components {
       };
       /**
        * Custom Churn Email Body 
-       * @description Custom body content for churn emails. 
+       * @description Custom body content for the email sent when a paid subscriber cancels. Supports template tags like `{{ subscriber.email }}` and `{{ newsletter.name }}`. 
        * @example Hi {{ subscriber.email }},
        * 
        * We're sorry to see you go!
@@ -2538,48 +2555,49 @@ export interface components {
       custom_churn_email_body?: string;
       /**
        * Custom Churn Email Subject 
-       * @description Custom subject line for churn emails. 
+       * @description Custom subject line for the email sent when a paid subscriber cancels. Supports template tags like `{{ newsletter.name }}`. 
        * @example You've canceled your premium subscription to {{ newsletter.name }}
        */
       custom_churn_email_subject?: string;
       /**
        * Custom Churn Email Template 
-       * @description Custom template for churn emails. 
-       * @example churn-template
+       * @description The email template to use for churn emails. If not set, uses the newsletter's default template. 
+       * @example modern
        */
       custom_churn_email_template?: string;
       /**
        * Custom Email Template 
-       * @description Custom email template identifier. 
-       * @example custom-template
+       * @description The identifier for a custom email template. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options. 
+       * @example modern
        */
       custom_email_template?: string;
       /**
        * Description 
+       * @description A brief description of your newsletter, displayed on your public archive page and used for SEO. 
        * @example Stay up to date with the latest trends in wigs and hairpieces
        */
       description?: string;
       /**
        * Domain 
-       * @description The domain of the newsletter on which archives are hosted. 
+       * @description The custom domain where your newsletter archives are hosted (e.g., 'newsletter.example.com'). See [custom domains](https://docs.buttondown.com/hosting-on-a-custom-domain) for setup instructions. 
        * @example sheinhardt.com
        */
       domain?: string;
       /**
        * Email Address 
-       * @description The email address of the newsletter. 
+       * @description The 'From' email address used when sending your newsletter. Must be verified before use. 
        * @example newsletter@sheinhardt.com
        */
       email_address?: string;
       /**
        * Email Domain 
-       * @description The domain of the newsletter from which emails are sent. 
+       * @description The custom domain from which your newsletter emails are sent (e.g., 'mail.example.com'). See [sending domains](https://docs.buttondown.com/sending-from-a-custom-domain) for setup instructions. 
        * @example mail.sheinhardt.com
        */
       email_domain?: string;
       /**
        * Enabled Features 
-       * @description List of enabled features for your newsletter. 
+       * @description A list of features enabled for your newsletter. Common values include 'archives', 'portal', 'surveys', 'comments', 'paid_subscriptions', 'automations', 'webhooks', 'tracking', and 'referrals'. 
        * @example [
        *   "archives",
        *   "portal",
@@ -2589,42 +2607,37 @@ export interface components {
       enabled_features?: (string)[];
       /**
        * Footer 
-       * @description HTML content displayed at the bottom of your newsletter emails. 
+       * @description HTML content displayed at the bottom of your newsletter emails. Supports [template tags](https://docs.buttondown.com/template-tags). 
        * @example <p>Thanks for reading!</p>
        */
       footer?: string;
       /**
        * From Name 
-       * @description The name displayed in the 'From' field of your emails. 
+       * @description The display name shown in the 'From' field of your emails (e.g., 'Jane from Acme Newsletter'). 
        * @example Sheinhardt Wig Company
        */
       from_name?: string;
       /**
        * Header 
-       * @description HTML content displayed at the top of your newsletter emails. 
+       * @description HTML content displayed at the top of your newsletter emails. Supports [template tags](https://docs.buttondown.com/template-tags). 
        * @example <p>Welcome to our newsletter!</p>
        */
       header?: string;
       /**
        * Icon 
-       * @description URL to your newsletter's icon image. 
+       * @description URL to your newsletter's icon image, used as a favicon and in various UI contexts. 
        * @example https://example.com/icon.png
        */
       icon?: string;
       /**
        * Image 
-       * @description URL to your newsletter's header or branding image. 
+       * @description URL to your newsletter's header or branding image, displayed on archive pages and in social previews. 
        * @example https://example.com/header.jpg
        */
       image?: string;
       /**
-       * Name 
-       * @example Sheinhardt Wig Company
-       */
-      name?: string;
-      /**
        * Metadata 
-       * @description Arbitrary user-defined key/value data for this newsletter. 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @example {
        *   "source": "my-app",
        *   "tier": "pro"
@@ -2632,24 +2645,31 @@ export interface components {
        */
       metadata?: Record<string, unknown>;
       /**
+       * Name 
+       * @description The display name of your newsletter, shown to subscribers and on your archive page. 
+       * @example Sheinhardt Wig Company
+       */
+      name?: string;
+      /**
        * Test Mode 
-       * @description Whether test mode is enabled for this newsletter.
+       * @description Whether test mode is enabled. When enabled, emails are not actually sent to subscribers, useful for testing automations and workflows.
        */
       test_mode?: boolean;
       /**
        * Tint Color 
-       * @description The accent color for your newsletter. 
+       * @description The accent color for your newsletter, used in emails and on your archive page. Must be a valid hex color code. 
        * @example #0069FF
        */
       tint_color?: string;
       /**
        * Username 
+       * @description The unique URL-safe identifier for your newsletter, used in your archive URL (e.g., 'buttondown.com/username'). 
        * @example sheinhardt
        */
       username?: string;
       /**
        * Web Css 
-       * @description Custom CSS styling for your newsletter's web presence. 
+       * @description Custom CSS styling applied to your newsletter's web presence (archive pages, subscription forms, etc.). 
        * @example .container { max-width: 800px; }
        */
       web_css?: string;
@@ -3353,7 +3373,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    CreateSurveyErrorCode: "identifier_already_exists";
+    CreateSurveyErrorCode: "identifier_already_exists" | "not_enough_answers";
     /** ErrorMessage[CreateSurveyErrorCode] */
     ErrorMessage_CreateSurveyErrorCode_: {
       code: components["schemas"]["CreateSurveyErrorCode"];
@@ -3433,7 +3453,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    UpdateSurveyErrorCode: "answers_empty" | "survey_has_responses";
+    UpdateSurveyErrorCode: "answers_empty" | "not_enough_answers" | "survey_has_responses";
     /** ErrorMessage[UpdateSurveyErrorCode] */
     ErrorMessage_UpdateSurveyErrorCode_: {
       code: components["schemas"]["UpdateSurveyErrorCode"];
