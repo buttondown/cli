@@ -3264,7 +3264,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    CreatePriceErrorCode: "invalid_amount" | "maximum_amount_too_high" | "paid_subscriptions_uninitialized" | "product_deleted";
+    CreatePriceErrorCode: "invalid_amount" | "maximum_amount_too_high" | "paid_subscriptions_uninitialized" | "product_deleted" | "suggested_amount_out_of_range";
     /** ErrorMessage[CreatePriceErrorCode] */
     ErrorMessage_CreatePriceErrorCode_: {
       code: components["schemas"]["CreatePriceErrorCode"];
@@ -3974,29 +3974,21 @@ export interface components {
     Comment: {
       /**
        * Id 
-       * Format: uuid 
-       * @description A unique UUID associated with the object.
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
        * Creation Date 
        * Format: date-time 
-       * @description The date and time at which the object was created.
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
-      /**
-       * Email Id 
-       * Format: uuid
-       */
+      /** Email Id */
       email_id: string;
-      /**
-       * Subscriber Id 
-       * Format: uuid
-       */
+      /** Subscriber Id */
       subscriber_id?: string;
       /**
        * Parent Id 
-       * Format: uuid 
        * @description The ID of the parent comment, if this comment is a reply to another comment.
        */
       parent_id?: string;
@@ -4017,13 +4009,11 @@ export interface components {
       text: string;
       /**
        * Parent Id 
-       * Format: uuid 
        * @description The ID of the parent comment, if this comment is a reply to another comment.
        */
       parent_id?: string;
       /**
        * Email Id 
-       * Format: uuid 
        * @description The ID of the email this comment is for. Required if parent_id is not provided.
        */
       email_id?: string;
