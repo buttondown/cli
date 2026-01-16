@@ -192,6 +192,10 @@ export interface paths {
     /** Send Reminder */
     post: operations["send_reminder"];
   };
+  "/subscribers/{id_or_email}/send-magic-link": {
+    /** Send Magic Link To Subscriber */
+    post: operations["send_magic_link_to_subscriber"];
+  };
   "/subscribers/{id_or_email}/emails/{email_id}": {
     /** Send Email To */
     post: operations["send_email_to"];
@@ -5586,6 +5590,32 @@ export interface operations {
   };
   /** Send Reminder */
   send_reminder: {
+    parameters: {
+      path: {
+        id_or_email: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /** Send Magic Link To Subscriber */
+  send_magic_link_to_subscriber: {
     parameters: {
       path: {
         id_or_email: string;
