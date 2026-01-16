@@ -208,6 +208,10 @@ export interface paths {
     /** Get Automations */
     get: operations["get_automations"];
   };
+  "/subscribers/{id_or_email}/automations/{automation_attempt_id}": {
+    /** Update Automation Attempt */
+    patch: operations["update_automation_attempt"];
+  };
   "/subscribers/{id_or_email}/stripe-subscriptions": {
     /** Get Stripe Subscriptions */
     get: operations["get_stripe_subscriptions"];
@@ -2126,6 +2130,37 @@ export interface components {
       previous?: string;
       /** Count */
       count: number;
+    };
+    /**
+     * UpdateAutomationAttemptErrorCode 
+     * @description Represents the type of error that occurred when updating an automation attempt.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    UpdateAutomationAttemptErrorCode: "automation_attempt_not_found" | "invalid_status";
+    /** ErrorMessage[UpdateAutomationAttemptErrorCode] */
+    ErrorMessage_UpdateAutomationAttemptErrorCode_: {
+      code: components["schemas"]["UpdateAutomationAttemptErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /** AutomationAttemptUpdateInput */
+    AutomationAttemptUpdateInput: {
+      /**
+       * Status 
+       * @description The status to set for the automation attempt. Only 'skipped' is allowed. 
+       * @enum {string}
+       */
+      status: "skipped";
     };
     /** StripeSubscription */
     StripeSubscription: {
@@ -5719,6 +5754,48 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["AutomationForSubscriberPage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /** Update Automation Attempt */
+  update_automation_attempt: {
+    parameters: {
+      path: {
+        id_or_email: string;
+        automation_attempt_id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AutomationAttemptUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AutomationForSubscriber"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_UpdateAutomationAttemptErrorCode_"];
         };
       };
       /** @description Forbidden */
