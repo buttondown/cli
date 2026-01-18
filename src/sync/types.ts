@@ -4,16 +4,18 @@ import { createClient } from "../lib/openapi-wrapper.js";
 
 export type Configuration = {
 	baseUrl: string;
-	apiKey: string;
-	username?: string;
 	directory: string;
+	username?: string;
+	// Authentication: either apiKey OR accessToken must be provided
+	apiKey?: string;
+	accessToken?: string;
 };
 
 export type OperationResult = {
-	updated: number;
-	created: number;
-	deleted: number;
-	failed: number;
+	updates: number;
+	creations: number;
+	noops: number;
+	deletions: number;
 };
 
 export type Resource<Model, SerializedModel> = {
@@ -25,10 +27,18 @@ export type Resource<Model, SerializedModel> = {
 
 export const constructClient = (configuration: Configuration) => {
 	return createClient<paths>({
-		base: configuration.baseUrl,
+		base: `${configuration.baseUrl}/v1`,
 		middlewares: [
 			async (request, next) => {
-				request.headers.set("authorization", `Token ${configuration.apiKey}`);
+				// Use Bearer token (OAuth) if available, otherwise fall back to API key
+				if (configuration.accessToken) {
+					request.headers.set(
+						"authorization",
+						`Bearer ${configuration.accessToken}`,
+					);
+				} else if (configuration.apiKey) {
+					request.headers.set("authorization", `Token ${configuration.apiKey}`);
+				}
 				request.headers.set(
 					"user-agent",
 					`buttondown-cli/${PACKAGE_JSON.version}`,

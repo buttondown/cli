@@ -3,6 +3,9 @@ import Conf from "conf";
 export type Config = {
 	apiKey?: string;
 	baseUrl?: string;
+	accessToken?: string;
+	refreshToken?: string;
+	tokenExpiresAt?: number;
 	username?: string;
 };
 

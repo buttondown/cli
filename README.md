@@ -23,21 +23,37 @@ npx @buttondown/cli
 
 ### Authentication
 
-Before using the CLI, you need to authenticate with your Buttondown API key:
+The CLI supports two authentication methods:
+
+**OAuth (recommended)** - Opens your browser to authenticate:
 
 ```bash
 buttondown login
 ```
 
-You can also provide your API key directly:
+**API Key** - Provide your API key directly (useful for CI/automation):
 
 ```bash
 buttondown login --api-key=your-api-key
 ```
 
+#### Local Development
+
+When developing against a local Buttondown instance with HTTPS (e.g., using Caddy), you may need to bypass certificate validation:
+
+```bash
+NODE_TLS_REJECT_UNAUTHORIZED=0 buttondown login --base-url https://application.bd
+```
+
+Or point Node.js to your local CA certificate:
+
+```bash
+NODE_EXTRA_CA_CERTS=/path/to/caddy/root.crt buttondown login --base-url https://application.bd
+```
+
 ### Download Content
 
-Pull your emails and attachments from Buttondown:
+Pull your emails, automations, and media from Buttondown:
 
 ```bash
 buttondown pull
@@ -51,9 +67,10 @@ buttondown pull --directory=./my-newsletter
 
 This command will:
 
-- Download all your emails as Markdown files
-- Download all your images from Buttondown
-- Track all synced content in the configuration file
+- Download your newsletter settings as `newsletter.json`
+- Download all your automations to `automations.yaml`
+- Download all your emails as Markdown files in `emails/`
+- Download all your images to `media/`
 
 ### Upload Content
 
@@ -72,8 +89,8 @@ buttondown push --directory=./my-newsletter
 This command will:
 
 - Upload any new or modified emails to Buttondown
+- Upload any new or modified automations to Buttondown
 - Upload any new media files in the `media/` directory to Buttondown's image storage
-- Track all uploaded files in the configuration file
 
 ### File Structure
 
@@ -81,11 +98,12 @@ The CLI creates the following directory structure:
 
 ```
 my-newsletter/
-├── .buttondown.json  # Sync configuration
-├── emails/           # Your emails as Markdown files
+├── newsletter.json    # Newsletter settings
+├── automations.yaml   # Your automations
+├── emails/            # Your emails as Markdown files
 │   ├── newsletter-issue-1.md
 │   └── newsletter-issue-2.md
-└── media/            # Images and media files
+└── media/             # Images and media files
     ├── image1.png
     └── document.pdf
 ```

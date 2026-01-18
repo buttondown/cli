@@ -41,10 +41,10 @@ export const REMOTE_IMAGES_RESOURCE: Resource<Image[], Image[]> = {
 	async set(): Promise<OperationResult> {
 		// Bulk image upload not supported via API
 		return {
-			updated: 0,
-			created: 0,
-			deleted: 0,
-			failed: 0,
+			updates: 0,
+			creations: 0,
+			noops: 0,
+			deletions: 0,
 		};
 	},
 	serialize: (d) => d,
@@ -66,10 +66,10 @@ export const LOCAL_IMAGES_RESOURCE: Resource<Image[], Buffer[]> = {
 			await writeFile(localPath, Buffer.from(arrayBuffer));
 		}
 		return {
-			updated: 0,
-			created: 0,
-			deleted: 0,
-			failed: 0,
+			updates: 0,
+			creations: 0,
+			noops: 0,
+			deletions: 0,
 		};
 	},
 	serialize: () => [],
