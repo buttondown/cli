@@ -3759,7 +3759,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    AdvertisingSlotStatus: "open" | "sold" | "finalized" | "executed" | "expired";
+    AdvertisingSlotStatus: "expired" | "executed" | "finalized" | "open" | "sold";
     /** AdvertisingSlot */
     AdvertisingSlot: {
       /** Id */
