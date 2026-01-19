@@ -425,6 +425,13 @@ export interface paths {
      */
     patch: operations["update_advertising_unit"];
   };
+  "/advertising_units/slots": {
+    /**
+     * List Advertising Slots 
+     * @description List all advertising slots
+     */
+    get: operations["list_advertising_slots"];
+  };
   "/advertising_units/slots/{id}": {
     /**
      * Update Advertising Slot 
@@ -3762,8 +3769,17 @@ export interface components {
     AdvertisingSlotStatus: "expired" | "executed" | "finalized" | "open" | "sold";
     /** AdvertisingSlot */
     AdvertisingSlot: {
-      /** Id */
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
       id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
       /**
        * Date 
        * Format: date
@@ -3772,8 +3788,37 @@ export interface components {
       status: components["schemas"]["AdvertisingSlotStatus"];
       /** Invoice Url */
       invoice_url?: string;
+      /** Sku Id */
+      sku_id: string;
+      /** Sponsor Company */
+      sponsor_company: string;
+      /** Sponsor Email */
+      sponsor_email: string;
+      /** Sponsor Name */
+      sponsor_name: string;
       /** Content */
       content: string;
+      /** Content Image Id */
+      content_image_id?: string;
+      /** Content Url */
+      content_url: string;
+      /**
+       * Content Approved At 
+       * Format: date-time
+       */
+      content_approved_at?: string;
+      /**
+       * Content Rejected At 
+       * Format: date-time
+       */
+      content_rejected_at?: string;
+      /** Content Rejection Reason */
+      content_rejection_reason: string;
+      /**
+       * Content Submitted At 
+       * Format: date-time
+       */
+      content_submitted_at?: string;
     };
     /** AdvertisingUnit */
     AdvertisingUnit: {
@@ -3801,6 +3846,14 @@ export interface components {
       url: string;
       /** Price */
       price?: number;
+      /** Allows Html */
+      allows_html: boolean;
+      /** Allows Image */
+      allows_image: boolean;
+      /** Max Characters */
+      max_characters?: number;
+      /** Submission Deadline Days */
+      submission_deadline_days: number;
     };
     /** Page[AdvertisingUnit] */
     AdvertisingUnitPage: {
@@ -3846,11 +3899,47 @@ export interface components {
       url?: string;
       /** Price */
       price?: number;
+      /** Allows Html */
+      allows_html?: boolean;
+      /** Allows Image */
+      allows_image?: boolean;
+      /** Max Characters */
+      max_characters?: number;
+      /** Submission Deadline Days */
+      submission_deadline_days?: number;
+    };
+    /** Page[AdvertisingSlot] */
+    AdvertisingSlotPage: {
+      /** Results */
+      results: (components["schemas"]["AdvertisingSlot"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
     };
     /** AdvertisingSlotUpdateInput */
     AdvertisingSlotUpdateInput: {
       /** Content */
       content?: string;
+      /**
+       * Content Approved At 
+       * Format: date-time
+       */
+      content_approved_at?: string;
+      /** Content Image Id */
+      content_image_id?: string;
+      /** Content Rejection Reason */
+      content_rejection_reason?: string;
+      /** Content Url */
+      content_url?: string;
+      /** Sponsor Company */
+      sponsor_company?: string;
+      /** Sponsor Email */
+      sponsor_email?: string;
+      /** Sponsor Name */
+      sponsor_name?: string;
     };
     /**
      * WebhookStatus 
@@ -7252,6 +7341,34 @@ export interface operations {
       };
       /** @description Not Found */
       404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * List Advertising Slots 
+   * @description List all advertising slots
+   */
+  list_advertising_slots: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AdvertisingSlotPage"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
