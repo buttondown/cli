@@ -3790,6 +3790,8 @@ export interface components {
       invoice_url?: string;
       /** Sku Id */
       sku_id: string;
+      /** Submission Url */
+      submission_url: string;
       /** Sponsor Company */
       sponsor_company: string;
       /** Sponsor Email */
@@ -3940,6 +3942,11 @@ export interface components {
       sponsor_email?: string;
       /** Sponsor Name */
       sponsor_name?: string;
+      /**
+       * Status 
+       * @enum {string}
+       */
+      status?: "approve" | "reject";
     };
     /**
      * WebhookStatus 
