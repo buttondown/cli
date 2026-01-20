@@ -1,35 +1,53 @@
 import { Box, Text, useApp } from "ink";
-import Spinner from "ink-spinner";
 import { useEffect, useReducer } from "react";
 import { type Configuration, RESOURCES } from "../sync/index.js";
 import type { OperationResult } from "../sync/types.js";
 
-type PushProps = {
-	directory: string;
-	baseUrl: string;
-	apiKey?: string;
-	accessToken?: string;
-};
-
 type State =
-	| { status: "not_started" }
-	| { status: "pushing"; stats: Record<string, OperationResult> }
-	| { status: "pushed"; stats: Record<string, OperationResult> }
-	| { status: "error"; error: string };
+	| {
+			status: "not_started";
+	  }
+	| {
+			status: "pushing";
+			stats: {
+				[resource: string]: OperationResult;
+			};
+	  }
+	| {
+			status: "pushed";
+			stats: {
+				[resource: string]: OperationResult;
+			};
+	  }
+	| {
+			status: "error";
+			error: string;
+	  };
 
 type Action =
-	| { type: "start_pushing" }
-	| { type: "register_push"; resource: string; result: OperationResult }
-	| { type: "finish_pushing" }
-	| { type: "register_error"; error: string };
+	| {
+			type: "start_pushing";
+	  }
+	| {
+			type: "register_new_push";
+			resource: string;
+			result: OperationResult;
+	  }
+	| {
+			type: "finish_pushing";
+	  }
+	| {
+			type: "register_error";
+			error: string;
+	  };
 
 const reducer = (state: State, action: Action): State => {
 	switch (action.type) {
 		case "start_pushing":
 			return { status: "pushing", stats: {} };
-		case "register_push":
+		case "register_new_push":
 			if (state.status !== "pushing") {
-				return state;
+				throw new Error("Cannot register new push if not pushing");
 			}
 			return {
 				status: "pushing",
@@ -37,118 +55,79 @@ const reducer = (state: State, action: Action): State => {
 			};
 		case "finish_pushing":
 			if (state.status !== "pushing") {
-				return state;
+				throw new Error("Cannot finish pushing if not pushing");
 			}
-			return { status: "pushed", stats: state.stats };
+			return { status: "pushed", stats: { ...state.stats } };
 		case "register_error":
 			return { status: "error", error: action.error };
 	}
 };
 
-export default function Push({
-	directory,
-	baseUrl,
-	apiKey,
-	accessToken,
-}: PushProps) {
+export default function Push(configuration: Configuration) {
 	const { exit } = useApp();
-	const [state, dispatch] = useReducer(reducer, { status: "not_started" });
+	const [state, dispatch] = useReducer(reducer, {
+		status: "not_started",
+	});
 
 	useEffect(() => {
 		const performPush = async () => {
-			dispatch({ type: "start_pushing" });
-
-			const configuration: Configuration = {
-				directory,
-				baseUrl,
-				apiKey,
-				accessToken,
-			};
-
 			try {
 				for (const resource of RESOURCES) {
 					const data = await resource.local.get(configuration);
 					if (data) {
-						const result = await resource.remote.set(
+						const output = await resource.remote.set(
 							data as any,
 							configuration,
 						);
 						dispatch({
-							type: "register_push",
+							type: "register_new_push",
 							resource: resource.name,
-							result,
+							result: output,
 						});
 					}
 				}
-				dispatch({ type: "finish_pushing" });
-			} catch (error) {
+
+				dispatch({
+					type: "finish_pushing",
+				});
+			} catch (error_) {
 				dispatch({
 					type: "register_error",
-					error: error instanceof Error ? error.message : String(error),
+					error: error_ instanceof Error ? error_.message : String(error_),
 				});
 			}
 		};
 
 		performPush();
-	}, [directory, baseUrl, apiKey, accessToken]);
+	}, [configuration]);
 
 	useEffect(() => {
-		if (state.status === "pushed" || state.status === "error") {
+		if (state.status !== "not_started") {
 			const timer = setTimeout(() => {
 				exit();
 			}, 500);
-			return () => clearTimeout(timer);
+			return () => {
+				clearTimeout(timer);
+			};
 		}
 	}, [state.status, exit]);
 
-	if (state.status === "error") {
-		return (
-			<Box flexDirection="column">
-				<Text color="red">✗ Error: {state.error}</Text>
-			</Box>
-		);
-	}
-
-	if (state.status === "pushing") {
-		return (
-			<Box flexDirection="column">
-				<Box>
-					<Text color="blue">
-						<Spinner type="dots" />
-					</Text>
-					<Text> Pushing to Buttondown...</Text>
-				</Box>
-				{Object.entries(state.stats).map(([resource, result]) => (
-					<Box key={resource} marginLeft={2}>
-						<Text color="green">
-							✓ {resource}: {result.updates} updates, {result.creations}{" "}
-							creations, {result.noops} no-ops, {result.deletions} deletions
-						</Text>
-					</Box>
-				))}
-			</Box>
-		);
-	}
-
-	if (state.status === "pushed") {
-		return (
-			<Box flexDirection="column">
-				<Text color="green">✓ Push complete!</Text>
-				{Object.entries(state.stats).map(([resource, result]) => (
-					<Box key={resource} marginLeft={2}>
-						<Text>
-							{resource}: {result.updates} updates, {result.creations}{" "}
-							creations, {result.noops} no-ops, {result.deletions} deletions
-						</Text>
-					</Box>
-				))}
-			</Box>
-		);
-	}
-
 	return (
-		<Box>
-			<Text>Initializing...</Text>
+		<Box flexDirection="column">
+			{state.status === "error" ? (
+				<Text color="red">Error: {state.error}</Text>
+			) : (
+				<>
+					<Text color="blue">{state.status}</Text>
+
+					{state.status === "pushing" &&
+						Object.entries(state.stats).map(([resource, result]) => (
+							<Box key={resource}>
+								<Text color="green">{`${resource} pushed: ${result.updated} updated, ${result.created} created, ${result.deleted} deleted, ${result.failed} failed`}</Text>
+							</Box>
+						))}
+				</>
+			)}
 		</Box>
 	);
 }

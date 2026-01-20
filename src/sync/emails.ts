@@ -1,13 +1,12 @@
-import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import fg from "fast-glob";
 import { parse as parseYAML, stringify as stringifyYAML } from "yaml";
-import { fetchAllPages, setRemotely } from "../lib/api.js";
 import type { components } from "../lib/openapi.js";
 import {
 	constructClient,
 	type OperationResult,
+	PAGE_SIZE,
 	type Resource,
 	type ResourceGroup,
 } from "./types.js";
@@ -134,23 +133,21 @@ export function serialize(email: Partial<Email & FrontMatterFields>): string {
 	const cleanedBody = body?.replace(MARKDOWN_MODE_SIGIL, "");
 
 	const restObject = Object.fromEntries(
-		Object.entries(rest)
-			.filter(
-				([field, value]) =>
-					value !== null &&
-					value !== undefined &&
-					value !== "" &&
-					JSON.stringify(value) !== "{}" &&
-					JSON.stringify(value) !== "[]" &&
-					FRONT_MATTER_FIELDS.includes(field as keyof FrontMatterFields) &&
-					JSON.stringify(value) !==
-						JSON.stringify(
-							FRONT_MATTER_FIELD_TO_DEFAULT_VALUE[
-								field as keyof FrontMatterFields
-							],
-						),
-			)
-			.sort(([a], [b]) => a.localeCompare(b)),
+		Object.entries(rest).filter(
+			([field, value]) =>
+				value !== null &&
+				value !== undefined &&
+				value !== "" &&
+				JSON.stringify(value) !== "{}" &&
+				JSON.stringify(value) !== "[]" &&
+				FRONT_MATTER_FIELDS.includes(field as keyof FrontMatterFields) &&
+				JSON.stringify(value) !==
+					JSON.stringify(
+						FRONT_MATTER_FIELD_TO_DEFAULT_VALUE[
+							field as keyof FrontMatterFields
+						],
+					),
+		) as [keyof FrontMatterFields, any][],
 	);
 	let yamlContent = stringifyYAML(restObject, { indent: 2 });
 	// Remove trailing newline to match Bun's YAML.stringify behavior
@@ -189,11 +186,57 @@ export function findRelativeImageReferences(
 
 export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {
 	async get(configuration) {
-		return fetchAllPages<Email>(configuration, "/emails");
+		const emails: Email[] = [];
+		let page = 1;
+		let hasMore = true;
+
+		while (hasMore) {
+			const response = await constructClient(configuration).get("/emails", {
+				params: {
+					query: {
+						// @ts-expect-error
+						page,
+						page_size: PAGE_SIZE,
+					},
+				},
+			});
+
+			if (response.data?.results) {
+				emails.push(...response.data.results);
+				hasMore = response.data.results.length === PAGE_SIZE;
+			} else {
+				hasMore = false;
+			}
+			page++;
+		}
+
+		return emails;
 	},
 	async set(value, configuration): Promise<OperationResult> {
-		const remoteEmails = await this.get(configuration);
-		return setRemotely(configuration, "/emails", remoteEmails || [], value, serialize);
+		let updated = 0;
+		let created = 0;
+		const deleted = 0;
+		const failed = 0;
+		for (const email of value) {
+			if (email.id) {
+				await constructClient(configuration).patch("/emails/{id}", {
+					params: { path: { id: email.id } },
+					body: email,
+				});
+				updated++;
+			} else {
+				await constructClient(configuration).post("/emails", {
+					body: { ...email, subject: email.subject || "" },
+				});
+				created++;
+			}
+		}
+		return {
+			updated: updated,
+			created: created,
+			deleted: deleted,
+			failed: failed,
+		};
 	},
 	serialize: (d) => d,
 	deserialize: (d) => d,
@@ -221,29 +264,15 @@ export const LOCAL_EMAILS_RESOURCE: Resource<Email[], string[]> = {
 	async set(value, configuration) {
 		const emailsDir = path.join(configuration.directory, "emails");
 		await mkdir(emailsDir, { recursive: true });
-		let creations = 0;
-		let updates = 0;
-		let noops = 0;
-		const deletions = 0;
 		for (const email of value) {
-			const serialized = serialize(email);
 			const filePath = path.join(emailsDir, `${email.slug || email.id}.md`);
-			if (!existsSync(filePath)) {
-				creations++;
-			} else {
-				if (serialized !== (await readFile(filePath, "utf8"))) {
-					updates++;
-				} else {
-					noops++;
-				}
-			}
-			await writeFile(filePath, serialized);
+			await writeFile(filePath, serialize(email));
 		}
 		return {
-			updates: updates,
-			creations: creations,
-			noops: noops,
-			deletions: deletions,
+			updated: value.length,
+			created: 0,
+			deleted: 0,
+			failed: 0,
 		};
 	},
 	serialize: (emails) => emails.map((e) => serialize(e)),

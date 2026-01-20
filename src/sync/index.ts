@@ -1,13 +1,7 @@
-import { AUTOMATIONS_RESOURCE } from "./automations.js";
 import { EMAILS_RESOURCE } from "./emails.js";
 import { IMAGES_RESOURCE } from "./images.js";
 import { NEWSLETTER_RESOURCE } from "./newsletter.js";
 
-export {
-	AUTOMATIONS_RESOURCE,
-	LOCAL_AUTOMATIONS_RESOURCE,
-	REMOTE_AUTOMATIONS_RESOURCE,
-} from "./automations.js";
 export {
 	EMAILS_RESOURCE,
 	findRelativeImageReferences,
@@ -27,7 +21,6 @@ export {
 export type { Configuration, Resource } from "./types.js";
 
 export const RESOURCES = [
-	AUTOMATIONS_RESOURCE,
 	EMAILS_RESOURCE,
 	IMAGES_RESOURCE,
 	NEWSLETTER_RESOURCE,

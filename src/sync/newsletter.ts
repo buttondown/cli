@@ -13,17 +13,11 @@ type Newsletter = components["schemas"]["Newsletter"];
 export const REMOTE_NEWSLETTER_RESOURCE: Resource<Newsletter, Newsletter> = {
 	async get(configuration) {
 		const response = await constructClient(configuration).get("/newsletters");
-		const newsletters = response.data?.results || [];
-
-		// If username specified, find matching newsletter
-		if (configuration.username) {
-			return (
-				newsletters.find((n) => n.username === configuration.username) || null
-			);
-		}
-
-		// Otherwise return the first newsletter (most users have only one)
-		return newsletters[0] || null;
+		return (
+			response.data?.results.find(
+				(n) => n.username === configuration.username,
+			) || null
+		);
 	},
 	async set(value, configuration): Promise<OperationResult> {
 		await constructClient(configuration).patch("/newsletters/{id}", {
@@ -31,10 +25,10 @@ export const REMOTE_NEWSLETTER_RESOURCE: Resource<Newsletter, Newsletter> = {
 			body: value,
 		});
 		return {
-			updates: 1,
-			creations: 0,
-			noops: 0,
-			deletions: 0,
+			updated: 1,
+			created: 0,
+			deleted: 0,
+			failed: 0,
 		};
 	},
 	serialize: (d) => d,
@@ -50,10 +44,10 @@ export const LOCAL_NEWSLETTER_RESOURCE: Resource<Newsletter, Newsletter> = {
 		const filePath = path.join(configuration.directory, "newsletter.json");
 		await writeFile(filePath, JSON.stringify(value, null, 2));
 		return {
-			updates: 1,
-			creations: 0,
-			noops: 0,
-			deletions: 0,
+			updated: 1,
+			created: 0,
+			deleted: 0,
+			failed: 0,
 		};
 	},
 	serialize: (r) => r,
