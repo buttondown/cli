@@ -7922,6 +7922,12 @@ export interface operations {
           "application/json": components["schemas"]["EmailEventPage"];
         };
       };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
