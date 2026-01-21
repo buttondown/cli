@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #MISE description="Release a new version"
-#MISE usage="arg '<version>' default='patch'"
+#USAGE arg "[version]" help="Version bump type" default="patch"
 npm version ${usage_version} --no-git-tag-version
 git add package.json
 git commit -m "chore(cli): bump version to v$(node -p 'require(\"./package.json\").version')"
