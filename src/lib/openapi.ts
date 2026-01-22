@@ -710,6 +710,12 @@ export interface components {
       /** Description */
       description?: string;
       /**
+       * Subscriber Editable 
+       * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
+       * @default false
+       */
+      subscriber_editable?: boolean;
+      /**
        * Id 
        * @description A unique TypeID associated with the object.
        */
@@ -737,6 +743,12 @@ export interface components {
       color: string;
       /** Description */
       description?: string;
+      /**
+       * Subscriber Editable 
+       * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
+       * @default false
+       */
+      subscriber_editable?: boolean;
     };
     /** Page[Tag] */
     TagPage: {
@@ -784,6 +796,11 @@ export interface components {
       description?: string;
       /** Secondary Id */
       secondary_id?: number;
+      /**
+       * Subscriber Editable 
+       * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal.
+       */
+      subscriber_editable?: boolean;
     };
     /** TagAnalytics */
     TagAnalytics: {
