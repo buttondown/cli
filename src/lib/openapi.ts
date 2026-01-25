@@ -3134,6 +3134,11 @@ export interface components {
       filters: components["schemas"]["FilterGroup"];
       /** Metadata */
       metadata: Record<string, unknown>;
+      /**
+       * Should Evaluate Filter After Delay 
+       * @description If true, filters are re-evaluated after the delay has passed.
+       */
+      should_evaluate_filter_after_delay: boolean;
     };
     /** Page[Automation] */
     AutomationPage: {
@@ -3184,6 +3189,12 @@ export interface components {
       metadata?: {
         [key: string]: string | undefined;
       };
+      /**
+       * Should Evaluate Filter After Delay 
+       * @description If true, filters are re-evaluated after the delay has passed. 
+       * @default false
+       */
+      should_evaluate_filter_after_delay?: boolean;
     };
     /** AutomationUpdateInput */
     AutomationUpdateInput: {
@@ -3197,6 +3208,11 @@ export interface components {
       filters?: components["schemas"]["FilterGroup"];
       /** Metadata */
       metadata?: Record<string, unknown>;
+      /**
+       * Should Evaluate Filter After Delay 
+       * @description If true, filters are re-evaluated after the delay has passed.
+       */
+      should_evaluate_filter_after_delay?: boolean;
     };
     /**
      * Failure 
@@ -3725,6 +3741,10 @@ export interface components {
       version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01";
       /** Ip Address */
       ip_address: string;
+      /** Api Key Id */
+      api_key_id?: string;
+      /** Api Key Label */
+      api_key_label?: string;
       /** Request Data */
       request_data: string;
       /** Response Data */
@@ -3764,6 +3784,10 @@ export interface components {
       version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01";
       /** Ip Address */
       ip_address: string;
+      /** Api Key Id */
+      api_key_id?: string;
+      /** Api Key Label */
+      api_key_label?: string;
     };
     /** APIRequestList */
     APIRequestList: {
@@ -7216,6 +7240,7 @@ export interface operations {
   list_api_requests: {
     parameters: {
       query: {
+        api_key_id?: (string)[];
         status_code?: (string)[];
         method?: (string)[];
         source?: (components["schemas"]["APIRequestSource"])[];
