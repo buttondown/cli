@@ -4407,9 +4407,15 @@ export interface components {
     PublicEmail: {
       /**
        * Id 
-       * Format: uuid
+       * @description A unique TypeID associated with the object.
        */
       id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
       /** Subject */
       subject: string;
       /** Slug */
@@ -4419,11 +4425,6 @@ export interface components {
        * Format: date-time
        */
       publish_date?: string;
-      /**
-       * Creation Date 
-       * Format: date-time
-       */
-      creation_date: string;
       /** Description */
       description: string;
       /** Absolute Url */
