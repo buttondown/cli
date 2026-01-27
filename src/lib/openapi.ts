@@ -5135,6 +5135,8 @@ export interface operations {
         subject?: string;
         /** @description If provided, only return emails with the given attachments. */
         attachments?: (string)[];
+        /** @description If provided, only return emails that reference the given snippets. */
+        snippet_id?: (string)[];
       };
     };
     responses: {
