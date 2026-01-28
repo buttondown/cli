@@ -541,6 +541,29 @@ export interface paths {
      */
     get: operations["list_public_emails"];
   };
+  "/snippets": {
+    /** List Snippets */
+    get: operations["list_snippets"];
+    /** Create Snippet */
+    post: operations["create_snippet"];
+  };
+  "/snippets/{id}": {
+    /**
+     * Retrieve Snippet 
+     * @description Retrieve a single snippet.
+     */
+    get: operations["retrieve_snippet"];
+    /**
+     * Delete Snippet 
+     * @description Delete a snippet.
+     */
+    delete: operations["delete_snippet"];
+    /**
+     * Update Snippet 
+     * @description Update a snippet.
+     */
+    patch: operations["update_snippet"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -4441,6 +4464,79 @@ export interface components {
       /** Count */
       count: number;
     };
+    /** Snippet */
+    Snippet: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Identifier */
+      identifier: string;
+      /** Name */
+      name: string;
+      /** Content */
+      content: string;
+      /**
+       * Reference Count 
+       * @default 0
+       */
+      reference_count?: number;
+    };
+    /** SnippetInput */
+    SnippetInput: {
+      /**
+       * Identifier 
+       * @example footer
+       */
+      identifier: string;
+      /**
+       * Name 
+       * @example Footer
+       */
+      name: string;
+      /**
+       * Content 
+       * @default  
+       * @example Thanks for reading!
+       */
+      content?: string;
+    };
+    /** Page[Snippet] */
+    SnippetPage: {
+      /** Results */
+      results: (components["schemas"]["Snippet"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** SnippetUpdateInput */
+    SnippetUpdateInput: {
+      /**
+       * Identifier 
+       * @example footer
+       */
+      identifier?: string;
+      /**
+       * Name 
+       * @example Footer
+       */
+      name?: string;
+      /**
+       * Content 
+       * @example Thanks for reading!
+       */
+      content?: string;
+    };
     /** @enum {string} */
     EmailExcludableField: "body";
   };
@@ -8129,6 +8225,161 @@ export interface operations {
       };
       /** @description Not Found */
       404: never;
+    };
+  };
+  /** List Snippets */
+  list_snippets: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SnippetPage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /** Create Snippet */
+  create_snippet: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SnippetInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Snippet"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Snippet 
+   * @description Retrieve a single snippet.
+   */
+  retrieve_snippet: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Snippet"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Snippet 
+   * @description Delete a snippet.
+   */
+  delete_snippet: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Snippet 
+   * @description Update a snippet.
+   */
+  update_snippet: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SnippetUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Snippet"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
     };
   };
 }

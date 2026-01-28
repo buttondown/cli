@@ -8,6 +8,6 @@ import { describe, expect, it } from "bun:test";
 describe("sync", () => {
 	it("should export resources", async () => {
 		const { RESOURCES } = await import("./sync/index.js");
-		expect(RESOURCES).toHaveLength(3);
+		expect(RESOURCES).toHaveLength(4);
 	});
 });

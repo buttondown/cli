@@ -1,6 +1,7 @@
 import { EMAILS_RESOURCE } from "./emails.js";
 import { IMAGES_RESOURCE } from "./images.js";
 import { NEWSLETTER_RESOURCE } from "./newsletter.js";
+import { SNIPPETS_RESOURCE } from "./snippets.js";
 
 export {
 	EMAILS_RESOURCE,
@@ -18,10 +19,16 @@ export {
 	NEWSLETTER_RESOURCE,
 	REMOTE_NEWSLETTER_RESOURCE,
 } from "./newsletter.js";
+export {
+	LOCAL_SNIPPETS_RESOURCE,
+	REMOTE_SNIPPETS_RESOURCE,
+	SNIPPETS_RESOURCE,
+} from "./snippets.js";
 export type { Configuration, Resource } from "./types.js";
 
 export const RESOURCES = [
 	EMAILS_RESOURCE,
 	IMAGES_RESOURCE,
 	NEWSLETTER_RESOURCE,
+	SNIPPETS_RESOURCE,
 ];
