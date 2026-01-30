@@ -732,6 +732,8 @@ export interface components {
       color: string;
       /** Description */
       description?: string;
+      /** Public Description */
+      public_description?: string;
       /**
        * Subscriber Editable 
        * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
@@ -766,6 +768,8 @@ export interface components {
       color: string;
       /** Description */
       description?: string;
+      /** Public Description */
+      public_description?: string;
       /**
        * Subscriber Editable 
        * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
@@ -817,6 +821,8 @@ export interface components {
       color?: string;
       /** Description */
       description?: string;
+      /** Public Description */
+      public_description?: string;
       /** Secondary Id */
       secondary_id?: number;
       /**
