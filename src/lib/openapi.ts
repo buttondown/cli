@@ -722,17 +722,25 @@ export interface components {
     Tag: {
       /**
        * Name 
+       * @description The name of the tag. 
        * @example VIP
        */
       name: string;
       /**
        * Color 
+       * @description The hex color code associated with the tag. 
        * @example #FFD700
        */
       color: string;
-      /** Description */
+      /**
+       * Description 
+       * @description An internal description of the tag, only visible to the newsletter author.
+       */
       description?: string;
-      /** Public Description */
+      /**
+       * Public Description 
+       * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
+       */
       public_description?: string;
       /**
        * Subscriber Editable 
@@ -751,24 +759,38 @@ export interface components {
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
-      /** Secondary Id */
+      /**
+       * Secondary Id 
+       * @description The secondary ID of the tag, used as a human-readable numeric identifier.
+       */
       secondary_id: number;
     };
-    /** TagInput */
+    /**
+     * TagInput 
+     * @description Input schema for creating a new tag.
+     */
     TagInput: {
       /**
        * Name 
+       * @description The name of the tag. 
        * @example VIP
        */
       name: string;
       /**
        * Color 
+       * @description The hex color code associated with the tag. 
        * @example #FFD700
        */
       color: string;
-      /** Description */
+      /**
+       * Description 
+       * @description An internal description of the tag, only visible to the newsletter author.
+       */
       description?: string;
-      /** Public Description */
+      /**
+       * Public Description 
+       * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
+       */
       public_description?: string;
       /**
        * Subscriber Editable 
@@ -807,23 +829,37 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
-    /** TagUpdateInput */
+    /**
+     * TagUpdateInput 
+     * @description Input schema for updating an existing tag. All fields are optional.
+     */
     TagUpdateInput: {
       /**
        * Name 
+       * @description The name of the tag. 
        * @example VIP
        */
       name?: string;
       /**
        * Color 
+       * @description The hex color code associated with the tag. 
        * @example #FFD700
        */
       color?: string;
-      /** Description */
+      /**
+       * Description 
+       * @description An internal description of the tag, only visible to the newsletter author.
+       */
       description?: string;
-      /** Public Description */
+      /**
+       * Public Description 
+       * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
+       */
       public_description?: string;
-      /** Secondary Id */
+      /**
+       * Secondary Id 
+       * @description The secondary ID of the tag, used as a human-readable numeric identifier.
+       */
       secondary_id?: number;
       /**
        * Subscriber Editable 
@@ -831,13 +867,25 @@ export interface components {
        */
       subscriber_editable?: boolean;
     };
-    /** TagAnalytics */
+    /**
+     * TagAnalytics 
+     * @description Analytics data associated with a given tag.
+     */
     TagAnalytics: {
-      /** Created Subscribers */
+      /**
+       * Created Subscribers 
+       * @description The number of subscribers who have been created with this tag.
+       */
       created_subscribers: number;
-      /** Click Rate */
+      /**
+       * Click Rate 
+       * @description The click rate of emails sent to subscribers with this tag.
+       */
       click_rate: number;
-      /** Open Rate */
+      /**
+       * Open Rate 
+       * @description The open rate of emails sent to subscribers with this tag.
+       */
       open_rate: number;
     };
     /** Empty */
