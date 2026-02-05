@@ -1817,7 +1817,7 @@ export interface components {
      * opt-in.) 
      * @enum {string}
      */
-    SubscriberSource: "admin" | "api" | "carrd" | "comment" | "embedded_form" | "import" | "memberful" | "organic" | "patreon" | "stripe" | "user" | "zapier";
+    SubscriberSource: "admin" | "api" | "carrd" | "comment" | "embedded_form" | "form" | "import" | "memberful" | "organic" | "patreon" | "stripe" | "user" | "zapier";
     /** StripeCoupon */
     StripeCoupon: {
       /** Coupon Id */
@@ -2883,14 +2883,13 @@ export interface components {
       };
       /**
        * Id 
-       * Format: uuid 
-       * @description A unique UUID associated with the object.
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
        * Creation Date 
        * Format: date-time 
-       * @description The date and time at which the object was created.
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       status: components["schemas"]["BulkActionStatus"];
@@ -4964,6 +4963,12 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["Image"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
