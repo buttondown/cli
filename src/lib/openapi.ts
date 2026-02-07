@@ -2376,11 +2376,11 @@ export interface components {
        */
       css?: string;
       /**
-       * Css Tokens 
-       * @description Custom CSS tokens (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
+       * Theme Configuration 
+       * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
        * @default {}
        */
-      css_tokens?: {
+      theme_configuration?: {
         [key: string]: string | undefined;
       };
       /**
@@ -2557,14 +2557,14 @@ export interface components {
        */
       css?: string;
       /**
-       * Css Tokens 
-       * @description Custom CSS tokens (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
+       * Theme Configuration 
+       * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
        * @default {} 
        * @example {
        *   "primary-color": "#0069FF"
        * }
        */
-      css_tokens?: {
+      theme_configuration?: {
         [key: string]: string | undefined;
       };
       /**
@@ -2697,13 +2697,13 @@ export interface components {
        */
       css?: string;
       /**
-       * Css Tokens 
-       * @description Custom CSS tokens (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
+       * Theme Configuration 
+       * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
        * @example {
        *   "primary-color": "#0069FF"
        * }
        */
-      css_tokens?: {
+      theme_configuration?: {
         [key: string]: string | undefined;
       };
       /**
@@ -3164,7 +3164,7 @@ export interface components {
      * 
      * In general, our event namespacing tries to hew to the following pattern:
      * 
-     * <source>.<object>.<action>
+     * `<source>.<object>.<action>`
      * 
      * When wondering which object we are referring to, default to the _more granular_ object.
      * 
@@ -7846,7 +7846,7 @@ export interface operations {
          * 
          * In general, our event namespacing tries to hew to the following pattern:
          * 
-         * <source>.<object>.<action>
+         * `<source>.<object>.<action>`
          * 
          * When wondering which object we are referring to, default to the _more granular_ object.
          * 
