@@ -1868,7 +1868,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    FirewallReasonCode: "email_address_capital_letters" | "email_address_cleantalk_score" | "email_address_contains_prohibited_string" | "email_address_extant_subscriber_count" | "email_address_is_honeypot" | "email_address_is_pwned" | "email_address_length" | "email_address_local_part_has_many_periods" | "email_address_many_consonants_in_a_row" | "email_address_mx_record_is_valid" | "email_address_noreply_local_part" | "email_address_null_characters" | "email_address_peaceful_domain" | "email_address_previous_evaluation" | "email_address_prohibited_via_domain" | "email_address_regex" | "email_address_sandbox_test" | "email_address_shannon_entropy" | "email_address_stopforumspam_score" | "email_address_tied_to_account" | "email_address_typo" | "fingerprint_missing" | "ip_address_cleantalk_score" | "ip_address_extant_subscriber_count" | "ip_address_peaceful" | "ip_address_prohibited" | "metadata_has_garbage" | "newsletter_age" | "newsletter_has_customized_transactional_email" | "newsletter_has_prohibited_string" | "newsletter_status" | "project_honeypot" | "referrer_url_prohibited" | "subscriber_import_provenance" | "subscriber_import_source" | "text_contains_malicious_url" | "text_contains_prohibited_string" | "turnstile_response_token_is_valid" | "user_agent_known";
+    FirewallReasonCode: "email_address_capital_letters" | "email_address_cleantalk_score" | "email_address_contains_prohibited_string" | "email_address_esp_suppression" | "email_address_extant_subscriber_count" | "email_address_is_honeypot" | "email_address_is_pwned" | "email_address_length" | "email_address_local_part_has_many_periods" | "email_address_many_consonants_in_a_row" | "email_address_mx_record_is_valid" | "email_address_noreply_local_part" | "email_address_null_characters" | "email_address_peaceful_domain" | "email_address_previous_evaluation" | "email_address_prohibited_via_domain" | "email_address_regex" | "email_address_sandbox_test" | "email_address_shannon_entropy" | "email_address_stopforumspam_score" | "email_address_tied_to_account" | "email_address_typo" | "fingerprint_missing" | "ip_address_cleantalk_score" | "ip_address_extant_subscriber_count" | "ip_address_peaceful" | "ip_address_prohibited" | "metadata_has_garbage" | "newsletter_age" | "newsletter_has_customized_transactional_email" | "newsletter_has_prohibited_string" | "newsletter_status" | "project_honeypot" | "referrer_url_prohibited" | "subscriber_import_provenance" | "subscriber_import_source" | "text_contains_malicious_url" | "text_contains_prohibited_string" | "turnstile_response_token_is_valid" | "user_agent_known";
     /** FirewallReason */
     FirewallReason: {
       /** @description The code of the firewall facet that flagged this subscriber. */
@@ -1950,6 +1950,36 @@ export interface components {
        */
       last_open_date?: string;
       /**
+       * Delivered Count 
+       * @description The subscriber's delivered count. 
+       * @example 12
+       */
+      delivered_count?: number;
+      /**
+       * Open Count 
+       * @description The subscriber's open count. 
+       * @example 7
+       */
+      open_count?: number;
+      /**
+       * Clicked Count 
+       * @description The subscriber's clicked count. 
+       * @example 3
+       */
+      clicked_count?: number;
+      /**
+       * Open Rate 
+       * @description The subscriber's open rate, computed from engagement counts. Null if delivered_count is 0 or null. 
+       * @example 0.5833
+       */
+      open_rate?: number;
+      /**
+       * Click Rate 
+       * @description The subscriber's click rate, computed from engagement counts. Null if delivered_count is 0 or null. 
+       * @example 0.25
+       */
+      click_rate?: number;
+      /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
@@ -2006,6 +2036,11 @@ export interface components {
        * @default []
        */
       email_transitions?: (components["schemas"]["EmailTransition"])[];
+      /**
+       * Form Id 
+       * Format: uuid
+       */
+      form_id?: string;
       /**
        * Firewall Reasons 
        * @description Information collected by Buttondown's firewall about this subscriber. See [the firewall](https://docs.buttondown.com/firewall) for more information.
@@ -2353,6 +2388,17 @@ export interface components {
      */
     Newsletter: {
       /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /**
        * Api Key 
        * Format: uuid 
        * @description The API key for this newsletter, used for authenticating API requests.
@@ -2363,12 +2409,6 @@ export interface components {
        * @enum {unknown}
        */
       auditing_mode?: "disabled" | "enabled" | "aggressive";
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
       /**
        * Css 
        * @description Custom CSS styling applied to your newsletter emails. See [CSS customization](https://docs.buttondown.com/customizing-email-design#adding-custom-css) for more information. 
@@ -2457,12 +2497,6 @@ export interface components {
        * @description URL to your newsletter's icon image, used as a favicon and in various UI contexts.
        */
       icon?: string;
-      /**
-       * Id 
-       * Format: uuid 
-       * @description The unique identifier for this newsletter.
-       */
-      id: string;
       /**
        * Image 
        * @description URL to your newsletter's header or branding image, displayed on archive pages and in social previews.
@@ -5695,6 +5729,8 @@ export interface operations {
         email_address?: string | (string)[];
         /** @description If provided, expand the given field. (Only supported fields: 'stripe_customer') */
         expand?: ("stripe_customer")[];
+        /** @description If provided, only return subscribers that came through the given form(s). */
+        form?: (string)[];
         /** @description If provided, only return subscribers with the given IDs. */
         ids?: (string)[];
         /** @description If provided, only return subscribers with the given IP address(es). */
@@ -5719,6 +5755,14 @@ export interface operations {
         referral_code?: (string)[];
         /** @description If provided, only return subscribers whose referrer URL(s) contain the given string. */
         referrer_url?: (string)[];
+        /** @description If provided, only return subscribers with an open rate less than or equal to the given value. */
+        open_rate__end?: number;
+        /** @description If provided, only return subscribers with an open rate greater than or equal to the given value. */
+        open_rate__start?: number;
+        /** @description If provided, only return subscribers with a click rate less than or equal to the given value. */
+        click_rate__end?: number;
+        /** @description If provided, only return subscribers with a click rate greater than or equal to the given value. */
+        click_rate__start?: number;
         /** @description If provided, only return subscribers with a risk score less than or equal to the given value. */
         risk_score__end?: number;
         /** @description If provided, only return subscribers with a risk score greater than or equal to the given value. */
