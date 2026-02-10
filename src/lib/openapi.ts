@@ -481,7 +481,7 @@ export interface paths {
     get: operations["list_comments"];
     /**
      * Create Comment 
-     * @description Create a new comment or reply to an existing comment. Authors can respond to comments at the given author.
+     * @description Create a new comment or reply to an existing comment. If subscriber_id is provided, the comment is attributed to that subscriber; otherwise it is attributed to the newsletter author.
      */
     post: operations["create_comment"];
   };
@@ -1909,14 +1909,13 @@ export interface components {
     Subscriber: {
       /**
        * Id 
-       * Format: uuid 
-       * @description A unique UUID associated with the object.
+       * @description A unique TypeID associated with the object.
        */
       id: string;
       /**
        * Creation Date 
        * Format: date-time 
-       * @description The date and time at which the object was created.
+       * @description The date and time at which the object was first created.
        */
       creation_date: string;
       /** Avatar Url */
@@ -2019,10 +2018,7 @@ export interface components {
       stripe_coupon?: components["schemas"]["StripeCoupon"];
       /** Stripe Customer Id */
       stripe_customer_id?: string;
-      /**
-       * Subscriber Import Id 
-       * Format: uuid
-       */
+      /** Subscriber Import Id */
       subscriber_import_id?: string;
       /** Tags */
       tags: (string)[];
@@ -2036,10 +2032,7 @@ export interface components {
        * @default []
        */
       email_transitions?: (components["schemas"]["EmailTransition"])[];
-      /**
-       * Form Id 
-       * Format: uuid
-       */
+      /** Form Id */
       form_id?: string;
       /**
        * Firewall Reasons 
@@ -2083,7 +2076,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    SubscriberInputValidationErrorCode: "email_already_exists" | "email_blocked" | "email_empty" | "email_invalid" | "ip_address_spammy" | "metadata_invalid" | "rate_limited" | "subscriber_already_exists" | "subscriber_blocked" | "subscriber_suppressed" | "tag_invalid";
+    SubscriberInputValidationErrorCode: "email_already_exists" | "email_blocked" | "email_empty" | "email_invalid" | "ip_address_spammy" | "metadata_invalid" | "rate_limited" | "subscriber_already_exists" | "subscriber_blocked" | "subscriber_id_invalid" | "subscriber_suppressed" | "tag_invalid";
     /** ErrorMessage[ValidationErrorCode] */
     ErrorMessage_ValidationErrorCode_: {
       code: components["schemas"]["SubscriberInputValidationErrorCode"];
@@ -2144,7 +2137,6 @@ export interface components {
       utm_source?: string;
       /**
        * Referring Subscriber Id 
-       * Format: uuid 
        * @description The ID of the subscriber that referred this subscriber.
        */
       referring_subscriber_id?: string;
@@ -2242,10 +2234,7 @@ export interface components {
       type?: components["schemas"]["SubscriberType"];
       /** Unsubscription Reason */
       unsubscription_reason?: string;
-      /**
-       * Email Which Prompted Unsubscription Id 
-       * Format: uuid
-       */
+      /** Email Which Prompted Unsubscription Id */
       email_which_prompted_unsubscription_id?: string;
     };
     /**
@@ -2256,18 +2245,12 @@ export interface components {
     AutomationAttemptStatus: "unprocessed" | "processed" | "failed" | "pending" | "skipped";
     /** AutomationForSubscriber */
     AutomationForSubscriber: {
-      /**
-       * Id 
-       * Format: uuid
-       */
+      /** Id */
       id: string;
       /** Name */
       name: string;
       status: components["schemas"]["AutomationAttemptStatus"];
-      /**
-       * Automation Id 
-       * Format: uuid
-       */
+      /** Automation Id */
       automation_id: string;
       /**
        * Execution Date 
@@ -4324,6 +4307,11 @@ export interface components {
        * @description The ID of the email this comment is for. Required if parent_id is not provided.
        */
       email_id?: string;
+      /**
+       * Subscriber Id 
+       * @description The ID of the subscriber to attribute the comment to. If not provided, the comment is attributed to the newsletter author.
+       */
+      subscriber_id?: string;
     };
     /** Page[Comment] */
     CommentPage: {
@@ -7957,7 +7945,7 @@ export interface operations {
   };
   /**
    * Create Comment 
-   * @description Create a new comment or reply to an existing comment. Authors can respond to comments at the given author.
+   * @description Create a new comment or reply to an existing comment. If subscriber_id is provided, the comment is attributed to that subscriber; otherwise it is attributed to the newsletter author.
    */
   create_comment: {
     requestBody: {
