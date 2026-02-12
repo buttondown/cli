@@ -2407,6 +2407,14 @@ export interface components {
         [key: string]: string | undefined;
       };
       /**
+       * Email Theme Configuration 
+       * @description A dictionary of CSS token overrides for the email theme. 
+       * @default {}
+       */
+      email_theme_configuration?: {
+        [key: string]: string | undefined;
+      };
+      /**
        * Custom Churn Email Body 
        * @description Custom body content for the email sent when a paid subscriber cancels. Supports template tags like `{{ subscriber.email }}` and `{{ newsletter.name }}`. 
        * @default
@@ -2585,6 +2593,17 @@ export interface components {
         [key: string]: string | undefined;
       };
       /**
+       * Email Theme Configuration 
+       * @description A dictionary of CSS token overrides for the email theme. 
+       * @default {} 
+       * @example {
+       *   "primary-color": "#0069FF"
+       * }
+       */
+      email_theme_configuration?: {
+        [key: string]: string | undefined;
+      };
+      /**
        * Custom Email Template 
        * @description The identifier for a custom email template. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options. 
        * @example modern
@@ -2721,6 +2740,16 @@ export interface components {
        * }
        */
       theme_configuration?: {
+        [key: string]: string | undefined;
+      };
+      /**
+       * Email Theme Configuration 
+       * @description A dictionary of CSS token overrides for the email theme. 
+       * @example {
+       *   "primary-color": "#0069FF"
+       * }
+       */
+      email_theme_configuration?: {
         [key: string]: string | undefined;
       };
       /**
