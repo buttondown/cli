@@ -6,6 +6,7 @@ import Login from "./commands/login.js";
 import Logout from "./commands/logout.js";
 import Pull from "./commands/pull.js";
 import Push from "./commands/push.js";
+import createConfig from "./config.js";
 
 const cli = meow(
 	`
@@ -96,30 +97,38 @@ switch (command) {
 	}
 
 	case "pull": {
-		if (!cli.flags.apiKey) {
-			console.error("Error: --api-key is required for the pull command");
+		const config = createConfig();
+		const apiKey = cli.flags.apiKey ?? config.get("apiKey");
+		if (!apiKey) {
+			console.error(
+				"Error: --api-key is required for the pull command, or run 'buttondown login' first",
+			);
 			process.exit(1);
 		}
 		render(
 			<Pull
 				directory={cli.flags.directory}
 				baseUrl={cli.flags.baseUrl}
-				apiKey={cli.flags.apiKey}
+				apiKey={apiKey}
 			/>,
 		);
 		break;
 	}
 
 	case "push": {
-		if (!cli.flags.apiKey) {
-			console.error("Error: --api-key is required for the push command");
+		const config = createConfig();
+		const apiKey = cli.flags.apiKey ?? config.get("apiKey");
+		if (!apiKey) {
+			console.error(
+				"Error: --api-key is required for the push command, or run 'buttondown login' first",
+			);
 			process.exit(1);
 		}
 		render(
 			<Push
 				directory={cli.flags.directory}
 				baseUrl={cli.flags.baseUrl}
-				apiKey={cli.flags.apiKey}
+				apiKey={apiKey}
 			/>,
 		);
 		break;

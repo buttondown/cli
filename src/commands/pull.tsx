@@ -1,6 +1,17 @@
 import { Box, Text, useApp } from "ink";
+import path from "node:path";
 import { useEffect, useReducer } from "react";
-import { type Configuration, RESOURCES } from "../sync/index.js";
+import {
+	BASE_RESOURCES,
+	type Configuration,
+	convertAbsoluteToRelativeImages,
+	IMAGES_RESOURCE,
+	REMOTE_EMAILS_RESOURCE,
+	LOCAL_EMAILS_RESOURCE,
+	readSyncState,
+	writeSyncState,
+} from "../sync/index.js";
+import type { SyncedImage } from "../sync/state.js";
 import type { OperationResult } from "../sync/types.js";
 
 type State =
@@ -71,8 +82,10 @@ export default function Pull(configuration: Configuration) {
 
 	useEffect(() => {
 		const performPull = async () => {
+			dispatch({ type: "start_pulling" });
 			try {
-				for (const resource of RESOURCES) {
+				// 1. Pull base resources (automations, newsletter, snippets)
+				for (const resource of BASE_RESOURCES) {
 					const data = await resource.remote.get(configuration);
 					if (data) {
 						const output = await resource.local.set(data as any, configuration);
@@ -83,6 +96,71 @@ export default function Pull(configuration: Configuration) {
 						});
 					}
 				}
+
+				// 2. Pull images → download to media/ → build URL→localPath mapping
+				const remoteImages = await IMAGES_RESOURCE.remote.get(configuration);
+				const syncedImages: Record<string, SyncedImage> = {};
+
+				if (remoteImages) {
+					const output = await IMAGES_RESOURCE.local.set(
+						remoteImages,
+						configuration,
+					);
+					dispatch({
+						type: "register_new_pull",
+						resource: "images",
+						result: output,
+					});
+
+					for (const image of remoteImages) {
+						const filename = path.basename(image.image);
+						const localPath = path.join(
+							configuration.directory,
+							"media",
+							filename,
+						);
+						syncedImages[image.id] = {
+							id: image.id,
+							localPath,
+							url: image.image,
+							filename,
+						};
+					}
+				}
+
+				// 3. Pull emails → convert absolute URLs to relative paths
+				const remoteEmails = await REMOTE_EMAILS_RESOURCE.get(configuration);
+
+				if (remoteEmails) {
+					const emailsDir = path.join(configuration.directory, "emails");
+					const imageMap = Object.fromEntries(
+						Object.entries(syncedImages).map(([k, v]) => [
+							k,
+							{ localPath: v.localPath, url: v.url },
+						]),
+					);
+
+					const processedEmails = remoteEmails.map((email) => ({
+						...email,
+						body: email.body
+							? convertAbsoluteToRelativeImages(email.body, emailsDir, imageMap)
+							: email.body,
+					}));
+
+					const output = await LOCAL_EMAILS_RESOURCE.set(
+						processedEmails,
+						configuration,
+					);
+					dispatch({
+						type: "register_new_pull",
+						resource: "emails",
+						result: output,
+					});
+				}
+
+				// 4. Write sync state
+				await writeSyncState(configuration.directory, { syncedImages });
+
 				dispatch({
 					type: "finish_pulling",
 				});

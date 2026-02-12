@@ -1,7 +1,8 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { components } from "../lib/openapi.js";
 import {
+	type Configuration,
 	constructClient,
 	type OperationResult,
 	PAGE_SIZE,
@@ -10,6 +11,46 @@ import {
 } from "./types.js";
 
 type Image = components["schemas"]["Image"];
+
+const EXTENSION_TO_MIME: Record<string, string> = {
+	".gif": "image/gif",
+	".jpeg": "image/jpeg",
+	".jpg": "image/jpeg",
+	".png": "image/png",
+	".svg": "image/svg+xml",
+	".webp": "image/webp",
+};
+
+export async function uploadImage(
+	configuration: Configuration,
+	imagePath: string,
+): Promise<{ id: string; url: string; filename: string }> {
+	const buffer = await readFile(imagePath);
+	const filename = path.basename(imagePath);
+	const ext = path.extname(imagePath).toLowerCase();
+	const mimeType = EXTENSION_TO_MIME[ext] || "application/octet-stream";
+
+	const formData = new FormData();
+	formData.append(
+		"image",
+		new Blob([new Uint8Array(buffer)], { type: mimeType }),
+		filename,
+	);
+
+	const response = await constructClient(configuration).post("/images", {
+		body: formData,
+	});
+
+	if (response.error) {
+		throw new Error(`Failed to upload image ${filename}`);
+	}
+
+	return {
+		id: response.data.id,
+		url: response.data.image,
+		filename,
+	};
+}
 
 export const REMOTE_IMAGES_RESOURCE: Resource<Image[], Image[]> = {
 	async get(configuration) {

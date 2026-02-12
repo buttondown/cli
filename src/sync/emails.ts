@@ -161,12 +161,14 @@ export function serialize(email: Partial<Email & FrontMatterFields>): string {
 }
 
 const RELATIVE_IMAGE_REFERENCE_REGEX = /!\[([^\]]*)\]\(([^)]+)\)/g;
+const ABSOLUTE_IMAGE_URL_REGEX = /!\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g;
 
 export function findRelativeImageReferences(
 	content: string,
 ): RelativeImageReference[] {
 	const results: RelativeImageReference[] = [];
-	let match = RELATIVE_IMAGE_REFERENCE_REGEX.exec(content);
+	const regex = new RegExp(RELATIVE_IMAGE_REFERENCE_REGEX);
+	let match = regex.exec(content);
 
 	while (match !== null) {
 		const [fullMatch, altText, imagePath] = match;
@@ -178,10 +180,69 @@ export function findRelativeImageReferences(
 				relativePath: imagePath,
 			});
 		}
-		match = RELATIVE_IMAGE_REFERENCE_REGEX.exec(content);
+		match = regex.exec(content);
 	}
 
 	return results;
+}
+
+export function replaceImageReference(
+	content: string,
+	originalReference: string,
+	newUrl: string,
+	altText: string,
+): string {
+	const newReference = `![${altText}](${newUrl})`;
+	return content.replace(originalReference, newReference);
+}
+
+type SyncedImageInfo = { localPath: string; url: string };
+
+export function resolveRelativeImageReferences(
+	content: string,
+	emailDir: string,
+	syncedImages: Record<string, SyncedImageInfo>,
+): string {
+	const references = findRelativeImageReferences(content);
+	let processedContent = content;
+
+	for (const ref of references) {
+		const absolutePath = path.resolve(emailDir, ref.relativePath);
+		const matchingImage = Object.values(syncedImages).find(
+			(img) => img.localPath === absolutePath,
+		);
+
+		if (matchingImage) {
+			processedContent = replaceImageReference(
+				processedContent,
+				ref.match,
+				matchingImage.url,
+				ref.altText,
+			);
+		}
+	}
+
+	return processedContent;
+}
+
+export function convertAbsoluteToRelativeImages(
+	content: string,
+	emailDir: string,
+	syncedImages: Record<string, SyncedImageInfo>,
+): string {
+	const regex = new RegExp(ABSOLUTE_IMAGE_URL_REGEX);
+	return content.replace(regex, (match, altText, imageUrl) => {
+		const syncedImage = Object.values(syncedImages).find(
+			(img) => img.url === imageUrl,
+		);
+
+		if (syncedImage) {
+			const relativePath = path.relative(emailDir, syncedImage.localPath);
+			return `![${altText}](${relativePath})`;
+		}
+
+		return match;
+	});
 }
 
 export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {

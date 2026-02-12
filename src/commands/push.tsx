@@ -1,6 +1,18 @@
 import { Box, Text, useApp } from "ink";
+import path from "node:path";
 import { useEffect, useReducer } from "react";
-import { type Configuration, RESOURCES } from "../sync/index.js";
+import {
+	BASE_RESOURCES,
+	type Configuration,
+	findRelativeImageReferences,
+	LOCAL_EMAILS_RESOURCE,
+	readSyncState,
+	REMOTE_EMAILS_RESOURCE,
+	resolveRelativeImageReferences,
+	uploadImage,
+	writeSyncState,
+} from "../sync/index.js";
+import type { SyncedImage } from "../sync/state.js";
 import type { OperationResult } from "../sync/types.js";
 
 type State =
@@ -71,8 +83,67 @@ export default function Push(configuration: Configuration) {
 
 	useEffect(() => {
 		const performPush = async () => {
+			dispatch({ type: "start_pushing" });
 			try {
-				for (const resource of RESOURCES) {
+				// 1. Read sync state
+				const syncState = await readSyncState(configuration.directory);
+				const syncedImages = { ...syncState.syncedImages };
+
+				// 2. Read local emails and find relative image references
+				const localEmails = await LOCAL_EMAILS_RESOURCE.get(configuration);
+				const emailsDir = path.join(configuration.directory, "emails");
+
+				if (localEmails) {
+					// 3. Collect all referenced images, upload new ones
+					for (const email of localEmails) {
+						if (!email.body) continue;
+						const refs = findRelativeImageReferences(email.body);
+						for (const ref of refs) {
+							const absolutePath = path.resolve(emailsDir, ref.relativePath);
+							const alreadySynced = Object.values(syncedImages).find(
+								(img) => img.localPath === absolutePath,
+							);
+							if (!alreadySynced) {
+								const result = await uploadImage(configuration, absolutePath);
+								syncedImages[result.id] = {
+									id: result.id,
+									localPath: absolutePath,
+									url: result.url,
+									filename: result.filename,
+								};
+							}
+						}
+					}
+
+					// 4. Replace relative paths with absolute URLs
+					const imageMap = Object.fromEntries(
+						Object.entries(syncedImages).map(([k, v]) => [
+							k,
+							{ localPath: v.localPath, url: v.url },
+						]),
+					);
+
+					const resolvedEmails = localEmails.map((email) => ({
+						...email,
+						body: email.body
+							? resolveRelativeImageReferences(email.body, emailsDir, imageMap)
+							: email.body,
+					}));
+
+					// 5. Push resolved emails
+					const emailResult = await REMOTE_EMAILS_RESOURCE.set(
+						resolvedEmails,
+						configuration,
+					);
+					dispatch({
+						type: "register_new_push",
+						resource: "emails",
+						result: emailResult,
+					});
+				}
+
+				// 6. Push remaining base resources
+				for (const resource of BASE_RESOURCES) {
 					const data = await resource.local.get(configuration);
 					if (data) {
 						const output = await resource.remote.set(
@@ -86,6 +157,9 @@ export default function Push(configuration: Configuration) {
 						});
 					}
 				}
+
+				// 7. Write updated sync state
+				await writeSyncState(configuration.directory, { syncedImages });
 
 				dispatch({
 					type: "finish_pushing",

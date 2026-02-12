@@ -1,7 +1,10 @@
 import { describe, expect, it } from "bun:test";
 import {
+	convertAbsoluteToRelativeImages,
 	deserialize,
 	findRelativeImageReferences,
+	replaceImageReference,
+	resolveRelativeImageReferences,
 	serialize,
 } from "./emails.js";
 
@@ -212,6 +215,172 @@ Content`;
 			expect(result).toHaveLength(2);
 			expect(result[0].relativePath).toBe("../test.png");
 			expect(result[1].relativePath).toBe("./subfolder/image.gif");
+		});
+
+		it("should return consistent results when called multiple times", () => {
+			const content = "![alt](./image.png) and ![alt2](../photo.jpg)";
+
+			const result1 = findRelativeImageReferences(content);
+			const result2 = findRelativeImageReferences(content);
+			const result3 = findRelativeImageReferences(content);
+
+			expect(result1).toHaveLength(2);
+			expect(result2).toHaveLength(2);
+			expect(result3).toHaveLength(2);
+			expect(result1).toEqual(result2);
+			expect(result2).toEqual(result3);
+		});
+	});
+
+	describe("replaceImageReference", () => {
+		it("should replace a relative image reference with an absolute URL", () => {
+			const content = "Here is ![alt](../media/image.png) in my email";
+			const result = replaceImageReference(
+				content,
+				"![alt](../media/image.png)",
+				"https://assets.buttondown.email/images/abc123.png",
+				"alt",
+			);
+			expect(result).toBe(
+				"Here is ![alt](https://assets.buttondown.email/images/abc123.png) in my email",
+			);
+		});
+
+		it("should only replace the exact match", () => {
+			const content = "![a](./one.png) and ![b](./two.png) and ![a](./one.png)";
+			const result = replaceImageReference(
+				content,
+				"![a](./one.png)",
+				"https://example.com/one.png",
+				"a",
+			);
+			expect(result).toBe(
+				"![a](https://example.com/one.png) and ![b](./two.png) and ![a](./one.png)",
+			);
+		});
+	});
+
+	describe("resolveRelativeImageReferences", () => {
+		it("should resolve relative paths to absolute URLs using the image map", () => {
+			const content = "Check out ![photo](../media/photo.png) in this email";
+			const emailDir = "/project/buttondown/emails";
+			const syncedImages: Record<string, { localPath: string; url: string }> = {
+				img1: {
+					localPath: "/project/buttondown/media/photo.png",
+					url: "https://assets.buttondown.email/images/photo.png",
+				},
+			};
+
+			const result = resolveRelativeImageReferences(
+				content,
+				emailDir,
+				syncedImages,
+			);
+
+			expect(result).toBe(
+				"Check out ![photo](https://assets.buttondown.email/images/photo.png) in this email",
+			);
+		});
+
+		it("should leave references intact when no matching synced image exists", () => {
+			const content = "![photo](../media/unknown.png)";
+			const emailDir = "/project/buttondown/emails";
+			const syncedImages: Record<string, { localPath: string; url: string }> =
+				{};
+
+			const result = resolveRelativeImageReferences(
+				content,
+				emailDir,
+				syncedImages,
+			);
+
+			expect(result).toBe("![photo](../media/unknown.png)");
+		});
+
+		it("should resolve multiple relative references", () => {
+			const content = "![a](../media/one.png) text ![b](../media/two.jpg)";
+			const emailDir = "/project/buttondown/emails";
+			const syncedImages: Record<string, { localPath: string; url: string }> = {
+				img1: {
+					localPath: "/project/buttondown/media/one.png",
+					url: "https://example.com/one.png",
+				},
+				img2: {
+					localPath: "/project/buttondown/media/two.jpg",
+					url: "https://example.com/two.jpg",
+				},
+			};
+
+			const result = resolveRelativeImageReferences(
+				content,
+				emailDir,
+				syncedImages,
+			);
+
+			expect(result).toBe(
+				"![a](https://example.com/one.png) text ![b](https://example.com/two.jpg)",
+			);
+		});
+	});
+
+	describe("convertAbsoluteToRelativeImages", () => {
+		it("should convert absolute URLs to relative paths for synced images", () => {
+			const content =
+				"![photo](https://assets.buttondown.email/images/photo.png)";
+			const emailDir = "/project/buttondown/emails";
+			const syncedImages: Record<string, { localPath: string; url: string }> = {
+				img1: {
+					localPath: "/project/buttondown/media/photo.png",
+					url: "https://assets.buttondown.email/images/photo.png",
+				},
+			};
+
+			const result = convertAbsoluteToRelativeImages(
+				content,
+				emailDir,
+				syncedImages,
+			);
+
+			expect(result).toBe("![photo](../media/photo.png)");
+		});
+
+		it("should leave non-synced absolute URLs intact", () => {
+			const content = "![photo](https://other-cdn.com/photo.png)";
+			const emailDir = "/project/buttondown/emails";
+			const syncedImages: Record<string, { localPath: string; url: string }> =
+				{};
+
+			const result = convertAbsoluteToRelativeImages(
+				content,
+				emailDir,
+				syncedImages,
+			);
+
+			expect(result).toBe("![photo](https://other-cdn.com/photo.png)");
+		});
+
+		it("should convert multiple absolute URLs", () => {
+			const content =
+				"![a](https://example.com/one.png) and ![b](https://example.com/two.jpg)";
+			const emailDir = "/project/buttondown/emails";
+			const syncedImages: Record<string, { localPath: string; url: string }> = {
+				img1: {
+					localPath: "/project/buttondown/media/one.png",
+					url: "https://example.com/one.png",
+				},
+				img2: {
+					localPath: "/project/buttondown/media/two.jpg",
+					url: "https://example.com/two.jpg",
+				},
+			};
+
+			const result = convertAbsoluteToRelativeImages(
+				content,
+				emailDir,
+				syncedImages,
+			);
+
+			expect(result).toBe("![a](../media/one.png) and ![b](../media/two.jpg)");
 		});
 	});
 });
