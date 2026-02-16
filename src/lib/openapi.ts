@@ -3302,7 +3302,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    AutomationCreationErrorCode: "delay_invalid" | "filter_invalid__tag" | "filter_invalid" | "action_invalid" | "invalid_newsletter_id" | "action_invalid__missing_body_or_subject";
+    AutomationCreationErrorCode: "delay_invalid" | "filter_invalid__tag" | "filter_invalid" | "action_invalid" | "filter_invalid__field" | "invalid_newsletter_id" | "action_invalid__missing_body_or_subject";
     /** ErrorMessage[AutomationCreationErrorCode] */
     ErrorMessage_AutomationCreationErrorCode_: {
       code: components["schemas"]["AutomationCreationErrorCode"];

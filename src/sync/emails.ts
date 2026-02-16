@@ -87,7 +87,8 @@ export function deserialize(content: string): {
 		};
 	}
 
-	const [_, frontmatter, body] = parts;
+	const [_, frontmatter, ...bodyParts] = parts;
+	const body = bodyParts.join("---");
 
 	const parsedYAML = parseYAML(frontmatter) as Record<string, any>;
 	if (Object.keys(parsedYAML).length === 0) {
@@ -279,15 +280,19 @@ export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {
 		const deleted = 0;
 		const failed = 0;
 		for (const email of value) {
+			const body = email.body
+				? `${MARKDOWN_MODE_SIGIL}${email.body}`
+				: email.body;
+			const emailWithSigil = { ...email, body };
 			if (email.id) {
 				await constructClient(configuration).patch("/emails/{id}", {
 					params: { path: { id: email.id } },
-					body: email,
+					body: emailWithSigil,
 				});
 				updated++;
 			} else {
 				await constructClient(configuration).post("/emails", {
-					body: { ...email, subject: email.subject || "" },
+					body: { ...emailWithSigil, subject: email.subject || "" },
 				});
 				created++;
 			}

@@ -111,12 +111,15 @@ describe("push", () => {
 
 		await delay(500);
 
-		// Email should have been pushed with absolute URL
+		// Email should have been pushed with absolute URL and plaintext sigil
 		expect(pushedEmails).toHaveLength(1);
 		expect(pushedEmails[0].body).toContain(
 			"https://assets.buttondown.email/images/photo.png",
 		);
 		expect(pushedEmails[0].body).not.toContain("../media/photo.png");
+		expect(pushedEmails[0].body).toContain(
+			"<!-- buttondown-editor-mode: plaintext -->",
+		);
 
 		// Sync state should be updated with the new image
 		const state = JSON.parse(
@@ -218,7 +221,7 @@ describe("push", () => {
 		);
 	});
 
-	test("should push emails without images unchanged", async () => {
+	test("should push emails without images with plaintext sigil", async () => {
 		const emailsDir = path.join(tempDir, "emails");
 		await mkdir(emailsDir, { recursive: true });
 
@@ -270,6 +273,8 @@ describe("push", () => {
 		await delay(500);
 
 		expect(pushedEmails).toHaveLength(1);
-		expect(pushedEmails[0].body).toBe("Just text, no images here.");
+		expect(pushedEmails[0].body).toBe(
+			"<!-- buttondown-editor-mode: plaintext -->Just text, no images here.",
+		);
 	});
 });

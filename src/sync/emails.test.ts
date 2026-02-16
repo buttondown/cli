@@ -149,6 +149,30 @@ Content`;
 			expect(result.isValid).toBe(true);
 			expect(result.email.metadata).toEqual({ key1: "value1", key2: "value2" });
 		});
+
+		it("should preserve horizontal rules in body content", () => {
+			const content = `---
+id: "123"
+subject: Test
+---
+
+First section
+
+---
+
+Second section
+
+---
+
+Third section`;
+
+			const result = deserialize(content);
+
+			expect(result.isValid).toBe(true);
+			expect(result.email.body).toBe(
+				"First section\n\n---\n\nSecond section\n\n---\n\nThird section",
+			);
+		});
 	});
 
 	describe("serialize/deserialize roundtrip", () => {
@@ -171,6 +195,19 @@ Content`;
 			expect(email.slug).toBe(original.slug);
 			expect(email.status).toBe(original.status);
 			expect(email.description).toBe(original.description);
+		});
+
+		it("should preserve horizontal rules through roundtrip", () => {
+			const original = {
+				id: "123",
+				subject: "Test",
+				body: "First section\n\n---\n\nSecond section",
+			};
+
+			const serialized = serialize(original);
+			const { email } = deserialize(serialized);
+
+			expect(email.body).toBe(original.body);
 		});
 	});
 
