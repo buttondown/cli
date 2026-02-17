@@ -4588,6 +4588,12 @@ export interface components {
       /** Count */
       count: number;
     };
+    /**
+     * Mode 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SnippetMode: "fancy" | "naked" | "plaintext";
     /** Snippet */
     Snippet: {
       /**
@@ -4607,6 +4613,7 @@ export interface components {
       name: string;
       /** Content */
       content: string;
+      mode: components["schemas"]["SnippetMode"];
       /**
        * Reference Count 
        * @default 0
@@ -4631,6 +4638,11 @@ export interface components {
        * @example Thanks for reading!
        */
       content?: string;
+      /**
+       * @description The editor mode for the snippet. 
+       * @default fancy
+       */
+      mode?: components["schemas"]["SnippetMode"];
     };
     /** Page[Snippet] */
     SnippetPage: {
@@ -4660,6 +4672,7 @@ export interface components {
        * @example Thanks for reading!
        */
       content?: string;
+      mode?: components["schemas"]["SnippetMode"];
     };
     /** @enum {string} */
     EmailExcludableField: "body";
