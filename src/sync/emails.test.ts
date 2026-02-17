@@ -86,6 +86,26 @@ describe("emails", () => {
 			expect(result).not.toContain("buttondown-editor-mode");
 			expect(result).toContain("Hello world");
 		});
+
+		it("should strip fancy editor mode sigil from body", () => {
+			const result = serialize({
+				id: "123",
+				subject: "Test",
+				body: "<!-- buttondown-editor-mode: fancy -->Hello world",
+			});
+
+			expect(result).toMatchSnapshot();
+		});
+
+		it("should strip all editor mode sigils from body", () => {
+			const result = serialize({
+				id: "123",
+				subject: "Test",
+				body: "<!-- buttondown-editor-mode: plaintext --><!-- buttondown-editor-mode: fancy -->Hello world",
+			});
+
+			expect(result).toMatchSnapshot();
+		});
 	});
 
 	describe("deserialize", () => {
@@ -208,6 +228,97 @@ Third section`;
 			const { email } = deserialize(serialized);
 
 			expect(email.body).toBe(original.body);
+		});
+
+		it("should strip fancy editor mode sigil through roundtrip", () => {
+			const serialized = serialize({
+				id: "123",
+				subject: "Test",
+				body: "<!-- buttondown-editor-mode: fancy -->Hello world",
+			});
+			const { email } = deserialize(serialized);
+
+			expect(email).toMatchSnapshot();
+		});
+
+		it("should strip plaintext editor mode sigil through roundtrip", () => {
+			const serialized = serialize({
+				id: "123",
+				subject: "Test",
+				body: "<!-- buttondown-editor-mode: plaintext -->Hello world",
+			});
+			const { email } = deserialize(serialized);
+
+			expect(email).toMatchSnapshot();
+		});
+
+		it("should produce stable body after multiple roundtrips", () => {
+			const original = {
+				id: "123",
+				subject: "Test",
+				body: "<!-- buttondown-editor-mode: fancy -->Hello world",
+			};
+
+			const serialized1 = serialize(original);
+			const { email: email1 } = deserialize(serialized1);
+			const serialized2 = serialize(email1);
+			const { email: email2 } = deserialize(serialized2);
+
+			expect({ serialized1, email1, serialized2, email2 }).toMatchSnapshot();
+		});
+	});
+
+	describe("serialize-based diff", () => {
+		it("should produce identical output for matching emails regardless of editor mode", () => {
+			const local = { id: "123", subject: "Test", body: "Hello world" };
+			const remotePlaintext = {
+				id: "123",
+				subject: "Test",
+				body: "<!-- buttondown-editor-mode: plaintext -->Hello world",
+			};
+			const remoteFancy = {
+				id: "123",
+				subject: "Test",
+				body: "<!-- buttondown-editor-mode: fancy -->Hello world",
+			};
+
+			expect(serialize(local)).toBe(serialize(remotePlaintext));
+			expect(serialize(local)).toBe(serialize(remoteFancy));
+		});
+
+		it("should produce different output when body differs", () => {
+			const local = { id: "123", subject: "Test", body: "Updated body" };
+			const remote = {
+				id: "123",
+				subject: "Test",
+				body: "<!-- buttondown-editor-mode: plaintext -->Hello world",
+			};
+
+			expect(serialize(local)).not.toBe(serialize(remote));
+		});
+
+		it("should produce different output when frontmatter fields differ", () => {
+			const local = { id: "123", subject: "New Subject", body: "Hello world" };
+			const remote = {
+				id: "123",
+				subject: "Old Subject",
+				body: "<!-- buttondown-editor-mode: plaintext -->Hello world",
+			};
+
+			expect(serialize(local)).not.toBe(serialize(remote));
+		});
+
+		it("should ignore extra remote fields not in frontmatter", () => {
+			const local = { id: "123", subject: "Test", body: "Hello world" };
+			const remote = {
+				id: "123",
+				subject: "Test",
+				body: "Hello world",
+				creation_date: "2025-01-01",
+				modification_date: "2025-01-02",
+			};
+
+			expect(serialize(local)).toBe(serialize(remote));
 		});
 	});
 

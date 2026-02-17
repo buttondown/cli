@@ -15,13 +15,41 @@ function jsonResponse(body: unknown, status = 200) {
 	});
 }
 
+type RouteHandler = (
+	request: Request,
+	url: URL,
+) => Response | Promise<Response | undefined> | undefined;
+
+function mockFetch(...handlers: RouteHandler[]) {
+	globalThis.fetch = mock(async (request: Request) => {
+		const url = new URL(request.url);
+		for (const handler of handlers) {
+			const response = await handler(request, url);
+			if (response) return response;
+		}
+		// Default: newsletter PATCH succeeds, everything else returns empty list
+		if (url.pathname.includes("/newsletters/") && request.method === "PATCH") {
+			return jsonResponse({});
+		}
+		return jsonResponse({ results: [], count: 0 });
+	}) as unknown as typeof fetch;
+}
+
 describe("push", () => {
 	let tempDir: string;
+	let emailsDir: string;
 	let originalFetch: typeof fetch;
 
 	beforeEach(async () => {
 		tempDir = await mkdtemp(path.join(tmpdir(), "push-test-"));
+		emailsDir = path.join(tempDir, "emails");
 		originalFetch = globalThis.fetch;
+		await mkdir(emailsDir, { recursive: true });
+		await writeSyncState(tempDir, { syncedImages: {} });
+		await writeFile(
+			path.join(tempDir, "newsletter.json"),
+			JSON.stringify({ id: "nl_1", name: "Test" }),
+		);
 	});
 
 	afterEach(async () => {
@@ -31,11 +59,19 @@ describe("push", () => {
 		}
 	});
 
+	function renderPush() {
+		render(
+			<Push
+				baseUrl="https://api.buttondown.com"
+				apiKey="test-key"
+				directory={tempDir}
+			/>,
+		);
+		return delay(500);
+	}
+
 	test("should upload new images and replace relative paths with absolute URLs", async () => {
-		// Set up local files
-		const emailsDir = path.join(tempDir, "emails");
 		const mediaDir = path.join(tempDir, "media");
-		await mkdir(emailsDir, { recursive: true });
 		await mkdir(mediaDir, { recursive: true });
 
 		await writeFile(
@@ -52,66 +88,36 @@ describe("push", () => {
 			Buffer.from("real-png-data"),
 		);
 
-		// Empty initial sync state
-		await writeSyncState(tempDir, { syncedImages: {} });
-
-		// Create newsletter.json to avoid errors from newsletter local.get
-		await writeFile(
-			path.join(tempDir, "newsletter.json"),
-			JSON.stringify({ id: "nl_1", name: "Test" }),
-		);
-
 		const pushedEmails: any[] = [];
 
-		globalThis.fetch = mock(async (request: Request) => {
-			const url = new URL(request.url);
-
-			// Image upload
-			if (url.pathname === "/images" && request.method === "POST") {
-				const formData = await request.formData();
-				const file = formData.get("image") as File;
-				expect(file).toBeTruthy();
-				expect(file.name).toBe("photo.png");
-
-				return jsonResponse(
-					{
-						id: "img_uploaded",
-						image: "https://assets.buttondown.email/images/photo.png",
-						creation_date: "2025-01-01",
-					},
-					201,
-				);
-			}
-
-			// Email push (PATCH existing)
-			if (url.pathname.includes("/emails/") && request.method === "PATCH") {
-				const body = await request.json();
-				pushedEmails.push(body);
-				return jsonResponse({});
-			}
-
-			// Base resource API calls (newsletter patch, automations, snippets)
-			if (
-				url.pathname.includes("/newsletters/") &&
-				request.method === "PATCH"
-			) {
-				return jsonResponse({});
-			}
-
-			return jsonResponse({ results: [], count: 0 });
-		}) as unknown as typeof fetch;
-
-		render(
-			<Push
-				baseUrl="https://api.buttondown.com"
-				apiKey="test-key"
-				directory={tempDir}
-			/>,
+		mockFetch(
+			async (request, url) => {
+				if (url.pathname === "/images" && request.method === "POST") {
+					const formData = await request.formData();
+					const file = formData.get("image") as File;
+					expect(file).toBeTruthy();
+					expect(file.name).toBe("photo.png");
+					return jsonResponse(
+						{
+							id: "img_uploaded",
+							image: "https://assets.buttondown.email/images/photo.png",
+							creation_date: "2025-01-01",
+						},
+						201,
+					);
+				}
+			},
+			async (request, url) => {
+				if (url.pathname.includes("/emails/") && request.method === "PATCH") {
+					const body = await request.json();
+					pushedEmails.push(body);
+					return jsonResponse({});
+				}
+			},
 		);
 
-		await delay(500);
+		await renderPush();
 
-		// Email should have been pushed with absolute URL and plaintext sigil
 		expect(pushedEmails).toHaveLength(1);
 		expect(pushedEmails[0].body).toContain(
 			"https://assets.buttondown.email/images/photo.png",
@@ -121,7 +127,6 @@ describe("push", () => {
 			"<!-- buttondown-editor-mode: plaintext -->",
 		);
 
-		// Sync state should be updated with the new image
 		const state = JSON.parse(
 			await readFile(path.join(tempDir, ".buttondown.json"), "utf8"),
 		);
@@ -134,9 +139,7 @@ describe("push", () => {
 	});
 
 	test("should skip upload for already-synced images", async () => {
-		const emailsDir = path.join(tempDir, "emails");
 		const mediaDir = path.join(tempDir, "media");
-		await mkdir(emailsDir, { recursive: true });
 		await mkdir(mediaDir, { recursive: true });
 
 		await writeFile(
@@ -150,7 +153,6 @@ describe("push", () => {
 		);
 		await writeFile(path.join(mediaDir, "photo.png"), Buffer.from("png-data"));
 
-		// Pre-populate sync state with the image already synced
 		await writeSyncState(tempDir, {
 			syncedImages: {
 				img_existing: {
@@ -162,69 +164,101 @@ describe("push", () => {
 			},
 		});
 
-		await writeFile(
-			path.join(tempDir, "newsletter.json"),
-			JSON.stringify({ id: "nl_1", name: "Test" }),
-		);
-
 		let imageUploadCount = 0;
 		const pushedEmails: any[] = [];
 
-		globalThis.fetch = mock(async (request: Request) => {
-			const url = new URL(request.url);
-
-			if (url.pathname === "/images" && request.method === "POST") {
-				imageUploadCount++;
-				return jsonResponse(
-					{
-						id: "img_new",
-						image: "https://example.com/new.png",
-						creation_date: "2025-01-01",
-					},
-					201,
-				);
-			}
-
-			if (url.pathname.includes("/emails/") && request.method === "PATCH") {
-				const body = await request.json();
-				pushedEmails.push(body);
-				return jsonResponse({});
-			}
-
-			if (
-				url.pathname.includes("/newsletters/") &&
-				request.method === "PATCH"
-			) {
-				return jsonResponse({});
-			}
-
-			return jsonResponse({ results: [], count: 0 });
-		}) as unknown as typeof fetch;
-
-		render(
-			<Push
-				baseUrl="https://api.buttondown.com"
-				apiKey="test-key"
-				directory={tempDir}
-			/>,
+		mockFetch(
+			(request, url) => {
+				if (url.pathname === "/images" && request.method === "POST") {
+					imageUploadCount++;
+					return jsonResponse(
+						{
+							id: "img_new",
+							image: "https://example.com/new.png",
+							creation_date: "2025-01-01",
+						},
+						201,
+					);
+				}
+			},
+			async (request, url) => {
+				if (url.pathname.includes("/emails/") && request.method === "PATCH") {
+					const body = await request.json();
+					pushedEmails.push(body);
+					return jsonResponse({});
+				}
+			},
 		);
 
-		await delay(500);
+		await renderPush();
 
-		// Should NOT have uploaded the image again
 		expect(imageUploadCount).toBe(0);
-
-		// Email should still have the absolute URL resolved from sync state
 		expect(pushedEmails).toHaveLength(1);
 		expect(pushedEmails[0].body).toContain(
 			"https://assets.buttondown.email/images/photo.png",
 		);
 	});
 
-	test("should push emails without images with plaintext sigil", async () => {
-		const emailsDir = path.join(tempDir, "emails");
-		await mkdir(emailsDir, { recursive: true });
+	test("should not push unchanged emails", async () => {
+		await writeFile(
+			path.join(emailsDir, "unchanged.md"),
+			serialize({
+				id: "email_unchanged",
+				subject: "Unchanged Post",
+				slug: "unchanged",
+				body: "Same content as remote",
+			}),
+		);
+		await writeFile(
+			path.join(emailsDir, "changed.md"),
+			serialize({
+				id: "email_changed",
+				subject: "Changed Post",
+				slug: "changed",
+				body: "Updated locally",
+			}),
+		);
 
+		const pushedEmailIds: string[] = [];
+
+		mockFetch(
+			(request, url) => {
+				if (url.pathname === "/emails" && request.method === "GET") {
+					return jsonResponse({
+						results: [
+							{
+								id: "email_unchanged",
+								subject: "Unchanged Post",
+								slug: "unchanged",
+								body: "<!-- buttondown-editor-mode: plaintext -->Same content as remote",
+							},
+							{
+								id: "email_changed",
+								subject: "Changed Post",
+								slug: "changed",
+								body: "<!-- buttondown-editor-mode: plaintext -->Old content from remote",
+							},
+						],
+						count: 2,
+					});
+				}
+			},
+			(request, url) => {
+				if (url.pathname.includes("/emails/") && request.method === "PATCH") {
+					const id = url.pathname.split("/emails/")[1];
+					pushedEmailIds.push(id);
+					return jsonResponse({});
+				}
+			},
+		);
+
+		await renderPush();
+
+		expect(pushedEmailIds).toHaveLength(1);
+		expect(pushedEmailIds[0]).toBe("email_changed");
+	});
+
+	test("should push emails without images with plaintext sigil", async () => {
 		await writeFile(
 			path.join(emailsDir, "plain-post.md"),
 			serialize({
@@ -235,42 +269,17 @@ describe("push", () => {
 			}),
 		);
 
-		await writeSyncState(tempDir, { syncedImages: {} });
-		await writeFile(
-			path.join(tempDir, "newsletter.json"),
-			JSON.stringify({ id: "nl_1", name: "Test" }),
-		);
-
 		const pushedEmails: any[] = [];
 
-		globalThis.fetch = mock(async (request: Request) => {
-			const url = new URL(request.url);
-
+		mockFetch(async (request, url) => {
 			if (url.pathname.includes("/emails/") && request.method === "PATCH") {
 				const body = await request.json();
 				pushedEmails.push(body);
 				return jsonResponse({});
 			}
+		});
 
-			if (
-				url.pathname.includes("/newsletters/") &&
-				request.method === "PATCH"
-			) {
-				return jsonResponse({});
-			}
-
-			return jsonResponse({ results: [], count: 0 });
-		}) as unknown as typeof fetch;
-
-		render(
-			<Push
-				baseUrl="https://api.buttondown.com"
-				apiKey="test-key"
-				directory={tempDir}
-			/>,
-		);
-
-		await delay(500);
+		await renderPush();
 
 		expect(pushedEmails).toHaveLength(1);
 		expect(pushedEmails[0].body).toBe(

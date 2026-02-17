@@ -1,0 +1,66 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`emails serialize should strip fancy editor mode sigil from body 1`] = `
+"---
+id: "123"
+subject: Test
+---
+
+Hello world"
+`;
+
+exports[`emails serialize should strip all editor mode sigils from body 1`] = `
+"---
+id: "123"
+subject: Test
+---
+
+Hello world"
+`;
+
+exports[`emails serialize/deserialize roundtrip should strip fancy editor mode sigil through roundtrip 1`] = `
+{
+  "body": "Hello world",
+  "id": "123",
+  "subject": "Test",
+}
+`;
+
+exports[`emails serialize/deserialize roundtrip should strip plaintext editor mode sigil through roundtrip 1`] = `
+{
+  "body": "Hello world",
+  "id": "123",
+  "subject": "Test",
+}
+`;
+
+exports[`emails serialize/deserialize roundtrip should produce stable body after multiple roundtrips 1`] = `
+{
+  "email1": {
+    "body": "Hello world",
+    "id": "123",
+    "subject": "Test",
+  },
+  "email2": {
+    "body": "Hello world",
+    "id": "123",
+    "subject": "Test",
+  },
+  "serialized1": 
+"---
+id: "123"
+subject: Test
+---
+
+Hello world"
+,
+  "serialized2": 
+"---
+id: "123"
+subject: Test
+---
+
+Hello world"
+,
+}
+`;
