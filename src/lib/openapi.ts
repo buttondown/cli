@@ -246,9 +246,15 @@ export interface paths {
     get: operations["retrieve_bulk_action"];
   };
   "/external_feeds": {
-    /** List External Feed */
+    /**
+     * List External Feed 
+     * @description List all external feeds
+     */
     get: operations["list_external_feed"];
-    /** Create External Feed */
+    /**
+     * Create External Feed 
+     * @description Create a new external feed
+     */
     post: operations["create_external_feed"];
   };
   "/external_feeds/{id}": {
@@ -1500,7 +1506,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    EmailCreationErrorCode: "subject_invalid" | "email_duplicate" | "email_invalid" | "body_invalid" | "publish_date_invalid" | "publish_date_missing" | "status_invalid" | "slug_invalid" | "canonical_url_invalid" | "tag_invalid";
+    EmailCreationErrorCode: "subject_invalid" | "email_duplicate" | "email_invalid" | "body_invalid" | "publish_date_invalid" | "publish_date_missing" | "status_invalid" | "body_contains_frontmatter" | "slug_invalid" | "canonical_url_invalid" | "tag_invalid";
     /** ErrorMessage[EmailCreationErrorCode] */
     ErrorMessage_EmailCreationErrorCode_: {
       code: components["schemas"]["EmailCreationErrorCode"];
@@ -3014,24 +3020,47 @@ export interface components {
       creation_date: string;
       /**
        * Last Checked Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The most recent date and time this feed was checked for new items.
        */
       last_checked_date?: string;
+      /** @description The current status of the external feed automation. */
       status: components["schemas"]["ExternalFeedAutomationStatus"];
+      /** @description Whether feed items are sent immediately or drafted for manual review. */
       behavior: components["schemas"]["ExternalFeedAutomationBehavior"];
+      /** @description How frequently this feed should create or draft emails. */
       cadence: components["schemas"]["ExternalFeedAutomationCadence"];
-      /** Cadence Metadata */
+      /**
+       * Cadence Metadata 
+       * @description Additional scheduling details for the selected cadence, such as weekday or time.
+       */
       cadence_metadata: {
         [key: string]: string | undefined;
       };
+      /**
+       * Filters 
+       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
+       */
       filters: components["schemas"]["FilterGroup"];
-      /** Url */
+      /**
+       * Url 
+       * @description The URL of the RSS feed to poll for new items.
+       */
       url: string;
-      /** Subject */
+      /**
+       * Subject 
+       * @description The subject line template for emails generated from this feed.
+       */
       subject: string;
-      /** Body */
+      /**
+       * Body 
+       * @description The body template for emails generated from this feed.
+       */
       body: string;
-      /** Label */
+      /**
+       * Label 
+       * @description An optional internal label for this feed.
+       */
       label: string;
       /**
        * Metadata 
@@ -3060,19 +3089,36 @@ export interface components {
        * @example draft
        */
       behavior: components["schemas"]["ExternalFeedAutomationBehavior"];
-      /** @example daily */
+      /**
+       * @description How frequently this feed should create or draft emails. 
+       * @example daily
+       */
       cadence: components["schemas"]["ExternalFeedAutomationCadence"];
-      /** Cadence Metadata */
+      /**
+       * Cadence Metadata 
+       * @description Additional scheduling details for the selected cadence, such as weekday or time.
+       */
       cadence_metadata: {
         [key: string]: string | undefined;
       };
+      /**
+       * Filters 
+       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
+       */
       filters: components["schemas"]["FilterGroup"];
-      /** Subject */
+      /**
+       * Subject 
+       * @description The subject line template for emails generated from this feed.
+       */
       subject: string;
-      /** Body */
+      /**
+       * Body 
+       * @description The body template for emails generated from this feed.
+       */
       body: string;
       /**
        * Label 
+       * @description An optional internal label for this feed. 
        * @default
        */
       label?: string;
@@ -3104,21 +3150,44 @@ export interface components {
     };
     /** ExternalFeedUpdateInput */
     ExternalFeedUpdateInput: {
-      /** @example draft */
+      /**
+       * @description The [behavior](https://docs.buttondown.com/api-external-feed-behavior) of the external feed. 
+       * @example draft
+       */
       behavior?: components["schemas"]["ExternalFeedAutomationBehavior"];
-      /** @example daily */
+      /**
+       * @description How frequently this feed should create or draft emails. 
+       * @example daily
+       */
       cadence?: components["schemas"]["ExternalFeedAutomationCadence"];
-      /** Cadence Metadata */
+      /**
+       * Cadence Metadata 
+       * @description Additional scheduling details for the selected cadence, such as weekday or time.
+       */
       cadence_metadata?: {
         [key: string]: string | undefined;
       };
+      /**
+       * Filters 
+       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
+       */
       filters?: components["schemas"]["FilterGroup"];
-      /** Subject */
+      /**
+       * Subject 
+       * @description The subject line template for emails generated from this feed.
+       */
       subject?: string;
-      /** Body */
+      /**
+       * Body 
+       * @description The body template for emails generated from this feed.
+       */
       body?: string;
-      /** Label */
+      /**
+       * Label 
+       * @description An optional internal label for this feed.
+       */
       label?: string;
+      /** @description The current status of the external feed automation. */
       status?: components["schemas"]["ExternalFeedAutomationStatus"];
       /**
        * Metadata 
@@ -3158,24 +3227,48 @@ export interface components {
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
+      /** @description The processing status of this feed item. */
       status: components["schemas"]["ExternalFeedItemStatus"];
-      /** Url */
+      /**
+       * Url 
+       * @description The canonical URL of the feed item.
+       */
       url: string;
       /**
        * Publish Date 
-       * Format: date-time
+       * Format: date-time 
+       * @description The publication date parsed from the feed item.
        */
       publish_date: string;
-      /** Title */
+      /**
+       * Title 
+       * @description The title of the feed item.
+       */
       title: string;
-      /** Description */
+      /**
+       * Description 
+       * @description The description excerpt parsed from the feed item.
+       */
       description: string;
-      /** Content */
+      /**
+       * Content 
+       * @description The full content parsed from the feed item.
+       */
       content: string;
-      /** Author */
+      /**
+       * Author 
+       * @description The author name parsed from the feed item.
+       */
       author: string;
-      /** Email Id */
+      /**
+       * Email Id 
+       * @description The ID of the generated email for this feed item, if one exists.
+       */
       email_id?: string;
+      /**
+       * Email 
+       * @description If expanded, the email generated from this feed item.
+       */
       email?: components["schemas"]["Email"];
     };
     /** Page[ExternalFeedItem] */
@@ -6424,7 +6517,10 @@ export interface operations {
       409: never;
     };
   };
-  /** List External Feed */
+  /**
+   * List External Feed 
+   * @description List all external feeds
+   */
   list_external_feed: {
     responses: {
       /** @description OK */
@@ -6443,7 +6539,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Create External Feed */
+  /**
+   * Create External Feed 
+   * @description Create a new external feed
+   */
   create_external_feed: {
     requestBody: {
       content: {
