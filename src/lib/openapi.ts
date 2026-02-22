@@ -502,6 +502,11 @@ export interface paths {
      * @description Delete a comment. Only the comment owner (subscriber) or the newsletter author can delete a comment.
      */
     delete: operations["delete_comment"];
+    /**
+     * Update Comment 
+     * @description Update a comment's status. Only the newsletter owner can call this.
+     */
+    patch: operations["update_comment"];
   };
   "/survey_responses": {
     /** Retrieve Survey Responses */
@@ -1031,6 +1036,12 @@ export interface components {
        * @description The ISBN of the book.
        */
       isbn?: string;
+      /**
+       * Shared 
+       * @description Whether the book is displayed publicly on the archive. 
+       * @default true
+       */
+      shared?: boolean;
     };
     /** BookInput */
     BookInput: {
@@ -1064,6 +1075,12 @@ export interface components {
        * @description The ISBN of the book.
        */
       isbn?: string;
+      /**
+       * Shared 
+       * @description Whether the book is displayed publicly on the archive. 
+       * @default true
+       */
+      shared?: boolean;
     };
     /** Page[Book] */
     BookPage: {
@@ -1108,6 +1125,11 @@ export interface components {
        * @description The ISBN of the book.
        */
       isbn?: string;
+      /**
+       * Shared 
+       * @description Whether the book is displayed publicly on the archive.
+       */
+      shared?: boolean;
     };
     /**
      * FailureBreakdownItem 
@@ -1932,6 +1954,12 @@ export interface components {
        */
       churn_date?: string;
       /**
+       * Commenting Disabled 
+       * @description Whether this subscriber is prevented from commenting. 
+       * @default false
+       */
+      commenting_disabled?: boolean;
+      /**
        * Email Address 
        * @description The email address of the subscriber. 
        * @example telemachus@buttondown.email
@@ -2213,6 +2241,11 @@ export interface components {
     /** SubscriberUpdateInput */
     SubscriberUpdateInput: {
       /**
+       * Commenting Disabled 
+       * @description Whether this subscriber is prevented from commenting.
+       */
+      commenting_disabled?: boolean;
+      /**
        * Email Address 
        * @description The email address of the subscriber. 
        * @example telemachus@buttondown.email
@@ -2362,11 +2395,29 @@ export interface components {
       count: number;
     };
     /**
+     * AnnouncementBarVisibility 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    NewsletterAnnouncementBarVisibility: "disabled" | "everyone" | "free_only" | "logged_out_only" | "paid_only";
+    /**
+     * ArchiveTheme 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    NewsletterArchiveTheme: "classic" | "modern" | "arbus" | "lovelace" | "myrna";
+    /**
      * AuditingMode 
      * @description An enumeration. 
      * @enum {string}
      */
     NewsletterAuditingMode: "disabled" | "enabled" | "aggressive";
+    /**
+     * Locale 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    NewsletterLocale: "cs-CZ" | "nl-NL" | "en-AU" | "en-CA" | "en-GB" | "en" | "fr" | "de" | "pl-PL" | "pt-BR" | "ru" | "es" | "tr" | "sv-SE";
     /**
      * Newsletter 
      * @description You will likely not need to interact with your newsletter settings
@@ -2388,11 +2439,35 @@ export interface components {
        */
       creation_date: string;
       /**
+       * Announcement Bar Background Color 
+       * @description The background color for the announcement bar on your archive page. Must be a valid hex color code. 
+       * @default
+       */
+      announcement_bar_background_color?: string;
+      /**
+       * Announcement Bar Text 
+       * @description Text displayed in the announcement bar on your archive page. Useful for promotions, updates, or calls to action. 
+       * @default
+       */
+      announcement_bar_text?: string;
+      /**
+       * @description Controls who sees the announcement bar on your archive page. 
+       * @default disabled 
+       * @enum {unknown}
+       */
+      announcement_bar_visibility?: "disabled" | "everyone" | "free_only" | "logged_out_only" | "paid_only";
+      /**
        * Api Key 
        * Format: uuid 
        * @description The API key for this newsletter, used for authenticating API requests.
        */
       api_key: string;
+      /**
+       * @description The visual theme for your newsletter's archive page. See [archive themes](https://docs.buttondown.com/customizing-web-design) for previews. 
+       * @default modern 
+       * @enum {unknown}
+       */
+      archive_theme?: "classic" | "modern" | "arbus" | "lovelace" | "myrna";
       /**
        * @description The auditing mode for your newsletter, which controls spam and abuse protection. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
        * @enum {unknown}
@@ -2404,22 +2479,6 @@ export interface components {
        * @default
        */
       css?: string;
-      /**
-       * Theme Configuration 
-       * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
-       * @default {}
-       */
-      theme_configuration?: {
-        [key: string]: string | undefined;
-      };
-      /**
-       * Email Theme Configuration 
-       * @description A dictionary of CSS token overrides for the email theme. 
-       * @default {}
-       */
-      email_theme_configuration?: {
-        [key: string]: string | undefined;
-      };
       /**
        * Custom Churn Email Body 
        * @description Custom body content for the email sent when a paid subscriber cancels. Supports template tags like `{{ subscriber.email }}` and `{{ newsletter.name }}`. 
@@ -2443,6 +2502,115 @@ export interface components {
        */
       custom_email_template?: string;
       /**
+       * Custom Expired Trial Notification Body 
+       * @description Custom body content for the email sent when a subscriber's free trial expires. Supports template tags. 
+       * @default
+       */
+      custom_expired_trial_notification_body?: string;
+      /**
+       * Custom Expired Trial Notification Subject 
+       * @description Custom subject line for the email sent when a subscriber's free trial expires. Supports template tags. 
+       * @default
+       */
+      custom_expired_trial_notification_subject?: string;
+      /**
+       * Custom Expired Trial Notification Template 
+       * @description The email template to use for expired trial notification emails. If not set, uses the newsletter's default template.
+       */
+      custom_expired_trial_notification_template?: string;
+      /**
+       * Custom Gift Subscription Email Body 
+       * @description Custom body content for the email sent when someone receives a gift subscription. Supports template tags. 
+       * @default
+       */
+      custom_gift_subscription_email_body?: string;
+      /**
+       * Custom Gift Subscription Email Subject 
+       * @description Custom subject line for the email sent when someone receives a gift subscription. Supports template tags. 
+       * @default
+       */
+      custom_gift_subscription_email_subject?: string;
+      /**
+       * Custom Gift Subscription Email Template 
+       * @description The email template to use for gift subscription emails. If not set, uses the newsletter's default template.
+       */
+      custom_gift_subscription_email_template?: string;
+      /**
+       * Custom Gift Unsubscription Email Body 
+       * @description Custom body content for the email sent when a gift subscription ends. Supports template tags. 
+       * @default
+       */
+      custom_gift_unsubscription_email_body?: string;
+      /**
+       * Custom Gift Unsubscription Email Subject 
+       * @description Custom subject line for the email sent when a gift subscription ends. Supports template tags. 
+       * @default
+       */
+      custom_gift_unsubscription_email_subject?: string;
+      /**
+       * Custom Gift Unsubscription Email Template 
+       * @description The email template to use for gift unsubscription emails. If not set, uses the newsletter's default template.
+       */
+      custom_gift_unsubscription_email_template?: string;
+      /**
+       * Custom Premium Confirmation Email Body 
+       * @description Custom body content for the email sent when a subscriber upgrades to a paid plan. Supports template tags. 
+       * @default
+       */
+      custom_premium_confirmation_email_body?: string;
+      /**
+       * Custom Premium Confirmation Email Subject 
+       * @description Custom subject line for the email sent when a subscriber upgrades to a paid plan. Supports template tags. 
+       * @default
+       */
+      custom_premium_confirmation_email_subject?: string;
+      /**
+       * Custom Premium Confirmation Email Template 
+       * @description The email template to use for premium confirmation emails. If not set, uses the newsletter's default template.
+       */
+      custom_premium_confirmation_email_template?: string;
+      /**
+       * Custom Subscription Confirmation Email Subject 
+       * @description Custom subject line for the double opt-in confirmation email sent to new subscribers. Supports template tags. 
+       * @default
+       */
+      custom_subscription_confirmation_email_subject?: string;
+      /**
+       * Custom Subscription Confirmation Email Template 
+       * @description The email template to use for subscription confirmation emails. If not set, uses the newsletter's default template.
+       */
+      custom_subscription_confirmation_email_template?: string;
+      /**
+       * Custom Subscription Confirmation Email Text 
+       * @description Custom body content for the double opt-in confirmation email. Must contain `{{ confirmation_url }}` as an HTML or Markdown link. 
+       * @default
+       */
+      custom_subscription_confirmation_email_text?: string;
+      /**
+       * Custom Subscription Confirmation Reminder Email Subject 
+       * @description Custom subject line for the reminder email sent to subscribers who haven't confirmed. Supports template tags. 
+       * @default
+       */
+      custom_subscription_confirmation_reminder_email_subject?: string;
+      /**
+       * Custom Subscription Confirmation Reminder Email Text 
+       * @description Custom body content for the reminder email sent to subscribers who haven't confirmed. Supports template tags. 
+       * @default
+       */
+      custom_subscription_confirmation_reminder_email_text?: string;
+      /**
+       * Custom Subscription Confirmed Email Subject 
+       * @description Custom subject line for the email sent after a subscriber confirms their subscription. Supports template tags. 
+       * @default
+       */
+      custom_subscription_confirmed_email_subject?: string;
+      /**
+       * Custom Subscription Confirmed Email Text 
+       * @description Custom body content for the email sent after a subscriber confirms their subscription. Supports template tags. 
+       * @default
+       */
+      custom_subscription_confirmed_email_text?: string;
+      /**
        * Description 
        * @description A brief description of your newsletter, displayed on your public archive page and used for SEO.
        */
@@ -2465,6 +2633,14 @@ export interface components {
        * @default
        */
       email_domain?: string;
+      /**
+       * Email Theme Configuration 
+       * @description A dictionary of CSS token overrides for the email theme. 
+       * @default {}
+       */
+      email_theme_configuration?: {
+        [key: string]: string | undefined;
+      };
       /**
        * Enabled Features 
        * @description A list of features enabled for your newsletter. Common values include 'archives', 'portal', 'surveys', 'comments', 'paid_subscriptions', 'automations', 'webhooks', 'tracking', and 'referrals'. 
@@ -2500,6 +2676,11 @@ export interface components {
        */
       image?: string;
       /**
+       * @description The language/locale for your newsletter's UI elements (confirmation emails, unsubscribe pages, etc.). See [localization](https://docs.buttondown.com/localization) for supported locales. 
+       * @default en
+       */
+      locale?: components["schemas"]["NewsletterLocale"];
+      /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
@@ -2511,17 +2692,66 @@ export interface components {
        */
       name: string;
       /**
+       * Reply To Address 
+       * @description An alternative email address that receives replies to your newsletter emails, instead of the sending address. 
+       * @default
+       */
+      reply_to_address?: string;
+      /**
+       * Sharing Networks 
+       * @description A list of social networks to show share buttons for on your archive pages. 
+       * @default []
+       */
+      sharing_networks?: (string)[];
+      /**
+       * Socials 
+       * @description A list of social media accounts linked to your newsletter, displayed on your archive page. Each entry has a `type`, `url`, and optional `label`. 
+       * @default []
+       */
+      socials?: (Record<string, unknown>)[];
+      /**
        * Sort 
        * @description The default sorting method for listing subscribers or messages. Example values: 'creation_date', '-creation_date', 'email_address'. 
        * @default creation_date
        */
       sort?: string;
       /**
+       * Subscription Confirmation Redirect Url 
+       * @description A URL to redirect subscribers to after they confirm their subscription via double opt-in. 
+       * @default
+       */
+      subscription_confirmation_redirect_url?: string;
+      /**
+       * Subscription Redirect Url 
+       * @description A URL to redirect subscribers to immediately after they submit the subscription form (before confirmation). 
+       * @default
+       */
+      subscription_redirect_url?: string;
+      /**
+       * @description The default email template for your newsletter. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options. 
+       * @default modern
+       */
+      template?: components["schemas"]["NewsletterEmailTemplate"];
+      /**
        * Test Mode 
        * @description Whether test mode is enabled. When enabled, emails are not actually sent to subscribers, useful for testing automations and workflows. 
        * @default false
        */
       test_mode?: boolean;
+      /**
+       * Theme Configuration 
+       * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
+       * @default {}
+       */
+      theme_configuration?: {
+        [key: string]: string | undefined;
+      };
+      /**
+       * Timezone 
+       * @description The timezone used for scheduling and displaying dates in your newsletter (e.g., 'America/New_York', 'Europe/London'). 
+       * @default Etc/UTC
+       */
+      timezone?: string;
       /**
        * Tint Color 
        * @description The accent color for your newsletter, used in emails and on your archive page. Must be a valid hex color code. 
@@ -2576,6 +2806,32 @@ export interface components {
     /** NewsletterInput */
     NewsletterInput: {
       /**
+       * Announcement Bar Background Color 
+       * @description The background color for the announcement bar on your archive page. Must be a valid hex color code. 
+       * @default  
+       * @example #FF6600
+       */
+      announcement_bar_background_color?: string;
+      /**
+       * Announcement Bar Text 
+       * @description Text displayed in the announcement bar on your archive page. Useful for promotions, updates, or calls to action. 
+       * @default  
+       * @example Subscribe to get 20% off your first order!
+       */
+      announcement_bar_text?: string;
+      /**
+       * @description Controls who sees the announcement bar on your archive page. 
+       * @default disabled 
+       * @example everyone
+       */
+      announcement_bar_visibility?: components["schemas"]["NewsletterAnnouncementBarVisibility"];
+      /**
+       * @description The visual theme for your newsletter's archive page. See [archive themes](https://docs.buttondown.com/customizing-web-design) for previews. 
+       * @default modern 
+       * @example modern
+       */
+      archive_theme?: components["schemas"]["NewsletterArchiveTheme"];
+      /**
        * @description The auditing mode for your newsletter, which controls spam and abuse protection. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
        * @example enabled
        */
@@ -2587,28 +2843,6 @@ export interface components {
        * @example .header { color: #000; }
        */
       css?: string;
-      /**
-       * Theme Configuration 
-       * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
-       * @default {} 
-       * @example {
-       *   "primary-color": "#0069FF"
-       * }
-       */
-      theme_configuration?: {
-        [key: string]: string | undefined;
-      };
-      /**
-       * Email Theme Configuration 
-       * @description A dictionary of CSS token overrides for the email theme. 
-       * @default {} 
-       * @example {
-       *   "primary-color": "#0069FF"
-       * }
-       */
-      email_theme_configuration?: {
-        [key: string]: string | undefined;
-      };
       /**
        * Custom Email Template 
        * @description The identifier for a custom email template. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options. 
@@ -2641,6 +2875,17 @@ export interface components {
        * @example mail.sheinhardt.com
        */
       email_domain?: string;
+      /**
+       * Email Theme Configuration 
+       * @description A dictionary of CSS token overrides for the email theme. 
+       * @default {} 
+       * @example {
+       *   "primary-color": "#0069FF"
+       * }
+       */
+      email_theme_configuration?: {
+        [key: string]: string | undefined;
+      };
       /**
        * Enabled Features 
        * @description A list of features enabled for your newsletter. Common values include 'archives', 'portal', 'surveys', 'comments', 'paid_subscriptions', 'automations', 'webhooks', 'tracking', and 'referrals'. 
@@ -2688,6 +2933,12 @@ export interface components {
        */
       image?: string;
       /**
+       * @description The language/locale for your newsletter's UI elements (confirmation emails, unsubscribe pages, etc.). See [localization](https://docs.buttondown.com/localization) for supported locales. 
+       * @default en 
+       * @example en
+       */
+      locale?: components["schemas"]["NewsletterLocale"];
+      /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
@@ -2700,10 +2951,78 @@ export interface components {
        */
       name: string;
       /**
+       * Reply To Address 
+       * @description An alternative email address that receives replies to your newsletter emails, instead of the sending address. 
+       * @example newsletter@sheinhardt.com
+       */
+      reply_to_address?: string;
+      /**
+       * Sharing Networks 
+       * @description A list of social networks to show share buttons for on your archive pages. 
+       * @default [] 
+       * @example [
+       *   "twitter",
+       *   "facebook",
+       *   "linkedin"
+       * ]
+       */
+      sharing_networks?: (string)[];
+      /**
+       * Socials 
+       * @description A list of social media accounts linked to your newsletter, displayed on your archive page. Each entry has a `type`, `url`, and optional `label`. 
+       * @default [] 
+       * @example [
+       *   {
+       *     "type": "twitter",
+       *     "url": "https://x.com/sheinhardt",
+       *     "label": null
+       *   }
+       * ]
+       */
+      socials?: (Record<string, unknown>)[];
+      /**
+       * Subscription Confirmation Redirect Url 
+       * @description A URL to redirect subscribers to after they confirm their subscription via double opt-in. 
+       * @default  
+       * @example https://example.com/confirmed
+       */
+      subscription_confirmation_redirect_url?: string;
+      /**
+       * Subscription Redirect Url 
+       * @description A URL to redirect subscribers to immediately after they submit the subscription form (before confirmation). 
+       * @default  
+       * @example https://example.com/thanks
+       */
+      subscription_redirect_url?: string;
+      /**
+       * @description The default email template for your newsletter. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options. 
+       * @default modern 
+       * @example modern
+       */
+      template?: components["schemas"]["NewsletterEmailTemplate"];
+      /**
        * Test Mode 
        * @description Whether test mode is enabled. When enabled, emails are not actually sent to subscribers, useful for testing automations and workflows.
        */
       test_mode?: boolean;
+      /**
+       * Theme Configuration 
+       * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
+       * @default {} 
+       * @example {
+       *   "primary-color": "#0069FF"
+       * }
+       */
+      theme_configuration?: {
+        [key: string]: string | undefined;
+      };
+      /**
+       * Timezone 
+       * @description The timezone used for scheduling and displaying dates in your newsletter (e.g., 'America/New_York', 'Europe/London'). 
+       * @default Etc/UTC 
+       * @example America/New_York
+       */
+      timezone?: string;
       /**
        * Tint Color 
        * @description The accent color for your newsletter, used in emails and on your archive page. Must be a valid hex color code. 
@@ -2728,6 +3047,28 @@ export interface components {
     /** NewsletterUpdateInput */
     NewsletterUpdateInput: {
       /**
+       * Announcement Bar Background Color 
+       * @description The background color for the announcement bar on your archive page. Must be a valid hex color code. 
+       * @example #FF6600
+       */
+      announcement_bar_background_color?: string;
+      /**
+       * Announcement Bar Text 
+       * @description Text displayed in the announcement bar on your archive page. Useful for promotions, updates, or calls to action. 
+       * @example Subscribe to get 20% off your first order!
+       */
+      announcement_bar_text?: string;
+      /**
+       * @description Controls who sees the announcement bar on your archive page. 
+       * @example everyone
+       */
+      announcement_bar_visibility?: components["schemas"]["NewsletterAnnouncementBarVisibility"];
+      /**
+       * @description The visual theme for your newsletter's archive page. See [archive themes](https://docs.buttondown.com/customizing-web-design) for previews. 
+       * @example modern
+       */
+      archive_theme?: components["schemas"]["NewsletterArchiveTheme"];
+      /**
        * @description The auditing mode for your newsletter, which controls spam and abuse protection. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
        * @example enabled
        */
@@ -2738,26 +3079,6 @@ export interface components {
        * @example .header { color: #000; }
        */
       css?: string;
-      /**
-       * Theme Configuration 
-       * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
-       * @example {
-       *   "primary-color": "#0069FF"
-       * }
-       */
-      theme_configuration?: {
-        [key: string]: string | undefined;
-      };
-      /**
-       * Email Theme Configuration 
-       * @description A dictionary of CSS token overrides for the email theme. 
-       * @example {
-       *   "primary-color": "#0069FF"
-       * }
-       */
-      email_theme_configuration?: {
-        [key: string]: string | undefined;
-      };
       /**
        * Custom Churn Email Body 
        * @description Custom body content for the email sent when a paid subscriber cancels. Supports template tags like `{{ subscriber.email }}` and `{{ newsletter.name }}`. 
@@ -2785,6 +3106,106 @@ export interface components {
        */
       custom_email_template?: string;
       /**
+       * Custom Expired Trial Notification Body 
+       * @description Custom body content for the email sent when a subscriber's free trial expires. Supports template tags.
+       */
+      custom_expired_trial_notification_body?: string;
+      /**
+       * Custom Expired Trial Notification Subject 
+       * @description Custom subject line for the email sent when a subscriber's free trial expires. Supports template tags.
+       */
+      custom_expired_trial_notification_subject?: string;
+      /**
+       * Custom Expired Trial Notification Template 
+       * @description The email template to use for expired trial notification emails. If not set, uses the newsletter's default template. 
+       * @example modern
+       */
+      custom_expired_trial_notification_template?: string;
+      /**
+       * Custom Gift Subscription Email Body 
+       * @description Custom body content for the email sent when someone receives a gift subscription. Supports template tags.
+       */
+      custom_gift_subscription_email_body?: string;
+      /**
+       * Custom Gift Subscription Email Subject 
+       * @description Custom subject line for the email sent when someone receives a gift subscription. Supports template tags.
+       */
+      custom_gift_subscription_email_subject?: string;
+      /**
+       * Custom Gift Subscription Email Template 
+       * @description The email template to use for gift subscription emails. If not set, uses the newsletter's default template. 
+       * @example modern
+       */
+      custom_gift_subscription_email_template?: string;
+      /**
+       * Custom Gift Unsubscription Email Body 
+       * @description Custom body content for the email sent when a gift subscription ends. Supports template tags.
+       */
+      custom_gift_unsubscription_email_body?: string;
+      /**
+       * Custom Gift Unsubscription Email Subject 
+       * @description Custom subject line for the email sent when a gift subscription ends. Supports template tags.
+       */
+      custom_gift_unsubscription_email_subject?: string;
+      /**
+       * Custom Gift Unsubscription Email Template 
+       * @description The email template to use for gift unsubscription emails. If not set, uses the newsletter's default template. 
+       * @example modern
+       */
+      custom_gift_unsubscription_email_template?: string;
+      /**
+       * Custom Premium Confirmation Email Body 
+       * @description Custom body content for the email sent when a subscriber upgrades to a paid plan. Supports template tags.
+       */
+      custom_premium_confirmation_email_body?: string;
+      /**
+       * Custom Premium Confirmation Email Subject 
+       * @description Custom subject line for the email sent when a subscriber upgrades to a paid plan. Supports template tags.
+       */
+      custom_premium_confirmation_email_subject?: string;
+      /**
+       * Custom Premium Confirmation Email Template 
+       * @description The email template to use for premium confirmation emails. If not set, uses the newsletter's default template. 
+       * @example modern
+       */
+      custom_premium_confirmation_email_template?: string;
+      /**
+       * Custom Subscription Confirmation Email Subject 
+       * @description Custom subject line for the double opt-in confirmation email sent to new subscribers. Supports template tags.
+       */
+      custom_subscription_confirmation_email_subject?: string;
+      /**
+       * Custom Subscription Confirmation Email Text 
+       * @description Custom body content for the double opt-in confirmation email. Must contain `{{ confirmation_url }}` as an HTML or Markdown link.
+       */
+      custom_subscription_confirmation_email_text?: string;
+      /**
+       * Custom Subscription Confirmation Email Template 
+       * @description The email template to use for subscription confirmation emails. If not set, uses the newsletter's default template. 
+       * @example modern
+       */
+      custom_subscription_confirmation_email_template?: string;
+      /**
+       * Custom Subscription Confirmation Reminder Email Subject 
+       * @description Custom subject line for the reminder email sent to subscribers who haven't confirmed. Supports template tags.
+       */
+      custom_subscription_confirmation_reminder_email_subject?: string;
+      /**
+       * Custom Subscription Confirmation Reminder Email Text 
+       * @description Custom body content for the reminder email sent to subscribers who haven't confirmed. Supports template tags.
+       */
+      custom_subscription_confirmation_reminder_email_text?: string;
+      /**
+       * Custom Subscription Confirmed Email Subject 
+       * @description Custom subject line for the email sent after a subscriber confirms their subscription. Supports template tags.
+       */
+      custom_subscription_confirmed_email_subject?: string;
+      /**
+       * Custom Subscription Confirmed Email Text 
+       * @description Custom body content for the email sent after a subscriber confirms their subscription. Supports template tags.
+       */
+      custom_subscription_confirmed_email_text?: string;
+      /**
        * Description 
        * @description A brief description of your newsletter, displayed on your public archive page and used for SEO. 
        * @example Stay up to date with the latest trends in wigs and hairpieces
@@ -2808,6 +3229,16 @@ export interface components {
        * @example mail.sheinhardt.com
        */
       email_domain?: string;
+      /**
+       * Email Theme Configuration 
+       * @description A dictionary of CSS token overrides for the email theme. 
+       * @example {
+       *   "primary-color": "#0069FF"
+       * }
+       */
+      email_theme_configuration?: {
+        [key: string]: string | undefined;
+      };
       /**
        * Enabled Features 
        * @description A list of features enabled for your newsletter. Common values include 'archives', 'portal', 'surveys', 'comments', 'paid_subscriptions', 'automations', 'webhooks', 'tracking', and 'referrals'. 
@@ -2849,6 +3280,11 @@ export interface components {
        */
       image?: string;
       /**
+       * @description The language/locale for your newsletter's UI elements (confirmation emails, unsubscribe pages, etc.). See [localization](https://docs.buttondown.com/localization) for supported locales. 
+       * @example en
+       */
+      locale?: components["schemas"]["NewsletterLocale"];
+      /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @example {
@@ -2864,10 +3300,71 @@ export interface components {
        */
       name?: string;
       /**
+       * Reply To Address 
+       * @description An alternative email address that receives replies to your newsletter emails, instead of the sending address. 
+       * @example newsletter@sheinhardt.com
+       */
+      reply_to_address?: string;
+      /**
+       * Sharing Networks 
+       * @description A list of social networks to show share buttons for on your archive pages. 
+       * @example [
+       *   "twitter",
+       *   "facebook",
+       *   "linkedin"
+       * ]
+       */
+      sharing_networks?: (string)[];
+      /**
+       * Socials 
+       * @description A list of social media accounts linked to your newsletter, displayed on your archive page. Each entry has a `type`, `url`, and optional `label`. 
+       * @example [
+       *   {
+       *     "type": "twitter",
+       *     "url": "https://x.com/sheinhardt",
+       *     "label": null
+       *   }
+       * ]
+       */
+      socials?: (Record<string, unknown>)[];
+      /**
+       * Subscription Confirmation Redirect Url 
+       * @description A URL to redirect subscribers to after they confirm their subscription via double opt-in. 
+       * @example https://example.com/confirmed
+       */
+      subscription_confirmation_redirect_url?: string;
+      /**
+       * Subscription Redirect Url 
+       * @description A URL to redirect subscribers to immediately after they submit the subscription form (before confirmation). 
+       * @example https://example.com/thanks
+       */
+      subscription_redirect_url?: string;
+      /**
+       * @description The default email template for your newsletter. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options. 
+       * @example modern
+       */
+      template?: components["schemas"]["NewsletterEmailTemplate"];
+      /**
        * Test Mode 
        * @description Whether test mode is enabled. When enabled, emails are not actually sent to subscribers, useful for testing automations and workflows.
        */
       test_mode?: boolean;
+      /**
+       * Theme Configuration 
+       * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
+       * @example {
+       *   "primary-color": "#0069FF"
+       * }
+       */
+      theme_configuration?: {
+        [key: string]: string | undefined;
+      };
+      /**
+       * Timezone 
+       * @description The timezone used for scheduling and displaying dates in your newsletter (e.g., 'America/New_York', 'Europe/London'). 
+       * @example America/New_York
+       */
+      timezone?: string;
       /**
        * Tint Color 
        * @description The accent color for your newsletter, used in emails and on your archive page. Must be a valid hex color code. 
@@ -2894,7 +3391,7 @@ export interface components {
      * (Not to be coy, but these names should be self-explanatory.) 
      * @enum {string}
      */
-    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "delete_tags" | "change_tags_colors" | "delete_surveys" | "delete_survey_responses" | "replay_events" | "delete_comments" | "update_survey_statuses" | "modify_stripe_subscriptions";
+    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "change_tags_colors" | "delete_comments" | "delete_surveys" | "delete_survey_responses" | "delete_tags" | "mark_comments_as_active" | "mark_comments_as_spammy" | "replay_events" | "update_survey_statuses" | "modify_stripe_subscriptions";
     /**
      * Status 
      * @description Represents the status of a bulk action.
@@ -4162,6 +4659,29 @@ export interface components {
       url?: string;
       /** Price */
       price?: number;
+      /**
+       * Allows Html 
+       * @description Whether the advertising unit accepts HTML content. 
+       * @default false
+       */
+      allows_html?: boolean;
+      /**
+       * Allows Image 
+       * @description Whether the advertising unit accepts an image. 
+       * @default false
+       */
+      allows_image?: boolean;
+      /**
+       * Max Characters 
+       * @description Maximum number of characters allowed for the ad content.
+       */
+      max_characters?: number;
+      /**
+       * Submission Deadline Days 
+       * @description Number of days before the slot date that content must be submitted. 
+       * @default 3
+       */
+      submission_deadline_days?: number;
     };
     /** AdvertisingUnitUpdateInput */
     AdvertisingUnitUpdateInput: {
@@ -4370,6 +4890,12 @@ export interface components {
       count: number;
     };
     /**
+     * Status 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    CommentStatus: "pending" | "active" | "spammy";
+    /**
      * Type 
      * @description An enumeration. 
      * @enum {string}
@@ -4405,6 +4931,7 @@ export interface components {
       parent_id?: string;
       /** Text */
       text: string;
+      status: components["schemas"]["CommentStatus"];
       comment_type: components["schemas"]["CommentType"];
       /** Annotation Data */
       annotation_data?: Record<string, unknown>;
@@ -4444,6 +4971,15 @@ export interface components {
       previous?: string;
       /** Count */
       count: number;
+    };
+    /** CommentUpdateInput */
+    CommentUpdateInput: {
+      /**
+       * Status 
+       * @description The new status for the comment. Use 'active' to approve or 'spammy' to mark as spam. 
+       * @enum {string}
+       */
+      status: "active" | "spammy";
     };
     /** Response */
     Response: {
@@ -8064,6 +8600,8 @@ export interface operations {
         /** @description If provided, expand the given field. (Only supported fields: 'subscriber', 'email'). */
         expand?: ("subscriber" | "email")[];
         ordering?: "creation_date" | "-creation_date" | "email" | "-email" | "subscriber" | "-subscriber";
+        /** @description An enumeration. */
+        status?: "pending" | "active" | "spammy";
       };
     };
     responses: {
@@ -8168,6 +8706,42 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Update Comment 
+   * @description Update a comment's status. Only the newsletter owner can call this.
+   */
+  update_comment: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CommentUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Comment"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
