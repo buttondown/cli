@@ -1,18 +1,18 @@
-import { Box, Text, useApp } from "ink";
 import path from "node:path";
+import { Box, Text, useApp } from "ink";
 import { useEffect, useReducer } from "react";
+import { serialize } from "../sync/emails.js";
 import {
   BASE_RESOURCES,
   type Configuration,
   findRelativeImageReferences,
   LOCAL_EMAILS_RESOURCE,
-  readSyncState,
   REMOTE_EMAILS_RESOURCE,
+  readSyncState,
   resolveRelativeImageReferences,
   uploadImage,
   writeSyncState,
 } from "../sync/index.js";
-import { serialize } from "../sync/emails.js";
 import type { OperationResult } from "../sync/types.js";
 
 type State =

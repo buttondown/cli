@@ -28,6 +28,6 @@
 		}
 	},
 	"files": {
-		"includes": ["**", "!**/node_modules/**", "!**/dist/**", "!**/src/lib/**"]
+		"includes": ["!**/node_modules", "!**/dist", "!**/src/lib"]
 	}
 }

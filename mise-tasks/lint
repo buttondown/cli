@@ -2,4 +2,4 @@
 #MISE description="Lint TypeScript files"
 #MISE sources=["cli/src/**/*"]
 bun lint:fix
-bun tsc
+bunx tsc --noEmit

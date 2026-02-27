@@ -1896,7 +1896,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    FirewallReasonCode: "email_address_capital_letters" | "email_address_cleantalk_score" | "email_address_contains_prohibited_string" | "email_address_esp_suppression" | "email_address_extant_subscriber_count" | "email_address_is_honeypot" | "email_address_is_pwned" | "email_address_length" | "email_address_local_part_has_many_periods" | "email_address_many_consonants_in_a_row" | "email_address_mx_record_is_valid" | "email_address_noreply_local_part" | "email_address_null_characters" | "email_address_peaceful_domain" | "email_address_previous_evaluation" | "email_address_prohibited_via_domain" | "email_address_regex" | "email_address_sandbox_test" | "email_address_shannon_entropy" | "email_address_stopforumspam_score" | "email_address_tied_to_account" | "email_address_typo" | "fingerprint_missing" | "ip_address_cleantalk_score" | "ip_address_extant_subscriber_count" | "ip_address_peaceful" | "ip_address_prohibited" | "metadata_has_garbage" | "newsletter_age" | "newsletter_has_customized_transactional_email" | "newsletter_has_prohibited_string" | "newsletter_status" | "project_honeypot" | "referrer_url_prohibited" | "subscriber_import_provenance" | "subscriber_import_source" | "text_contains_malicious_url" | "text_contains_prohibited_string" | "turnstile_response_token_is_valid" | "user_agent_known";
+    FirewallReasonCode: "email_address_capital_letters" | "email_address_cleantalk_score" | "email_address_contains_prohibited_string" | "email_address_esp_suppression" | "email_address_extant_subscriber_count" | "email_address_gmail_word_numbers" | "email_address_has_gravatar" | "email_address_is_honeypot" | "email_address_is_pwned" | "email_address_length" | "email_address_local_part_has_many_periods" | "email_address_many_consonants_in_a_row" | "email_address_mx_record_is_valid" | "email_address_noreply_local_part" | "email_address_null_characters" | "email_address_peaceful_domain" | "email_address_plus_single_number" | "email_address_previous_evaluation" | "email_address_prohibited_via_domain" | "email_address_regex" | "email_address_sandbox_test" | "email_address_shannon_entropy" | "email_address_stopforumspam_score" | "email_address_tied_to_account" | "email_address_typo" | "fingerprint_missing" | "ip_address_cleantalk_score" | "ip_address_extant_subscriber_count" | "ip_address_peaceful" | "ip_address_prohibited" | "metadata_has_garbage" | "newsletter_age" | "newsletter_has_customized_transactional_email" | "newsletter_has_prohibited_string" | "newsletter_status" | "project_honeypot" | "referrer_url_prohibited" | "subscriber_import_provenance" | "subscriber_import_source" | "text_contains_malicious_url" | "text_contains_prohibited_string" | "turnstile_response_token_is_valid" | "user_agent_known";
     /** FirewallReason */
     FirewallReason: {
       /** @description The code of the firewall facet that flagged this subscriber. */
@@ -2135,7 +2135,8 @@ export interface components {
       /**
        * Notes 
        * @description Any notes you want to attach to the subscriber. These are not publicly visible. 
-       * @default
+       * @default  
+       * @example One of our first subscribers!
        */
       notes?: string;
       /**
@@ -3808,6 +3809,12 @@ export interface components {
      * @enum {string}
      */
     ExternalEventType: "advertising_slot.purchased" | "automation.invoked" | "date.day.started" | "date.month.started" | "date.week.started" | "date.year.started" | "email.created" | "email.deleted" | "email.sent" | "email.status.changed" | "email.updated" | "external_feed_item.created" | "export.completed" | "export.created" | "export.failed" | "firewall.blocked" | "mention.created" | "memberful.member.updated" | "memberful.subscription.created" | "memberful.subscription.deleted" | "note.created" | "note.deleted" | "patreon.member.updated" | "patreon.membership.created" | "patreon.membership.deleted" | "shopify.customer.created" | "shopify.customer.updated" | "social_mention.created" | "stripe.checkout.session.completed" | "stripe.customer.updated" | "stripe.subscription.activated" | "stripe.subscription.churning" | "stripe.subscription.deactivated" | "subscriber.bounced" | "subscriber.changed_email" | "subscriber.churned" | "subscriber.clicked" | "subscriber.commented" | "subscriber.complained" | "subscriber.confirmed" | "subscriber.created" | "subscriber.deleted" | "subscriber.delivered" | "subscriber.opened" | "subscriber.paid" | "subscriber.paused" | "subscriber.resumed" | "subscriber.referred" | "subscriber.referred.paid" | "subscriber.rejected" | "subscriber.replied" | "subscriber.responded_to_survey" | "subscriber.tags.changed" | "subscriber.trial_ended" | "subscriber.trial_started" | "subscriber.type.changed" | "subscriber.unsubscribed" | "subscriber.updated" | "subscriber.viewed_checkout_page" | "survey.cleared_responses" | "survey.created" | "survey.deleted" | "survey.updated" | "form.created" | "form.deleted" | "form.updated";
+    /**
+     * ActionType 
+     * @description The action that is triggered when the automation is successfully run. 
+     * @enum {string}
+     */
+    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_arena_post" | "create_bluesky_post" | "create_linkedin_post" | "create_mastodon_post" | "create_tumblr_post" | "create_twitter_post" | "create_export" | "send_post_request" | "send_confirmation_reminder";
     /** Delay */
     Delay: {
       /** Value */
@@ -3832,17 +3839,12 @@ export interface components {
       time: "immediate" | "delay";
       delay?: components["schemas"]["Delay"];
     };
-    /**
-     * ActionType 
-     * @description The action that is triggered when the automation is successfully run. 
-     * @enum {string}
-     */
-    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_arena_post" | "create_bluesky_post" | "create_linkedin_post" | "create_mastodon_post" | "create_tumblr_post" | "create_twitter_post" | "create_export" | "send_post_request" | "send_confirmation_reminder";
     /** Action */
     Action: {
       type: components["schemas"]["AutomationActionType"];
       /** Metadata */
       metadata: Record<string, unknown>;
+      timing?: components["schemas"]["Timing"];
     };
     /** Automation */
     Automation: {
@@ -3861,7 +3863,6 @@ export interface components {
       name: string;
       status: components["schemas"]["AutomationStatus"];
       trigger: components["schemas"]["ExternalEventType"];
-      timing: components["schemas"]["Timing"];
       /** Actions */
       actions: (components["schemas"]["Action"])[];
       filters: components["schemas"]["FilterGroup"];
@@ -3911,7 +3912,6 @@ export interface components {
       /** Name */
       name: string;
       trigger: components["schemas"]["ExternalEventType"];
-      timing: components["schemas"]["Timing"];
       /** Actions */
       actions: (Record<string, unknown>)[];
       filters: components["schemas"]["FilterGroup"];
@@ -4896,12 +4896,6 @@ export interface components {
      */
     CommentStatus: "pending" | "active" | "spammy";
     /**
-     * Type 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    CommentType: "reviewer" | "subscriber";
-    /**
      * Comment 
      * @description Comments are a way for subscribers to interact with newsletters. They're a way to
      * provide feedback, ask questions, and generally engage with the content of an email.
@@ -4932,9 +4926,6 @@ export interface components {
       /** Text */
       text: string;
       status: components["schemas"]["CommentStatus"];
-      comment_type: components["schemas"]["CommentType"];
-      /** Annotation Data */
-      annotation_data?: Record<string, unknown>;
       subscriber?: components["schemas"]["Subscriber"];
       email?: components["schemas"]["Email"];
     };
@@ -5983,7 +5974,7 @@ export interface operations {
         /** @description If provided, only return emails with the given status. */
         status?: (components["schemas"]["EmailStatus"])[];
         /** @description If provided, only return emails without the given status. */
-        negative_status?: (components["schemas"]["EmailStatus"])[];
+        "-status"?: (components["schemas"]["EmailStatus"])[];
         /** @description If provided, only return emails with the given ids. */
         ids?: (string)[];
         ordering?: "creation_date" | "-creation_date" | "status" | "-status" | "publish_date" | "-publish_date" | "subject" | "-subject" | "email_type" | "-email_type" | "modification_date" | "-modification_date" | "clicks" | "-clicks" | "opens" | "-opens" | "click_rate" | "-click_rate" | "open_rate" | "-open_rate" | "page_views_lifetime" | "-page_views_lifetime" | "page_views_30" | "-page_views_30" | "page_views_7" | "-page_views_7" | "webmentions" | "-webmentions" | "subscriptions" | "-subscriptions" | "paid_subscriptions" | "-paid_subscriptions" | "unsubscriptions" | "-unsubscriptions" | "replies" | "-replies" | "comments" | "-comments" | "social_mentions" | "-social_mentions" | "permanent_failure_rate" | "-permanent_failure_rate" | "complaint_rate" | "-complaint_rate";
@@ -8589,8 +8580,6 @@ export interface operations {
   list_comments: {
     parameters: {
       query: {
-        /** @description If provided, only return comments of the given type. */
-        comment_type: "reviewer" | "subscriber";
         /** @description If provided, only return comments for the given email. */
         email_id?: string;
         /** @description If provided, only return comments for the given subscriber. */
