@@ -25,6 +25,11 @@ export default function Create({ directory, title }: CreateProps) {
           .replaceAll(/[^a-z\d]+/g, "-")
           .replaceAll(/(^-|-$)/g, "");
 
+        if (!slug) {
+          setError("Title must contain at least one alphanumeric character");
+          return;
+        }
+
         const filePath = path.join(emailsDir, `${slug}.md`);
 
         if (await fs.pathExists(filePath)) {

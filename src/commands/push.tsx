@@ -1,18 +1,22 @@
 import path from "node:path";
 import { Box, Text, useApp } from "ink";
 import { useEffect, useReducer } from "react";
+import { serialize as serializeAutomation } from "../sync/automations.js";
 import { serialize } from "../sync/emails.js";
 import {
-  BASE_RESOURCES,
+  AUTOMATIONS_RESOURCE,
   type Configuration,
   findRelativeImageReferences,
   LOCAL_EMAILS_RESOURCE,
+  NEWSLETTER_RESOURCE,
   REMOTE_EMAILS_RESOURCE,
+  SNIPPETS_RESOURCE,
   readSyncState,
   resolveRelativeImageReferences,
   uploadImage,
   writeSyncState,
 } from "../sync/index.js";
+import { serialize as serializeSnippet } from "../sync/snippets.js";
 import type { OperationResult } from "../sync/types.js";
 
 type State =
@@ -160,23 +164,88 @@ export default function Push(configuration: Configuration) {
           });
         }
 
-        // 7. Push remaining base resources
-        for (const resource of BASE_RESOURCES) {
-          const data = await resource.local.get(configuration);
-          if (data) {
-            const output = await resource.remote.set(
-              data as any,
+        // 7. Push automations (only changed)
+        const localAutomations =
+          await AUTOMATIONS_RESOURCE.local.get(configuration);
+        if (localAutomations) {
+          const remoteAutomations =
+            (await AUTOMATIONS_RESOURCE.remote.get(configuration)) ?? [];
+          const remoteAutomationsById = new Map(
+            remoteAutomations
+              .filter((a) => a.id)
+              .map((a) => [a.id, a]),
+          );
+          const changedAutomations = localAutomations.filter((a) => {
+            if (!a.id) return true;
+            const remote = remoteAutomationsById.get(a.id);
+            if (!remote) return true;
+            return (
+              serializeAutomation(a) !== serializeAutomation(remote)
+            );
+          });
+          const output = await AUTOMATIONS_RESOURCE.remote.set(
+            changedAutomations,
+            configuration,
+          );
+          dispatch({
+            type: "register_new_push",
+            resource: "automations",
+            result: output,
+          });
+        }
+
+        // 8. Push snippets (only changed)
+        const localSnippets =
+          await SNIPPETS_RESOURCE.local.get(configuration);
+        if (localSnippets) {
+          const remoteSnippets =
+            (await SNIPPETS_RESOURCE.remote.get(configuration)) ?? [];
+          const remoteSnippetsById = new Map(
+            remoteSnippets
+              .filter((s) => s.id)
+              .map((s) => [s.id, s]),
+          );
+          const changedSnippets = localSnippets.filter((s) => {
+            if (!s.id) return true;
+            const remote = remoteSnippetsById.get(s.id);
+            if (!remote) return true;
+            return serializeSnippet(s) !== serializeSnippet(remote);
+          });
+          const output = await SNIPPETS_RESOURCE.remote.set(
+            changedSnippets,
+            configuration,
+          );
+          dispatch({
+            type: "register_new_push",
+            resource: "snippets",
+            result: output,
+          });
+        }
+
+        // 9. Push newsletter (only if changed)
+        const localNewsletter =
+          await NEWSLETTER_RESOURCE.local.get(configuration);
+        if (localNewsletter) {
+          const remoteNewsletter =
+            await NEWSLETTER_RESOURCE.remote.get(configuration);
+          if (
+            !remoteNewsletter ||
+            JSON.stringify(localNewsletter) !==
+              JSON.stringify(remoteNewsletter)
+          ) {
+            const output = await NEWSLETTER_RESOURCE.remote.set(
+              localNewsletter,
               configuration,
             );
             dispatch({
               type: "register_new_push",
-              resource: resource.name,
+              resource: "newsletter",
               result: output,
             });
           }
         }
 
-        // 8. Write updated sync state
+        // 10. Write updated sync state
         await writeSyncState(configuration.directory, { syncedImages });
 
         dispatch({

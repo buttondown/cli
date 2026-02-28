@@ -4,7 +4,9 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import delay from "delay";
 import { render } from "ink-testing-library";
+import { serialize as serializeAutomation } from "../sync/automations.js";
 import { serialize } from "../sync/emails.js";
+import { serialize as serializeSnippet } from "../sync/snippets.js";
 import { writeSyncState } from "../sync/state.js";
 import Push from "./push.js";
 
@@ -285,5 +287,158 @@ describe("push", () => {
     expect(pushedEmails[0].body).toBe(
       "<!-- buttondown-editor-mode: plaintext -->Just text, no images here.",
     );
+  });
+
+  test("should not push unchanged automations", async () => {
+    const automationsDir = path.join(tempDir, "automations");
+    await mkdir(automationsDir, { recursive: true });
+
+    const unchangedAutomation = {
+      id: "auto_unchanged",
+      name: "Unchanged Automation",
+      status: "active" as const,
+      trigger: "subscriber.created" as const,
+      actions: [{ type: "send_email" as const, metadata: {} as Record<string, string> }],
+      filters: { filters: [], groups: [], predicate: "and" as const },
+      metadata: {} as Record<string, string>,
+    };
+    const changedAutomation = {
+      id: "auto_changed",
+      name: "Changed Automation",
+      status: "active" as const,
+      trigger: "subscriber.created" as const,
+      actions: [{ type: "send_email" as const, metadata: {} as Record<string, string> }],
+      filters: { filters: [], groups: [], predicate: "and" as const },
+      metadata: {} as Record<string, string>,
+    };
+
+    await writeFile(
+      path.join(automationsDir, "unchanged-automation.json"),
+      serializeAutomation(unchangedAutomation),
+    );
+    await writeFile(
+      path.join(automationsDir, "changed-automation.json"),
+      serializeAutomation({
+        ...changedAutomation,
+        status: "inactive" as const,
+      }),
+    );
+
+    const patchedAutomationIds: string[] = [];
+
+    mockFetch(
+      (request, url) => {
+        if (url.pathname === "/automations" && request.method === "GET") {
+          return jsonResponse({
+            results: [unchangedAutomation, changedAutomation],
+            count: 2,
+          });
+        }
+      },
+      async (request, url) => {
+        if (
+          url.pathname.includes("/automations/") &&
+          request.method === "PATCH"
+        ) {
+          const id = url.pathname.split("/automations/")[1];
+          patchedAutomationIds.push(id);
+          return jsonResponse({});
+        }
+      },
+    );
+
+    await renderPush();
+
+    expect(patchedAutomationIds).toHaveLength(1);
+    expect(patchedAutomationIds[0]).toBe("auto_changed");
+  });
+
+  test("should not push unchanged snippets", async () => {
+    const snippetsDir = path.join(tempDir, "snippets");
+    await mkdir(snippetsDir, { recursive: true });
+
+    const unchangedSnippet = {
+      id: "snip_unchanged",
+      name: "Unchanged Snippet",
+      identifier: "unchanged-snippet",
+      content: "Same content as remote",
+    };
+    const changedSnippet = {
+      id: "snip_changed",
+      name: "Changed Snippet",
+      identifier: "changed-snippet",
+      content: "Old content from remote",
+    };
+
+    await writeFile(
+      path.join(snippetsDir, "unchanged-snippet.md"),
+      serializeSnippet(unchangedSnippet),
+    );
+    await writeFile(
+      path.join(snippetsDir, "changed-snippet.md"),
+      serializeSnippet({
+        ...changedSnippet,
+        content: "Updated locally",
+      }),
+    );
+
+    const patchedSnippetIds: string[] = [];
+
+    mockFetch(
+      (request, url) => {
+        if (url.pathname === "/snippets" && request.method === "GET") {
+          return jsonResponse({
+            results: [unchangedSnippet, changedSnippet],
+            count: 2,
+          });
+        }
+      },
+      async (request, url) => {
+        if (
+          url.pathname.includes("/snippets/") &&
+          request.method === "PATCH"
+        ) {
+          const id = url.pathname.split("/snippets/")[1];
+          patchedSnippetIds.push(id);
+          return jsonResponse({});
+        }
+      },
+    );
+
+    await renderPush();
+
+    expect(patchedSnippetIds).toHaveLength(1);
+    expect(patchedSnippetIds[0]).toBe("snip_changed");
+  });
+
+  test("should not push unchanged newsletter", async () => {
+    const newsletter = { id: "nl_1", name: "Test" };
+
+    await writeFile(
+      path.join(tempDir, "newsletter.json"),
+      JSON.stringify(newsletter),
+    );
+
+    let newsletterPatched = false;
+
+    mockFetch((request, url) => {
+      if (url.pathname === "/newsletters" && request.method === "GET") {
+        return jsonResponse({
+          results: [newsletter],
+          count: 1,
+        });
+      }
+      if (
+        url.pathname.includes("/newsletters/") &&
+        request.method === "PATCH"
+      ) {
+        newsletterPatched = true;
+        return jsonResponse({});
+      }
+    });
+
+    await renderPush();
+
+    expect(newsletterPatched).toBe(false);
   });
 });

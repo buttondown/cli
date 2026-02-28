@@ -38,7 +38,14 @@ export const REMOTE_NEWSLETTER_RESOURCE: Resource<Newsletter, Newsletter> = {
 export const LOCAL_NEWSLETTER_RESOURCE: Resource<Newsletter, Newsletter> = {
   async get(configuration) {
     const filePath = path.join(configuration.directory, "newsletter.json");
-    return JSON.parse(await readFile(filePath, "utf8"));
+    try {
+      return JSON.parse(await readFile(filePath, "utf8"));
+    } catch (error: any) {
+      if (error.code === "ENOENT") {
+        return null;
+      }
+      throw error;
+    }
   },
   async set(value, configuration): Promise<OperationResult> {
     const filePath = path.join(configuration.directory, "newsletter.json");
