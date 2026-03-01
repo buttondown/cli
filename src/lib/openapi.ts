@@ -5,74 +5,75 @@
 
 
 export interface paths {
-  "/exports": {
-    /** List Exports */
-    get: operations["list_exports"];
-    /** Create Export */
-    post: operations["create_export"];
-  };
-  "/exports/{id}": {
-    /**
-     * Retrieve Export 
-     * @description Retrieve a specific export by its ID
-     */
-    get: operations["retrieve_export"];
-  };
-  "/tags": {
-    /** List Tags */
-    get: operations["list_tags"];
-    /** Create Tag */
-    post: operations["create_tag"];
-  };
-  "/tags/{id}": {
-    /**
-     * Retrieve Tag 
-     * @description Retrieve a specific tag by its ID
-     */
-    get: operations["retrieve_tag"];
-    /**
-     * Delete Tag 
-     * @description Delete a tag
-     */
-    delete: operations["delete_tag"];
-    /**
-     * Update Tag 
-     * @description Update a tag's properties
-     */
-    patch: operations["update_tag"];
-  };
-  "/tags/{id}/analytics": {
-    /**
-     * Retrieve Tag Analytics 
-     * @description Retrieve analytics for a specific tag
-     */
-    get: operations["retrieve_tag_analytics"];
-  };
-  "/ping": {
-    /** Ping */
-    get: operations["ping"];
-  };
   "/accounts/me": {
-    /** Get Account */
+    /**
+     * Get Account 
+     * @description Retrieve the account associated with the current API key
+     */
     get: operations["get_account"];
   };
-  "/images": {
-    /** List Images */
-    get: operations["list_images"];
-    /** Create Image */
-    post: operations["create_image"];
-  };
-  "/images/{id}": {
+  "/advertising_units": {
     /**
-     * Delete Image 
-     * @description Delete an uploaded image
+     * List Advertising Units 
+     * @description List all advertising units
      */
-    delete: operations["delete_image"];
+    get: operations["list_advertising_units"];
+    /**
+     * Create Advertising Unit 
+     * @description Create a new advertising unit
+     */
+    post: operations["create_advertising_unit"];
+  };
+  "/advertising_units/{id}": {
+    /**
+     * Delete Advertising Unit 
+     * @description Delete an advertising unit
+     */
+    delete: operations["delete_advertising_unit"];
+    /**
+     * Update Advertising Unit 
+     * @description Update an advertising unit's properties
+     */
+    patch: operations["update_advertising_unit"];
+  };
+  "/advertising_units/slots": {
+    /**
+     * List Advertising Slots 
+     * @description List all advertising slots
+     */
+    get: operations["list_advertising_slots"];
+  };
+  "/advertising_units/slots/{id}": {
+    /**
+     * Update Advertising Slot 
+     * @description Update an advertising slot's sponsor content
+     */
+    patch: operations["update_advertising_slot"];
+  };
+  "/api_requests/{id}": {
+    /**
+     * Retrieve Api Request 
+     * @description Retrieve a specific API request by its ID
+     */
+    get: operations["retrieve_api_request"];
+  };
+  "/api_requests": {
+    /**
+     * List Api Requests 
+     * @description List all API requests
+     */
+    get: operations["list_api_requests"];
   };
   "/attachments": {
-    /** List Attachments */
+    /**
+     * List Attachments 
+     * @description List all attachments
+     */
     get: operations["list_attachments"];
-    /** Create Attachment */
+    /**
+     * Create Attachment 
+     * @description Upload a new attachment
+     */
     post: operations["create_attachment"];
   };
   "/attachments/{id}": {
@@ -86,6 +87,49 @@ export interface paths {
      * @description Delete an attachment
      */
     delete: operations["delete_attachment"];
+  };
+  "/automations": {
+    /**
+     * List Automations 
+     * @description List all automations
+     */
+    get: operations["list_automations"];
+    /**
+     * Create Automation 
+     * @description Create a new automation
+     */
+    post: operations["create_automation"];
+  };
+  "/automations/{id}": {
+    /**
+     * Retrieve Automation 
+     * @description Retrieve a specific automation by its ID
+     */
+    get: operations["retrieve_automation"];
+    /**
+     * Delete Automation 
+     * @description Delete an automation
+     */
+    delete: operations["delete_automation"];
+    /**
+     * Update Automation 
+     * @description Update an automation's properties
+     */
+    patch: operations["update_automation"];
+  };
+  "/automations/{id}/invoke": {
+    /**
+     * Invoke Automation 
+     * @description Manually trigger an automation
+     */
+    post: operations["invoke_automation"];
+  };
+  "/automations/{id}/analytics": {
+    /**
+     * Retrieve Automation Analytics 
+     * @description Retrieve analytics data for an automation
+     */
+    get: operations["retrieve_automation_analytics"];
   };
   "/books": {
     /**
@@ -116,10 +160,66 @@ export interface paths {
      */
     patch: operations["update_book"];
   };
+  "/bulk_actions": {
+    /**
+     * Create Bulk Action 
+     * @description Create a new bulk action
+     */
+    post: operations["create_bulk_action"];
+  };
+  "/bulk_actions/{id}": {
+    /**
+     * Retrieve Bulk Action 
+     * @description Retrieve the status of a bulk action
+     */
+    get: operations["retrieve_bulk_action"];
+  };
+  "/comments": {
+    /**
+     * List Comments 
+     * @description List all comments
+     */
+    get: operations["list_comments"];
+    /**
+     * Create Comment 
+     * @description Create a new comment or reply to an existing comment. If subscriber_id is provided, the comment is attributed to that subscriber; otherwise it is attributed to the newsletter author.
+     */
+    post: operations["create_comment"];
+  };
+  "/comments/{id}": {
+    /**
+     * Retrieve Comment 
+     * @description Retrieve a specific comment by its ID
+     */
+    get: operations["retrieve_comment"];
+    /**
+     * Delete Comment 
+     * @description Delete a comment. Only the comment owner (subscriber) or the newsletter author can delete a comment.
+     */
+    delete: operations["delete_comment"];
+    /**
+     * Update Comment 
+     * @description Update a comment's status. Only the newsletter owner can call this.
+     */
+    patch: operations["update_comment"];
+  };
+  "/coupons": {
+    /**
+     * List Coupons 
+     * @description List all Stripe coupons
+     */
+    get: operations["list_coupons"];
+  };
   "/emails": {
-    /** List Emails */
+    /**
+     * List Emails 
+     * @description List all emails
+     */
     get: operations["list_emails"];
-    /** Create Email */
+    /**
+     * Create Email 
+     * @description Create a new email
+     */
     post: operations["create_email"];
   };
   "/emails/{id}": {
@@ -174,76 +274,38 @@ export interface paths {
      */
     post: operations["send_draft"];
   };
-  "/subscribers": {
-    /** List Subscribers */
-    get: operations["list_subscribers"];
-    /** Create Subscriber */
-    post: operations["create_subscriber"];
-  };
-  "/subscribers/{id_or_email}": {
-    /** Retrieve Subscriber */
-    get: operations["retrieve_subscriber"];
-    /** Delete Subscriber */
-    delete: operations["delete_subscriber"];
-    /** Update Subscriber */
-    patch: operations["update_subscriber"];
-  };
-  "/subscribers/{id_or_email}/send-reminder": {
-    /** Send Reminder */
-    post: operations["send_reminder"];
-  };
-  "/subscribers/{id_or_email}/send-magic-link": {
-    /** Send Magic Link To Subscriber */
-    post: operations["send_magic_link_to_subscriber"];
-  };
-  "/subscribers/{id_or_email}/emails/{email_id}": {
-    /** Send Email To */
-    post: operations["send_email_to"];
-  };
-  "/subscribers/{id_or_email}/referrals": {
-    /** Get Referrals */
-    get: operations["get_referrals"];
-  };
-  "/subscribers/{id_or_email}/automations": {
-    /** Get Automations */
-    get: operations["get_automations"];
-  };
-  "/subscribers/{id_or_email}/automations/{automation_attempt_id}": {
-    /** Update Automation Attempt */
-    patch: operations["update_automation_attempt"];
-  };
-  "/subscribers/{id_or_email}/stripe-subscriptions": {
-    /** Get Stripe Subscriptions */
-    get: operations["get_stripe_subscriptions"];
-  };
-  "/newsletters": {
-    /** List Newsletters */
-    get: operations["list_newsletters"];
-    /** Create Newsletter */
-    post: operations["create_newsletter"];
-  };
-  "/newsletters/{id}": {
+  "/events": {
     /**
-     * Delete Newsletter 
-     * @description Delete a newsletter
+     * List Events 
+     * @description List all events
      */
-    delete: operations["delete_newsletter"];
-    /**
-     * Update Newsletter 
-     * @description Update a newsletter's settings
-     */
-    patch: operations["update_newsletter"];
+    get: operations["list_events"];
   };
-  "/bulk_actions": {
-    /** Create Bulk Action */
-    post: operations["create_bulk_action"];
-  };
-  "/bulk_actions/{id}": {
+  "/events/{id}": {
     /**
-     * Retrieve Bulk Action 
-     * @description Retrieve the status of a bulk action
+     * Get Event 
+     * @description Retrieve a specific event by its ID
      */
-    get: operations["retrieve_bulk_action"];
+    get: operations["get_event"];
+  };
+  "/exports": {
+    /**
+     * List Exports 
+     * @description List all exports
+     */
+    get: operations["list_exports"];
+    /**
+     * Create Export 
+     * @description Create a new data export
+     */
+    post: operations["create_export"];
+  };
+  "/exports/{id}": {
+    /**
+     * Retrieve Export 
+     * @description Retrieve a specific export by its ID
+     */
+    get: operations["retrieve_export"];
   };
   "/external_feeds": {
     /**
@@ -286,103 +348,16 @@ export interface paths {
      */
     post: operations["poll_items"];
   };
-  "/automations": {
-    /** List Automations */
-    get: operations["list_automations"];
-    /** Create Automation */
-    post: operations["create_automation"];
-  };
-  "/automations/{id}": {
-    /**
-     * Retrieve Automation 
-     * @description Retrieve a specific automation by its ID
-     */
-    get: operations["retrieve_automation"];
-    /**
-     * Delete Automation 
-     * @description Delete an automation
-     */
-    delete: operations["delete_automation"];
-    /**
-     * Update Automation 
-     * @description Update an automation's properties
-     */
-    patch: operations["update_automation"];
-  };
-  "/automations/{id}/invoke": {
-    /**
-     * Invoke Automation 
-     * @description Manually trigger an automation
-     */
-    post: operations["invoke_automation"];
-  };
-  "/automations/{id}/analytics": {
-    /**
-     * Retrieve Automation Analytics 
-     * @description Retrieve analytics data for an automation
-     */
-    get: operations["retrieve_automation_analytics"];
-  };
-  "/users": {
-    /** List Users */
-    get: operations["list_users"];
-    /** Create User */
-    post: operations["create_user"];
-  };
-  "/users/{id}": {
-    /**
-     * Retrieve User 
-     * @description Retrieve a specific user by its ID
-     */
-    get: operations["retrieve_user"];
-    /**
-     * Delete User 
-     * @description Delete a user
-     */
-    delete: operations["delete_user"];
-    /**
-     * Update User 
-     * @description Update a user's properties
-     */
-    patch: operations["update_user"];
-  };
-  "/prices": {
-    /** List Prices */
-    get: operations["list_prices"];
-    /** Create Price */
-    post: operations["create_price"];
-  };
-  "/coupons": {
-    /** List Coupons */
-    get: operations["list_coupons"];
-  };
-  "/surveys": {
-    /** List Surveys */
-    get: operations["list_surveys"];
-    /** Create Survey */
-    post: operations["create_survey"];
-  };
-  "/surveys/{id}": {
-    /**
-     * Retrieve Survey 
-     * @description Retrieve a specific survey by its ID
-     */
-    get: operations["retrieve_survey"];
-    /**
-     * Delete Survey 
-     * @description Delete a survey
-     */
-    delete: operations["delete_survey"];
-    /**
-     * Update Survey 
-     * @description Update a survey's properties
-     */
-    patch: operations["update_survey"];
-  };
   "/forms": {
-    /** List Forms */
+    /**
+     * List Forms 
+     * @description List all forms
+     */
     get: operations["list_forms"];
-    /** Create Form */
+    /**
+     * Create Form 
+     * @description Create a new form
+     */
     post: operations["create_form"];
   };
   "/forms/{id}": {
@@ -402,53 +377,324 @@ export interface paths {
      */
     patch: operations["update_form"];
   };
-  "/api_requests/{id}": {
+  "/images": {
     /**
-     * Retrieve Api Request 
-     * @description Retrieve a specific API request by its ID
+     * List Images 
+     * @description List all uploaded images
      */
-    get: operations["retrieve_api_request"];
-  };
-  "/api_requests": {
-    /** List Api Requests */
-    get: operations["list_api_requests"];
-  };
-  "/advertising_units": {
-    /** List Advertising Units */
-    get: operations["list_advertising_units"];
-    /** Create Advertising Unit */
-    post: operations["create_advertising_unit"];
-  };
-  "/advertising_units/{id}": {
+    get: operations["list_images"];
     /**
-     * Delete Advertising Unit 
-     * @description Delete an advertising unit
+     * Create Image 
+     * @description Upload an image
      */
-    delete: operations["delete_advertising_unit"];
-    /**
-     * Update Advertising Unit 
-     * @description Update an advertising unit's properties
-     */
-    patch: operations["update_advertising_unit"];
+    post: operations["create_image"];
   };
-  "/advertising_units/slots": {
+  "/images/{id}": {
     /**
-     * List Advertising Slots 
-     * @description List all advertising slots
+     * Delete Image 
+     * @description Delete an uploaded image
      */
-    get: operations["list_advertising_slots"];
+    delete: operations["delete_image"];
   };
-  "/advertising_units/slots/{id}": {
+  "/newsletters": {
     /**
-     * Update Advertising Slot 
-     * @description Update an advertising slot's sponsor content
+     * List Newsletters 
+     * @description List all newsletters
      */
-    patch: operations["update_advertising_slot"];
+    get: operations["list_newsletters"];
+    /**
+     * Create Newsletter 
+     * @description Create a new newsletter
+     */
+    post: operations["create_newsletter"];
+  };
+  "/newsletters/{id}": {
+    /**
+     * Delete Newsletter 
+     * @description Delete a newsletter
+     */
+    delete: operations["delete_newsletter"];
+    /**
+     * Update Newsletter 
+     * @description Update a newsletter's settings
+     */
+    patch: operations["update_newsletter"];
+  };
+  "/notes": {
+    /**
+     * List Notes 
+     * @description List all notes
+     */
+    get: operations["list_notes"];
+    /**
+     * Create Note Endpoint 
+     * @description Create a new note
+     */
+    post: operations["create_note_endpoint"];
+  };
+  "/notes/{id}": {
+    /**
+     * Delete Note Endpoint 
+     * @description Delete a note
+     */
+    delete: operations["delete_note_endpoint"];
+  };
+  "/ping": {
+    /**
+     * Ping 
+     * @description Check if the API is reachable and your credentials are valid
+     */
+    get: operations["ping"];
+  };
+  "/prices": {
+    /**
+     * List Prices 
+     * @description List all prices
+     */
+    get: operations["list_prices"];
+    /**
+     * Create Price 
+     * @description Create a new price
+     */
+    post: operations["create_price"];
+  };
+  "/public/emails/{username}": {
+    /**
+     * Search public emails 
+     * @description Search and list public emails for a newsletter. No authentication required.
+     */
+    get: operations["list_public_emails"];
+  };
+  "/snippets": {
+    /**
+     * List Snippets 
+     * @description List all snippets
+     */
+    get: operations["list_snippets"];
+    /**
+     * Create Snippet 
+     * @description Create a new snippet
+     */
+    post: operations["create_snippet"];
+  };
+  "/snippets/{id}": {
+    /**
+     * Retrieve Snippet 
+     * @description Retrieve a single snippet.
+     */
+    get: operations["retrieve_snippet"];
+    /**
+     * Delete Snippet 
+     * @description Delete a snippet.
+     */
+    delete: operations["delete_snippet"];
+    /**
+     * Update Snippet 
+     * @description Update a snippet.
+     */
+    patch: operations["update_snippet"];
+  };
+  "/subscribers": {
+    /**
+     * List Subscribers 
+     * @description List all subscribers
+     */
+    get: operations["list_subscribers"];
+    /**
+     * Create Subscriber 
+     * @description Create a new subscriber
+     */
+    post: operations["create_subscriber"];
+  };
+  "/subscribers/{id_or_email}": {
+    /**
+     * Retrieve Subscriber 
+     * @description Retrieve a specific subscriber by their ID or email address
+     */
+    get: operations["retrieve_subscriber"];
+    /**
+     * Delete Subscriber 
+     * @description Delete a subscriber
+     */
+    delete: operations["delete_subscriber"];
+    /**
+     * Update Subscriber 
+     * @description Update a subscriber's properties
+     */
+    patch: operations["update_subscriber"];
+  };
+  "/subscribers/{id_or_email}/send-reminder": {
+    /**
+     * Send Reminder 
+     * @description Send a confirmation reminder email to an unactivated subscriber
+     */
+    post: operations["send_reminder"];
+  };
+  "/subscribers/{id_or_email}/send-magic-link": {
+    /**
+     * Send Magic Link To Subscriber 
+     * @description Send a magic link email to a subscriber
+     */
+    post: operations["send_magic_link_to_subscriber"];
+  };
+  "/subscribers/{id_or_email}/emails/{email_id}": {
+    /**
+     * Send Email To 
+     * @description Send a specific email to a specific subscriber
+     */
+    post: operations["send_email_to"];
+  };
+  "/subscribers/{id_or_email}/referrals": {
+    /**
+     * Get Referrals 
+     * @description List subscribers referred by a specific subscriber
+     */
+    get: operations["get_referrals"];
+  };
+  "/subscribers/{id_or_email}/automations": {
+    /**
+     * Get Automations 
+     * @description List automation attempts for a specific subscriber
+     */
+    get: operations["get_automations"];
+  };
+  "/subscribers/{id_or_email}/automations/{automation_attempt_id}": {
+    /**
+     * Update Automation Attempt 
+     * @description Update the status of an automation attempt for a subscriber
+     */
+    patch: operations["update_automation_attempt"];
+  };
+  "/subscribers/{id_or_email}/stripe-subscriptions": {
+    /**
+     * Get Stripe Subscriptions 
+     * @description List Stripe subscriptions for a specific subscriber
+     */
+    get: operations["get_stripe_subscriptions"];
+  };
+  "/survey_responses": {
+    /**
+     * Retrieve Survey Responses 
+     * @description List all survey responses
+     */
+    get: operations["retrieve_survey_responses"];
+    /**
+     * Create Survey Response 
+     * @description Create a new survey response
+     */
+    post: operations["create_survey_response"];
+  };
+  "/survey_responses/{id}": {
+    /**
+     * Update Survey Response 
+     * @description Update a survey response's text. Only the response owner (subscriber) can update their response.
+     */
+    patch: operations["update_survey_response"];
+  };
+  "/surveys": {
+    /**
+     * List Surveys 
+     * @description List all surveys
+     */
+    get: operations["list_surveys"];
+    /**
+     * Create Survey 
+     * @description Create a new survey
+     */
+    post: operations["create_survey"];
+  };
+  "/surveys/{id}": {
+    /**
+     * Retrieve Survey 
+     * @description Retrieve a specific survey by its ID
+     */
+    get: operations["retrieve_survey"];
+    /**
+     * Delete Survey 
+     * @description Delete a survey
+     */
+    delete: operations["delete_survey"];
+    /**
+     * Update Survey 
+     * @description Update a survey's properties
+     */
+    patch: operations["update_survey"];
+  };
+  "/tags": {
+    /**
+     * List Tags 
+     * @description List all tags
+     */
+    get: operations["list_tags"];
+    /**
+     * Create Tag 
+     * @description Create a new tag
+     */
+    post: operations["create_tag"];
+  };
+  "/tags/{id}": {
+    /**
+     * Retrieve Tag 
+     * @description Retrieve a specific tag by its ID
+     */
+    get: operations["retrieve_tag"];
+    /**
+     * Delete Tag 
+     * @description Delete a tag
+     */
+    delete: operations["delete_tag"];
+    /**
+     * Update Tag 
+     * @description Update a tag's properties
+     */
+    patch: operations["update_tag"];
+  };
+  "/tags/{id}/analytics": {
+    /**
+     * Retrieve Tag Analytics 
+     * @description Retrieve analytics for a specific tag
+     */
+    get: operations["retrieve_tag_analytics"];
+  };
+  "/users": {
+    /**
+     * List Users 
+     * @description List all users
+     */
+    get: operations["list_users"];
+    /**
+     * Create User 
+     * @description Invite a new user to the newsletter
+     */
+    post: operations["create_user"];
+  };
+  "/users/{id}": {
+    /**
+     * Retrieve User 
+     * @description Retrieve a specific user by its ID
+     */
+    get: operations["retrieve_user"];
+    /**
+     * Delete User 
+     * @description Delete a user
+     */
+    delete: operations["delete_user"];
+    /**
+     * Update User 
+     * @description Update a user's properties
+     */
+    patch: operations["update_user"];
   };
   "/webhooks": {
-    /** List Webhooks */
+    /**
+     * List Webhooks 
+     * @description List all webhooks
+     */
     get: operations["list_webhooks"];
-    /** Create Webhook */
+    /**
+     * Create Webhook 
+     * @description Create a new webhook
+     */
     post: operations["create_webhook"];
   };
   "/webhooks/{id}": {
@@ -482,157 +728,33 @@ export interface paths {
      */
     post: operations["test_webhook"];
   };
-  "/comments": {
-    /** List Comments */
-    get: operations["list_comments"];
-    /**
-     * Create Comment 
-     * @description Create a new comment or reply to an existing comment. If subscriber_id is provided, the comment is attributed to that subscriber; otherwise it is attributed to the newsletter author.
-     */
-    post: operations["create_comment"];
-  };
-  "/comments/{id}": {
-    /**
-     * Retrieve Comment 
-     * @description Retrieve a specific comment by its ID
-     */
-    get: operations["retrieve_comment"];
-    /**
-     * Delete Comment 
-     * @description Delete a comment. Only the comment owner (subscriber) or the newsletter author can delete a comment.
-     */
-    delete: operations["delete_comment"];
-    /**
-     * Update Comment 
-     * @description Update a comment's status. Only the newsletter owner can call this.
-     */
-    patch: operations["update_comment"];
-  };
-  "/survey_responses": {
-    /** Retrieve Survey Responses */
-    get: operations["retrieve_survey_responses"];
-    /** Create Survey Response */
-    post: operations["create_survey_response"];
-  };
-  "/survey_responses/{id}": {
-    /**
-     * Update Survey Response 
-     * @description Update a survey response's text. Only the response owner (subscriber) can update their response.
-     */
-    patch: operations["update_survey_response"];
-  };
-  "/events": {
-    /** List Events */
-    get: operations["list_events"];
-  };
-  "/events/{id}": {
-    /**
-     * Get Event 
-     * @description Retrieve a specific event by its ID
-     */
-    get: operations["get_event"];
-  };
-  "/notes": {
-    /** List Notes */
-    get: operations["list_notes"];
-    /** Create Note Endpoint */
-    post: operations["create_note_endpoint"];
-  };
-  "/notes/{id}": {
-    /**
-     * Delete Note Endpoint 
-     * @description Delete a note
-     */
-    delete: operations["delete_note_endpoint"];
-  };
-  "/public/emails/{username}": {
-    /**
-     * Search public emails 
-     * @description Search and list public emails for a newsletter. No authentication required.
-     */
-    get: operations["list_public_emails"];
-  };
-  "/snippets": {
-    /** List Snippets */
-    get: operations["list_snippets"];
-    /** Create Snippet */
-    post: operations["create_snippet"];
-  };
-  "/snippets/{id}": {
-    /**
-     * Retrieve Snippet 
-     * @description Retrieve a single snippet.
-     */
-    get: operations["retrieve_snippet"];
-    /**
-     * Delete Snippet 
-     * @description Delete a snippet.
-     */
-    delete: operations["delete_snippet"];
-    /**
-     * Update Snippet 
-     * @description Update a snippet.
-     */
-    patch: operations["update_snippet"];
-  };
 }
 
 export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    /** Account */
+    Account: {
+      /** Username */
+      username: string;
+      /** Email Address */
+      email_address: string;
+    };
     /**
-     * Collection 
-     * @description A group of data that can be exported in an export. 
-     * @enum {string}
-     */
-    ExportCollection: "subscribers" | "emails" | "events" | "referrals" | "surveys" | "comments" | "requests" | "mentions" | "conversations" | "images" | "stripe_subscriptions" | "stripe_products" | "stripe_customers" | "stripe_prices" | "stripe_charges";
-    /**
-     * Format 
+     * Status 
      * @description An enumeration. 
      * @enum {string}
      */
-    ExportFormat: "csv" | "json";
+    AdvertisingSKUStatus: "active" | "inactive";
     /**
      * Status 
-     * @description Represents the status of an export.
-     * 
-     * No action is required to move from one state or another; Buttondown
-     * internally handles the transitions, and exposing the status is for
-     * observability purposes only. 
+     * @description An enumeration. 
      * @enum {string}
      */
-    ExportStatus: "error" | "in_progress" | "not_started" | "ready";
-    /**
-     * Export 
-     * @description Some software applications may want programmatic access to their newsletter exports.
-     * This assists with a few niche use cases, such as regular backups or data ingestion
-     * (into a data warehouse), or post-publishing processes that hinge on email events.
-     * 
-     * In general, you probably won't _need_ to use this endpoint unless you
-     * _absolutely_ need to use this endpoint.
-     * 
-     * To browse the contents of a given export collection, refer to the [Data exports](https://docs.buttondown.com/data-exports-subscriber) section
-     * of the documentation.
-     */
-    Export: {
-      /** @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export. */
-      collections: (components["schemas"]["ExportCollection"])[];
-      /**
-       * Parameters 
-       * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export.
-       */
-      parameters?: Record<string, unknown>;
-      /**
-       * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
-       * @default csv
-       */
-      format?: components["schemas"]["ExportFormat"];
-      /**
-       * Columns 
-       * @description If provided, the export will only include these columns.
-       */
-      columns?: (string)[];
+    AdvertisingSlotStatus: "expired" | "executed" | "finalized" | "open" | "sold";
+    /** AdvertisingSlot */
+    AdvertisingSlot: {
       /**
        * Id 
        * @description A unique TypeID associated with the object.
@@ -645,18 +767,158 @@ export interface components {
        */
       creation_date: string;
       /**
-       * Url 
-       * @description The URL of the export file. This is only available after the export has completed.
+       * Date 
+       * Format: date 
+       * @description The date this advertising slot is scheduled for.
        */
-      url?: string;
+      date: string;
+      /** @description The current status of the advertising slot. */
+      status: components["schemas"]["AdvertisingSlotStatus"];
       /**
-       * Completion Date 
-       * Format: date-time 
-       * @description The date and time the export completed.
+       * Invoice Url 
+       * @description URL to the Stripe invoice PDF for this slot, if available.
        */
-      completion_date?: string;
-      /** @description The status of the export. */
-      status: components["schemas"]["ExportStatus"];
+      invoice_url?: string;
+      /**
+       * Sku Id 
+       * @description The ID of the advertising unit this slot belongs to.
+       */
+      sku_id: string;
+      /**
+       * Submission Url 
+       * @description URL where the sponsor can submit their ad content.
+       */
+      submission_url: string;
+      /**
+       * Sponsor Company 
+       * @description The name of the sponsoring company.
+       */
+      sponsor_company: string;
+      /**
+       * Sponsor Email 
+       * @description The email address of the sponsor contact.
+       */
+      sponsor_email: string;
+      /**
+       * Sponsor Name 
+       * @description The name of the sponsor contact.
+       */
+      sponsor_name: string;
+      /**
+       * Content 
+       * @description The ad content text.
+       */
+      content: string;
+      /**
+       * Content Image Id 
+       * @description The ID of the image attached to this ad, if any.
+       */
+      content_image_id?: string;
+      /**
+       * Content Url 
+       * @description The URL the ad links to.
+       */
+      content_url: string;
+      /**
+       * Content Approved At 
+       * Format: date-time 
+       * @description When the ad content was approved, if applicable.
+       */
+      content_approved_at?: string;
+      /**
+       * Content Rejected At 
+       * Format: date-time 
+       * @description When the ad content was rejected, if applicable.
+       */
+      content_rejected_at?: string;
+      /**
+       * Content Rejection Reason 
+       * @description The reason the ad content was rejected, if applicable.
+       */
+      content_rejection_reason: string;
+      /**
+       * Content Submitted At 
+       * Format: date-time 
+       * @description When the ad content was submitted for review.
+       */
+      content_submitted_at?: string;
+    };
+    /** AdvertisingUnit */
+    AdvertisingUnit: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** @description The current status of the advertising unit. */
+      status: components["schemas"]["AdvertisingSKUStatus"];
+      /**
+       * Slots 
+       * @description The list of advertising slots for this unit.
+       */
+      slots: (components["schemas"]["AdvertisingSlot"])[];
+      /**
+       * Title 
+       * @description The title of the advertising unit.
+       */
+      title: string;
+      /**
+       * Description 
+       * @description A description of the advertising unit.
+       */
+      description: string;
+      /**
+       * Behavior 
+       * @description The behavior type of the advertising unit.
+       */
+      behavior: string;
+      /**
+       * Url 
+       * @description The URL for the advertising unit's landing page.
+       */
+      url: string;
+      /**
+       * Price 
+       * @description The price in the smallest currency unit, or null if not set.
+       */
+      price?: number;
+      /**
+       * Allows Html 
+       * @description Whether the advertising unit accepts HTML content.
+       */
+      allows_html: boolean;
+      /**
+       * Allows Image 
+       * @description Whether the advertising unit accepts an image.
+       */
+      allows_image: boolean;
+      /**
+       * Max Characters 
+       * @description Maximum number of characters allowed for the ad content.
+       */
+      max_characters?: number;
+      /**
+       * Submission Deadline Days 
+       * @description Number of days before the slot date that content must be submitted.
+       */
+      submission_deadline_days: number;
+    };
+    /** Page[AdvertisingUnit] */
+    AdvertisingUnitPage: {
+      /** Results */
+      results: (components["schemas"]["AdvertisingUnit"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
     };
     /** ErrorMessage */
     ErrorMessage: {
@@ -672,93 +934,184 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
+    /** AdvertisingUnitInput */
+    AdvertisingUnitInput: {
+      /**
+       * Title 
+       * @description The title of the advertising unit.
+       */
+      title?: string;
+      /**
+       * Description 
+       * @description A description of the advertising unit.
+       */
+      description?: string;
+      /**
+       * Behavior 
+       * @description The behavior type of the advertising unit. 
+       * @default
+       */
+      behavior?: string;
+      /**
+       * Url 
+       * @description The URL for the advertising unit's landing page. 
+       * @default
+       */
+      url?: string;
+      /**
+       * Price 
+       * @description The price in the smallest currency unit.
+       */
+      price?: number;
+      /**
+       * Allows Html 
+       * @description Whether the advertising unit accepts HTML content. 
+       * @default false
+       */
+      allows_html?: boolean;
+      /**
+       * Allows Image 
+       * @description Whether the advertising unit accepts an image. 
+       * @default false
+       */
+      allows_image?: boolean;
+      /**
+       * Max Characters 
+       * @description Maximum number of characters allowed for the ad content.
+       */
+      max_characters?: number;
+      /**
+       * Submission Deadline Days 
+       * @description Number of days before the slot date that content must be submitted. 
+       * @default 3
+       */
+      submission_deadline_days?: number;
+    };
+    /** AdvertisingUnitUpdateInput */
+    AdvertisingUnitUpdateInput: {
+      /**
+       * Title 
+       * @description The title of the advertising unit.
+       */
+      title?: string;
+      /**
+       * Description 
+       * @description A description of the advertising unit.
+       */
+      description?: string;
+      /**
+       * Dates 
+       * @description The dates for this advertising unit's slots.
+       */
+      dates: (string)[];
+      /**
+       * Behavior 
+       * @description The behavior type of the advertising unit.
+       */
+      behavior?: string;
+      /**
+       * Url 
+       * @description The URL for the advertising unit's landing page.
+       */
+      url?: string;
+      /**
+       * Price 
+       * @description The price in the smallest currency unit.
+       */
+      price?: number;
+      /**
+       * Allows Html 
+       * @description Whether the advertising unit accepts HTML content.
+       */
+      allows_html?: boolean;
+      /**
+       * Allows Image 
+       * @description Whether the advertising unit accepts an image.
+       */
+      allows_image?: boolean;
+      /**
+       * Max Characters 
+       * @description Maximum number of characters allowed for the ad content.
+       */
+      max_characters?: number;
+      /**
+       * Submission Deadline Days 
+       * @description Number of days before the slot date that content must be submitted.
+       */
+      submission_deadline_days?: number;
+    };
+    /** Page[AdvertisingSlot] */
+    AdvertisingSlotPage: {
+      /** Results */
+      results: (components["schemas"]["AdvertisingSlot"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** AdvertisingSlotUpdateInput */
+    AdvertisingSlotUpdateInput: {
+      /**
+       * Content 
+       * @description The ad content text.
+       */
+      content?: string;
+      /**
+       * Content Approved At 
+       * Format: date-time 
+       * @description When the ad content was approved.
+       */
+      content_approved_at?: string;
+      /**
+       * Content Image Id 
+       * @description The ID of the image attached to this ad.
+       */
+      content_image_id?: string;
+      /**
+       * Content Rejection Reason 
+       * @description The reason the ad content was rejected.
+       */
+      content_rejection_reason?: string;
+      /**
+       * Content Url 
+       * @description The URL the ad links to.
+       */
+      content_url?: string;
+      /**
+       * Sponsor Company 
+       * @description The name of the sponsoring company.
+       */
+      sponsor_company?: string;
+      /**
+       * Sponsor Email 
+       * @description The email address of the sponsor contact.
+       */
+      sponsor_email?: string;
+      /**
+       * Sponsor Name 
+       * @description The name of the sponsor contact.
+       */
+      sponsor_name?: string;
+      /**
+       * Status 
+       * @description Set to 'approve' or 'reject' to update the content review status. 
+       * @enum {string}
+       */
+      status?: "approve" | "reject";
+    };
     /**
-     * CreateExportErrorCode 
+     * Source 
      * @description An enumeration. 
      * @enum {string}
      */
-    CreateExportErrorCode: "collection_empty_invalid" | "columns_empty_invalid" | "columns_invalid";
-    /** ErrorMessage[CreateExportErrorCode] */
-    ErrorMessage_CreateExportErrorCode_: {
-      code: components["schemas"]["CreateExportErrorCode"];
-      /** Detail */
-      detail: string;
-      /**
-       * Metadata 
-       * @default {}
-       */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
-    };
-    /** ExportInput */
-    ExportInput: {
-      /** @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export. */
-      collections: (components["schemas"]["ExportCollection"])[];
-      /**
-       * Parameters 
-       * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export.
-       */
-      parameters?: Record<string, unknown>;
-      /**
-       * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
-       * @default csv
-       */
-      format?: components["schemas"]["ExportFormat"];
-      /**
-       * Columns 
-       * @description If provided, the export will only include these columns.
-       */
-      columns?: (string)[];
-    };
-    /** Page[Export] */
-    ExportPage: {
-      /** Results */
-      results: (components["schemas"]["Export"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
+    APIRequestSource: "api" | "app" | "carrd" | "zapier" | "cli" | "make";
     /**
-     * Tag 
-     * @description Tags are a way to organize your subscribers. You can create, update, and
-     * delete tags via the API. You can also list all tags for a given newsletter.
-     * 
-     * Tags don't have any strict functionality on their own, but you can send emails
-     * to subscribers with a given tag (or to all subscribers _without_ a given tag.)
+     * APIRequestDetail 
+     * @description Represents a request to the API (api.buttondown.com).
      */
-    Tag: {
-      /**
-       * Name 
-       * @description The name of the tag. 
-       * @example VIP
-       */
-      name: string;
-      /**
-       * Color 
-       * @description The hex color code associated with the tag. 
-       * @example #FFD700
-       */
-      color: string;
-      /**
-       * Description 
-       * @description An internal description of the tag, only visible to the newsletter author.
-       */
-      description?: string;
-      /**
-       * Public Description 
-       * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
-       */
-      public_description?: string;
-      /**
-       * Subscriber Editable 
-       * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
-       * @default false
-       */
-      subscriber_editable?: boolean;
+    APIRequestDetail: {
       /**
        * Id 
        * @description A unique TypeID associated with the object.
@@ -770,152 +1123,38 @@ export interface components {
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
+      /** Status Code */
+      status_code: number;
+      /** Path */
+      path: string;
+      /** Method */
+      method: string;
+      source: components["schemas"]["APIRequestSource"];
       /**
-       * Secondary Id 
-       * @description The secondary ID of the tag, used as a human-readable numeric identifier.
+       * Version 
+       * @enum {string}
        */
-      secondary_id: number;
-    };
-    /**
-     * TagInput 
-     * @description Input schema for creating a new tag.
-     */
-    TagInput: {
-      /**
-       * Name 
-       * @description The name of the tag. 
-       * @example VIP
-       */
-      name: string;
-      /**
-       * Color 
-       * @description The hex color code associated with the tag. 
-       * @example #FFD700
-       */
-      color: string;
-      /**
-       * Description 
-       * @description An internal description of the tag, only visible to the newsletter author.
-       */
-      description?: string;
-      /**
-       * Public Description 
-       * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
-       */
-      public_description?: string;
-      /**
-       * Subscriber Editable 
-       * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
-       * @default false
-       */
-      subscriber_editable?: boolean;
-    };
-    /** Page[Tag] */
-    TagPage: {
-      /** Results */
-      results: (components["schemas"]["Tag"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * UpdateTagErrorCode 
-     * @description A potential error code that can be returned when updating a tag. 
-     * @enum {string}
-     */
-    UpdateTagErrorCode: "name_already_exists" | "name_too_long";
-    /** ErrorMessage[UpdateTagErrorCode] */
-    ErrorMessage_UpdateTagErrorCode_: {
-      code: components["schemas"]["UpdateTagErrorCode"];
-      /** Detail */
-      detail: string;
-      /**
-       * Metadata 
-       * @default {}
-       */
-      metadata?: {
+      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01";
+      /** Ip Address */
+      ip_address: string;
+      /** Api Key Id */
+      api_key_id?: string;
+      /** Api Key Label */
+      api_key_label?: string;
+      /** Request Data */
+      request_data: string;
+      /** Response Data */
+      response_data: string;
+      /** Headers */
+      headers: {
         [key: string]: string | undefined;
       };
     };
     /**
-     * TagUpdateInput 
-     * @description Input schema for updating an existing tag. All fields are optional.
+     * APIRequest 
+     * @description Represents a request to the API (api.buttondown.com).
      */
-    TagUpdateInput: {
-      /**
-       * Name 
-       * @description The name of the tag. 
-       * @example VIP
-       */
-      name?: string;
-      /**
-       * Color 
-       * @description The hex color code associated with the tag. 
-       * @example #FFD700
-       */
-      color?: string;
-      /**
-       * Description 
-       * @description An internal description of the tag, only visible to the newsletter author.
-       */
-      description?: string;
-      /**
-       * Public Description 
-       * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
-       */
-      public_description?: string;
-      /**
-       * Secondary Id 
-       * @description The secondary ID of the tag, used as a human-readable numeric identifier.
-       */
-      secondary_id?: number;
-      /**
-       * Subscriber Editable 
-       * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal.
-       */
-      subscriber_editable?: boolean;
-    };
-    /**
-     * TagAnalytics 
-     * @description Analytics data associated with a given tag.
-     */
-    TagAnalytics: {
-      /**
-       * Created Subscribers 
-       * @description The number of subscribers who have been created with this tag.
-       */
-      created_subscribers: number;
-      /**
-       * Click Rate 
-       * @description The click rate of emails sent to subscribers with this tag.
-       */
-      click_rate: number;
-      /**
-       * Open Rate 
-       * @description The open rate of emails sent to subscribers with this tag.
-       */
-      open_rate: number;
-    };
-    /** Empty */
-    Empty: Record<string, unknown>;
-    /** Account */
-    Account: {
-      /** Username */
-      username: string;
-      /** Email Address */
-      email_address: string;
-    };
-    /**
-     * Image 
-     * @description Images are, well, images! Buttondown allows you to upload images to its secure
-     * S3 bucket and do with them what you will. This is sort of an odd duck of an
-     * API, to be sure, but if you want to be able to do things like draft
-     * and send emails completely on your iPad you need a surefire way of creating images.
-     */
-    Image: {
+    APIRequest: {
       /**
        * Id 
        * @description A unique TypeID associated with the object.
@@ -927,23 +1166,31 @@ export interface components {
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
+      /** Status Code */
+      status_code: number;
+      /** Path */
+      path: string;
+      /** Method */
+      method: string;
+      source: components["schemas"]["APIRequestSource"];
       /**
-       * Image 
-       * @description The URL of the image. 
-       * @example https://placecats.com/408/287
+       * Version 
+       * @enum {string}
        */
-      image: string;
+      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01";
+      /** Ip Address */
+      ip_address: string;
+      /** Api Key Id */
+      api_key_id?: string;
+      /** Api Key Label */
+      api_key_label?: string;
     };
-    /** Page[Image] */
-    ImagePage: {
+    /** APIRequestList */
+    APIRequestList: {
       /** Results */
-      results: (components["schemas"]["Image"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
+      results: (components["schemas"]["APIRequest"])[];
+      /** Cursor */
+      cursor?: string;
     };
     /**
      * Attachment 
@@ -992,6 +1239,394 @@ export interface components {
       previous?: string;
       /** Count */
       count: number;
+    };
+    /**
+     * Status 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    AutomationStatus: "active" | "inactive";
+    /**
+     * Type 
+     * @description Various types of events that are recorded by Buttondown, both in terms of exogenous systems
+     * like Stripe and Memberful, and endogenous ones like email opens and clicks. (In general, if anything
+     * important ever happens that could be relevant to your newsletter, we have an event type for it!)
+     * 
+     * These event types power lots of things within Buttondown. They're used to trigger automations, webhooks,
+     * and analytics.
+     * 
+     * (Note that Buttondown also has a different thing we call "events"; those are `EmailEvents` and are used
+     * for tracking aggregate details about an email. Alas, we shouldn't have used the term "event" for two different
+     * things, but it's too late to go back now!)
+     * 
+     * In general, our event namespacing tries to hew to the following pattern:
+     * 
+     * `<source>.<object>.<action>`
+     * 
+     * When wondering which object we are referring to, default to the _more granular_ object.
+     * 
+     * For instance, an email being sent to a subscriber is `subscriber.delivered`, not `email.sent`. 
+     * @enum {string}
+     */
+    ExternalEventType: "advertising_slot.purchased" | "automation.invoked" | "date.day.started" | "date.month.started" | "date.week.started" | "date.year.started" | "email.created" | "email.deleted" | "email.sent" | "email.status.changed" | "email.updated" | "external_feed_item.created" | "export.completed" | "export.created" | "export.failed" | "firewall.blocked" | "mention.created" | "memberful.member.updated" | "memberful.subscription.created" | "memberful.subscription.deleted" | "note.created" | "note.deleted" | "patreon.member.updated" | "patreon.membership.created" | "patreon.membership.deleted" | "shopify.customer.created" | "shopify.customer.updated" | "social_mention.created" | "stripe.checkout.session.completed" | "stripe.customer.updated" | "stripe.subscription.activated" | "stripe.subscription.churning" | "stripe.subscription.deactivated" | "subscriber.bounced" | "subscriber.changed_email" | "subscriber.churned" | "subscriber.clicked" | "subscriber.commented" | "subscriber.complained" | "subscriber.confirmed" | "subscriber.created" | "subscriber.deleted" | "subscriber.delivered" | "subscriber.opened" | "subscriber.paid" | "subscriber.paused" | "subscriber.resumed" | "subscriber.referred" | "subscriber.referred.paid" | "subscriber.rejected" | "subscriber.replied" | "subscriber.responded_to_survey" | "subscriber.tags.changed" | "subscriber.trial_ended" | "subscriber.trial_started" | "subscriber.type.changed" | "subscriber.unsubscribed" | "subscriber.updated" | "subscriber.viewed_checkout_page" | "survey.cleared_responses" | "survey.created" | "survey.deleted" | "survey.updated" | "form.created" | "form.deleted" | "form.updated";
+    /**
+     * ActionType 
+     * @description The action that is triggered when the automation is successfully run. 
+     * @enum {string}
+     */
+    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_arena_post" | "create_bluesky_post" | "create_linkedin_post" | "create_mastodon_post" | "create_tumblr_post" | "create_twitter_post" | "create_export" | "send_post_request" | "send_confirmation_reminder";
+    /** Delay */
+    Delay: {
+      /** Value */
+      value: string;
+      /**
+       * Unit 
+       * @enum {string}
+       */
+      unit: "minutes" | "hours" | "days" | "weeks";
+      /**
+       * Time Of Day 
+       * @enum {string}
+       */
+      time_of_day?: "morning" | "evening" | "";
+    };
+    /** Timing */
+    Timing: {
+      /**
+       * Time 
+       * @enum {string}
+       */
+      time: "immediate" | "delay";
+      delay?: components["schemas"]["Delay"];
+    };
+    /** Action */
+    Action: {
+      type: components["schemas"]["AutomationActionType"];
+      /** Metadata */
+      metadata: Record<string, unknown>;
+      timing?: components["schemas"]["Timing"];
+    };
+    /**
+     * Operator 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    Operator: "equals" | "not_equals" | "contains" | "not_contains" | "is_empty" | "is_not_empty" | "greater_than" | "less_than";
+    /**
+     * Filter 
+     * @description A filter is a single condition that can be evaluated against a [Subscriber](/api-subscribers-retrieve). It has a field, an operator, and a value:
+     * 
+     * ```json
+     * {
+     *     "field": "subscriber.tags",
+     *     "operator": "contains",
+     *     "value": "executive"
+     * }
+     * ```
+     * 
+     * The field is the path to the field on the subscriber to evaluate. The operator is the operator to use when evaluating the filter. The value is the value to compare the field to.
+     */
+    Filter: {
+      /** Field */
+      field: string;
+      operator: components["schemas"]["Operator"];
+      /** Value */
+      value: string;
+    };
+    /**
+     * FilterGroup 
+     * @description Buttondown's filtering schema can be used for multiple things:
+     * 
+     * - Filtering [the audience of an email](/api-emails-create) to a specific subset
+     * - Creating [finely-tuned automations](/api-automation-introduction)
+     * 
+     * Filters are fractal; they can be nested in groups, and groups can be nested in other groups. This is accomplished through a tree-like structure. Every "FilterGroup" has a "predicate" field, which is either "and" or "or", which determines how the filters and groups within the group are combined, a "groups" field, which is a list of "FilterGroup" objects (that's that recursive bit!), and a "filters" field, which are the leaf-level filters themselves.
+     * 
+     * Let's say you want a simple filter: all subscribers who have a tag called "executive". You can do that like this:
+     * 
+     * ```json
+     * {
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}],
+     *     "groups": [],
+     *     "predicate": "and"
+     * }
+     * ```
+     * 
+     * Now, let's say you want to filter for subscribers who have a tag called "executive" and a tag called "general-electric". You can do that like this:
+     * 
+     * ```json
+     * {
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
+     *     "groups": [],
+     *     "predicate": "and"
+     * }
+     * ```
+     * 
+     * If you wanted to change that `and` to an `or`, you can do that like this:
+     * 
+     * ```json
+     * {
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
+     *     "groups": [],
+     *     "predicate": "or"
+     * }
+     * ```
+     * 
+     * Now, let's say you want to filter for subscribers who have a tag called "executive" _or_ a tag called "general-electric" and a tag called "admin". This is where the whole nested thing comes in handy. You can do that like this:
+     * 
+     * ```json
+     * {
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}],
+     *     "groups": [
+     *         {
+     *             "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "admin"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
+     *             "groups": [],
+     *             "predicate": "and"
+     *         }
+     *     ],
+     *     "predicate": "or"
+     * }
+     * ```
+     * 
+     * You can read more about the specific filter construction in the [Filter documentation](/api-emails-filter).
+     */
+    FilterGroup: {
+      /**
+       * Filters 
+       * @description The leaf-level filters to apply to the audience.
+       */
+      filters: (components["schemas"]["Filter"])[];
+      /**
+       * Groups 
+       * @description The nested groups to apply to the audience.
+       */
+      groups: (components["schemas"]["FilterGroup"])[];
+      /**
+       * Predicate 
+       * @description The logical operator to use when combining filters (either 'and' or 'or'). 
+       * @enum {string}
+       */
+      predicate: "and" | "or";
+    };
+    /** Automation */
+    Automation: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Name */
+      name: string;
+      status: components["schemas"]["AutomationStatus"];
+      trigger: components["schemas"]["ExternalEventType"];
+      /** Actions */
+      actions: (components["schemas"]["Action"])[];
+      filters: components["schemas"]["FilterGroup"];
+      /** Metadata */
+      metadata: Record<string, unknown>;
+      /**
+       * Should Evaluate Filter After Delay 
+       * @description If true, filters are re-evaluated after the delay has passed.
+       */
+      should_evaluate_filter_after_delay: boolean;
+    };
+    /** Page[Automation] */
+    AutomationPage: {
+      /** Results */
+      results: (components["schemas"]["Automation"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /**
+     * AutomationCreationErrorCode 
+     * @description Represents the type of error that occurred when creating an automation.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    AutomationCreationErrorCode: "delay_invalid" | "filter_invalid__tag" | "filter_invalid" | "action_invalid" | "filter_invalid__field" | "invalid_newsletter_id" | "trigger_action_invalid" | "action_invalid__missing_body_or_subject";
+    /** ErrorMessage[AutomationCreationErrorCode] */
+    ErrorMessage_AutomationCreationErrorCode_: {
+      code: components["schemas"]["AutomationCreationErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /** AutomationInput */
+    AutomationInput: {
+      /** Name */
+      name: string;
+      trigger: components["schemas"]["ExternalEventType"];
+      /** Actions */
+      actions: (Record<string, unknown>)[];
+      filters: components["schemas"]["FilterGroup"];
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+      /**
+       * Should Evaluate Filter After Delay 
+       * @description If true, filters are re-evaluated after the delay has passed. 
+       * @default false
+       */
+      should_evaluate_filter_after_delay?: boolean;
+    };
+    /** AutomationUpdateInput */
+    AutomationUpdateInput: {
+      /** Name */
+      name?: string;
+      status?: components["schemas"]["AutomationStatus"];
+      trigger?: components["schemas"]["ExternalEventType"];
+      timing?: components["schemas"]["Timing"];
+      /** Actions */
+      actions?: (Record<string, unknown>)[];
+      filters?: components["schemas"]["FilterGroup"];
+      /** Metadata */
+      metadata?: Record<string, unknown>;
+      /**
+       * Should Evaluate Filter After Delay 
+       * @description If true, filters are re-evaluated after the delay has passed.
+       */
+      should_evaluate_filter_after_delay?: boolean;
+    };
+    /**
+     * FailureBreakdownItem 
+     * @description A single failure reason with its count.
+     */
+    FailureBreakdownItem: {
+      /**
+       * Code 
+       * @description The failure reason code (e.g. 'hard_bounce', 'spam')
+       */
+      code: string;
+      /**
+       * Count 
+       * @description Number of failures with this reason
+       */
+      count: number;
+    };
+    /** Analytics */
+    Analytics: {
+      /**
+       * Recipients 
+       * @default 0
+       */
+      recipients?: number;
+      /**
+       * Deliveries 
+       * @default 0
+       */
+      deliveries?: number;
+      /**
+       * Opens 
+       * @default 0
+       */
+      opens?: number;
+      /**
+       * Clicks 
+       * @default 0
+       */
+      clicks?: number;
+      /**
+       * Temporary Failures 
+       * @default 0
+       */
+      temporary_failures?: number;
+      /**
+       * Permanent Failures 
+       * @default 0
+       */
+      permanent_failures?: number;
+      /**
+       * Unsubscriptions 
+       * @default 0
+       */
+      unsubscriptions?: number;
+      /**
+       * Complaints 
+       * @default 0
+       */
+      complaints?: number;
+      /**
+       * Survey Responses 
+       * @default 0
+       */
+      survey_responses?: number;
+      /**
+       * Webmentions 
+       * @default 0
+       */
+      webmentions?: number;
+      /**
+       * Page Views Lifetime 
+       * @default 0
+       */
+      page_views_lifetime?: number;
+      /**
+       * Page Views 30 
+       * @default 0
+       */
+      page_views_30?: number;
+      /**
+       * Page Views 7 
+       * @default 0
+       */
+      page_views_7?: number;
+      /**
+       * Subscriptions 
+       * @default 0
+       */
+      subscriptions?: number;
+      /**
+       * Paid Subscriptions 
+       * @default 0
+       */
+      paid_subscriptions?: number;
+      /**
+       * Replies 
+       * @default 0
+       */
+      replies?: number;
+      /**
+       * Comments 
+       * @default 0
+       */
+      comments?: number;
+      /**
+       * Social Mentions 
+       * @default 0
+       */
+      social_mentions?: number;
+      /**
+       * Temporary Failure Breakdown 
+       * @description Breakdown of temporary failures, sorted by count descending
+       */
+      temporary_failure_breakdown?: (components["schemas"]["FailureBreakdownItem"])[];
+      /**
+       * Permanent Failure Breakdown 
+       * @description Breakdown of permanent failures, sorted by count descending
+       */
+      permanent_failure_breakdown?: (components["schemas"]["FailureBreakdownItem"])[];
     };
     /** Book */
     Book: {
@@ -1132,287 +1767,51 @@ export interface components {
       shared?: boolean;
     };
     /**
-     * FailureBreakdownItem 
-     * @description A single failure reason with its count.
-     */
-    FailureBreakdownItem: {
-      /**
-       * Code 
-       * @description The failure reason code (e.g. 'hard_bounce', 'spam')
-       */
-      code: string;
-      /**
-       * Count 
-       * @description Number of failures with this reason
-       */
-      count: number;
-    };
-    /** Analytics */
-    Analytics: {
-      /**
-       * Recipients 
-       * @default 0
-       */
-      recipients?: number;
-      /**
-       * Deliveries 
-       * @default 0
-       */
-      deliveries?: number;
-      /**
-       * Opens 
-       * @default 0
-       */
-      opens?: number;
-      /**
-       * Clicks 
-       * @default 0
-       */
-      clicks?: number;
-      /**
-       * Temporary Failures 
-       * @default 0
-       */
-      temporary_failures?: number;
-      /**
-       * Permanent Failures 
-       * @default 0
-       */
-      permanent_failures?: number;
-      /**
-       * Unsubscriptions 
-       * @default 0
-       */
-      unsubscriptions?: number;
-      /**
-       * Complaints 
-       * @default 0
-       */
-      complaints?: number;
-      /**
-       * Survey Responses 
-       * @default 0
-       */
-      survey_responses?: number;
-      /**
-       * Webmentions 
-       * @default 0
-       */
-      webmentions?: number;
-      /**
-       * Page Views Lifetime 
-       * @default 0
-       */
-      page_views_lifetime?: number;
-      /**
-       * Page Views 30 
-       * @default 0
-       */
-      page_views_30?: number;
-      /**
-       * Page Views 7 
-       * @default 0
-       */
-      page_views_7?: number;
-      /**
-       * Subscriptions 
-       * @default 0
-       */
-      subscriptions?: number;
-      /**
-       * Paid Subscriptions 
-       * @default 0
-       */
-      paid_subscriptions?: number;
-      /**
-       * Replies 
-       * @default 0
-       */
-      replies?: number;
-      /**
-       * Comments 
-       * @default 0
-       */
-      comments?: number;
-      /**
-       * Social Mentions 
-       * @default 0
-       */
-      social_mentions?: number;
-      /**
-       * Temporary Failure Breakdown 
-       * @description Breakdown of temporary failures, sorted by count descending
-       */
-      temporary_failure_breakdown?: (components["schemas"]["FailureBreakdownItem"])[];
-      /**
-       * Permanent Failure Breakdown 
-       * @description Breakdown of permanent failures, sorted by count descending
-       */
-      permanent_failure_breakdown?: (components["schemas"]["FailureBreakdownItem"])[];
-    };
-    /**
-     * CommentingMode 
-     * @description Governs who can comment on this email.
-     * 
-     * This enum replaces the `is_comments_disabled` field, which has been deprecated. (Also note that this field may be superseded by newsletter-level settings; for instance, "enabled" is an invalid and inert value if the newsletter itself has comments disabled.) 
-     * @enum {string}
-     */
-    EmailCommentingMode: "disabled" | "enabled" | "enabled_for_paid_subscribers";
-    /**
      * Type 
-     * @description Represents the audience of an email, and to whom it is visible both in the initial
-     * email and in online archives. 
+     * @description Represents the action being performed on a bulk of objects.
+     * 
+     * (Not to be coy, but these names should be self-explanatory.) 
      * @enum {string}
      */
-    EmailType: "public" | "private" | "premium" | "free" | "churned" | "archival";
-    /**
-     * Operator 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    Operator: "equals" | "not_equals" | "contains" | "not_contains" | "is_empty" | "is_not_empty" | "greater_than" | "less_than";
-    /**
-     * Filter 
-     * @description A filter is a single condition that can be evaluated against a [Subscriber](/api-subscribers-retrieve). It has a field, an operator, and a value:
-     * 
-     * ```json
-     * {
-     *     "field": "subscriber.tags",
-     *     "operator": "contains",
-     *     "value": "executive"
-     * }
-     * ```
-     * 
-     * The field is the path to the field on the subscriber to evaluate. The operator is the operator to use when evaluating the filter. The value is the value to compare the field to.
-     */
-    Filter: {
-      /** Field */
-      field: string;
-      operator: components["schemas"]["Operator"];
-      /** Value */
-      value: string;
-    };
-    /**
-     * FilterGroup 
-     * @description Buttondown's filtering schema can be used for multiple things:
-     * 
-     * - Filtering [the audience of an email](/api-emails-create) to a specific subset
-     * - Creating [finely-tuned automations](/api-automation-introduction)
-     * 
-     * Filters are fractal; they can be nested in groups, and groups can be nested in other groups. This is accomplished through a tree-like structure. Every "FilterGroup" has a "predicate" field, which is either "and" or "or", which determines how the filters and groups within the group are combined, a "groups" field, which is a list of "FilterGroup" objects (that's that recursive bit!), and a "filters" field, which are the leaf-level filters themselves.
-     * 
-     * Let's say you want a simple filter: all subscribers who have a tag called "executive". You can do that like this:
-     * 
-     * ```json
-     * {
-     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}],
-     *     "groups": [],
-     *     "predicate": "and"
-     * }
-     * ```
-     * 
-     * Now, let's say you want to filter for subscribers who have a tag called "executive" and a tag called "general-electric". You can do that like this:
-     * 
-     * ```json
-     * {
-     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
-     *     "groups": [],
-     *     "predicate": "and"
-     * }
-     * ```
-     * 
-     * If you wanted to change that `and` to an `or`, you can do that like this:
-     * 
-     * ```json
-     * {
-     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
-     *     "groups": [],
-     *     "predicate": "or"
-     * }
-     * ```
-     * 
-     * Now, let's say you want to filter for subscribers who have a tag called "executive" _or_ a tag called "general-electric" and a tag called "admin". This is where the whole nested thing comes in handy. You can do that like this:
-     * 
-     * ```json
-     * {
-     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}],
-     *     "groups": [
-     *         {
-     *             "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "admin"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
-     *             "groups": [],
-     *             "predicate": "and"
-     *         }
-     *     ],
-     *     "predicate": "or"
-     * }
-     * ```
-     * 
-     * You can read more about the specific filter construction in the [Filter documentation](/api-emails-filter).
-     */
-    FilterGroup: {
-      /**
-       * Filters 
-       * @description The leaf-level filters to apply to the audience.
-       */
-      filters: (components["schemas"]["Filter"])[];
-      /**
-       * Groups 
-       * @description The nested groups to apply to the audience.
-       */
-      groups: (components["schemas"]["FilterGroup"])[];
-      /**
-       * Predicate 
-       * @description The logical operator to use when combining filters (either 'and' or 'or'). 
-       * @enum {string}
-       */
-      predicate: "and" | "or";
-    };
-    /**
-     * Source 
-     * @description Represents the original provenance of an email. This value is not exposed
-     * to subscribers, but does determine some behavior of the email (e.g. whether
-     * or not analytics can be calculated.) 
-     * @enum {string}
-     */
-    EmailSource: "api" | "import" | "app" | "external_feed";
+    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "change_tags_colors" | "delete_comments" | "delete_surveys" | "delete_survey_responses" | "delete_tags" | "mark_comments_as_active" | "mark_comments_as_spammy" | "replay_events" | "update_survey_statuses" | "modify_stripe_subscriptions";
     /**
      * Status 
-     * @description Represents the state of an email.
+     * @description Represents the status of a bulk action.
      * 
      * No action is required to move from one state or another; Buttondown
      * internally handles the transitions, and exposing the status is for
      * observability purposes only. 
      * @enum {string}
      */
-    EmailStatus: "draft" | "managed_by_rss" | "about_to_send" | "scheduled" | "in_flight" | "paused" | "deleted" | "errored" | "sent" | "imported" | "throttled" | "resending" | "transactional" | "suppressed";
+    BulkActionStatus: "not_started" | "in_progress" | "processed" | "failed";
     /**
-     * SuppressionReason 
-     * @description Represents the reason an email was suppressed. 
-     * @enum {string}
+     * BulkAction 
+     * @description A bulk action represents, well, a bulk action. It is used to perform
+     * actions on a large number of objects at once. For example, you can
+     * use it to delete a large number of emails, or to unsubscribe a large
+     * number of subscribers. The actions within a bulk action are processed
+     * serially by Buttondown; this should be considered an ergonomic way to
+     * batch API calls across the network rather than a net-new piece of functionality
+     * in of itself.
      */
-    EmailSuppressionReason: "law_enforcement" | "internal_auditing";
-    /**
-     * EmailTemplate 
-     * @description Represents the template of an email.
-     * 
-     * Each template has a different layout/style; you can view screenshots and examples [in the docs](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates). 
-     * @enum {string}
-     */
-    NewsletterEmailTemplate: "classic" | "modern" | "plaintext" | "naked";
-    /**
-     * Email 
-     * @description Emails are why you're here on Buttondown, right?
-     * Creating an email via the API is just like creating one in the interface;
-     * it will instantly trigger sending actual emails,
-     * based on the tags and email type you provide.
-     * 
-     * Relevant changes to the schema:
-     * 
-     * - [2024-08-15](https://docs.buttondown.com/api-changelog-2024-08-15): unshipped the `included_tags` and `excluded_tags` fields.
-     * - [2024-12-30](https://docs.buttondown.com/api-changelog-2024-12-30): unshipped the `is_comments_disabled` field, and replaced it with a more flexible `commenting_mode` field.
-     * - [2025-09-23](https://docs.buttondown.com/api-changelog-2025-09-23): increased the maximum length of the `subject` field from 1000 to 2000 characters.
-     */
-    Email: {
+    BulkAction: {
+      /**
+       * @description The type of bulk action to perform. 
+       * @example delete_emails
+       */
+      type: components["schemas"]["BulkActionType"];
+      /**
+       * Metadata 
+       * @example {
+       *   "ids": [
+       *     "611c8825-6f21-4544-bb47-9f50453e9cb0",
+       *     "418c701a-efe3-4e3d-a404-e635a2f28775"
+       *   ]
+       * }
+       */
+      metadata: {
+        [key: string]: (string | (string)[] | Record<string, unknown>) | undefined;
+      };
       /**
        * Id 
        * @description A unique TypeID associated with the object.
@@ -1424,419 +1823,40 @@ export interface components {
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
-      /** Absolute Url */
-      absolute_url: string;
-      analytics?: components["schemas"]["Analytics"];
+      status: components["schemas"]["BulkActionStatus"];
       /**
-       * Attachments 
-       * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
-       */
-      attachments?: (string)[];
-      /**
-       * Body 
-       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`.
-       */
-      body: string;
-      /**
-       * Canonical Url 
-       * @description The URL of the original source of the content.
-       */
-      canonical_url: string;
-      commenting_mode: components["schemas"]["EmailCommentingMode"];
-      /**
-       * Description 
-       * @description A human-readable description of the email, used for archives and SEO.
-       */
-      description: string;
-      /** @default public */
-      email_type?: components["schemas"]["EmailType"];
-      /**
-       * Featured 
-       * @description Designated whether or not this email should be highlighted within the archives.
-       */
-      featured: boolean;
-      filters: components["schemas"]["FilterGroup"];
-      /**
-       * Image 
-       * @description A primary image to be used when previewing the email on the web or in other contexts.
-       */
-      image: string;
-      /**
-       * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
-       * @default {}
-       */
-      metadata?: Record<string, unknown>;
-      /**
-       * Modification Date 
+       * Completion Date 
        * Format: date-time 
-       * @description The date and time at which the object was last modified.
+       * @description The date and time at which the bulk action was completed.
        */
-      modification_date: string;
-      /**
-       * Publish Date 
-       * Format: date-time 
-       * @description The date and time at which the email should be published in the future (for scheduled emails), or the date and time at which the email was published (for sent emails).
-       */
-      publish_date?: string;
-      /**
-       * Related Email Ids 
-       * @description A list of email IDs that are related to this email. Related emails are shown at the bottom of the email and archive pages.
-       */
-      related_email_ids: (string)[];
-      /**
-       * Secondary Id 
-       * @description An informal 'number' for the email, used in some templates ('This was issue #123').
-       */
-      secondary_id?: number;
-      /**
-       * Should Trigger Pay Per Email Billing 
-       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
-       */
-      should_trigger_pay_per_email_billing: boolean;
-      /**
-       * Slug 
-       * @description A short, human-readable identifier for the email. (Used in the URL of the email, and in the 'slug' field of the email object.) 
-       * @example welcome-to-the-newsletter
-       */
-      slug?: string;
-      /**
-       * @description The source of the email. 
-       * @example app
-       */
-      source: components["schemas"]["EmailSource"];
-      /**
-       * @description The current status of the email. 
-       * @example draft
-       */
-      status: components["schemas"]["EmailStatus"];
-      /**
-       * Subject 
-       * @description The subject line for the email.
-       */
-      subject: string;
-      /** @description Reason for suppression, if email is suppressed. */
-      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
-      /** @description If present, this template overrides your newsletter's default template. */
-      template?: components["schemas"]["NewsletterEmailTemplate"];
+      completion_date?: string;
     };
-    /**
-     * EmailCreationErrorCode 
-     * @description Represents the type of error that occurred when creating an email.
-     * 
-     * Human-readable error messages are provided in the `detail` field of the response;
-     * these values are meant to be parseable by code or client logic. 
-     * @enum {string}
-     */
-    EmailCreationErrorCode: "subject_invalid" | "email_duplicate" | "email_invalid" | "body_invalid" | "publish_date_invalid" | "publish_date_missing" | "status_invalid" | "body_contains_frontmatter" | "slug_invalid" | "canonical_url_invalid" | "tag_invalid";
-    /** ErrorMessage[EmailCreationErrorCode] */
-    ErrorMessage_EmailCreationErrorCode_: {
-      code: components["schemas"]["EmailCreationErrorCode"];
-      /** Detail */
-      detail: string;
+    /** BulkActionInput */
+    BulkActionInput: {
+      /**
+       * @description The type of bulk action to perform. 
+       * @example delete_emails
+       */
+      type: components["schemas"]["BulkActionType"];
       /**
        * Metadata 
-       * @default {}
-       */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
-    };
-    /** EmailInput */
-    EmailInput: {
-      /**
-       * Attachments 
-       * @default []
-       */
-      attachments?: (string)[];
-      /**
-       * Publish Date 
-       * Format: date-time
-       */
-      publish_date?: string;
-      /**
-       * Subject 
-       * @example The subject line for the email
-       */
-      subject: string;
-      /** Slug */
-      slug?: string;
-      /**
-       * Description 
-       * @default
-       */
-      description?: string;
-      /**
-       * Canonical Url 
-       * @default
-       */
-      canonical_url?: string;
-      /**
-       * Image 
-       * @default
-       */
-      image?: string;
-      /**
-       * Body 
-       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`. 
-       * @default  
-       * @example This is an example of the body of an email.
-       */
-      body?: string;
-      /** @default public */
-      email_type?: components["schemas"]["EmailType"];
-      /** @default about_to_send */
-      status?: components["schemas"]["EmailStatus"];
-      /**
-       * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
-       * @default {}
-       */
-      metadata?: Record<string, unknown>;
-      /** Secondary Id */
-      secondary_id?: number;
-      /**
-       * Filters 
-       * @default {
-       *   "filters": [],
-       *   "groups": [],
-       *   "predicate": "and"
+       * @example {
+       *   "ids": [
+       *     "611c8825-6f21-4544-bb47-9f50453e9cb0",
+       *     "418c701a-efe3-4e3d-a404-e635a2f28775"
+       *   ]
        * }
        */
-      filters?: components["schemas"]["FilterGroup"];
-      /** @default enabled */
-      commenting_mode?: components["schemas"]["EmailCommentingMode"];
-      /**
-       * Related Email Ids 
-       * @default []
-       */
-      related_email_ids?: (string)[];
-      /**
-       * Featured 
-       * @description Designated whether or not this email should be highlighted within the archives. 
-       * @default false
-       */
-      featured?: boolean;
-      /**
-       * Should Trigger Pay Per Email Billing 
-       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters. 
-       * @default false
-       */
-      should_trigger_pay_per_email_billing?: boolean;
-    };
-    /** Page[Email] */
-    EmailPage: {
-      /** Results */
-      results: (components["schemas"]["Email"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * EmailListErrorCode 
-     * @description Represents the type of error that occurred when listing emails.
-     * 
-     * Human-readable error messages are provided in the `detail` field of the response;
-     * these values are meant to be parseable by code or client logic. 
-     * @enum {string}
-     */
-    EmailListErrorCode: "creation_date_invalid" | "publish_date_invalid";
-    /** ErrorMessage[EmailListErrorCode] */
-    ErrorMessage_EmailListErrorCode_: {
-      code: components["schemas"]["EmailListErrorCode"];
-      /** Detail */
-      detail: string;
-      /**
-       * Metadata 
-       * @default {}
-       */
-      metadata?: {
-        [key: string]: string | undefined;
+      metadata: {
+        [key: string]: (string | (string)[] | Record<string, unknown>) | undefined;
       };
-    };
-    /** EmailUpdateInput */
-    EmailUpdateInput: {
-      /**
-       * Attachments 
-       * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
-       */
-      attachments?: (string)[];
-      /** Publish Date */
-      publish_date?: string | "none";
-      /**
-       * Subject 
-       * @description The subject line for the email. 
-       * @example The subject line for the email
-       */
-      subject?: string;
-      /**
-       * Description 
-       * @description A human-readable description of the email, used for archives and SEO.
-       */
-      description?: string;
-      /**
-       * Canonical Url 
-       * @description The URL of the original source of the content. 
-       * @example https://sheinhardtwig.com/2025/01/17/our-nbc-partnership
-       */
-      canonical_url?: string;
-      /**
-       * Body 
-       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`. 
-       * @example This is an example of the body of an email.
-       */
-      body?: string;
-      /** @description The type of email to create. Defaults to `PUBLIC`. */
-      email_type?: components["schemas"]["EmailType"];
-      status?: components["schemas"]["EmailStatus"];
-      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
-      /**
-       * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
-       * @default {}
-       */
-      metadata?: Record<string, unknown>;
-      /**
-       * Image 
-       * @default
-       */
-      image?: string;
-      /**
-       * Slug 
-       * @example hello-world
-       */
-      slug?: string;
-      /** Secondary Id */
-      secondary_id?: number;
-      filters?: components["schemas"]["FilterGroup"];
-      /** Template */
-      template?: components["schemas"]["NewsletterEmailTemplate"] | "none";
-      commenting_mode?: components["schemas"]["EmailCommentingMode"];
-      /** Related Email Ids */
-      related_email_ids?: (string)[];
-      /**
-       * Featured 
-       * @description Designated whether or not this email should be highlighted within the archives.
-       */
-      featured?: boolean;
-      /**
-       * Should Trigger Pay Per Email Billing 
-       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
-       */
-      should_trigger_pay_per_email_billing?: boolean;
-    };
-    /**
-     * AccessLevel 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    AccessLevel: "none" | "read" | "write";
-    /** Permissions */
-    Permissions: {
-      /** @default none */
-      subscriber?: components["schemas"]["AccessLevel"];
-      /** @default none */
-      email?: components["schemas"]["AccessLevel"];
-      /** @default none */
-      sending?: components["schemas"]["AccessLevel"];
-      /** @default none */
-      styling?: components["schemas"]["AccessLevel"];
-      /** @default none */
-      administrivia?: components["schemas"]["AccessLevel"];
-      /** @default none */
-      automations?: components["schemas"]["AccessLevel"];
-      /** @default none */
-      surveys?: components["schemas"]["AccessLevel"];
-      /** @default none */
-      forms?: components["schemas"]["AccessLevel"];
     };
     /**
      * Status 
      * @description An enumeration. 
      * @enum {string}
      */
-    InvitationStatus: "pending" | "accepted" | "declined" | "revoked" | "owner";
-    /** User */
-    User: {
-      permissions: components["schemas"]["Permissions"];
-      /** Email Address */
-      email_address: string;
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      status: components["schemas"]["InvitationStatus"];
-      /**
-       * Last Logged In 
-       * Format: date-time
-       */
-      last_logged_in?: string;
-    };
-    /** History */
-    History: {
-      /** History Id */
-      history_id: number;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Value */
-      value: string;
-      /** User Id */
-      user_id?: string;
-      user?: components["schemas"]["User"];
-    };
-    /** Page[History] */
-    HistoryPage: {
-      /** Results */
-      results: (components["schemas"]["History"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /** Render */
-    Render: {
-      /**
-       * Content 
-       * @description The rendered HTML for the specified target format.
-       */
-      content: string;
-    };
-    /** SendDraftInput */
-    SendDraftInput: {
-      /**
-       * Subscribers 
-       * @description A list of subscriber ids to which to send the email. 
-       * @example [
-       *   "bc5601f4-b180-4e02-8501-c18080662376",
-       *   "24ee3338-daaf-42b0-bf7b-0cab38972fe5"
-       * ]
-       */
-      subscribers?: (string)[];
-      /**
-       * Recipients 
-       * @description A list of email addresses to send the email to. 
-       * @example [
-       *   "telemachus@buttondown.email"
-       * ]
-       */
-      recipients?: (string)[];
-    };
+    CommentStatus: "pending" | "active" | "spammy";
     /**
      * Source 
      * @description Represents the original provenance of a subscriber. This value is not exposed
@@ -2103,42 +2123,118 @@ export interface components {
       stripe_customer?: Record<string, unknown>;
     };
     /**
-     * ValidationErrorCode 
-     * @description Represents the type of error that occurred when validating subscriber input.
+     * CommentingMode 
+     * @description Governs who can comment on this email.
      * 
-     * Human-readable error messages are provided in the `detail` field of the response;
-     * these values are meant to be parseable by code or client logic. 
+     * This enum replaces the `is_comments_disabled` field, which has been deprecated. (Also note that this field may be superseded by newsletter-level settings; for instance, "enabled" is an invalid and inert value if the newsletter itself has comments disabled.) 
      * @enum {string}
      */
-    SubscriberInputValidationErrorCode: "email_already_exists" | "email_blocked" | "email_empty" | "email_invalid" | "ip_address_spammy" | "metadata_invalid" | "rate_limited" | "subscriber_already_exists" | "subscriber_blocked" | "subscriber_id_invalid" | "subscriber_suppressed" | "tag_invalid";
-    /** ErrorMessage[ValidationErrorCode] */
-    ErrorMessage_ValidationErrorCode_: {
-      code: components["schemas"]["SubscriberInputValidationErrorCode"];
-      /** Detail */
-      detail: string;
+    EmailCommentingMode: "disabled" | "enabled" | "enabled_for_paid_subscribers";
+    /**
+     * Type 
+     * @description Represents the audience of an email, and to whom it is visible both in the initial
+     * email and in online archives. 
+     * @enum {string}
+     */
+    EmailType: "public" | "private" | "premium" | "free" | "churned" | "archival";
+    /**
+     * Source 
+     * @description Represents the original provenance of an email. This value is not exposed
+     * to subscribers, but does determine some behavior of the email (e.g. whether
+     * or not analytics can be calculated.) 
+     * @enum {string}
+     */
+    EmailSource: "api" | "import" | "app" | "external_feed";
+    /**
+     * Status 
+     * @description Represents the state of an email.
+     * 
+     * No action is required to move from one state or another; Buttondown
+     * internally handles the transitions, and exposing the status is for
+     * observability purposes only. 
+     * @enum {string}
+     */
+    EmailStatus: "draft" | "managed_by_rss" | "about_to_send" | "scheduled" | "in_flight" | "paused" | "deleted" | "errored" | "sent" | "imported" | "throttled" | "resending" | "transactional" | "suppressed";
+    /**
+     * SuppressionReason 
+     * @description Represents the reason an email was suppressed. 
+     * @enum {string}
+     */
+    EmailSuppressionReason: "law_enforcement" | "internal_auditing";
+    /**
+     * EmailTemplate 
+     * @description Represents the template of an email.
+     * 
+     * Each template has a different layout/style; you can view screenshots and examples [in the docs](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates). 
+     * @enum {string}
+     */
+    NewsletterEmailTemplate: "classic" | "modern" | "plaintext" | "naked";
+    /**
+     * Email 
+     * @description Emails are why you're here on Buttondown, right?
+     * Creating an email via the API is just like creating one in the interface;
+     * it will instantly trigger sending actual emails,
+     * based on the tags and email type you provide.
+     * 
+     * Relevant changes to the schema:
+     * 
+     * - [2024-08-15](https://docs.buttondown.com/api-changelog-2024-08-15): unshipped the `included_tags` and `excluded_tags` fields.
+     * - [2024-12-30](https://docs.buttondown.com/api-changelog-2024-12-30): unshipped the `is_comments_disabled` field, and replaced it with a more flexible `commenting_mode` field.
+     * - [2025-09-23](https://docs.buttondown.com/api-changelog-2025-09-23): increased the maximum length of the `subject` field from 1000 to 2000 characters.
+     */
+    Email: {
       /**
-       * Metadata 
-       * @default {}
+       * Id 
+       * @description A unique TypeID associated with the object.
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
-    };
-    /** SubscriberInput */
-    SubscriberInput: {
+      id: string;
       /**
-       * Email Address 
-       * @description The email address of the subscriber. 
-       * @example telemachus@buttondown.email
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
        */
-      email_address: string;
+      creation_date: string;
+      /** Absolute Url */
+      absolute_url: string;
+      analytics?: components["schemas"]["Analytics"];
       /**
-       * Notes 
-       * @description Any notes you want to attach to the subscriber. These are not publicly visible. 
-       * @default  
-       * @example One of our first subscribers!
+       * Attachments 
+       * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
        */
-      notes?: string;
+      attachments?: (string)[];
+      /**
+       * Body 
+       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`.
+       */
+      body: string;
+      /**
+       * Canonical Url 
+       * @description The URL of the original source of the content.
+       */
+      canonical_url: string;
+      commenting_mode: components["schemas"]["EmailCommentingMode"];
+      /**
+       * Description 
+       * @description A human-readable description of the email, used for archives and SEO.
+       */
+      description: string;
+      /**
+       * @deprecated 
+       * @description The type of email. 
+       * @default public
+       */
+      email_type?: components["schemas"]["EmailType"];
+      /**
+       * Featured 
+       * @description Designated whether or not this email should be highlighted within the archives.
+       */
+      featured: boolean;
+      filters: components["schemas"]["FilterGroup"];
+      /**
+       * Image 
+       * @description A primary image to be used when previewing the email on the web or in other contexts.
+       */
+      image: string;
       /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
@@ -2146,48 +2242,139 @@ export interface components {
        */
       metadata?: Record<string, unknown>;
       /**
-       * Tags 
-       * @default []
+       * Modification Date 
+       * Format: date-time 
+       * @description The date and time at which the object was last modified.
        */
-      tags?: (string)[];
+      modification_date: string;
       /**
-       * Referrer Url 
-       * @default
+       * Publish Date 
+       * Format: date-time 
+       * @description The date and time at which the email should be published in the future (for scheduled emails), or the date and time at which the email was published (for sent emails).
        */
-      referrer_url?: string;
+      publish_date?: string;
       /**
-       * Utm Campaign 
-       * @default
+       * Related Email Ids 
+       * @description A list of email IDs that are related to this email. Related emails are shown at the bottom of the email and archive pages.
        */
-      utm_campaign?: string;
+      related_email_ids: (string)[];
       /**
-       * Utm Medium 
-       * @default
+       * Secondary Id 
+       * @description An informal 'number' for the email, used in some templates ('This was issue #123').
        */
-      utm_medium?: string;
+      secondary_id?: number;
       /**
-       * Utm Source 
-       * @default
+       * Should Trigger Pay Per Email Billing 
+       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
        */
-      utm_source?: string;
+      should_trigger_pay_per_email_billing: boolean;
       /**
-       * Referring Subscriber Id 
-       * @description The ID of the subscriber that referred this subscriber.
+       * Slug 
+       * @description A short, human-readable identifier for the email. (Used in the URL of the email, and in the 'slug' field of the email object.) 
+       * @example welcome-to-the-newsletter
        */
-      referring_subscriber_id?: string;
-      /** @example regular */
-      type?: components["schemas"]["SubscriberType"];
+      slug?: string;
       /**
-       * Ip Address 
-       * @description The IP address of the subscriber. If provided, we will use this IP address to determine the subscriber's location and validate their legitimacy. 
-       * @example 127.0.0.1
+       * @description The source of the email. 
+       * @example app
        */
-      ip_address?: string;
+      source: components["schemas"]["EmailSource"];
+      /**
+       * @description The current status of the email. 
+       * @example draft
+       */
+      status: components["schemas"]["EmailStatus"];
+      /**
+       * Subject 
+       * @description The subject line for the email.
+       */
+      subject: string;
+      /** @description Reason for suppression, if email is suppressed. */
+      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
+      /** @description If present, this template overrides your newsletter's default template. */
+      template?: components["schemas"]["NewsletterEmailTemplate"];
     };
-    /** Page[Subscriber] */
-    SubscriberPage: {
+    /**
+     * Comment 
+     * @description Comments are a way for subscribers to interact with newsletters. They're a way to
+     * provide feedback, ask questions, and generally engage with the content of an email.
+     * Comments exist in a tree structure; comments that reply to other comments are
+     * considered "children" of the parent comment.
+     */
+    Comment: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Email Id */
+      email_id: string;
+      /** Subscriber Id */
+      subscriber_id?: string;
+      /**
+       * Parent Id 
+       * @description The ID of the parent comment, if this comment is a reply to another comment.
+       */
+      parent_id?: string;
+      /** Text */
+      text: string;
+      status: components["schemas"]["CommentStatus"];
+      subscriber?: components["schemas"]["Subscriber"];
+      email?: components["schemas"]["Email"];
+    };
+    /** CommentInput */
+    CommentInput: {
+      /**
+       * Text 
+       * @description The text content of the comment
+       */
+      text: string;
+      /**
+       * Parent Id 
+       * @description The ID of the parent comment, if this comment is a reply to another comment.
+       */
+      parent_id?: string;
+      /**
+       * Email Id 
+       * @description The ID of the email this comment is for. Required if parent_id is not provided.
+       */
+      email_id?: string;
+      /**
+       * Subscriber Id 
+       * @description The ID of the subscriber to attribute the comment to. If not provided, the comment is attributed to the newsletter author.
+       */
+      subscriber_id?: string;
+    };
+    /** Page[Comment] */
+    CommentPage: {
       /** Results */
-      results: (components["schemas"]["Subscriber"])[];
+      results: (components["schemas"]["Comment"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** CommentUpdateInput */
+    CommentUpdateInput: {
+      /**
+       * Status 
+       * @description The new status for the comment. Use 'active' to approve or 'spammy' to mark as spam. 
+       * @enum {string}
+       */
+      status: "active" | "spammy";
+    };
+    /** Page[StripeCoupon] */
+    StripeCouponPage: {
+      /** Results */
+      results: (components["schemas"]["StripeCoupon"])[];
       /** Next */
       next?: string;
       /** Previous */
@@ -2196,17 +2383,17 @@ export interface components {
       count: number;
     };
     /**
-     * ListSubscribersErrorCode 
-     * @description Represents the type of error that occurred when listing subscribers.
+     * EmailCreationErrorCode 
+     * @description Represents the type of error that occurred when creating an email.
      * 
      * Human-readable error messages are provided in the `detail` field of the response;
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    ListSubscribersErrorCode: "invalid_tag" | "date_invalid" | "invalid_ordering";
-    /** ErrorMessage[ListSubscribersErrorCode] */
-    ErrorMessage_ListSubscribersErrorCode_: {
-      code: components["schemas"]["ListSubscribersErrorCode"];
+    EmailCreationErrorCode: "subject_invalid" | "email_duplicate" | "email_invalid" | "body_invalid" | "publish_date_invalid" | "publish_date_missing" | "status_invalid" | "body_contains_frontmatter" | "slug_invalid" | "canonical_url_invalid" | "tag_invalid";
+    /** ErrorMessage[EmailCreationErrorCode] */
+    ErrorMessage_EmailCreationErrorCode_: {
+      code: components["schemas"]["EmailCreationErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -2217,93 +2404,374 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
-    /**
-     * UpdateSubscriberErrorCode 
-     * @description Represents the type of error that occurred when updating a subscriber.
-     * 
-     * Human-readable error messages are provided in the `detail` field of the response;
-     * these values are meant to be parseable by code or client logic. 
-     * @enum {string}
-     */
-    UpdateSubscriberErrorCode: "email_already_exists" | "email_invalid" | "email_has_been_changed_too_many_times" | "firewall_blocked" | "subscriber_type_invalid" | "tag_invalid";
-    /** ErrorMessage[UpdateSubscriberErrorCode] */
-    ErrorMessage_UpdateSubscriberErrorCode_: {
-      code: components["schemas"]["UpdateSubscriberErrorCode"];
-      /** Detail */
-      detail: string;
+    /** EmailInput */
+    EmailInput: {
       /**
-       * Metadata 
-       * @default {}
+       * Attachments 
+       * @default []
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
-    };
-    /** SubscriberUpdateInput */
-    SubscriberUpdateInput: {
+      attachments?: (string)[];
       /**
-       * Commenting Disabled 
-       * @description Whether this subscriber is prevented from commenting.
+       * Publish Date 
+       * Format: date-time
        */
-      commenting_disabled?: boolean;
+      publish_date?: string;
       /**
-       * Email Address 
-       * @description The email address of the subscriber. 
-       * @example telemachus@buttondown.email
+       * Subject 
+       * @example The subject line for the email
        */
-      email_address?: string;
+      subject: string;
+      /** Slug */
+      slug?: string;
       /**
-       * Notes 
-       * @description Any notes you want to attach to the subscriber. These are not publicly visible. 
-       * @example One of our first subscribers!
+       * Description 
+       * @default
        */
-      notes?: string;
+      description?: string;
+      /**
+       * Canonical Url 
+       * @default
+       */
+      canonical_url?: string;
+      /**
+       * Image 
+       * @default
+       */
+      image?: string;
+      /**
+       * Body 
+       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`. 
+       * @default  
+       * @example This is an example of the body of an email.
+       */
+      body?: string;
+      /**
+       * @deprecated 
+       * @description The type of email to create. Defaults to `PUBLIC`. 
+       * @default public
+       */
+      email_type?: components["schemas"]["EmailType"];
+      /** @default about_to_send */
+      status?: components["schemas"]["EmailStatus"];
       /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
       metadata?: Record<string, unknown>;
-      /** Tags */
-      tags?: (string)[];
+      /** Secondary Id */
+      secondary_id?: number;
       /**
-       * Referrer Url 
+       * Filters 
+       * @default {
+       *   "filters": [],
+       *   "groups": [],
+       *   "predicate": "and"
+       * }
+       */
+      filters?: components["schemas"]["FilterGroup"];
+      /** @default enabled */
+      commenting_mode?: components["schemas"]["EmailCommentingMode"];
+      /**
+       * Related Email Ids 
+       * @default []
+       */
+      related_email_ids?: (string)[];
+      /**
+       * Featured 
+       * @description Designated whether or not this email should be highlighted within the archives. 
+       * @default false
+       */
+      featured?: boolean;
+      /**
+       * Should Trigger Pay Per Email Billing 
+       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters. 
+       * @default false
+       */
+      should_trigger_pay_per_email_billing?: boolean;
+    };
+    /** Page[Email] */
+    EmailPage: {
+      /** Results */
+      results: (components["schemas"]["Email"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /**
+     * EmailListErrorCode 
+     * @description Represents the type of error that occurred when listing emails.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    EmailListErrorCode: "creation_date_invalid" | "publish_date_invalid";
+    /** ErrorMessage[EmailListErrorCode] */
+    ErrorMessage_EmailListErrorCode_: {
+      code: components["schemas"]["EmailListErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /** EmailUpdateInput */
+    EmailUpdateInput: {
+      /**
+       * Attachments 
+       * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
+       */
+      attachments?: (string)[];
+      /** Publish Date */
+      publish_date?: string | "none";
+      /**
+       * Subject 
+       * @description The subject line for the email. 
+       * @example The subject line for the email
+       */
+      subject?: string;
+      /**
+       * Description 
+       * @description A human-readable description of the email, used for archives and SEO.
+       */
+      description?: string;
+      /**
+       * Canonical Url 
+       * @description The URL of the original source of the content. 
+       * @example https://sheinhardtwig.com/2025/01/17/our-nbc-partnership
+       */
+      canonical_url?: string;
+      /**
+       * Body 
+       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`. 
+       * @example This is an example of the body of an email.
+       */
+      body?: string;
+      /**
+       * @deprecated 
+       * @description The type of email to create. Defaults to `PUBLIC`.
+       */
+      email_type?: components["schemas"]["EmailType"];
+      status?: components["schemas"]["EmailStatus"];
+      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
+      /**
+       * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
+       */
+      metadata?: Record<string, unknown>;
+      /**
+       * Image 
        * @default
        */
-      referrer_url?: string;
-      type?: components["schemas"]["SubscriberType"];
-      /** Unsubscription Reason */
-      unsubscription_reason?: string;
-      /** Email Which Prompted Unsubscription Id */
-      email_which_prompted_unsubscription_id?: string;
+      image?: string;
+      /**
+       * Slug 
+       * @example hello-world
+       */
+      slug?: string;
+      /** Secondary Id */
+      secondary_id?: number;
+      filters?: components["schemas"]["FilterGroup"];
+      /** Template */
+      template?: components["schemas"]["NewsletterEmailTemplate"] | "none";
+      commenting_mode?: components["schemas"]["EmailCommentingMode"];
+      /** Related Email Ids */
+      related_email_ids?: (string)[];
+      /**
+       * Featured 
+       * @description Designated whether or not this email should be highlighted within the archives.
+       */
+      featured?: boolean;
+      /**
+       * Should Trigger Pay Per Email Billing 
+       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
+       */
+      should_trigger_pay_per_email_billing?: boolean;
+    };
+    /**
+     * AccessLevel 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    AccessLevel: "none" | "read" | "write";
+    /** Permissions */
+    Permissions: {
+      /**
+       * @description Access level for subscriber management. 
+       * @default none
+       */
+      subscriber?: components["schemas"]["AccessLevel"];
+      /**
+       * @description Access level for email management. 
+       * @default none
+       */
+      email?: components["schemas"]["AccessLevel"];
+      /**
+       * @description Access level for sending emails. 
+       * @default none
+       */
+      sending?: components["schemas"]["AccessLevel"];
+      /**
+       * @description Access level for newsletter styling. 
+       * @default none
+       */
+      styling?: components["schemas"]["AccessLevel"];
+      /**
+       * @description Access level for account administration. 
+       * @default none
+       */
+      administrivia?: components["schemas"]["AccessLevel"];
+      /**
+       * @description Access level for automation management. 
+       * @default none
+       */
+      automations?: components["schemas"]["AccessLevel"];
+      /**
+       * @description Access level for survey management. 
+       * @default none
+       */
+      surveys?: components["schemas"]["AccessLevel"];
+      /**
+       * @description Access level for form management. 
+       * @default none
+       */
+      forms?: components["schemas"]["AccessLevel"];
     };
     /**
      * Status 
      * @description An enumeration. 
      * @enum {string}
      */
-    AutomationAttemptStatus: "unprocessed" | "processed" | "failed" | "pending" | "skipped";
-    /** AutomationForSubscriber */
-    AutomationForSubscriber: {
-      /** Id */
-      id: string;
-      /** Name */
-      name: string;
-      status: components["schemas"]["AutomationAttemptStatus"];
-      /** Automation Id */
-      automation_id: string;
+    InvitationStatus: "pending" | "accepted" | "declined" | "revoked" | "owner";
+    /** User */
+    User: {
+      permissions: components["schemas"]["Permissions"];
       /**
-       * Execution Date 
-       * Format: date-time
+       * Email Address 
+       * @description The email address of the user.
        */
-      execution_date: string;
-      /** Actions */
-      actions: (Record<string, unknown>)[];
+      email_address: string;
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      status: components["schemas"]["InvitationStatus"];
+      /**
+       * Last Logged In 
+       * Format: date-time 
+       * @description When the user last logged in, or null if they haven't accepted the invitation.
+       */
+      last_logged_in?: string;
     };
-    /** Page[AutomationForSubscriber] */
-    AutomationForSubscriberPage: {
+    /** History */
+    History: {
+      /** History Id */
+      history_id: number;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Value */
+      value: string;
+      /** User Id */
+      user_id?: string;
+      user?: components["schemas"]["User"];
+    };
+    /** Page[History] */
+    HistoryPage: {
       /** Results */
-      results: (components["schemas"]["AutomationForSubscriber"])[];
+      results: (components["schemas"]["History"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Render */
+    Render: {
+      /**
+       * Content 
+       * @description The rendered HTML for the specified target format.
+       */
+      content: string;
+    };
+    /** SendDraftInput */
+    SendDraftInput: {
+      /**
+       * Subscribers 
+       * @description A list of subscriber ids to which to send the email. 
+       * @example [
+       *   "bc5601f4-b180-4e02-8501-c18080662376",
+       *   "24ee3338-daaf-42b0-bf7b-0cab38972fe5"
+       * ]
+       */
+      subscribers?: (string)[];
+      /**
+       * Recipients 
+       * @description A list of email addresses to send the email to. 
+       * @example [
+       *   "telemachus@buttondown.email"
+       * ]
+       */
+      recipients?: (string)[];
+    };
+    /**
+     * EmailEventType 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    EmailEventType: "activation_bounced" | "activation_clicked" | "activation_complained" | "activation_deferred" | "activation_delivered" | "activation_opened" | "activation_rejected" | "activation_reminder_bounced" | "activation_reminder_clicked" | "activation_reminder_complained" | "activation_reminder_deferred" | "activation_reminder_delivered" | "activation_reminder_opened" | "activation_reminder_rejected" | "subscription_confirmed_clicked" | "subscription_confirmed_bounced" | "subscription_confirmed_complained" | "subscription_confirmed_deferred" | "subscription_confirmed_delivered" | "subscription_confirmed_opened" | "subscription_confirmed_rejected" | "attempted" | "bounced" | "clicked" | "complained" | "deferred" | "delivered" | "opened" | "rejected" | "replied" | "sent" | "unsubscribed";
+    /** EmailEvent */
+    EmailEvent: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Subscriber Id */
+      subscriber_id?: string;
+      /** Email Id */
+      email_id?: string;
+      /** Automation Id */
+      automation_id?: string;
+      /** Metadata */
+      metadata: {
+        [key: string]: string | undefined;
+      };
+      event_type: components["schemas"]["EmailEventType"];
+      subscriber?: components["schemas"]["Subscriber"];
+      email?: components["schemas"]["Email"];
+      automation?: components["schemas"]["Automation"];
+    };
+    /** Page[EmailEvent] */
+    EmailEventPage: {
+      /** Results */
+      results: (components["schemas"]["EmailEvent"])[];
       /** Next */
       next?: string;
       /** Previous */
@@ -2312,42 +2780,62 @@ export interface components {
       count: number;
     };
     /**
-     * UpdateAutomationAttemptErrorCode 
-     * @description Represents the type of error that occurred when updating an automation attempt.
-     * 
-     * Human-readable error messages are provided in the `detail` field of the response;
-     * these values are meant to be parseable by code or client logic. 
+     * Collection 
+     * @description A group of data that can be exported in an export. 
      * @enum {string}
      */
-    UpdateAutomationAttemptErrorCode: "automation_attempt_not_found" | "invalid_status";
-    /** ErrorMessage[UpdateAutomationAttemptErrorCode] */
-    ErrorMessage_UpdateAutomationAttemptErrorCode_: {
-      code: components["schemas"]["UpdateAutomationAttemptErrorCode"];
-      /** Detail */
-      detail: string;
+    ExportCollection: "subscribers" | "emails" | "events" | "referrals" | "surveys" | "comments" | "requests" | "mentions" | "conversations" | "images" | "stripe_subscriptions" | "stripe_products" | "stripe_customers" | "stripe_prices" | "stripe_charges";
+    /**
+     * Format 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ExportFormat: "csv" | "json";
+    /**
+     * Status 
+     * @description Represents the status of an export.
+     * 
+     * No action is required to move from one state or another; Buttondown
+     * internally handles the transitions, and exposing the status is for
+     * observability purposes only. 
+     * @enum {string}
+     */
+    ExportStatus: "error" | "in_progress" | "not_started" | "ready";
+    /**
+     * Export 
+     * @description Some software applications may want programmatic access to their newsletter exports.
+     * This assists with a few niche use cases, such as regular backups or data ingestion
+     * (into a data warehouse), or post-publishing processes that hinge on email events.
+     * 
+     * In general, you probably won't _need_ to use this endpoint unless you
+     * _absolutely_ need to use this endpoint.
+     * 
+     * To browse the contents of a given export collection, refer to the [Data exports](https://docs.buttondown.com/data-exports-subscriber) section
+     * of the documentation.
+     */
+    Export: {
+      /** @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export. */
+      collections: (components["schemas"]["ExportCollection"])[];
       /**
-       * Metadata 
-       * @default {}
+       * Parameters 
+       * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export.
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
-    };
-    /** AutomationAttemptUpdateInput */
-    AutomationAttemptUpdateInput: {
+      parameters?: Record<string, unknown>;
       /**
-       * Status 
-       * @description The status to set for the automation attempt. Only 'skipped' is allowed. 
-       * @enum {string}
+       * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
+       * @default csv
        */
-      status: "skipped";
-    };
-    /** StripeSubscription */
-    StripeSubscription: {
-      /** Subscription Id */
-      subscription_id: string;
-      /** Url */
-      url: string;
+      format?: components["schemas"]["ExportFormat"];
+      /**
+       * Columns 
+       * @description If provided, the export will only include these columns.
+       */
+      columns?: (string)[];
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
       /**
        * Creation Date 
        * Format: date-time 
@@ -2355,39 +2843,544 @@ export interface components {
        */
       creation_date: string;
       /**
-       * Ending Date 
-       * Format: date-time
+       * Url 
+       * @description The URL of the export file. This is only available after the export has completed.
        */
-      ending_date?: string;
-      /** Amount */
-      amount: number;
-      /** Currency */
-      currency: string;
-      /** Cadence */
-      cadence: string;
-      /** Status */
-      status: string;
+      url?: string;
       /**
-       * Application Fee Percent 
-       * @description The application fee percent for the subscription.
+       * Completion Date 
+       * Format: date-time 
+       * @description The date and time the export completed.
        */
-      application_fee_percent?: number;
-      /**
-       * Source 
-       * @description Buttondown attempts to detect the source of a subscription, but this is not always possible. 
-       * @enum {string}
-       */
-      source?: "substack" | "buttondown";
-      /**
-       * Product 
-       * @description The name of the product which the subscriber is subscribed to. (You can override this by setting the `buttondown_template_facing_id` metadata on the product in Stripe.)
-       */
-      product?: string;
+      completion_date?: string;
+      /** @description The status of the export. */
+      status: components["schemas"]["ExportStatus"];
     };
-    /** Page[UnexpandableStripeSubscription] */
-    StripeSubscriptionPage: {
+    /**
+     * CreateExportErrorCode 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    CreateExportErrorCode: "collection_empty_invalid" | "columns_empty_invalid" | "columns_invalid";
+    /** ErrorMessage[CreateExportErrorCode] */
+    ErrorMessage_CreateExportErrorCode_: {
+      code: components["schemas"]["CreateExportErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /** ExportInput */
+    ExportInput: {
+      /** @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export. */
+      collections: (components["schemas"]["ExportCollection"])[];
+      /**
+       * Parameters 
+       * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export.
+       */
+      parameters?: Record<string, unknown>;
+      /**
+       * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
+       * @default csv
+       */
+      format?: components["schemas"]["ExportFormat"];
+      /**
+       * Columns 
+       * @description If provided, the export will only include these columns.
+       */
+      columns?: (string)[];
+    };
+    /** Page[Export] */
+    ExportPage: {
       /** Results */
-      results: (components["schemas"]["StripeSubscription"])[];
+      results: (components["schemas"]["Export"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /**
+     * Status 
+     * @description Represents the status of the automation, and whether or not it is active. Inactive automations will not be processed. Deleted automations will not be processed. 
+     * @enum {string}
+     */
+    ExternalFeedAutomationStatus: "active" | "failing" | "inactive" | "deleted";
+    /**
+     * Behavior 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ExternalFeedAutomationBehavior: "draft" | "emails";
+    /**
+     * Cadence 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ExternalFeedAutomationCadence: "every" | "daily" | "weekly" | "monthly";
+    /**
+     * ExternalFeed 
+     * @description An automation is a one-to-one mapping between an external RSS feed and an action
+     * to be performed when new items are detected in that feed. Right now, Buttondown offers
+     * two actions:
+     * 
+     * - Send an email
+     * - Create an email but save it as a draft to be sent out manually
+     * 
+     * The automation is configured with a cadence, which is the frequency at which the
+     * automation will be run. The cadence can be one of the following:
+     * 
+     * - Run the automation every time a new item is detected in the feed
+     * - Run the automation once per week
+     * - Run the automation once per month
+     */
+    ExternalFeed: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /**
+       * Last Checked Date 
+       * Format: date-time 
+       * @description The most recent date and time this feed was checked for new items.
+       */
+      last_checked_date?: string;
+      /** @description The current status of the external feed automation. */
+      status: components["schemas"]["ExternalFeedAutomationStatus"];
+      /** @description Whether feed items are sent immediately or drafted for manual review. */
+      behavior: components["schemas"]["ExternalFeedAutomationBehavior"];
+      /** @description How frequently this feed should create or draft emails. */
+      cadence: components["schemas"]["ExternalFeedAutomationCadence"];
+      /**
+       * Cadence Metadata 
+       * @description Additional scheduling details for the selected cadence, such as weekday or time.
+       */
+      cadence_metadata: {
+        [key: string]: string | undefined;
+      };
+      /**
+       * Filters 
+       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
+       */
+      filters: components["schemas"]["FilterGroup"];
+      /**
+       * Url 
+       * @description The URL of the RSS feed to poll for new items.
+       */
+      url: string;
+      /**
+       * Subject 
+       * @description The subject line template for emails generated from this feed.
+       */
+      subject: string;
+      /**
+       * Body 
+       * @description The body template for emails generated from this feed.
+       */
+      body: string;
+      /**
+       * Label 
+       * @description An optional internal label for this feed.
+       */
+      label: string;
+      /**
+       * Metadata 
+       * @description Metadata to be passed to emails rendered by this RSS feed. 
+       * @example {
+       *   "foo": "bar"
+       * }
+       */
+      metadata?: Record<string, unknown>;
+      /**
+       * Skip Old Items 
+       * @description Skip items with publish date older than one day from when they're discovered
+       */
+      skip_old_items: boolean;
+    };
+    /** ExternalFeedInput */
+    ExternalFeedInput: {
+      /**
+       * Url 
+       * @description The URL of the RSS feed to poll for new items. 
+       * @example http://lorem-rss.herokuapp.com/feed
+       */
+      url: string;
+      /**
+       * @description The [behavior](https://docs.buttondown.com/api-external-feed-behavior) of the external feed. 
+       * @example draft
+       */
+      behavior: components["schemas"]["ExternalFeedAutomationBehavior"];
+      /**
+       * @description How frequently this feed should create or draft emails. 
+       * @example daily
+       */
+      cadence: components["schemas"]["ExternalFeedAutomationCadence"];
+      /**
+       * Cadence Metadata 
+       * @description Additional scheduling details for the selected cadence, such as weekday or time.
+       */
+      cadence_metadata: {
+        [key: string]: string | undefined;
+      };
+      /**
+       * Filters 
+       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
+       */
+      filters: components["schemas"]["FilterGroup"];
+      /**
+       * Subject 
+       * @description The subject line template for emails generated from this feed.
+       */
+      subject: string;
+      /**
+       * Body 
+       * @description The body template for emails generated from this feed.
+       */
+      body: string;
+      /**
+       * Label 
+       * @description An optional internal label for this feed. 
+       * @default
+       */
+      label?: string;
+      /**
+       * Metadata 
+       * @description Metadata to be passed to emails rendered by this RSS feed. 
+       * @example {
+       *   "foo": "bar"
+       * }
+       */
+      metadata?: Record<string, unknown>;
+      /**
+       * Skip Old Items 
+       * @description Skip items with publish date older than one day from when they're discovered 
+       * @default false
+       */
+      skip_old_items?: boolean;
+    };
+    /** Page[ExternalFeed] */
+    ExternalFeedPage: {
+      /** Results */
+      results: (components["schemas"]["ExternalFeed"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** ExternalFeedUpdateInput */
+    ExternalFeedUpdateInput: {
+      /**
+       * @description The [behavior](https://docs.buttondown.com/api-external-feed-behavior) of the external feed. 
+       * @example draft
+       */
+      behavior?: components["schemas"]["ExternalFeedAutomationBehavior"];
+      /**
+       * @description How frequently this feed should create or draft emails. 
+       * @example daily
+       */
+      cadence?: components["schemas"]["ExternalFeedAutomationCadence"];
+      /**
+       * Cadence Metadata 
+       * @description Additional scheduling details for the selected cadence, such as weekday or time.
+       */
+      cadence_metadata?: {
+        [key: string]: string | undefined;
+      };
+      /**
+       * Filters 
+       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
+       */
+      filters?: components["schemas"]["FilterGroup"];
+      /**
+       * Subject 
+       * @description The subject line template for emails generated from this feed.
+       */
+      subject?: string;
+      /**
+       * Body 
+       * @description The body template for emails generated from this feed.
+       */
+      body?: string;
+      /**
+       * Label 
+       * @description An optional internal label for this feed.
+       */
+      label?: string;
+      /** @description The current status of the external feed automation. */
+      status?: components["schemas"]["ExternalFeedAutomationStatus"];
+      /**
+       * Metadata 
+       * @description Metadata to be passed to emails rendered by this RSS feed. 
+       * @example {
+       *   "foo": "bar"
+       * }
+       */
+      metadata?: Record<string, unknown>;
+      /**
+       * Skip Old Items 
+       * @description Skip items with publish date older than one day from when they're discovered
+       */
+      skip_old_items?: boolean;
+    };
+    /** Empty */
+    Empty: Record<string, unknown>;
+    /**
+     * Status 
+     * @description The status of a given item (meaning a distinct URL) within an RSS feed. 
+     * @enum {string}
+     */
+    ExternalFeedItemStatus: "unprocessed" | "irrelevant" | "errored" | "skipped" | "queued" | "processed";
+    /**
+     * ExternalFeedItem 
+     * @description An external feed item is a single item in an external RSS feed. It is created
+     * automatically by Buttondown when a new item is detected in an external feed. External feed
+     * items are immutable and cannot be modified or deleted.
+     */
+    ExternalFeedItem: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** @description The processing status of this feed item. */
+      status: components["schemas"]["ExternalFeedItemStatus"];
+      /**
+       * Url 
+       * @description The canonical URL of the feed item.
+       */
+      url: string;
+      /**
+       * Publish Date 
+       * Format: date-time 
+       * @description The publication date parsed from the feed item.
+       */
+      publish_date: string;
+      /**
+       * Title 
+       * @description The title of the feed item.
+       */
+      title: string;
+      /**
+       * Description 
+       * @description The description excerpt parsed from the feed item.
+       */
+      description: string;
+      /**
+       * Content 
+       * @description The full content parsed from the feed item.
+       */
+      content: string;
+      /**
+       * Author 
+       * @description The author name parsed from the feed item.
+       */
+      author: string;
+      /**
+       * Email Id 
+       * @description The ID of the generated email for this feed item, if one exists.
+       */
+      email_id?: string;
+      /**
+       * Email 
+       * @description If expanded, the email generated from this feed item.
+       */
+      email?: components["schemas"]["Email"];
+    };
+    /** Page[ExternalFeedItem] */
+    ExternalFeedItemPage: {
+      /** Results */
+      results: (components["schemas"]["ExternalFeedItem"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /**
+     * Status 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    FormStatus: "active" | "inactive";
+    /** Form */
+    Form: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Title */
+      title: string;
+      /** Slug */
+      slug: string;
+      /** Body */
+      body: string;
+      /** Css */
+      css: string;
+      /** Success Body */
+      success_body: string;
+      /** Surveys */
+      surveys: (string)[];
+      /** Admin */
+      admin: boolean;
+      status: components["schemas"]["FormStatus"];
+    };
+    /**
+     * CreateFormErrorCode 
+     * @description Represents the type of error that occurred when creating a form.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    CreateFormErrorCode: "slug_already_exists";
+    /** ErrorMessage[CreateFormErrorCode] */
+    ErrorMessage_CreateFormErrorCode_: {
+      code: components["schemas"]["CreateFormErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /** FormInput */
+    FormInput: {
+      /**
+       * Title 
+       * @example Contact Form
+       */
+      title: string;
+      /**
+       * Slug 
+       * @example contact
+       */
+      slug: string;
+      /**
+       * Body 
+       * @default  
+       * @example
+       */
+      body?: string;
+      /**
+       * Css 
+       * @default  
+       * @example
+       */
+      css?: string;
+      /**
+       * Success Body 
+       * @default  
+       * @example Thank you for your submission!
+       */
+      success_body?: string;
+      /**
+       * Surveys 
+       * @example []
+       */
+      surveys?: (string)[];
+      /**
+       * Admin 
+       * @default false 
+       * @example false
+       */
+      admin?: boolean;
+      /**
+       * @default active 
+       * @example active
+       */
+      status?: components["schemas"]["FormStatus"];
+    };
+    /** Page[Form] */
+    FormPage: {
+      /** Results */
+      results: (components["schemas"]["Form"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** FormUpdateInput */
+    FormUpdateInput: {
+      /** Title */
+      title?: string;
+      /** Slug */
+      slug?: string;
+      /** Body */
+      body?: string;
+      /** Css */
+      css?: string;
+      /** Success Body */
+      success_body?: string;
+      /** Surveys */
+      surveys?: (string)[];
+      /** Admin */
+      admin?: boolean;
+      status?: components["schemas"]["FormStatus"];
+    };
+    /**
+     * Image 
+     * @description Images are, well, images! Buttondown allows you to upload images to its secure
+     * S3 bucket and do with them what you will. This is sort of an odd duck of an
+     * API, to be sure, but if you want to be able to do things like draft
+     * and send emails completely on your iPad you need a surefire way of creating images.
+     */
+    Image: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /**
+       * Image 
+       * @description The URL of the image. 
+       * @example https://placecats.com/408/287
+       */
+      image: string;
+    };
+    /** Page[Image] */
+    ImagePage: {
+      /** Results */
+      results: (components["schemas"]["Image"])[];
       /** Next */
       next?: string;
       /** Previous */
@@ -3385,52 +4378,8 @@ export interface components {
        */
       web_css?: string;
     };
-    /**
-     * Type 
-     * @description Represents the action being performed on a bulk of objects.
-     * 
-     * (Not to be coy, but these names should be self-explanatory.) 
-     * @enum {string}
-     */
-    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "change_tags_colors" | "delete_comments" | "delete_surveys" | "delete_survey_responses" | "delete_tags" | "mark_comments_as_active" | "mark_comments_as_spammy" | "replay_events" | "update_survey_statuses" | "modify_stripe_subscriptions";
-    /**
-     * Status 
-     * @description Represents the status of a bulk action.
-     * 
-     * No action is required to move from one state or another; Buttondown
-     * internally handles the transitions, and exposing the status is for
-     * observability purposes only. 
-     * @enum {string}
-     */
-    BulkActionStatus: "not_started" | "in_progress" | "processed" | "failed";
-    /**
-     * BulkAction 
-     * @description A bulk action represents, well, a bulk action. It is used to perform
-     * actions on a large number of objects at once. For example, you can
-     * use it to delete a large number of emails, or to unsubscribe a large
-     * number of subscribers. The actions within a bulk action are processed
-     * serially by Buttondown; this should be considered an ergonomic way to
-     * batch API calls across the network rather than a net-new piece of functionality
-     * in of itself.
-     */
-    BulkAction: {
-      /**
-       * @description The type of bulk action to perform. 
-       * @example delete_emails
-       */
-      type: components["schemas"]["BulkActionType"];
-      /**
-       * Metadata 
-       * @example {
-       *   "ids": [
-       *     "611c8825-6f21-4544-bb47-9f50453e9cb0",
-       *     "418c701a-efe3-4e3d-a404-e635a2f28775"
-       *   ]
-       * }
-       */
-      metadata: {
-        [key: string]: (string | (string)[] | Record<string, unknown>) | undefined;
-      };
+    /** Note */
+    Note: {
       /**
        * Id 
        * @description A unique TypeID associated with the object.
@@ -3442,596 +4391,163 @@ export interface components {
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
-      status: components["schemas"]["BulkActionStatus"];
-      /**
-       * Completion Date 
-       * Format: date-time 
-       * @description The date and time at which the bulk action was completed.
-       */
-      completion_date?: string;
-    };
-    /** BulkActionInput */
-    BulkActionInput: {
-      /**
-       * @description The type of bulk action to perform. 
-       * @example delete_emails
-       */
-      type: components["schemas"]["BulkActionType"];
-      /**
-       * Metadata 
-       * @example {
-       *   "ids": [
-       *     "611c8825-6f21-4544-bb47-9f50453e9cb0",
-       *     "418c701a-efe3-4e3d-a404-e635a2f28775"
-       *   ]
-       * }
-       */
-      metadata: {
-        [key: string]: (string | (string)[] | Record<string, unknown>) | undefined;
-      };
-    };
-    /**
-     * Status 
-     * @description Represents the status of the automation, and whether or not it is active. Inactive automations will not be processed. Deleted automations will not be processed. 
-     * @enum {string}
-     */
-    ExternalFeedAutomationStatus: "active" | "failing" | "inactive" | "deleted";
-    /**
-     * Behavior 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    ExternalFeedAutomationBehavior: "draft" | "emails";
-    /**
-     * Cadence 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    ExternalFeedAutomationCadence: "every" | "daily" | "weekly" | "monthly";
-    /**
-     * ExternalFeed 
-     * @description An automation is a one-to-one mapping between an external RSS feed and an action
-     * to be performed when new items are detected in that feed. Right now, Buttondown offers
-     * two actions:
-     * 
-     * - Send an email
-     * - Create an email but save it as a draft to be sent out manually
-     * 
-     * The automation is configured with a cadence, which is the frequency at which the
-     * automation will be run. The cadence can be one of the following:
-     * 
-     * - Run the automation every time a new item is detected in the feed
-     * - Run the automation once per week
-     * - Run the automation once per month
-     */
-    ExternalFeed: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /**
-       * Last Checked Date 
-       * Format: date-time 
-       * @description The most recent date and time this feed was checked for new items.
-       */
-      last_checked_date?: string;
-      /** @description The current status of the external feed automation. */
-      status: components["schemas"]["ExternalFeedAutomationStatus"];
-      /** @description Whether feed items are sent immediately or drafted for manual review. */
-      behavior: components["schemas"]["ExternalFeedAutomationBehavior"];
-      /** @description How frequently this feed should create or draft emails. */
-      cadence: components["schemas"]["ExternalFeedAutomationCadence"];
-      /**
-       * Cadence Metadata 
-       * @description Additional scheduling details for the selected cadence, such as weekday or time.
-       */
-      cadence_metadata: {
-        [key: string]: string | undefined;
-      };
-      /**
-       * Filters 
-       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
-       */
-      filters: components["schemas"]["FilterGroup"];
-      /**
-       * Url 
-       * @description The URL of the RSS feed to poll for new items.
-       */
-      url: string;
-      /**
-       * Subject 
-       * @description The subject line template for emails generated from this feed.
-       */
-      subject: string;
       /**
        * Body 
-       * @description The body template for emails generated from this feed.
+       * @description The text content of the note. 
+       * @example This subscriber upgraded to a paid plan.
        */
       body: string;
       /**
-       * Label 
-       * @description An optional internal label for this feed.
+       * Model Type 
+       * @description The type of object this note is attached to (e.g., 'email', 'subscriber'). 
+       * @example email 
+       * @enum {string}
        */
-      label: string;
+      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
       /**
-       * Metadata 
-       * @description Metadata to be passed to emails rendered by this RSS feed. 
-       * @example {
-       *   "foo": "bar"
-       * }
+       * Model Id 
+       * @description The ID of the object this note is attached to. 
+       * @example 13121cd6-0dfc-424c-bb12-988b0a32fcb3
        */
-      metadata?: Record<string, unknown>;
+      model_id: string;
+      /** Metadata */
+      metadata: Record<string, unknown>;
       /**
-       * Skip Old Items 
-       * @description Skip items with publish date older than one day from when they're discovered
+       * Source 
+       * @description The source of the note. If the note was created by a Buttondown admin, this will be 'admin'; otherwise, it will be 'user'. 
+       * @example admin 
+       * @enum {string}
        */
-      skip_old_items: boolean;
+      source: "admin" | "user";
+      /** User Id */
+      user_id?: string;
+      user?: components["schemas"]["User"];
     };
-    /** ExternalFeedInput */
-    ExternalFeedInput: {
-      /**
-       * Url 
-       * @description The URL of the RSS feed to poll for new items. 
-       * @example http://lorem-rss.herokuapp.com/feed
-       */
-      url: string;
-      /**
-       * @description The [behavior](https://docs.buttondown.com/api-external-feed-behavior) of the external feed. 
-       * @example draft
-       */
-      behavior: components["schemas"]["ExternalFeedAutomationBehavior"];
-      /**
-       * @description How frequently this feed should create or draft emails. 
-       * @example daily
-       */
-      cadence: components["schemas"]["ExternalFeedAutomationCadence"];
-      /**
-       * Cadence Metadata 
-       * @description Additional scheduling details for the selected cadence, such as weekday or time.
-       */
-      cadence_metadata: {
-        [key: string]: string | undefined;
-      };
-      /**
-       * Filters 
-       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
-       */
-      filters: components["schemas"]["FilterGroup"];
-      /**
-       * Subject 
-       * @description The subject line template for emails generated from this feed.
-       */
-      subject: string;
+    /** NoteInput */
+    NoteInput: {
       /**
        * Body 
-       * @description The body template for emails generated from this feed.
+       * @description The text content of the note. 
+       * @example This subscriber upgraded to a paid plan.
        */
       body: string;
       /**
-       * Label 
-       * @description An optional internal label for this feed. 
-       * @default
-       */
-      label?: string;
-      /**
-       * Metadata 
-       * @description Metadata to be passed to emails rendered by this RSS feed. 
-       * @example {
-       *   "foo": "bar"
-       * }
-       */
-      metadata?: Record<string, unknown>;
-      /**
-       * Skip Old Items 
-       * @description Skip items with publish date older than one day from when they're discovered 
-       * @default false
-       */
-      skip_old_items?: boolean;
-    };
-    /** Page[ExternalFeed] */
-    ExternalFeedPage: {
-      /** Results */
-      results: (components["schemas"]["ExternalFeed"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /** ExternalFeedUpdateInput */
-    ExternalFeedUpdateInput: {
-      /**
-       * @description The [behavior](https://docs.buttondown.com/api-external-feed-behavior) of the external feed. 
-       * @example draft
-       */
-      behavior?: components["schemas"]["ExternalFeedAutomationBehavior"];
-      /**
-       * @description How frequently this feed should create or draft emails. 
-       * @example daily
-       */
-      cadence?: components["schemas"]["ExternalFeedAutomationCadence"];
-      /**
-       * Cadence Metadata 
-       * @description Additional scheduling details for the selected cadence, such as weekday or time.
-       */
-      cadence_metadata?: {
-        [key: string]: string | undefined;
-      };
-      /**
-       * Filters 
-       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
-       */
-      filters?: components["schemas"]["FilterGroup"];
-      /**
-       * Subject 
-       * @description The subject line template for emails generated from this feed.
-       */
-      subject?: string;
-      /**
-       * Body 
-       * @description The body template for emails generated from this feed.
-       */
-      body?: string;
-      /**
-       * Label 
-       * @description An optional internal label for this feed.
-       */
-      label?: string;
-      /** @description The current status of the external feed automation. */
-      status?: components["schemas"]["ExternalFeedAutomationStatus"];
-      /**
-       * Metadata 
-       * @description Metadata to be passed to emails rendered by this RSS feed. 
-       * @example {
-       *   "foo": "bar"
-       * }
-       */
-      metadata?: Record<string, unknown>;
-      /**
-       * Skip Old Items 
-       * @description Skip items with publish date older than one day from when they're discovered
-       */
-      skip_old_items?: boolean;
-    };
-    /**
-     * Status 
-     * @description The status of a given item (meaning a distinct URL) within an RSS feed. 
-     * @enum {string}
-     */
-    ExternalFeedItemStatus: "unprocessed" | "irrelevant" | "errored" | "skipped" | "queued" | "processed";
-    /**
-     * ExternalFeedItem 
-     * @description An external feed item is a single item in an external RSS feed. It is created
-     * automatically by Buttondown when a new item is detected in an external feed. External feed
-     * items are immutable and cannot be modified or deleted.
-     */
-    ExternalFeedItem: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** @description The processing status of this feed item. */
-      status: components["schemas"]["ExternalFeedItemStatus"];
-      /**
-       * Url 
-       * @description The canonical URL of the feed item.
-       */
-      url: string;
-      /**
-       * Publish Date 
-       * Format: date-time 
-       * @description The publication date parsed from the feed item.
-       */
-      publish_date: string;
-      /**
-       * Title 
-       * @description The title of the feed item.
-       */
-      title: string;
-      /**
-       * Description 
-       * @description The description excerpt parsed from the feed item.
-       */
-      description: string;
-      /**
-       * Content 
-       * @description The full content parsed from the feed item.
-       */
-      content: string;
-      /**
-       * Author 
-       * @description The author name parsed from the feed item.
-       */
-      author: string;
-      /**
-       * Email Id 
-       * @description The ID of the generated email for this feed item, if one exists.
-       */
-      email_id?: string;
-      /**
-       * Email 
-       * @description If expanded, the email generated from this feed item.
-       */
-      email?: components["schemas"]["Email"];
-    };
-    /** Page[ExternalFeedItem] */
-    ExternalFeedItemPage: {
-      /** Results */
-      results: (components["schemas"]["ExternalFeedItem"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    AutomationStatus: "active" | "inactive";
-    /**
-     * Type 
-     * @description Various types of events that are recorded by Buttondown, both in terms of exogenous systems
-     * like Stripe and Memberful, and endogenous ones like email opens and clicks. (In general, if anything
-     * important ever happens that could be relevant to your newsletter, we have an event type for it!)
-     * 
-     * These event types power lots of things within Buttondown. They're used to trigger automations, webhooks,
-     * and analytics.
-     * 
-     * (Note that Buttondown also has a different thing we call "events"; those are `EmailEvents` and are used
-     * for tracking aggregate details about an email. Alas, we shouldn't have used the term "event" for two different
-     * things, but it's too late to go back now!)
-     * 
-     * In general, our event namespacing tries to hew to the following pattern:
-     * 
-     * `<source>.<object>.<action>`
-     * 
-     * When wondering which object we are referring to, default to the _more granular_ object.
-     * 
-     * For instance, an email being sent to a subscriber is `subscriber.delivered`, not `email.sent`. 
-     * @enum {string}
-     */
-    ExternalEventType: "advertising_slot.purchased" | "automation.invoked" | "date.day.started" | "date.month.started" | "date.week.started" | "date.year.started" | "email.created" | "email.deleted" | "email.sent" | "email.status.changed" | "email.updated" | "external_feed_item.created" | "export.completed" | "export.created" | "export.failed" | "firewall.blocked" | "mention.created" | "memberful.member.updated" | "memberful.subscription.created" | "memberful.subscription.deleted" | "note.created" | "note.deleted" | "patreon.member.updated" | "patreon.membership.created" | "patreon.membership.deleted" | "shopify.customer.created" | "shopify.customer.updated" | "social_mention.created" | "stripe.checkout.session.completed" | "stripe.customer.updated" | "stripe.subscription.activated" | "stripe.subscription.churning" | "stripe.subscription.deactivated" | "subscriber.bounced" | "subscriber.changed_email" | "subscriber.churned" | "subscriber.clicked" | "subscriber.commented" | "subscriber.complained" | "subscriber.confirmed" | "subscriber.created" | "subscriber.deleted" | "subscriber.delivered" | "subscriber.opened" | "subscriber.paid" | "subscriber.paused" | "subscriber.resumed" | "subscriber.referred" | "subscriber.referred.paid" | "subscriber.rejected" | "subscriber.replied" | "subscriber.responded_to_survey" | "subscriber.tags.changed" | "subscriber.trial_ended" | "subscriber.trial_started" | "subscriber.type.changed" | "subscriber.unsubscribed" | "subscriber.updated" | "subscriber.viewed_checkout_page" | "survey.cleared_responses" | "survey.created" | "survey.deleted" | "survey.updated" | "form.created" | "form.deleted" | "form.updated";
-    /**
-     * ActionType 
-     * @description The action that is triggered when the automation is successfully run. 
-     * @enum {string}
-     */
-    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_arena_post" | "create_bluesky_post" | "create_linkedin_post" | "create_mastodon_post" | "create_tumblr_post" | "create_twitter_post" | "create_export" | "send_post_request" | "send_confirmation_reminder";
-    /** Delay */
-    Delay: {
-      /** Value */
-      value: string;
-      /**
-       * Unit 
+       * Model Type 
+       * @description The type of object this note is attached to (e.g., 'email', 'subscriber'). 
+       * @example email 
        * @enum {string}
        */
-      unit: "minutes" | "hours" | "days" | "weeks";
+      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
       /**
-       * Time Of Day 
-       * @enum {string}
+       * Model Id 
+       * @description The ID of the object this note is attached to. 
+       * @example 13121cd6-0dfc-424c-bb12-988b0a32fcb3
        */
-      time_of_day?: "morning" | "evening" | "";
-    };
-    /** Timing */
-    Timing: {
-      /**
-       * Time 
-       * @enum {string}
-       */
-      time: "immediate" | "delay";
-      delay?: components["schemas"]["Delay"];
-    };
-    /** Action */
-    Action: {
-      type: components["schemas"]["AutomationActionType"];
-      /** Metadata */
-      metadata: Record<string, unknown>;
-      timing?: components["schemas"]["Timing"];
-    };
-    /** Automation */
-    Automation: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Name */
-      name: string;
-      status: components["schemas"]["AutomationStatus"];
-      trigger: components["schemas"]["ExternalEventType"];
-      /** Actions */
-      actions: (components["schemas"]["Action"])[];
-      filters: components["schemas"]["FilterGroup"];
-      /** Metadata */
-      metadata: Record<string, unknown>;
-      /**
-       * Should Evaluate Filter After Delay 
-       * @description If true, filters are re-evaluated after the delay has passed.
-       */
-      should_evaluate_filter_after_delay: boolean;
-    };
-    /** Page[Automation] */
-    AutomationPage: {
-      /** Results */
-      results: (components["schemas"]["Automation"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * AutomationCreationErrorCode 
-     * @description Represents the type of error that occurred when creating an automation.
-     * 
-     * Human-readable error messages are provided in the `detail` field of the response;
-     * these values are meant to be parseable by code or client logic. 
-     * @enum {string}
-     */
-    AutomationCreationErrorCode: "delay_invalid" | "filter_invalid__tag" | "filter_invalid" | "action_invalid" | "filter_invalid__field" | "invalid_newsletter_id" | "trigger_action_invalid" | "action_invalid__missing_body_or_subject";
-    /** ErrorMessage[AutomationCreationErrorCode] */
-    ErrorMessage_AutomationCreationErrorCode_: {
-      code: components["schemas"]["AutomationCreationErrorCode"];
-      /** Detail */
-      detail: string;
+      model_id: string;
       /**
        * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
-    };
-    /** AutomationInput */
-    AutomationInput: {
-      /** Name */
-      name: string;
-      trigger: components["schemas"]["ExternalEventType"];
-      /** Actions */
-      actions: (Record<string, unknown>)[];
-      filters: components["schemas"]["FilterGroup"];
-      /**
-       * Metadata 
-       * @default {}
-       */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
-      /**
-       * Should Evaluate Filter After Delay 
-       * @description If true, filters are re-evaluated after the delay has passed. 
-       * @default false
-       */
-      should_evaluate_filter_after_delay?: boolean;
-    };
-    /** AutomationUpdateInput */
-    AutomationUpdateInput: {
-      /** Name */
-      name?: string;
-      status?: components["schemas"]["AutomationStatus"];
-      trigger?: components["schemas"]["ExternalEventType"];
-      timing?: components["schemas"]["Timing"];
-      /** Actions */
-      actions?: (Record<string, unknown>)[];
-      filters?: components["schemas"]["FilterGroup"];
-      /** Metadata */
       metadata?: Record<string, unknown>;
-      /**
-       * Should Evaluate Filter After Delay 
-       * @description If true, filters are re-evaluated after the delay has passed.
-       */
-      should_evaluate_filter_after_delay?: boolean;
     };
-    /**
-     * Failure 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    Failure: "email_already_exists";
-    /** ErrorMessage[Failure] */
-    ErrorMessage_Failure_: {
-      code: components["schemas"]["Failure"];
-      /** Detail */
-      detail: string;
-      /**
-       * Metadata 
-       * @default {}
-       */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
-    };
-    /** UserInput */
-    UserInput: {
-      permissions: components["schemas"]["Permissions"];
-      /** Email Address */
-      email_address: string;
-    };
-    /** Page[User] */
-    UserPage: {
+    /** Page[Note] */
+    NotePage: {
       /** Results */
-      results: (components["schemas"]["User"])[];
+      results: (components["schemas"]["Note"])[];
       /** Next */
       next?: string;
       /** Previous */
       previous?: string;
       /** Count */
       count: number;
-    };
-    /** UserUpdateInput */
-    UserUpdateInput: {
-      /** Permissions */
-      permissions: {
-        [key: string]: string | undefined;
-      };
     };
     /** Product */
     Product: {
-      /** Id */
+      /**
+       * Id 
+       * @description The unique identifier of the product.
+       */
       id: string;
-      /** Product Id */
+      /**
+       * Product Id 
+       * @description The Stripe product ID.
+       */
       product_id: string;
-      /** Name */
+      /**
+       * Name 
+       * @description The name of the product.
+       */
       name: string;
-      /** Creation Date */
+      /**
+       * Creation Date 
+       * @description The date the product was created in Stripe.
+       */
       creation_date: string;
-      /** Active */
+      /**
+       * Active 
+       * @description Whether the product is currently active.
+       */
       active: boolean;
-      /** Default Price */
+      /**
+       * Default Price 
+       * @description The ID of the default price for this product.
+       */
       default_price?: string;
     };
     /** Price */
     Price: {
-      /** Amount */
+      /**
+       * Amount 
+       * @description The price amount in the smallest currency unit (e.g. cents).
+       */
       amount?: number;
       /**
        * Cadence 
+       * @description The billing cadence for this price. 
        * @enum {string}
        */
       cadence: "year" | "month" | "one-time" | "email" | "week";
-      /** Currency */
+      /**
+       * Currency 
+       * @description The three-letter ISO currency code (e.g. 'usd').
+       */
       currency: string;
-      /** Description */
+      /**
+       * Description 
+       * @description An optional human-readable description of the price.
+       */
       description?: string;
-      /** Maximum Amount */
+      /**
+       * Maximum Amount 
+       * @description The maximum amount for pay-what-you-want prices.
+       */
       maximum_amount?: number;
-      /** Minimum Amount */
+      /**
+       * Minimum Amount 
+       * @description The minimum amount for pay-what-you-want prices.
+       */
       minimum_amount?: number;
-      /** Product Id */
+      /**
+       * Product Id 
+       * @description The ID of the Stripe product this price belongs to.
+       */
       product_id?: string;
       /**
        * Style 
+       * @description The pricing style: 'fixed', 'pay-what-you-want', or 'usage-based'. 
        * @enum {string}
        */
       style: "pay-what-you-want" | "fixed" | "usage-based";
-      /** Suggested Amount */
+      /**
+       * Suggested Amount 
+       * @description The suggested amount for pay-what-you-want prices.
+       */
       suggested_amount?: number;
-      /** Id */
+      /**
+       * Id 
+       * @description The unique identifier of the price.
+       */
       id: string;
       product?: components["schemas"]["Product"];
     };
@@ -4092,35 +4608,467 @@ export interface components {
     };
     /** PriceInput */
     PriceInput: {
-      /** Amount */
+      /**
+       * Amount 
+       * @description The price amount in the smallest currency unit (e.g. cents).
+       */
       amount?: number;
       /**
        * Cadence 
+       * @description The billing cadence for this price. 
        * @enum {string}
        */
       cadence: "year" | "month" | "one-time" | "email" | "week";
-      /** Currency */
+      /**
+       * Currency 
+       * @description The three-letter ISO currency code (e.g. 'usd').
+       */
       currency: string;
-      /** Description */
+      /**
+       * Description 
+       * @description An optional human-readable description of the price.
+       */
       description?: string;
-      /** Maximum Amount */
+      /**
+       * Maximum Amount 
+       * @description The maximum amount for pay-what-you-want prices.
+       */
       maximum_amount?: number;
-      /** Minimum Amount */
+      /**
+       * Minimum Amount 
+       * @description The minimum amount for pay-what-you-want prices.
+       */
       minimum_amount?: number;
-      /** Product Id */
+      /**
+       * Product Id 
+       * @description The ID of the Stripe product this price belongs to.
+       */
       product_id?: string;
       /**
        * Style 
+       * @description The pricing style: 'fixed', 'pay-what-you-want', or 'usage-based'. 
        * @enum {string}
        */
       style: "pay-what-you-want" | "fixed" | "usage-based";
-      /** Suggested Amount */
+      /**
+       * Suggested Amount 
+       * @description The suggested amount for pay-what-you-want prices.
+       */
       suggested_amount?: number;
     };
-    /** Page[StripeCoupon] */
-    StripeCouponPage: {
+    /**
+     * PublicEmail 
+     * @description Public email schema for email search results.
+     */
+    PublicEmail: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Subject */
+      subject: string;
+      /** Slug */
+      slug?: string;
+      /**
+       * Publish Date 
+       * Format: date-time
+       */
+      publish_date?: string;
+      /** Description */
+      description: string;
+      /** Absolute Url */
+      absolute_url: string;
+    };
+    /** Page[PublicEmail] */
+    PublicEmailPage: {
       /** Results */
-      results: (components["schemas"]["StripeCoupon"])[];
+      results: (components["schemas"]["PublicEmail"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /**
+     * Mode 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SnippetMode: "fancy" | "naked" | "plaintext";
+    /** Snippet */
+    Snippet: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Identifier */
+      identifier: string;
+      /** Name */
+      name: string;
+      /** Content */
+      content: string;
+      mode: components["schemas"]["SnippetMode"];
+      /**
+       * Reference Count 
+       * @default 0
+       */
+      reference_count?: number;
+    };
+    /** SnippetInput */
+    SnippetInput: {
+      /**
+       * Identifier 
+       * @example footer
+       */
+      identifier: string;
+      /**
+       * Name 
+       * @example Footer
+       */
+      name: string;
+      /**
+       * Content 
+       * @default  
+       * @example Thanks for reading!
+       */
+      content?: string;
+      /**
+       * @description The editor mode for the snippet. 
+       * @default fancy
+       */
+      mode?: components["schemas"]["SnippetMode"];
+    };
+    /** Page[Snippet] */
+    SnippetPage: {
+      /** Results */
+      results: (components["schemas"]["Snippet"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** SnippetUpdateInput */
+    SnippetUpdateInput: {
+      /**
+       * Identifier 
+       * @example footer
+       */
+      identifier?: string;
+      /**
+       * Name 
+       * @example Footer
+       */
+      name?: string;
+      /**
+       * Content 
+       * @example Thanks for reading!
+       */
+      content?: string;
+      mode?: components["schemas"]["SnippetMode"];
+    };
+    /**
+     * ValidationErrorCode 
+     * @description Represents the type of error that occurred when validating subscriber input.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    SubscriberInputValidationErrorCode: "email_already_exists" | "email_blocked" | "email_empty" | "email_invalid" | "ip_address_spammy" | "metadata_invalid" | "rate_limited" | "subscriber_already_exists" | "subscriber_blocked" | "subscriber_id_invalid" | "subscriber_suppressed" | "tag_invalid";
+    /** ErrorMessage[ValidationErrorCode] */
+    ErrorMessage_ValidationErrorCode_: {
+      code: components["schemas"]["SubscriberInputValidationErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /** SubscriberInput */
+    SubscriberInput: {
+      /**
+       * Email Address 
+       * @description The email address of the subscriber. 
+       * @example telemachus@buttondown.email
+       */
+      email_address: string;
+      /**
+       * Notes 
+       * @description Any notes you want to attach to the subscriber. These are not publicly visible. 
+       * @default  
+       * @example One of our first subscribers!
+       */
+      notes?: string;
+      /**
+       * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
+       */
+      metadata?: Record<string, unknown>;
+      /**
+       * Tags 
+       * @default []
+       */
+      tags?: (string)[];
+      /**
+       * Referrer Url 
+       * @default
+       */
+      referrer_url?: string;
+      /**
+       * Utm Campaign 
+       * @default
+       */
+      utm_campaign?: string;
+      /**
+       * Utm Medium 
+       * @default
+       */
+      utm_medium?: string;
+      /**
+       * Utm Source 
+       * @default
+       */
+      utm_source?: string;
+      /**
+       * Referring Subscriber Id 
+       * @description The ID of the subscriber that referred this subscriber.
+       */
+      referring_subscriber_id?: string;
+      /** @example regular */
+      type?: components["schemas"]["SubscriberType"];
+      /**
+       * Ip Address 
+       * @description The IP address of the subscriber. If provided, we will use this IP address to determine the subscriber's location and validate their legitimacy. 
+       * @example 127.0.0.1
+       */
+      ip_address?: string;
+    };
+    /** Page[Subscriber] */
+    SubscriberPage: {
+      /** Results */
+      results: (components["schemas"]["Subscriber"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /**
+     * ListSubscribersErrorCode 
+     * @description Represents the type of error that occurred when listing subscribers.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    ListSubscribersErrorCode: "invalid_tag" | "date_invalid" | "invalid_ordering";
+    /** ErrorMessage[ListSubscribersErrorCode] */
+    ErrorMessage_ListSubscribersErrorCode_: {
+      code: components["schemas"]["ListSubscribersErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /**
+     * UpdateSubscriberErrorCode 
+     * @description Represents the type of error that occurred when updating a subscriber.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    UpdateSubscriberErrorCode: "email_already_exists" | "email_invalid" | "email_has_been_changed_too_many_times" | "firewall_blocked" | "subscriber_type_invalid" | "tag_invalid";
+    /** ErrorMessage[UpdateSubscriberErrorCode] */
+    ErrorMessage_UpdateSubscriberErrorCode_: {
+      code: components["schemas"]["UpdateSubscriberErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /** SubscriberUpdateInput */
+    SubscriberUpdateInput: {
+      /**
+       * Commenting Disabled 
+       * @description Whether this subscriber is prevented from commenting.
+       */
+      commenting_disabled?: boolean;
+      /**
+       * Email Address 
+       * @description The email address of the subscriber. 
+       * @example telemachus@buttondown.email
+       */
+      email_address?: string;
+      /**
+       * Notes 
+       * @description Any notes you want to attach to the subscriber. These are not publicly visible. 
+       * @example One of our first subscribers!
+       */
+      notes?: string;
+      /**
+       * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
+       */
+      metadata?: Record<string, unknown>;
+      /** Tags */
+      tags?: (string)[];
+      /**
+       * Referrer Url 
+       * @default
+       */
+      referrer_url?: string;
+      type?: components["schemas"]["SubscriberType"];
+      /** Unsubscription Reason */
+      unsubscription_reason?: string;
+      /** Email Which Prompted Unsubscription Id */
+      email_which_prompted_unsubscription_id?: string;
+    };
+    /**
+     * Status 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    AutomationAttemptStatus: "unprocessed" | "processed" | "failed" | "pending" | "skipped";
+    /** AutomationForSubscriber */
+    AutomationForSubscriber: {
+      /** Id */
+      id: string;
+      /** Name */
+      name: string;
+      status: components["schemas"]["AutomationAttemptStatus"];
+      /** Automation Id */
+      automation_id: string;
+      /**
+       * Execution Date 
+       * Format: date-time
+       */
+      execution_date: string;
+      /** Actions */
+      actions: (Record<string, unknown>)[];
+    };
+    /** Page[AutomationForSubscriber] */
+    AutomationForSubscriberPage: {
+      /** Results */
+      results: (components["schemas"]["AutomationForSubscriber"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /**
+     * UpdateAutomationAttemptErrorCode 
+     * @description Represents the type of error that occurred when updating an automation attempt.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    UpdateAutomationAttemptErrorCode: "automation_attempt_not_found" | "invalid_status";
+    /** ErrorMessage[UpdateAutomationAttemptErrorCode] */
+    ErrorMessage_UpdateAutomationAttemptErrorCode_: {
+      code: components["schemas"]["UpdateAutomationAttemptErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /** AutomationAttemptUpdateInput */
+    AutomationAttemptUpdateInput: {
+      /**
+       * Status 
+       * @description The status to set for the automation attempt. Only 'skipped' is allowed. 
+       * @enum {string}
+       */
+      status: "skipped";
+    };
+    /** StripeSubscription */
+    StripeSubscription: {
+      /** Subscription Id */
+      subscription_id: string;
+      /** Url */
+      url: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /**
+       * Ending Date 
+       * Format: date-time
+       */
+      ending_date?: string;
+      /** Amount */
+      amount: number;
+      /** Currency */
+      currency: string;
+      /** Cadence */
+      cadence: string;
+      /** Status */
+      status: string;
+      /**
+       * Application Fee Percent 
+       * @description The application fee percent for the subscription.
+       */
+      application_fee_percent?: number;
+      /**
+       * Source 
+       * @description Buttondown attempts to detect the source of a subscription, but this is not always possible. 
+       * @enum {string}
+       */
+      source?: "substack" | "buttondown";
+      /**
+       * Product 
+       * @description The name of the product which the subscriber is subscribed to. (You can override this by setting the `buttondown_template_facing_id` metadata on the product in Stripe.)
+       */
+      product?: string;
+    };
+    /** Page[UnexpandableStripeSubscription] */
+    StripeSubscriptionPage: {
+      /** Results */
+      results: (components["schemas"]["StripeSubscription"])[];
       /** Next */
       next?: string;
       /** Previous */
@@ -4176,6 +5124,72 @@ export interface components {
       /** Is Freeform Response Enabled */
       is_freeform_response_enabled: boolean;
       input_type: components["schemas"]["SurveyInputType"];
+    };
+    /** Response */
+    Response: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /**
+       * Answer 
+       * @description The answer given to the survey.
+       */
+      answer: string;
+      /**
+       * Text 
+       * @description Optional text included by the subscriber with the response. Subscribers are only prompted to supply a text response if the `is_freeform_response_enabled` field is set to `true` on the survey.
+       */
+      text: string;
+      /** Survey Id */
+      survey_id: string;
+      /** Subscriber Id */
+      subscriber_id: string;
+      /** Email Id */
+      email_id?: string;
+      /** Automation Id */
+      automation_id?: string;
+      subscriber?: components["schemas"]["Subscriber"];
+      survey?: components["schemas"]["Survey"];
+      email?: components["schemas"]["Email"];
+      automation?: components["schemas"]["Automation"];
+    };
+    /** Page[Response] */
+    ResponsePage: {
+      /** Results */
+      results: (components["schemas"]["Response"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** ResponseInput */
+    ResponseInput: {
+      /** Subscriber Id */
+      subscriber_id: string;
+      /** Survey Id */
+      survey_id: string;
+      /** Email Id */
+      email_id: string;
+      /** Answer */
+      answer: number;
+    };
+    /** ResponseUpdateInput */
+    ResponseUpdateInput: {
+      /**
+       * Text 
+       * @description The text response to update. Only applicable if the survey has freeform responses enabled.
+       */
+      text?: string;
     };
     /**
      * CreateSurveyErrorCode 
@@ -4305,13 +5319,42 @@ export interface components {
       randomize_answers?: boolean;
     };
     /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
+     * Tag 
+     * @description Tags are a way to organize your subscribers. You can create, update, and
+     * delete tags via the API. You can also list all tags for a given newsletter.
+     * 
+     * Tags don't have any strict functionality on their own, but you can send emails
+     * to subscribers with a given tag (or to all subscribers _without_ a given tag.)
      */
-    FormStatus: "active" | "inactive";
-    /** Form */
-    Form: {
+    Tag: {
+      /**
+       * Name 
+       * @description The name of the tag. 
+       * @example VIP
+       */
+      name: string;
+      /**
+       * Color 
+       * @description The hex color code associated with the tag. 
+       * @example #FFD700
+       */
+      color: string;
+      /**
+       * Description 
+       * @description An internal description of the tag, only visible to the newsletter author.
+       */
+      description?: string;
+      /**
+       * Public Description 
+       * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
+       */
+      public_description?: string;
+      /**
+       * Subscriber Editable 
+       * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
+       * @default false
+       */
+      subscriber_editable?: boolean;
       /**
        * Id 
        * @description A unique TypeID associated with the object.
@@ -4323,34 +5366,66 @@ export interface components {
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
-      /** Title */
-      title: string;
-      /** Slug */
-      slug: string;
-      /** Body */
-      body: string;
-      /** Css */
-      css: string;
-      /** Success Body */
-      success_body: string;
-      /** Surveys */
-      surveys: (string)[];
-      /** Admin */
-      admin: boolean;
-      status: components["schemas"]["FormStatus"];
+      /**
+       * Secondary Id 
+       * @description The secondary ID of the tag, used as a human-readable numeric identifier.
+       */
+      secondary_id: number;
     };
     /**
-     * CreateFormErrorCode 
-     * @description Represents the type of error that occurred when creating a form.
-     * 
-     * Human-readable error messages are provided in the `detail` field of the response;
-     * these values are meant to be parseable by code or client logic. 
+     * TagInput 
+     * @description Input schema for creating a new tag.
+     */
+    TagInput: {
+      /**
+       * Name 
+       * @description The name of the tag. 
+       * @example VIP
+       */
+      name: string;
+      /**
+       * Color 
+       * @description The hex color code associated with the tag. 
+       * @example #FFD700
+       */
+      color: string;
+      /**
+       * Description 
+       * @description An internal description of the tag, only visible to the newsletter author.
+       */
+      description?: string;
+      /**
+       * Public Description 
+       * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
+       */
+      public_description?: string;
+      /**
+       * Subscriber Editable 
+       * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
+       * @default false
+       */
+      subscriber_editable?: boolean;
+    };
+    /** Page[Tag] */
+    TagPage: {
+      /** Results */
+      results: (components["schemas"]["Tag"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /**
+     * UpdateTagErrorCode 
+     * @description A potential error code that can be returned when updating a tag. 
      * @enum {string}
      */
-    CreateFormErrorCode: "slug_already_exists";
-    /** ErrorMessage[CreateFormErrorCode] */
-    ErrorMessage_CreateFormErrorCode_: {
-      code: components["schemas"]["CreateFormErrorCode"];
+    UpdateTagErrorCode: "name_already_exists" | "name_too_long";
+    /** ErrorMessage[UpdateTagErrorCode] */
+    ErrorMessage_UpdateTagErrorCode_: {
+      code: components["schemas"]["UpdateTagErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -4361,279 +5436,97 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
-    /** FormInput */
-    FormInput: {
+    /**
+     * TagUpdateInput 
+     * @description Input schema for updating an existing tag. All fields are optional.
+     */
+    TagUpdateInput: {
       /**
-       * Title 
-       * @example Contact Form
+       * Name 
+       * @description The name of the tag. 
+       * @example VIP
        */
-      title: string;
+      name?: string;
       /**
-       * Slug 
-       * @example contact
+       * Color 
+       * @description The hex color code associated with the tag. 
+       * @example #FFD700
        */
-      slug: string;
+      color?: string;
       /**
-       * Body 
-       * @default  
-       * @example
+       * Description 
+       * @description An internal description of the tag, only visible to the newsletter author.
        */
-      body?: string;
+      description?: string;
       /**
-       * Css 
-       * @default  
-       * @example
+       * Public Description 
+       * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
        */
-      css?: string;
+      public_description?: string;
       /**
-       * Success Body 
-       * @default  
-       * @example Thank you for your submission!
+       * Secondary Id 
+       * @description The secondary ID of the tag, used as a human-readable numeric identifier.
        */
-      success_body?: string;
+      secondary_id?: number;
       /**
-       * Surveys 
-       * @example []
+       * Subscriber Editable 
+       * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal.
        */
-      surveys?: (string)[];
-      /**
-       * Admin 
-       * @default false 
-       * @example false
-       */
-      admin?: boolean;
-      /**
-       * @default active 
-       * @example active
-       */
-      status?: components["schemas"]["FormStatus"];
-    };
-    /** Page[Form] */
-    FormPage: {
-      /** Results */
-      results: (components["schemas"]["Form"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /** FormUpdateInput */
-    FormUpdateInput: {
-      /** Title */
-      title?: string;
-      /** Slug */
-      slug?: string;
-      /** Body */
-      body?: string;
-      /** Css */
-      css?: string;
-      /** Success Body */
-      success_body?: string;
-      /** Surveys */
-      surveys?: (string)[];
-      /** Admin */
-      admin?: boolean;
-      status?: components["schemas"]["FormStatus"];
+      subscriber_editable?: boolean;
     };
     /**
-     * Source 
+     * TagAnalytics 
+     * @description Analytics data associated with a given tag.
+     */
+    TagAnalytics: {
+      /**
+       * Created Subscribers 
+       * @description The number of subscribers who have been created with this tag.
+       */
+      created_subscribers: number;
+      /**
+       * Click Rate 
+       * @description The click rate of emails sent to subscribers with this tag.
+       */
+      click_rate: number;
+      /**
+       * Open Rate 
+       * @description The open rate of emails sent to subscribers with this tag.
+       */
+      open_rate: number;
+    };
+    /**
+     * Failure 
      * @description An enumeration. 
      * @enum {string}
      */
-    APIRequestSource: "api" | "app" | "carrd" | "zapier" | "cli" | "make";
-    /**
-     * APIRequestDetail 
-     * @description Represents a request to the API (api.buttondown.com).
-     */
-    APIRequestDetail: {
+    Failure: "email_already_exists";
+    /** ErrorMessage[Failure] */
+    ErrorMessage_Failure_: {
+      code: components["schemas"]["Failure"];
+      /** Detail */
+      detail: string;
       /**
-       * Id 
-       * @description A unique TypeID associated with the object.
+       * Metadata 
+       * @default {}
        */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Status Code */
-      status_code: number;
-      /** Path */
-      path: string;
-      /** Method */
-      method: string;
-      source: components["schemas"]["APIRequestSource"];
-      /**
-       * Version 
-       * @enum {string}
-       */
-      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01";
-      /** Ip Address */
-      ip_address: string;
-      /** Api Key Id */
-      api_key_id?: string;
-      /** Api Key Label */
-      api_key_label?: string;
-      /** Request Data */
-      request_data: string;
-      /** Response Data */
-      response_data: string;
-      /** Headers */
-      headers: {
+      metadata?: {
         [key: string]: string | undefined;
       };
     };
-    /**
-     * APIRequest 
-     * @description Represents a request to the API (api.buttondown.com).
-     */
-    APIRequest: {
+    /** UserInput */
+    UserInput: {
+      permissions: components["schemas"]["Permissions"];
       /**
-       * Id 
-       * @description A unique TypeID associated with the object.
+       * Email Address 
+       * @description The email address of the user.
        */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Status Code */
-      status_code: number;
-      /** Path */
-      path: string;
-      /** Method */
-      method: string;
-      source: components["schemas"]["APIRequestSource"];
-      /**
-       * Version 
-       * @enum {string}
-       */
-      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01";
-      /** Ip Address */
-      ip_address: string;
-      /** Api Key Id */
-      api_key_id?: string;
-      /** Api Key Label */
-      api_key_label?: string;
+      email_address: string;
     };
-    /** APIRequestList */
-    APIRequestList: {
+    /** Page[User] */
+    UserPage: {
       /** Results */
-      results: (components["schemas"]["APIRequest"])[];
-      /** Cursor */
-      cursor?: string;
-    };
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    AdvertisingSKUStatus: "active" | "inactive";
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    AdvertisingSlotStatus: "expired" | "executed" | "finalized" | "open" | "sold";
-    /** AdvertisingSlot */
-    AdvertisingSlot: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /**
-       * Date 
-       * Format: date
-       */
-      date: string;
-      status: components["schemas"]["AdvertisingSlotStatus"];
-      /** Invoice Url */
-      invoice_url?: string;
-      /** Sku Id */
-      sku_id: string;
-      /** Submission Url */
-      submission_url: string;
-      /** Sponsor Company */
-      sponsor_company: string;
-      /** Sponsor Email */
-      sponsor_email: string;
-      /** Sponsor Name */
-      sponsor_name: string;
-      /** Content */
-      content: string;
-      /** Content Image Id */
-      content_image_id?: string;
-      /** Content Url */
-      content_url: string;
-      /**
-       * Content Approved At 
-       * Format: date-time
-       */
-      content_approved_at?: string;
-      /**
-       * Content Rejected At 
-       * Format: date-time
-       */
-      content_rejected_at?: string;
-      /** Content Rejection Reason */
-      content_rejection_reason: string;
-      /**
-       * Content Submitted At 
-       * Format: date-time
-       */
-      content_submitted_at?: string;
-    };
-    /** AdvertisingUnit */
-    AdvertisingUnit: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      status: components["schemas"]["AdvertisingSKUStatus"];
-      /** Slots */
-      slots: (components["schemas"]["AdvertisingSlot"])[];
-      /** Title */
-      title: string;
-      /** Description */
-      description: string;
-      /** Behavior */
-      behavior: string;
-      /** Url */
-      url: string;
-      /** Price */
-      price?: number;
-      /** Allows Html */
-      allows_html: boolean;
-      /** Allows Image */
-      allows_image: boolean;
-      /** Max Characters */
-      max_characters?: number;
-      /** Submission Deadline Days */
-      submission_deadline_days: number;
-    };
-    /** Page[AdvertisingUnit] */
-    AdvertisingUnitPage: {
-      /** Results */
-      results: (components["schemas"]["AdvertisingUnit"])[];
+      results: (components["schemas"]["User"])[];
       /** Next */
       next?: string;
       /** Previous */
@@ -4641,108 +5534,15 @@ export interface components {
       /** Count */
       count: number;
     };
-    /** AdvertisingUnitInput */
-    AdvertisingUnitInput: {
-      /** Title */
-      title?: string;
-      /** Description */
-      description?: string;
+    /** UserUpdateInput */
+    UserUpdateInput: {
       /**
-       * Behavior 
-       * @default
+       * Permissions 
+       * @description A mapping of permission names to access levels.
        */
-      behavior?: string;
-      /**
-       * Url 
-       * @default
-       */
-      url?: string;
-      /** Price */
-      price?: number;
-      /**
-       * Allows Html 
-       * @description Whether the advertising unit accepts HTML content. 
-       * @default false
-       */
-      allows_html?: boolean;
-      /**
-       * Allows Image 
-       * @description Whether the advertising unit accepts an image. 
-       * @default false
-       */
-      allows_image?: boolean;
-      /**
-       * Max Characters 
-       * @description Maximum number of characters allowed for the ad content.
-       */
-      max_characters?: number;
-      /**
-       * Submission Deadline Days 
-       * @description Number of days before the slot date that content must be submitted. 
-       * @default 3
-       */
-      submission_deadline_days?: number;
-    };
-    /** AdvertisingUnitUpdateInput */
-    AdvertisingUnitUpdateInput: {
-      /** Title */
-      title?: string;
-      /** Description */
-      description?: string;
-      /** Dates */
-      dates: (string)[];
-      /** Behavior */
-      behavior?: string;
-      /** Url */
-      url?: string;
-      /** Price */
-      price?: number;
-      /** Allows Html */
-      allows_html?: boolean;
-      /** Allows Image */
-      allows_image?: boolean;
-      /** Max Characters */
-      max_characters?: number;
-      /** Submission Deadline Days */
-      submission_deadline_days?: number;
-    };
-    /** Page[AdvertisingSlot] */
-    AdvertisingSlotPage: {
-      /** Results */
-      results: (components["schemas"]["AdvertisingSlot"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /** AdvertisingSlotUpdateInput */
-    AdvertisingSlotUpdateInput: {
-      /** Content */
-      content?: string;
-      /**
-       * Content Approved At 
-       * Format: date-time
-       */
-      content_approved_at?: string;
-      /** Content Image Id */
-      content_image_id?: string;
-      /** Content Rejection Reason */
-      content_rejection_reason?: string;
-      /** Content Url */
-      content_url?: string;
-      /** Sponsor Company */
-      sponsor_company?: string;
-      /** Sponsor Email */
-      sponsor_email?: string;
-      /** Sponsor Name */
-      sponsor_name?: string;
-      /**
-       * Status 
-       * @enum {string}
-       */
-      status?: "approve" | "reject";
+      permissions: {
+        [key: string]: string | undefined;
+      };
     };
     /**
      * WebhookStatus 
@@ -4889,411 +5689,6 @@ export interface components {
       /** Count */
       count: number;
     };
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    CommentStatus: "pending" | "active" | "spammy";
-    /**
-     * Comment 
-     * @description Comments are a way for subscribers to interact with newsletters. They're a way to
-     * provide feedback, ask questions, and generally engage with the content of an email.
-     * Comments exist in a tree structure; comments that reply to other comments are
-     * considered "children" of the parent comment.
-     */
-    Comment: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Email Id */
-      email_id: string;
-      /** Subscriber Id */
-      subscriber_id?: string;
-      /**
-       * Parent Id 
-       * @description The ID of the parent comment, if this comment is a reply to another comment.
-       */
-      parent_id?: string;
-      /** Text */
-      text: string;
-      status: components["schemas"]["CommentStatus"];
-      subscriber?: components["schemas"]["Subscriber"];
-      email?: components["schemas"]["Email"];
-    };
-    /** CommentInput */
-    CommentInput: {
-      /**
-       * Text 
-       * @description The text content of the comment
-       */
-      text: string;
-      /**
-       * Parent Id 
-       * @description The ID of the parent comment, if this comment is a reply to another comment.
-       */
-      parent_id?: string;
-      /**
-       * Email Id 
-       * @description The ID of the email this comment is for. Required if parent_id is not provided.
-       */
-      email_id?: string;
-      /**
-       * Subscriber Id 
-       * @description The ID of the subscriber to attribute the comment to. If not provided, the comment is attributed to the newsletter author.
-       */
-      subscriber_id?: string;
-    };
-    /** Page[Comment] */
-    CommentPage: {
-      /** Results */
-      results: (components["schemas"]["Comment"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /** CommentUpdateInput */
-    CommentUpdateInput: {
-      /**
-       * Status 
-       * @description The new status for the comment. Use 'active' to approve or 'spammy' to mark as spam. 
-       * @enum {string}
-       */
-      status: "active" | "spammy";
-    };
-    /** Response */
-    Response: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /**
-       * Answer 
-       * @description The answer given to the survey.
-       */
-      answer: string;
-      /**
-       * Text 
-       * @description Optional text included by the subscriber with the response. Subscribers are only prompted to supply a text response if the `is_freeform_response_enabled` field is set to `true` on the survey.
-       */
-      text: string;
-      /** Survey Id */
-      survey_id: string;
-      /** Subscriber Id */
-      subscriber_id: string;
-      /** Email Id */
-      email_id?: string;
-      /** Automation Id */
-      automation_id?: string;
-      subscriber?: components["schemas"]["Subscriber"];
-      survey?: components["schemas"]["Survey"];
-      email?: components["schemas"]["Email"];
-      automation?: components["schemas"]["Automation"];
-    };
-    /** Page[Response] */
-    ResponsePage: {
-      /** Results */
-      results: (components["schemas"]["Response"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /** ResponseInput */
-    ResponseInput: {
-      /** Subscriber Id */
-      subscriber_id: string;
-      /** Survey Id */
-      survey_id: string;
-      /** Email Id */
-      email_id: string;
-      /** Answer */
-      answer: number;
-    };
-    /** ResponseUpdateInput */
-    ResponseUpdateInput: {
-      /**
-       * Text 
-       * @description The text response to update. Only applicable if the survey has freeform responses enabled.
-       */
-      text?: string;
-    };
-    /**
-     * EmailEventType 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    EmailEventType: "activation_bounced" | "activation_clicked" | "activation_complained" | "activation_deferred" | "activation_delivered" | "activation_opened" | "activation_rejected" | "activation_reminder_bounced" | "activation_reminder_clicked" | "activation_reminder_complained" | "activation_reminder_deferred" | "activation_reminder_delivered" | "activation_reminder_opened" | "activation_reminder_rejected" | "subscription_confirmed_clicked" | "subscription_confirmed_bounced" | "subscription_confirmed_complained" | "subscription_confirmed_deferred" | "subscription_confirmed_delivered" | "subscription_confirmed_opened" | "subscription_confirmed_rejected" | "attempted" | "bounced" | "clicked" | "complained" | "deferred" | "delivered" | "opened" | "rejected" | "replied" | "sent" | "unsubscribed";
-    /** EmailEvent */
-    EmailEvent: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Subscriber Id */
-      subscriber_id?: string;
-      /** Email Id */
-      email_id?: string;
-      /** Automation Id */
-      automation_id?: string;
-      /** Metadata */
-      metadata: {
-        [key: string]: string | undefined;
-      };
-      event_type: components["schemas"]["EmailEventType"];
-      subscriber?: components["schemas"]["Subscriber"];
-      email?: components["schemas"]["Email"];
-      automation?: components["schemas"]["Automation"];
-    };
-    /** Page[EmailEvent] */
-    EmailEventPage: {
-      /** Results */
-      results: (components["schemas"]["EmailEvent"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /** Note */
-    Note: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /**
-       * Body 
-       * @description The text content of the note. 
-       * @example This subscriber upgraded to a paid plan.
-       */
-      body: string;
-      /**
-       * Model Type 
-       * @description The type of object this note is attached to (e.g., 'email', 'subscriber'). 
-       * @example email 
-       * @enum {string}
-       */
-      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
-      /**
-       * Model Id 
-       * @description The ID of the object this note is attached to. 
-       * @example 13121cd6-0dfc-424c-bb12-988b0a32fcb3
-       */
-      model_id: string;
-      /** Metadata */
-      metadata: Record<string, unknown>;
-      /**
-       * Source 
-       * @description The source of the note. If the note was created by a Buttondown admin, this will be 'admin'; otherwise, it will be 'user'. 
-       * @example admin 
-       * @enum {string}
-       */
-      source: "admin" | "user";
-      /** User Id */
-      user_id?: string;
-      user?: components["schemas"]["User"];
-    };
-    /** NoteInput */
-    NoteInput: {
-      /**
-       * Body 
-       * @description The text content of the note. 
-       * @example This subscriber upgraded to a paid plan.
-       */
-      body: string;
-      /**
-       * Model Type 
-       * @description The type of object this note is attached to (e.g., 'email', 'subscriber'). 
-       * @example email 
-       * @enum {string}
-       */
-      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
-      /**
-       * Model Id 
-       * @description The ID of the object this note is attached to. 
-       * @example 13121cd6-0dfc-424c-bb12-988b0a32fcb3
-       */
-      model_id: string;
-      /**
-       * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
-       * @default {}
-       */
-      metadata?: Record<string, unknown>;
-    };
-    /** Page[Note] */
-    NotePage: {
-      /** Results */
-      results: (components["schemas"]["Note"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * PublicEmail 
-     * @description Public email schema for email search results.
-     */
-    PublicEmail: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Subject */
-      subject: string;
-      /** Slug */
-      slug?: string;
-      /**
-       * Publish Date 
-       * Format: date-time
-       */
-      publish_date?: string;
-      /** Description */
-      description: string;
-      /** Absolute Url */
-      absolute_url: string;
-    };
-    /** Page[PublicEmail] */
-    PublicEmailPage: {
-      /** Results */
-      results: (components["schemas"]["PublicEmail"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * Mode 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    SnippetMode: "fancy" | "naked" | "plaintext";
-    /** Snippet */
-    Snippet: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Identifier */
-      identifier: string;
-      /** Name */
-      name: string;
-      /** Content */
-      content: string;
-      mode: components["schemas"]["SnippetMode"];
-      /**
-       * Reference Count 
-       * @default 0
-       */
-      reference_count?: number;
-    };
-    /** SnippetInput */
-    SnippetInput: {
-      /**
-       * Identifier 
-       * @example footer
-       */
-      identifier: string;
-      /**
-       * Name 
-       * @example Footer
-       */
-      name: string;
-      /**
-       * Content 
-       * @default  
-       * @example Thanks for reading!
-       */
-      content?: string;
-      /**
-       * @description The editor mode for the snippet. 
-       * @default fancy
-       */
-      mode?: components["schemas"]["SnippetMode"];
-    };
-    /** Page[Snippet] */
-    SnippetPage: {
-      /** Results */
-      results: (components["schemas"]["Snippet"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /** SnippetUpdateInput */
-    SnippetUpdateInput: {
-      /**
-       * Identifier 
-       * @example footer
-       */
-      identifier?: string;
-      /**
-       * Name 
-       * @example Footer
-       */
-      name?: string;
-      /**
-       * Content 
-       * @example Thanks for reading!
-       */
-      content?: string;
-      mode?: components["schemas"]["SnippetMode"];
-    };
     /** @enum {string} */
     EmailExcludableField: "body";
   };
@@ -5308,297 +5703,10 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  /** List Exports */
-  list_exports: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ExportPage"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create Export */
-  create_export: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ExportInput"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["Export"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage_CreateExportErrorCode_"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
   /**
-   * Retrieve Export 
-   * @description Retrieve a specific export by its ID
+   * Get Account 
+   * @description Retrieve the account associated with the current API key
    */
-  retrieve_export: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Export"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** List Tags */
-  list_tags: {
-    parameters: {
-      query: {
-        /** @description If provided, only return tags matching the given IDs. */
-        ids?: (string)[];
-        page_size?: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["TagPage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create Tag */
-  create_tag: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TagInput"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["Tag"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Retrieve Tag 
-   * @description Retrieve a specific tag by its ID
-   */
-  retrieve_tag: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Tag"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Delete Tag 
-   * @description Delete a tag
-   */
-  delete_tag: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description No Content */
-      204: never;
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Update Tag 
-   * @description Update a tag's properties
-   */
-  update_tag: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TagUpdateInput"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Tag"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage_UpdateTagErrorCode_"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Retrieve Tag Analytics 
-   * @description Retrieve analytics for a specific tag
-   */
-  retrieve_tag_analytics: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["TagAnalytics"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Ping */
-  ping: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Empty"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Get Account */
   get_account: {
     responses: {
       /** @description OK */
@@ -5611,41 +5719,16 @@ export interface operations {
       409: never;
     };
   };
-  /** List Images */
-  list_images: {
+  /**
+   * List Advertising Units 
+   * @description List all advertising units
+   */
+  list_advertising_units: {
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["ImagePage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-    };
-  };
-  /** Create Image */
-  create_image: {
-    requestBody: {
-      content: {
-        "multipart/form-data": {
-          /**
-           * Image 
-           * Format: binary
-           */
-          image: string;
-        };
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["Image"];
+          "application/json": components["schemas"]["AdvertisingUnitPage"];
         };
       };
       /** @description Bad Request */
@@ -5665,10 +5748,43 @@ export interface operations {
     };
   };
   /**
-   * Delete Image 
-   * @description Delete an uploaded image
+   * Create Advertising Unit 
+   * @description Create a new advertising unit
    */
-  delete_image: {
+  create_advertising_unit: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AdvertisingUnitInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["AdvertisingUnit"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Advertising Unit 
+   * @description Delete an advertising unit
+   */
+  delete_advertising_unit: {
     parameters: {
       path: {
         id: string;
@@ -5677,6 +5793,143 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Advertising Unit 
+   * @description Update an advertising unit's properties
+   */
+  update_advertising_unit: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AdvertisingUnitUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AdvertisingUnit"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * List Advertising Slots 
+   * @description List all advertising slots
+   */
+  list_advertising_slots: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AdvertisingSlotPage"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Advertising Slot 
+   * @description Update an advertising slot's sponsor content
+   */
+  update_advertising_slot: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AdvertisingSlotUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AdvertisingSlot"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Api Request 
+   * @description Retrieve a specific API request by its ID
+   */
+  retrieve_api_request: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["APIRequestDetail"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -5693,7 +5946,53 @@ export interface operations {
       409: never;
     };
   };
-  /** List Attachments */
+  /**
+   * List Api Requests 
+   * @description List all API requests
+   */
+  list_api_requests: {
+    parameters: {
+      query: {
+        api_key_id?: (string)[];
+        status_code?: (string)[];
+        method?: (string)[];
+        source?: (components["schemas"]["APIRequestSource"])[];
+        version?: ("2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01")[];
+        date__start?: string;
+        date__end?: string;
+        creation_date__lt?: string;
+        creation_date__gt?: string;
+        path?: (string)[];
+        limit?: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["APIRequestList"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * List Attachments 
+   * @description List all attachments
+   */
   list_attachments: {
     parameters: {
       query: {
@@ -5717,7 +6016,10 @@ export interface operations {
       };
     };
   };
-  /** Create Attachment */
+  /**
+   * Create Attachment 
+   * @description Upload a new attachment
+   */
   create_attachment: {
     parameters: {
       query: {
@@ -5796,6 +6098,235 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * List Automations 
+   * @description List all automations
+   */
+  list_automations: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AutomationPage"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Create Automation 
+   * @description Create a new automation
+   */
+  create_automation: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AutomationInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Automation"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_AutomationCreationErrorCode_"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Automation 
+   * @description Retrieve a specific automation by its ID
+   */
+  retrieve_automation: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Automation"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Automation 
+   * @description Delete an automation
+   */
+  delete_automation: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Automation 
+   * @description Update an automation's properties
+   */
+  update_automation: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AutomationUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Automation"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Invoke Automation 
+   * @description Manually trigger an automation
+   */
+  invoke_automation: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Automation Analytics 
+   * @description Retrieve analytics data for an automation
+   */
+  retrieve_automation_analytics: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Analytics"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -5967,7 +6498,276 @@ export interface operations {
       409: never;
     };
   };
-  /** List Emails */
+  /**
+   * Create Bulk Action 
+   * @description Create a new bulk action
+   */
+  create_bulk_action: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["BulkActionInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["BulkAction"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Bulk Action 
+   * @description Retrieve the status of a bulk action
+   */
+  retrieve_bulk_action: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BulkAction"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * List Comments 
+   * @description List all comments
+   */
+  list_comments: {
+    parameters: {
+      query: {
+        /** @description If provided, only return comments for the given email. */
+        email_id?: string;
+        /** @description If provided, only return comments for the given subscriber. */
+        subscriber_id?: string;
+        /** @description If provided, only return comments that are replies to the given parent comment. */
+        parent_id?: string;
+        /** @description If provided, expand the given field. (Only supported fields: 'subscriber', 'email'). */
+        expand?: ("subscriber" | "email")[];
+        ordering?: "creation_date" | "-creation_date" | "email" | "-email" | "subscriber" | "-subscriber";
+        /** @description An enumeration. */
+        status?: "pending" | "active" | "spammy";
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CommentPage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Create Comment 
+   * @description Create a new comment or reply to an existing comment. If subscriber_id is provided, the comment is attributed to that subscriber; otherwise it is attributed to the newsletter author.
+   */
+  create_comment: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CommentInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Comment"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Comment 
+   * @description Retrieve a specific comment by its ID
+   */
+  retrieve_comment: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Comment"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Comment 
+   * @description Delete a comment. Only the comment owner (subscriber) or the newsletter author can delete a comment.
+   */
+  delete_comment: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Update Comment 
+   * @description Update a comment's status. Only the newsletter owner can call this.
+   */
+  update_comment: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CommentUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Comment"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * List Coupons 
+   * @description List all Stripe coupons
+   */
+  list_coupons: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StripeCouponPage"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * List Emails 
+   * @description List all emails
+   */
   list_emails: {
     parameters: {
       query: {
@@ -6023,7 +6823,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Create Email */
+  /**
+   * Create Email 
+   * @description Create a new email
+   */
   create_email: {
     requestBody: {
       content: {
@@ -6356,164 +7159,33 @@ export interface operations {
       409: never;
     };
   };
-  /** List Subscribers */
-  list_subscribers: {
+  /**
+   * List Events 
+   * @description List all events
+   */
+  list_events: {
     parameters: {
       query: {
-        /** @description If provided, only return subscribers with the given churn date(s). */
-        churn_date__end?: string;
-        /** @description If provided, only return subscribers with the given churn date(s). */
-        churn_date__start?: string;
-        /** @description If provided, only return subscribers with the given coupon ID(s). */
-        coupon?: (string)[];
-        /** @description If provided, only return subscribers who are currently subscribed to the given price ID(s). */
-        current_price?: (string)[];
-        /** @description If provided, only return subscribers created before the given date. */
-        date__end?: string;
-        /** @description If provided, only return subscribers created on or after the given date. */
-        date__start?: string;
-        /** @description If provided, only return subscribers whose email domain matches the given domain(s). */
-        domain?: (string)[];
-        /** @description If provided, only return subscribers whose email address contains the given string. */
-        email_address?: string | (string)[];
-        /** @description If provided, expand the given field. (Only supported fields: 'stripe_customer') */
-        expand?: ("stripe_customer")[];
-        /** @description If provided, only return subscribers that came through the given form(s). */
-        form?: (string)[];
-        /** @description If provided, only return subscribers with the given IDs. */
-        ids?: (string)[];
-        /** @description If provided, only return subscribers with the given IP address(es). */
-        ip_address?: (string)[];
-        /** @description If provided, only return subscribers with the given last click date(s). */
-        last_click_date__end?: string;
-        /** @description If provided, only return subscribers with the given last click date(s). */
-        last_click_date__start?: string;
-        /** @description If provided, only return subscribers with the given last open date(s). */
-        last_open_date__end?: string;
-        /** @description If provided, only return subscribers with the given last open date(s). */
-        last_open_date__start?: string;
-        /** @description If provided, only return subscribers whose email domain does not match the given domain(s). */
-        "-domain"?: (string)[];
-        "-tag"?: string;
-        /** @description If provided, only return subscribers without the given type. */
-        "-type"?: (components["schemas"]["SubscriberType"])[];
-        ordering?: string;
-        /** @description If provided, only return subscribers who have at one point subscribed to the given price ID(s). */
-        price?: (string)[];
-        /** @description If provided, only return subscribers with the given referral code(s). */
-        referral_code?: (string)[];
-        /** @description If provided, only return subscribers whose referrer URL(s) contain the given string. */
-        referrer_url?: (string)[];
-        /** @description If provided, only return subscribers with an open rate less than or equal to the given value. */
-        open_rate__end?: number;
-        /** @description If provided, only return subscribers with an open rate greater than or equal to the given value. */
-        open_rate__start?: number;
-        /** @description If provided, only return subscribers with a click rate less than or equal to the given value. */
-        click_rate__end?: number;
-        /** @description If provided, only return subscribers with a click rate greater than or equal to the given value. */
-        click_rate__start?: number;
-        /** @description If provided, only return subscribers with a risk score less than or equal to the given value. */
-        risk_score__end?: number;
-        /** @description If provided, only return subscribers with a risk score greater than or equal to the given value. */
-        risk_score__start?: number;
-        /** @description If provided, only return subscribers with the given source(s). */
-        source?: (components["schemas"]["SubscriberSource"])[];
-        /** @description If provided, only return subscribers that were imported by the given subscriber import. */
-        subscriber_import?: (string)[];
-        tag?: (string)[];
-        /** @description If provided, only return subscribers with the given type. */
-        type?: (components["schemas"]["SubscriberType"])[];
-        /** @description If provided, only return subscribers with the given undeliverability date(s). */
-        undeliverability_date__end?: string;
-        /** @description If provided, only return subscribers with the given undeliverability date(s). */
-        undeliverability_date__start?: string;
-        /** @description If provided, only return subscribers with the given undeliverability reason(s). */
-        undeliverability_reason?: (components["schemas"]["SubscriberUndeliverabilityReason"])[];
-        /** @description If provided, only return subscribers with the given unsubscription date(s). */
-        unsubscription_date__end?: string;
-        /** @description If provided, only return subscribers with the given unsubscription date(s). */
-        unsubscription_date__start?: string;
-        /** @description If provided, only return subscribers with the given unsubscription reason(s). */
-        unsubscription_reason?: (string)[];
-        /** @description If provided, only return subscribers with the given upgrade date(s). */
-        upgrade_date__end?: string;
-        /** @description If provided, only return subscribers with the given upgrade date(s). */
-        upgrade_date__start?: string;
-        /** @description If provided, only return subscribers with the given UTM campaign(s). */
-        utm_campaign?: (string)[];
-        /** @description If provided, only return subscribers with the given UTM medium(s). */
-        utm_medium?: (string)[];
-        /** @description If provided, only return subscribers with the given UTM source(s). */
-        utm_source?: (string)[];
+        event_type?: components["schemas"]["EmailEventType"];
+        ordering?: "creation_date" | "-creation_date";
+        /** @description If provided, expand the given field. (Only supported field: 'subscriber'). */
+        expand?: ("automation" | "subscriber" | "email")[];
+        email_id?: string;
+        automation_id?: string;
+        subscriber_id?: string;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SubscriberPage"];
+          "application/json": components["schemas"]["EmailEventPage"];
         };
       };
       /** @description Bad Request */
       400: {
         content: {
-          "application/json": components["schemas"]["ErrorMessage_ListSubscribersErrorCode_"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
           "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-      /** @description Unprocessable Entity */
-      422: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-    };
-  };
-  /** Create Subscriber */
-  create_subscriber: {
-    parameters: {
-      header: {
-        /**
-         * @description The behavior to apply when a subscriber with the same email address already exists.
-         * Defaults to "no_op", which will return a 400 error if a subscriber with the same email address already exists. Other values include:
-         * 
-         * - "overwrite", which will overwrite the existing subscriber's data with the new one.
-         * - "add", which will add the new subscriber data to the existing one.
-         */
-        "X-Buttondown-Collision-Behavior"?: "no_op" | "add" | "overwrite" | "fail";
-        /** @description Bypass the firewall for this subscriber creation. Subject to aggressive rate limiting (5 per hour per newsletter). */
-        "X-Buttondown-Bypass-Firewall"?: boolean;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SubscriberInput"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["Subscriber"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage_ValidationErrorCode_"];
         };
       };
       /** @description Forbidden */
@@ -6524,29 +7196,27 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
-      /** @description Too Many Requests */
-      429: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
     };
   };
-  /** Retrieve Subscriber */
-  retrieve_subscriber: {
+  /**
+   * Get Event 
+   * @description Retrieve a specific event by its ID
+   */
+  get_event: {
     parameters: {
       query: {
-        expand?: ("stripe_customer")[];
+        /** @description If provided, expand the given field. (Only supported field: 'subscriber'). */
+        expand?: ("automation" | "subscriber" | "email")[];
       };
       path: {
-        id_or_email: string;
+        id: string;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Subscriber"];
+          "application/json": components["schemas"]["EmailEvent"];
         };
       };
       /** @description Forbidden */
@@ -6561,28 +7231,28 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
-      /** @description Conflict */
-      409: never;
     };
   };
-  /** Delete Subscriber */
-  delete_subscriber: {
-    parameters: {
-      path: {
-        id_or_email: string;
-      };
-    };
+  /**
+   * List Exports 
+   * @description List all exports
+   */
+  list_exports: {
     responses: {
-      /** @description No Content */
-      204: never;
-      /** @description Forbidden */
-      403: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ExportPage"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
-      /** @description Not Found */
-      404: {
+      /** @description Forbidden */
+      403: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -6591,311 +7261,27 @@ export interface operations {
       409: never;
     };
   };
-  /** Update Subscriber */
-  update_subscriber: {
-    parameters: {
-      path: {
-        id_or_email: string;
-      };
-    };
+  /**
+   * Create Export 
+   * @description Create a new data export
+   */
+  create_export: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["SubscriberUpdateInput"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Subscriber"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage_UpdateSubscriberErrorCode_"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Send Reminder */
-  send_reminder: {
-    parameters: {
-      path: {
-        id_or_email: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: never;
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Send Magic Link To Subscriber */
-  send_magic_link_to_subscriber: {
-    parameters: {
-      path: {
-        id_or_email: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: never;
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Send Email To */
-  send_email_to: {
-    parameters: {
-      path: {
-        id_or_email: string;
-        email_id: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Empty"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Get Referrals */
-  get_referrals: {
-    parameters: {
-      path: {
-        id_or_email: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SubscriberPage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Get Automations */
-  get_automations: {
-    parameters: {
-      path: {
-        id_or_email: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["AutomationForSubscriberPage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Update Automation Attempt */
-  update_automation_attempt: {
-    parameters: {
-      path: {
-        id_or_email: string;
-        automation_attempt_id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AutomationAttemptUpdateInput"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["AutomationForSubscriber"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage_UpdateAutomationAttemptErrorCode_"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Get Stripe Subscriptions */
-  get_stripe_subscriptions: {
-    parameters: {
-      path: {
-        id_or_email: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["StripeSubscriptionPage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** List Newsletters */
-  list_newsletters: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["NewsletterPage"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create Newsletter */
-  create_newsletter: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["NewsletterInput"];
+        "application/json": components["schemas"]["ExportInput"];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["Newsletter"];
+          "application/json": components["schemas"]["Export"];
         };
       };
       /** @description Bad Request */
       400: {
         content: {
-          "application/json": components["schemas"]["ErrorMessage_CreateNewsletterErrorCode_"];
+          "application/json": components["schemas"]["ErrorMessage_CreateExportErrorCode_"];
         };
       };
       /** @description Forbidden */
@@ -6909,113 +7295,10 @@ export interface operations {
     };
   };
   /**
-   * Delete Newsletter 
-   * @description Delete a newsletter
+   * Retrieve Export 
+   * @description Retrieve a specific export by its ID
    */
-  delete_newsletter: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description No Content */
-      204: never;
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Update Newsletter 
-   * @description Update a newsletter's settings
-   */
-  update_newsletter: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["NewsletterUpdateInput"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Newsletter"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create Bulk Action */
-  create_bulk_action: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["BulkActionInput"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["BulkAction"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Retrieve Bulk Action 
-   * @description Retrieve the status of a bulk action
-   */
-  retrieve_bulk_action: {
+  retrieve_export: {
     parameters: {
       path: {
         id: string;
@@ -7025,7 +7308,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["BulkAction"];
+          "application/json": components["schemas"]["Export"];
         };
       };
       /** @description Forbidden */
@@ -7281,49 +7564,27 @@ export interface operations {
       409: never;
     };
   };
-  /** List Automations */
-  list_automations: {
+  /**
+   * List Forms 
+   * @description List all forms
+   */
+  list_forms: {
+    parameters: {
+      query: {
+        /** @description If provided, only return forms with the given status. */
+        status?: (components["schemas"]["FormStatus"])[];
+        /** @description If provided, only return forms without the given status. */
+        "-status"?: (components["schemas"]["FormStatus"])[];
+        /** @description If provided, filter by admin-only flag. */
+        admin?: boolean;
+        ordering?: "creation_date" | "-creation_date" | "title" | "-title" | "slug" | "-slug" | "status" | "-status";
+      };
+    };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["AutomationPage"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create Automation */
-  create_automation: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AutomationInput"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["Automation"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage_AutomationCreationErrorCode_"];
+          "application/json": components["schemas"]["FormPage"];
         };
       };
       /** @description Forbidden */
@@ -7337,10 +7598,43 @@ export interface operations {
     };
   };
   /**
-   * Retrieve Automation 
-   * @description Retrieve a specific automation by its ID
+   * Create Form 
+   * @description Create a new form
    */
-  retrieve_automation: {
+  create_form: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FormInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Form"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_CreateFormErrorCode_"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Form 
+   * @description Retrieve a specific form by its ID
+   */
+  retrieve_form: {
     parameters: {
       path: {
         id: string;
@@ -7350,7 +7644,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Automation"];
+          "application/json": components["schemas"]["Form"];
         };
       };
       /** @description Forbidden */
@@ -7370,10 +7664,10 @@ export interface operations {
     };
   };
   /**
-   * Delete Automation 
-   * @description Delete an automation
+   * Delete Form 
+   * @description Delete a form
    */
-  delete_automation: {
+  delete_form: {
     parameters: {
       path: {
         id: string;
@@ -7399,10 +7693,10 @@ export interface operations {
     };
   };
   /**
-   * Update Automation 
-   * @description Update an automation's properties
+   * Update Form 
+   * @description Update a form's properties
    */
-  update_automation: {
+  update_form: {
     parameters: {
       path: {
         id: string;
@@ -7410,14 +7704,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AutomationUpdateInput"];
+        "application/json": components["schemas"]["FormUpdateInput"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Automation"];
+          "application/json": components["schemas"]["Form"];
         };
       };
       /** @description Bad Request */
@@ -7426,12 +7720,6 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
       /** @description Not Found */
       404: {
         content: {
@@ -7443,114 +7731,56 @@ export interface operations {
     };
   };
   /**
-   * Invoke Automation 
-   * @description Manually trigger an automation
+   * List Images 
+   * @description List all uploaded images
    */
-  invoke_automation: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
+  list_images: {
     responses: {
       /** @description OK */
-      200: never;
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImagePage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
     };
   };
   /**
-   * Retrieve Automation Analytics 
-   * @description Retrieve analytics data for an automation
+   * Create Image 
+   * @description Upload an image
    */
-  retrieve_automation_analytics: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Analytics"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** List Users */
-  list_users: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UserPage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create User */
-  create_user: {
+  create_image: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UserInput"];
+        "multipart/form-data": {
+          /**
+           * Image 
+           * Format: binary
+           */
+          image: string;
+        };
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["User"];
+          "application/json": components["schemas"]["Image"];
         };
       };
       /** @description Bad Request */
       400: {
         content: {
-          "application/json": components["schemas"]["ErrorMessage_Failure_"];
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
       403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -7560,43 +7790,10 @@ export interface operations {
     };
   };
   /**
-   * Retrieve User 
-   * @description Retrieve a specific user by its ID
+   * Delete Image 
+   * @description Delete an uploaded image
    */
-  retrieve_user: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["User"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Delete User 
-   * @description Delete a user
-   */
-  delete_user: {
+  delete_image: {
     parameters: {
       path: {
         id: string;
@@ -7622,10 +7819,100 @@ export interface operations {
     };
   };
   /**
-   * Update User 
-   * @description Update a user's properties
+   * List Newsletters 
+   * @description List all newsletters
    */
-  update_user: {
+  list_newsletters: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NewsletterPage"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Create Newsletter 
+   * @description Create a new newsletter
+   */
+  create_newsletter: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NewsletterInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Newsletter"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_CreateNewsletterErrorCode_"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Newsletter 
+   * @description Delete a newsletter
+   */
+  delete_newsletter: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Newsletter 
+   * @description Update a newsletter's settings
+   */
+  update_newsletter: {
     parameters: {
       path: {
         id: string;
@@ -7633,14 +7920,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UserUpdateInput"];
+        "application/json": components["schemas"]["NewsletterUpdateInput"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["User"];
+          "application/json": components["schemas"]["Newsletter"];
         };
       };
       /** @description Bad Request */
@@ -7665,7 +7952,120 @@ export interface operations {
       409: never;
     };
   };
-  /** List Prices */
+  /**
+   * List Notes 
+   * @description List all notes
+   */
+  list_notes: {
+    parameters: {
+      query: {
+        /** @description Filter notes by the type of object they are attached to. */
+        model_type?: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
+        /** @description Filter notes by the ID of the object they are attached to. */
+        model_id?: string;
+        /** @description If provided, expand the given field. */
+        expand?: ("user")[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NotePage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Create Note Endpoint 
+   * @description Create a new note
+   */
+  create_note_endpoint: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NoteInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Note"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Note Endpoint 
+   * @description Delete a note
+   */
+  delete_note_endpoint: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Ping 
+   * @description Check if the API is reachable and your credentials are valid
+   */
+  ping: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Empty"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * List Prices 
+   * @description List all prices
+   */
   list_prices: {
     parameters: {
       query: {
@@ -7696,7 +8096,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Create Price */
+  /**
+   * Create Price 
+   * @description Create a new price
+   */
   create_price: {
     requestBody: {
       content: {
@@ -7726,13 +8129,68 @@ export interface operations {
       409: never;
     };
   };
-  /** List Coupons */
-  list_coupons: {
+  /**
+   * Search public emails 
+   * @description Search and list public emails for a newsletter. No authentication required.
+   */
+  list_public_emails: {
+    parameters: {
+      query: {
+        q?: string;
+        page?: number;
+      };
+      path: {
+        username: string;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StripeCouponPage"];
+          "application/json": components["schemas"]["PublicEmailPage"];
+        };
+      };
+      /** @description Not Found */
+      404: never;
+    };
+  };
+  /**
+   * List Snippets 
+   * @description List all snippets
+   */
+  list_snippets: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SnippetPage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Create Snippet 
+   * @description Create a new snippet
+   */
+  create_snippet: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SnippetInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Snippet"];
         };
       };
       /** @description Bad Request */
@@ -7751,7 +8209,768 @@ export interface operations {
       409: never;
     };
   };
-  /** List Surveys */
+  /**
+   * Retrieve Snippet 
+   * @description Retrieve a single snippet.
+   */
+  retrieve_snippet: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Snippet"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Snippet 
+   * @description Delete a snippet.
+   */
+  delete_snippet: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Snippet 
+   * @description Update a snippet.
+   */
+  update_snippet: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SnippetUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Snippet"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * List Subscribers 
+   * @description List all subscribers
+   */
+  list_subscribers: {
+    parameters: {
+      query: {
+        /** @description If provided, only return subscribers with the given churn date(s). */
+        churn_date__end?: string;
+        /** @description If provided, only return subscribers with the given churn date(s). */
+        churn_date__start?: string;
+        /** @description If provided, only return subscribers with the given coupon ID(s). */
+        coupon?: (string)[];
+        /** @description If provided, only return subscribers who are currently subscribed to the given price ID(s). */
+        current_price?: (string)[];
+        /** @description If provided, only return subscribers created before the given date. */
+        date__end?: string;
+        /** @description If provided, only return subscribers created on or after the given date. */
+        date__start?: string;
+        /** @description If provided, only return subscribers whose email domain matches the given domain(s). */
+        domain?: (string)[];
+        /** @description If provided, only return subscribers whose email address contains the given string. */
+        email_address?: string | (string)[];
+        /** @description If provided, expand the given field. (Only supported fields: 'stripe_customer') */
+        expand?: ("stripe_customer")[];
+        /** @description If provided, only return subscribers that came through the given form(s). */
+        form?: (string)[];
+        /** @description If provided, only return subscribers with the given IDs. */
+        ids?: (string)[];
+        /** @description If provided, only return subscribers with the given IP address(es). */
+        ip_address?: (string)[];
+        /** @description If provided, only return subscribers with the given last click date(s). */
+        last_click_date__end?: string;
+        /** @description If provided, only return subscribers with the given last click date(s). */
+        last_click_date__start?: string;
+        /** @description If provided, only return subscribers with the given last open date(s). */
+        last_open_date__end?: string;
+        /** @description If provided, only return subscribers with the given last open date(s). */
+        last_open_date__start?: string;
+        /** @description If provided, only return subscribers whose email domain does not match the given domain(s). */
+        "-domain"?: (string)[];
+        "-tag"?: string;
+        /** @description If provided, only return subscribers without the given type. */
+        "-type"?: (components["schemas"]["SubscriberType"])[];
+        ordering?: string;
+        /** @description If provided, only return subscribers who have at one point subscribed to the given price ID(s). */
+        price?: (string)[];
+        /** @description If provided, only return subscribers with the given referral code(s). */
+        referral_code?: (string)[];
+        /** @description If provided, only return subscribers whose referrer URL(s) contain the given string. */
+        referrer_url?: (string)[];
+        /** @description If provided, only return subscribers with an open rate less than or equal to the given value. */
+        open_rate__end?: number;
+        /** @description If provided, only return subscribers with an open rate greater than or equal to the given value. */
+        open_rate__start?: number;
+        /** @description If provided, only return subscribers with a click rate less than or equal to the given value. */
+        click_rate__end?: number;
+        /** @description If provided, only return subscribers with a click rate greater than or equal to the given value. */
+        click_rate__start?: number;
+        /** @description If provided, only return subscribers with a risk score less than or equal to the given value. */
+        risk_score__end?: number;
+        /** @description If provided, only return subscribers with a risk score greater than or equal to the given value. */
+        risk_score__start?: number;
+        /** @description If provided, only return subscribers with the given source(s). */
+        source?: (components["schemas"]["SubscriberSource"])[];
+        /** @description If provided, only return subscribers that were imported by the given subscriber import. */
+        subscriber_import?: (string)[];
+        tag?: (string)[];
+        /** @description If provided, only return subscribers with the given type. */
+        type?: (components["schemas"]["SubscriberType"])[];
+        /** @description If provided, only return subscribers with the given undeliverability date(s). */
+        undeliverability_date__end?: string;
+        /** @description If provided, only return subscribers with the given undeliverability date(s). */
+        undeliverability_date__start?: string;
+        /** @description If provided, only return subscribers with the given undeliverability reason(s). */
+        undeliverability_reason?: (components["schemas"]["SubscriberUndeliverabilityReason"])[];
+        /** @description If provided, only return subscribers with the given unsubscription date(s). */
+        unsubscription_date__end?: string;
+        /** @description If provided, only return subscribers with the given unsubscription date(s). */
+        unsubscription_date__start?: string;
+        /** @description If provided, only return subscribers with the given unsubscription reason(s). */
+        unsubscription_reason?: (string)[];
+        /** @description If provided, only return subscribers with the given upgrade date(s). */
+        upgrade_date__end?: string;
+        /** @description If provided, only return subscribers with the given upgrade date(s). */
+        upgrade_date__start?: string;
+        /** @description If provided, only return subscribers with the given UTM campaign(s). */
+        utm_campaign?: (string)[];
+        /** @description If provided, only return subscribers with the given UTM medium(s). */
+        utm_medium?: (string)[];
+        /** @description If provided, only return subscribers with the given UTM source(s). */
+        utm_source?: (string)[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SubscriberPage"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_ListSubscribersErrorCode_"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Create Subscriber 
+   * @description Create a new subscriber
+   */
+  create_subscriber: {
+    parameters: {
+      header: {
+        /**
+         * @description The behavior to apply when a subscriber with the same email address already exists.
+         * Defaults to "no_op", which will return a 400 error if a subscriber with the same email address already exists. Other values include:
+         * 
+         * - "overwrite", which will overwrite the existing subscriber's data with the new one.
+         * - "add", which will add the new subscriber data to the existing one.
+         */
+        "X-Buttondown-Collision-Behavior"?: "no_op" | "add" | "overwrite" | "fail";
+        /** @description Bypass the firewall for this subscriber creation. Subject to aggressive rate limiting (5 per hour per newsletter). */
+        "X-Buttondown-Bypass-Firewall"?: boolean;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SubscriberInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Subscriber"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_ValidationErrorCode_"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+      /** @description Too Many Requests */
+      429: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Retrieve Subscriber 
+   * @description Retrieve a specific subscriber by their ID or email address
+   */
+  retrieve_subscriber: {
+    parameters: {
+      query: {
+        expand?: ("stripe_customer")[];
+      };
+      path: {
+        id_or_email: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Subscriber"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete Subscriber 
+   * @description Delete a subscriber
+   */
+  delete_subscriber: {
+    parameters: {
+      path: {
+        id_or_email: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Subscriber 
+   * @description Update a subscriber's properties
+   */
+  update_subscriber: {
+    parameters: {
+      path: {
+        id_or_email: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SubscriberUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Subscriber"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_UpdateSubscriberErrorCode_"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Send Reminder 
+   * @description Send a confirmation reminder email to an unactivated subscriber
+   */
+  send_reminder: {
+    parameters: {
+      path: {
+        id_or_email: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Send Magic Link To Subscriber 
+   * @description Send a magic link email to a subscriber
+   */
+  send_magic_link_to_subscriber: {
+    parameters: {
+      path: {
+        id_or_email: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Send Email To 
+   * @description Send a specific email to a specific subscriber
+   */
+  send_email_to: {
+    parameters: {
+      path: {
+        id_or_email: string;
+        email_id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Empty"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Get Referrals 
+   * @description List subscribers referred by a specific subscriber
+   */
+  get_referrals: {
+    parameters: {
+      path: {
+        id_or_email: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SubscriberPage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Get Automations 
+   * @description List automation attempts for a specific subscriber
+   */
+  get_automations: {
+    parameters: {
+      path: {
+        id_or_email: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AutomationForSubscriberPage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Automation Attempt 
+   * @description Update the status of an automation attempt for a subscriber
+   */
+  update_automation_attempt: {
+    parameters: {
+      path: {
+        id_or_email: string;
+        automation_attempt_id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AutomationAttemptUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AutomationForSubscriber"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_UpdateAutomationAttemptErrorCode_"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Get Stripe Subscriptions 
+   * @description List Stripe subscriptions for a specific subscriber
+   */
+  get_stripe_subscriptions: {
+    parameters: {
+      path: {
+        id_or_email: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StripeSubscriptionPage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Survey Responses 
+   * @description List all survey responses
+   */
+  retrieve_survey_responses: {
+    parameters: {
+      query: {
+        /** @description If provided, only return responses made to the given email. */
+        email_id?: string;
+        /** @description If provided, only return responses made by the given subscriber. */
+        subscriber_id?: string;
+        /** @description If provided, only return responses made to the given survey(s). */
+        survey?: (string)[];
+        /** @description If provided, only return responses made after the given date. */
+        creation_date__start?: string;
+        /** @description If provided, only return responses made before the given date. */
+        creation_date__end?: string;
+        /** @description If provided, expand the given field. */
+        expand?: ("email" | "subscriber" | "survey" | "automation")[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ResponsePage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Create Survey Response 
+   * @description Create a new survey response
+   */
+  create_survey_response: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResponseInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Survey Response 
+   * @description Update a survey response's text. Only the response owner (subscriber) can update their response.
+   */
+  update_survey_response: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResponseUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * List Surveys 
+   * @description List all surveys
+   */
   list_surveys: {
     parameters: {
       query: {
@@ -7779,7 +8998,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Create Survey */
+  /**
+   * Create Survey 
+   * @description Create a new survey
+   */
   create_survey: {
     requestBody: {
       content: {
@@ -7921,54 +9143,23 @@ export interface operations {
       409: never;
     };
   };
-  /** List Forms */
-  list_forms: {
+  /**
+   * List Tags 
+   * @description List all tags
+   */
+  list_tags: {
     parameters: {
       query: {
-        /** @description If provided, only return forms with the given status. */
-        status?: (components["schemas"]["FormStatus"])[];
-        /** @description If provided, only return forms without the given status. */
-        "-status"?: (components["schemas"]["FormStatus"])[];
-        /** @description If provided, filter by admin-only flag. */
-        admin?: boolean;
-        ordering?: "creation_date" | "-creation_date" | "title" | "-title" | "slug" | "-slug" | "status" | "-status";
+        /** @description If provided, only return tags matching the given IDs. */
+        ids?: (string)[];
+        page_size?: number;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["FormPage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create Form */
-  create_form: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["FormInput"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["Form"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage_CreateFormErrorCode_"];
+          "application/json": components["schemas"]["TagPage"];
         };
       };
       /** @description Forbidden */
@@ -7982,10 +9173,43 @@ export interface operations {
     };
   };
   /**
-   * Retrieve Form 
-   * @description Retrieve a specific form by its ID
+   * Create Tag 
+   * @description Create a new tag
    */
-  retrieve_form: {
+  create_tag: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TagInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Tag"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Tag 
+   * @description Retrieve a specific tag by its ID
+   */
+  retrieve_tag: {
     parameters: {
       path: {
         id: string;
@@ -7995,7 +9219,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Form"];
+          "application/json": components["schemas"]["Tag"];
         };
       };
       /** @description Forbidden */
@@ -8015,10 +9239,10 @@ export interface operations {
     };
   };
   /**
-   * Delete Form 
-   * @description Delete a form
+   * Delete Tag 
+   * @description Delete a tag
    */
-  delete_form: {
+  delete_tag: {
     parameters: {
       path: {
         id: string;
@@ -8044,10 +9268,10 @@ export interface operations {
     };
   };
   /**
-   * Update Form 
-   * @description Update a form's properties
+   * Update Tag 
+   * @description Update a tag's properties
    */
-  update_form: {
+  update_tag: {
     parameters: {
       path: {
         id: string;
@@ -8055,18 +9279,51 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["FormUpdateInput"];
+        "application/json": components["schemas"]["TagUpdateInput"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Form"];
+          "application/json": components["schemas"]["Tag"];
         };
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_UpdateTagErrorCode_"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Retrieve Tag Analytics 
+   * @description Retrieve analytics for a specific tag
+   */
+  retrieve_tag_analytics: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TagAnalytics"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -8082,66 +9339,15 @@ export interface operations {
     };
   };
   /**
-   * Retrieve Api Request 
-   * @description Retrieve a specific API request by its ID
+   * List Users 
+   * @description List all users
    */
-  retrieve_api_request: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
+  list_users: {
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["APIRequestDetail"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** List Api Requests */
-  list_api_requests: {
-    parameters: {
-      query: {
-        api_key_id?: (string)[];
-        status_code?: (string)[];
-        method?: (string)[];
-        source?: (components["schemas"]["APIRequestSource"])[];
-        version?: ("2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01")[];
-        date__start?: string;
-        date__end?: string;
-        creation_date__lt?: string;
-        creation_date__gt?: string;
-        path?: (string)[];
-        limit?: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["APIRequestList"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
+          "application/json": components["schemas"]["UserPage"];
         };
       };
       /** @description Forbidden */
@@ -8154,53 +9360,37 @@ export interface operations {
       409: never;
     };
   };
-  /** List Advertising Units */
-  list_advertising_units: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["AdvertisingUnitPage"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create Advertising Unit */
-  create_advertising_unit: {
+  /**
+   * Create User 
+   * @description Invite a new user to the newsletter
+   */
+  create_user: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AdvertisingUnitInput"];
+        "application/json": components["schemas"]["UserInput"];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "application/json": components["schemas"]["AdvertisingUnit"];
+          "application/json": components["schemas"]["User"];
         };
       };
       /** @description Bad Request */
       400: {
         content: {
-          "application/json": components["schemas"]["ErrorMessage"];
+          "application/json": components["schemas"]["ErrorMessage_Failure_"];
         };
       };
       /** @description Forbidden */
       403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -8210,10 +9400,43 @@ export interface operations {
     };
   };
   /**
-   * Delete Advertising Unit 
-   * @description Delete an advertising unit
+   * Retrieve User 
+   * @description Retrieve a specific user by its ID
    */
-  delete_advertising_unit: {
+  retrieve_user: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["User"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Delete User 
+   * @description Delete a user
+   */
+  delete_user: {
     parameters: {
       path: {
         id: string;
@@ -8222,8 +9445,8 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
-      /** @description Bad Request */
-      400: {
+      /** @description Forbidden */
+      403: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -8239,10 +9462,10 @@ export interface operations {
     };
   };
   /**
-   * Update Advertising Unit 
-   * @description Update an advertising unit's properties
+   * Update User 
+   * @description Update a user's properties
    */
-  update_advertising_unit: {
+  update_user: {
     parameters: {
       path: {
         id: string;
@@ -8250,42 +9473,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AdvertisingUnitUpdateInput"];
+        "application/json": components["schemas"]["UserUpdateInput"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["AdvertisingUnit"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * List Advertising Slots 
-   * @description List all advertising slots
-   */
-  list_advertising_slots: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["AdvertisingSlotPage"];
+          "application/json": components["schemas"]["User"];
         };
       };
       /** @description Bad Request */
@@ -8300,38 +9495,6 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Update Advertising Slot 
-   * @description Update an advertising slot's sponsor content
-   */
-  update_advertising_slot: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AdvertisingSlotUpdateInput"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["AdvertisingSlot"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
       /** @description Not Found */
       404: {
         content: {
@@ -8342,7 +9505,10 @@ export interface operations {
       409: never;
     };
   };
-  /** List Webhooks */
+  /**
+   * List Webhooks 
+   * @description List all webhooks
+   */
   list_webhooks: {
     responses: {
       /** @description OK */
@@ -8361,7 +9527,10 @@ export interface operations {
       409: never;
     };
   };
-  /** Create Webhook */
+  /**
+   * Create Webhook 
+   * @description Create a new webhook
+   */
   create_webhook: {
     requestBody: {
       content: {
@@ -8560,627 +9729,6 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** List Comments */
-  list_comments: {
-    parameters: {
-      query: {
-        /** @description If provided, only return comments for the given email. */
-        email_id?: string;
-        /** @description If provided, only return comments for the given subscriber. */
-        subscriber_id?: string;
-        /** @description If provided, only return comments that are replies to the given parent comment. */
-        parent_id?: string;
-        /** @description If provided, expand the given field. (Only supported fields: 'subscriber', 'email'). */
-        expand?: ("subscriber" | "email")[];
-        ordering?: "creation_date" | "-creation_date" | "email" | "-email" | "subscriber" | "-subscriber";
-        /** @description An enumeration. */
-        status?: "pending" | "active" | "spammy";
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CommentPage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Create Comment 
-   * @description Create a new comment or reply to an existing comment. If subscriber_id is provided, the comment is attributed to that subscriber; otherwise it is attributed to the newsletter author.
-   */
-  create_comment: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CommentInput"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["Comment"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Retrieve Comment 
-   * @description Retrieve a specific comment by its ID
-   */
-  retrieve_comment: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Comment"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Delete Comment 
-   * @description Delete a comment. Only the comment owner (subscriber) or the newsletter author can delete a comment.
-   */
-  delete_comment: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description No Content */
-      204: never;
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-    };
-  };
-  /**
-   * Update Comment 
-   * @description Update a comment's status. Only the newsletter owner can call this.
-   */
-  update_comment: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CommentUpdateInput"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Comment"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-    };
-  };
-  /** Retrieve Survey Responses */
-  retrieve_survey_responses: {
-    parameters: {
-      query: {
-        /** @description If provided, only return responses made to the given email. */
-        email_id?: string;
-        /** @description If provided, only return responses made by the given subscriber. */
-        subscriber_id?: string;
-        /** @description If provided, only return responses made to the given survey(s). */
-        survey?: (string)[];
-        /** @description If provided, only return responses made after the given date. */
-        creation_date__start?: string;
-        /** @description If provided, only return responses made before the given date. */
-        creation_date__end?: string;
-        /** @description If provided, expand the given field. */
-        expand?: ("email" | "subscriber" | "survey" | "automation")[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ResponsePage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create Survey Response */
-  create_survey_response: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ResponseInput"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["Response"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Update Survey Response 
-   * @description Update a survey response's text. Only the response owner (subscriber) can update their response.
-   */
-  update_survey_response: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ResponseUpdateInput"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Response"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-    };
-  };
-  /** List Events */
-  list_events: {
-    parameters: {
-      query: {
-        event_type?: components["schemas"]["EmailEventType"];
-        ordering?: "creation_date" | "-creation_date";
-        /** @description If provided, expand the given field. (Only supported field: 'subscriber'). */
-        expand?: ("automation" | "subscriber" | "email")[];
-        email_id?: string;
-        automation_id?: string;
-        subscriber_id?: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["EmailEventPage"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Get Event 
-   * @description Retrieve a specific event by its ID
-   */
-  get_event: {
-    parameters: {
-      query: {
-        /** @description If provided, expand the given field. (Only supported field: 'subscriber'). */
-        expand?: ("automation" | "subscriber" | "email")[];
-      };
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["EmailEvent"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-    };
-  };
-  /** List Notes */
-  list_notes: {
-    parameters: {
-      query: {
-        /** @description Filter notes by the type of object they are attached to. */
-        model_type?: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
-        /** @description Filter notes by the ID of the object they are attached to. */
-        model_id?: string;
-        /** @description If provided, expand the given field. */
-        expand?: ("user")[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["NotePage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create Note Endpoint */
-  create_note_endpoint: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["NoteInput"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["Note"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Delete Note Endpoint 
-   * @description Delete a note
-   */
-  delete_note_endpoint: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description No Content */
-      204: never;
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Search public emails 
-   * @description Search and list public emails for a newsletter. No authentication required.
-   */
-  list_public_emails: {
-    parameters: {
-      query: {
-        q?: string;
-        page?: number;
-      };
-      path: {
-        username: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PublicEmailPage"];
-        };
-      };
-      /** @description Not Found */
-      404: never;
-    };
-  };
-  /** List Snippets */
-  list_snippets: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SnippetPage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /** Create Snippet */
-  create_snippet: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SnippetInput"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "application/json": components["schemas"]["Snippet"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Retrieve Snippet 
-   * @description Retrieve a single snippet.
-   */
-  retrieve_snippet: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Snippet"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Delete Snippet 
-   * @description Delete a snippet.
-   */
-  delete_snippet: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** @description No Content */
-      204: never;
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorMessage"];
-        };
-      };
-      /** @description Conflict */
-      409: never;
-    };
-  };
-  /**
-   * Update Snippet 
-   * @description Update a snippet.
-   */
-  update_snippet: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SnippetUpdateInput"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Snippet"];
-        };
-      };
       /** @description Bad Request */
       400: {
         content: {
