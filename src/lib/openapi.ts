@@ -6796,6 +6796,18 @@ export interface operations {
         attachments?: (string)[];
         /** @description If provided, only return emails that reference the given snippets. */
         snippet_id?: (string)[];
+        /** @description If provided, only return emails with at least this many deliveries. */
+        deliveries__start?: number;
+        /** @description If provided, only return emails with at most this many deliveries. */
+        deliveries__end?: number;
+        /** @description If provided, only return emails with a click rate greater than or equal to the given value. */
+        click_rate__start?: number;
+        /** @description If provided, only return emails with a click rate less than or equal to the given value. */
+        click_rate__end?: number;
+        /** @description If provided, only return emails with an open rate greater than or equal to the given value. */
+        open_rate__start?: number;
+        /** @description If provided, only return emails with an open rate less than or equal to the given value. */
+        open_rate__end?: number;
       };
     };
     responses: {
