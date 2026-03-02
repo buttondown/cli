@@ -1475,7 +1475,7 @@ export interface components {
       name: string;
       trigger: components["schemas"]["ExternalEventType"];
       /** Actions */
-      actions: (Record<string, unknown>)[];
+      actions: (components["schemas"]["Action"])[];
       filters: components["schemas"]["FilterGroup"];
       /**
        * Metadata 
@@ -1499,7 +1499,7 @@ export interface components {
       trigger?: components["schemas"]["ExternalEventType"];
       timing?: components["schemas"]["Timing"];
       /** Actions */
-      actions?: (Record<string, unknown>)[];
+      actions?: (components["schemas"]["Action"])[];
       filters?: components["schemas"]["FilterGroup"];
       /** Metadata */
       metadata?: Record<string, unknown>;
