@@ -4592,7 +4592,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    CreatePriceErrorCode: "invalid_amount" | "maximum_amount_too_high" | "paid_subscriptions_uninitialized" | "product_deleted" | "suggested_amount_out_of_range";
+    CreatePriceErrorCode: "invalid_amount" | "maximum_amount_too_high" | "minimum_amount_not_less_than_maximum" | "paid_subscriptions_uninitialized" | "product_deleted" | "suggested_amount_out_of_range";
     /** ErrorMessage[CreatePriceErrorCode] */
     ErrorMessage_CreatePriceErrorCode_: {
       code: components["schemas"]["CreatePriceErrorCode"];
