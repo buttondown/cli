@@ -741,18 +741,6 @@ export interface components {
       /** Email Address */
       email_address: string;
     };
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    AdvertisingSKUStatus: "active" | "inactive";
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    AdvertisingSlotStatus: "expired" | "executed" | "finalized" | "open" | "sold";
     /** AdvertisingSlot */
     AdvertisingSlot: {
       /**
@@ -909,20 +897,12 @@ export interface components {
        */
       submission_deadline_days: number;
     };
-    /** Page[AdvertisingUnit] */
-    AdvertisingUnitPage: {
-      /** Results */
-      results: (components["schemas"]["AdvertisingUnit"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
     /** ErrorMessage */
     ErrorMessage: {
-      /** Code */
+      /**
+       * Code 
+       * @description The error code.
+       */
       code?: Record<string, unknown>;
       /** Detail */
       detail: string;
@@ -1040,17 +1020,6 @@ export interface components {
        */
       submission_deadline_days?: number;
     };
-    /** Page[AdvertisingSlot] */
-    AdvertisingSlotPage: {
-      /** Results */
-      results: (components["schemas"]["AdvertisingSlot"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
     /** AdvertisingSlotUpdateInput */
     AdvertisingSlotUpdateInput: {
       /**
@@ -1102,12 +1071,6 @@ export interface components {
       status?: "approve" | "reject";
     };
     /**
-     * Source 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    APIRequestSource: "api" | "app" | "carrd" | "zapier" | "cli" | "make";
-    /**
      * APIRequestDetail 
      * @description Represents a request to the API (api.buttondown.com).
      */
@@ -1149,6 +1112,20 @@ export interface components {
       headers: {
         [key: string]: string | undefined;
       };
+    };
+    /** ListFilter */
+    ListFilter: {
+      /**
+       * Ids 
+       * @description If provided, only return tags matching the given IDs.
+       */
+      ids?: (string)[];
+      /**
+       * Page Size 
+       * @description The number of results per page. 
+       * @default 100
+       */
+      page_size?: number;
     };
     /**
      * APIRequest 
@@ -1229,52 +1206,59 @@ export interface components {
        */
       size: number;
     };
-    /** Page[Attachment] */
-    AttachmentPage: {
-      /** Results */
-      results: (components["schemas"]["Attachment"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
+    /** AttachmentListFilter */
+    AttachmentListFilter: {
+      /**
+       * Ids 
+       * @description If provided, only return attachments matching the given IDs.
+       */
+      ids?: (string)[];
+      /**
+       * Page Size 
+       * @description The number of results per page. 
+       * @default 100
+       */
+      page_size?: number;
     };
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    AutomationStatus: "active" | "inactive";
-    /**
-     * Type 
-     * @description Various types of events that are recorded by Buttondown, both in terms of exogenous systems
-     * like Stripe and Memberful, and endogenous ones like email opens and clicks. (In general, if anything
-     * important ever happens that could be relevant to your newsletter, we have an event type for it!)
-     * 
-     * These event types power lots of things within Buttondown. They're used to trigger automations, webhooks,
-     * and analytics.
-     * 
-     * (Note that Buttondown also has a different thing we call "events"; those are `EmailEvents` and are used
-     * for tracking aggregate details about an email. Alas, we shouldn't have used the term "event" for two different
-     * things, but it's too late to go back now!)
-     * 
-     * In general, our event namespacing tries to hew to the following pattern:
-     * 
-     * `<source>.<object>.<action>`
-     * 
-     * When wondering which object we are referring to, default to the _more granular_ object.
-     * 
-     * For instance, an email being sent to a subscriber is `subscriber.delivered`, not `email.sent`. 
-     * @enum {string}
-     */
-    ExternalEventType: "advertising_slot.purchased" | "automation.invoked" | "date.day.started" | "date.month.started" | "date.week.started" | "date.year.started" | "email.created" | "email.deleted" | "email.sent" | "email.status.changed" | "email.updated" | "external_feed_item.created" | "export.completed" | "export.created" | "export.failed" | "firewall.blocked" | "mention.created" | "memberful.member.updated" | "memberful.subscription.created" | "memberful.subscription.deleted" | "note.created" | "note.deleted" | "patreon.member.updated" | "patreon.membership.created" | "patreon.membership.deleted" | "shopify.customer.created" | "shopify.customer.updated" | "social_mention.created" | "stripe.checkout.session.completed" | "stripe.customer.updated" | "stripe.subscription.activated" | "stripe.subscription.churning" | "stripe.subscription.deactivated" | "subscriber.bounced" | "subscriber.changed_email" | "subscriber.churned" | "subscriber.clicked" | "subscriber.commented" | "subscriber.complained" | "subscriber.confirmed" | "subscriber.created" | "subscriber.deleted" | "subscriber.delivered" | "subscriber.opened" | "subscriber.paid" | "subscriber.paused" | "subscriber.resumed" | "subscriber.referred" | "subscriber.referred.paid" | "subscriber.rejected" | "subscriber.replied" | "subscriber.responded_to_survey" | "subscriber.tags.changed" | "subscriber.trial_ended" | "subscriber.trial_started" | "subscriber.type.changed" | "subscriber.unsubscribed" | "subscriber.updated" | "subscriber.viewed_checkout_page" | "survey.cleared_responses" | "survey.created" | "survey.deleted" | "survey.updated" | "form.created" | "form.deleted" | "form.updated";
-    /**
-     * ActionType 
-     * @description The action that is triggered when the automation is successfully run. 
-     * @enum {string}
-     */
-    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_arena_post" | "create_bluesky_post" | "create_linkedin_post" | "create_mastodon_post" | "create_tumblr_post" | "create_twitter_post" | "create_export" | "send_post_request" | "send_confirmation_reminder";
+    /** Action */
+    Action: {
+      type: components["schemas"]["AutomationActionType"];
+      /** Metadata */
+      metadata: {
+        [key: string]: unknown | undefined;
+      };
+      timing?: components["schemas"]["Timing"];
+    };
+    /** Automation */
+    Automation: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Name */
+      name: string;
+      status: components["schemas"]["AutomationStatus"];
+      trigger: components["schemas"]["ExternalEventType"];
+      /** Actions */
+      actions: (components["schemas"]["Action"])[];
+      filters: components["schemas"]["FilterGroup"];
+      /** Metadata */
+      metadata: {
+        [key: string]: unknown | undefined;
+      };
+      /**
+       * Should Evaluate Filter After Delay 
+       * @description If true, filters are re-evaluated after the delay has passed.
+       */
+      should_evaluate_filter_after_delay: boolean;
+    };
     /** Delay */
     Delay: {
       /** Value */
@@ -1290,28 +1274,6 @@ export interface components {
        */
       time_of_day?: "morning" | "evening" | "";
     };
-    /** Timing */
-    Timing: {
-      /**
-       * Time 
-       * @enum {string}
-       */
-      time: "immediate" | "delay";
-      delay?: components["schemas"]["Delay"];
-    };
-    /** Action */
-    Action: {
-      type: components["schemas"]["AutomationActionType"];
-      /** Metadata */
-      metadata: Record<string, unknown>;
-      timing?: components["schemas"]["Timing"];
-    };
-    /**
-     * Operator 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    Operator: "equals" | "not_equals" | "contains" | "not_contains" | "is_empty" | "is_not_empty" | "greater_than" | "less_than";
     /**
      * Filter 
      * @description A filter is a single condition that can be evaluated against a [Subscriber](/api-subscribers-retrieve). It has a field, an operator, and a value:
@@ -1408,44 +1370,20 @@ export interface components {
        */
       predicate: "and" | "or";
     };
-    /** Automation */
-    Automation: {
+    /**
+     * Operator 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    Operator: "equals" | "not_equals" | "contains" | "not_contains" | "is_empty" | "is_not_empty" | "greater_than" | "less_than";
+    /** Timing */
+    Timing: {
       /**
-       * Id 
-       * @description A unique TypeID associated with the object.
+       * Time 
+       * @enum {string}
        */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Name */
-      name: string;
-      status: components["schemas"]["AutomationStatus"];
-      trigger: components["schemas"]["ExternalEventType"];
-      /** Actions */
-      actions: (components["schemas"]["Action"])[];
-      filters: components["schemas"]["FilterGroup"];
-      /** Metadata */
-      metadata: Record<string, unknown>;
-      /**
-       * Should Evaluate Filter After Delay 
-       * @description If true, filters are re-evaluated after the delay has passed.
-       */
-      should_evaluate_filter_after_delay: boolean;
-    };
-    /** Page[Automation] */
-    AutomationPage: {
-      /** Results */
-      results: (components["schemas"]["Automation"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
+      time: "immediate" | "delay";
+      delay?: components["schemas"]["Delay"];
     };
     /**
      * AutomationCreationErrorCode 
@@ -1458,7 +1396,8 @@ export interface components {
     AutomationCreationErrorCode: "delay_invalid" | "filter_invalid__tag" | "filter_invalid" | "action_invalid" | "filter_invalid__field" | "invalid_newsletter_id" | "trigger_action_invalid" | "action_invalid__missing_body_or_subject";
     /** ErrorMessage[AutomationCreationErrorCode] */
     ErrorMessage_AutomationCreationErrorCode_: {
-      code: components["schemas"]["AutomationCreationErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["AutomationCreationErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -1502,28 +1441,14 @@ export interface components {
       actions?: (components["schemas"]["Action"])[];
       filters?: components["schemas"]["FilterGroup"];
       /** Metadata */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Should Evaluate Filter After Delay 
        * @description If true, filters are re-evaluated after the delay has passed.
        */
       should_evaluate_filter_after_delay?: boolean;
-    };
-    /**
-     * FailureBreakdownItem 
-     * @description A single failure reason with its count.
-     */
-    FailureBreakdownItem: {
-      /**
-       * Code 
-       * @description The failure reason code (e.g. 'hard_bounce', 'spam')
-       */
-      code: string;
-      /**
-       * Count 
-       * @description Number of failures with this reason
-       */
-      count: number;
     };
     /** Analytics */
     Analytics: {
@@ -1628,6 +1553,22 @@ export interface components {
        */
       permanent_failure_breakdown?: (components["schemas"]["FailureBreakdownItem"])[];
     };
+    /**
+     * FailureBreakdownItem 
+     * @description A single failure reason with its count.
+     */
+    FailureBreakdownItem: {
+      /**
+       * Code 
+       * @description The failure reason code (e.g. 'hard_bounce', 'spam')
+       */
+      code: string;
+      /**
+       * Count 
+       * @description Number of failures with this reason
+       */
+      count: number;
+    };
     /** Book */
     Book: {
       /**
@@ -1717,17 +1658,6 @@ export interface components {
        */
       shared?: boolean;
     };
-    /** Page[Book] */
-    BookPage: {
-      /** Results */
-      results: (components["schemas"]["Book"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
     /** BookUpdateInput */
     BookUpdateInput: {
       /**
@@ -1767,24 +1697,6 @@ export interface components {
       shared?: boolean;
     };
     /**
-     * Type 
-     * @description Represents the action being performed on a bulk of objects.
-     * 
-     * (Not to be coy, but these names should be self-explanatory.) 
-     * @enum {string}
-     */
-    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "change_tags_colors" | "delete_comments" | "delete_surveys" | "delete_survey_responses" | "delete_tags" | "mark_comments_as_active" | "mark_comments_as_spammy" | "replay_events" | "update_survey_statuses" | "modify_stripe_subscriptions";
-    /**
-     * Status 
-     * @description Represents the status of a bulk action.
-     * 
-     * No action is required to move from one state or another; Buttondown
-     * internally handles the transitions, and exposing the status is for
-     * observability purposes only. 
-     * @enum {string}
-     */
-    BulkActionStatus: "not_started" | "in_progress" | "processed" | "failed";
-    /**
      * BulkAction 
      * @description A bulk action represents, well, a bulk action. It is used to perform
      * actions on a large number of objects at once. For example, you can
@@ -1810,7 +1722,9 @@ export interface components {
        * }
        */
       metadata: {
-        [key: string]: (string | (string)[] | Record<string, unknown>) | undefined;
+        [key: string]: (string | (string)[] | ({
+          [key: string]: unknown | undefined;
+        })) | undefined;
       };
       /**
        * Id 
@@ -1848,56 +1762,171 @@ export interface components {
        * }
        */
       metadata: {
-        [key: string]: (string | (string)[] | Record<string, unknown>) | undefined;
+        [key: string]: (string | (string)[] | ({
+          [key: string]: unknown | undefined;
+        })) | undefined;
       };
     };
     /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
+     * Comment 
+     * @description Comments are a way for subscribers to interact with newsletters. They're a way to
+     * provide feedback, ask questions, and generally engage with the content of an email.
+     * Comments exist in a tree structure; comments that reply to other comments are
+     * considered "children" of the parent comment.
      */
-    CommentStatus: "pending" | "active" | "spammy";
-    /**
-     * Source 
-     * @description Represents the original provenance of a subscriber. This value is not exposed
-     * to subscribers; it's only used for internal tracking purposes and governs some
-     * of the behavior of the subscriber (i.e. whether or not to require double
-     * opt-in.) 
-     * @enum {string}
-     */
-    SubscriberSource: "admin" | "api" | "carrd" | "comment" | "embedded_form" | "form" | "import" | "memberful" | "organic" | "patreon" | "stripe" | "user" | "zapier";
-    /** StripeCoupon */
-    StripeCoupon: {
-      /** Coupon Id */
-      coupon_id: string;
-      /** Percent Off */
-      percent_off?: string;
-      /** Amount Off */
-      amount_off?: number;
-      /** Name */
-      name?: string;
+    Comment: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Email Id */
+      email_id: string;
+      /** Subscriber Id */
+      subscriber_id?: string;
+      /**
+       * Parent Id 
+       * @description The ID of the parent comment, if this comment is a reply to another comment.
+       */
+      parent_id?: string;
+      /** Text */
+      text: string;
+      status: components["schemas"]["CommentStatus"];
+      subscriber?: components["schemas"]["Subscriber"];
+      email?: components["schemas"]["Email"];
     };
     /**
-     * Type 
-     * @description Represents the state of a subscriber and what emails they
-     * should or should not be receiving. This type is meant to be fully expressive
-     * so as to consolidate the logic of determining what emails a subscriber should
-     * receive into a single place.
+     * Email 
+     * @description Emails are why you're here on Buttondown, right?
+     * Creating an email via the API is just like creating one in the interface;
+     * it will instantly trigger sending actual emails,
+     * based on the tags and email type you provide.
      * 
-     * Note that the only types that can be set programmatically are REGULAR, UNSUBSCRIBED,
-     * GIFTED and UNPAID. All other types are meant to be user-visible and cannot
-     * be set programmatically. 
-     * @enum {string}
+     * Relevant changes to the schema:
+     * 
+     * - [2024-08-15](https://docs.buttondown.com/api-changelog-2024-08-15): unshipped the `included_tags` and `excluded_tags` fields.
+     * - [2024-12-30](https://docs.buttondown.com/api-changelog-2024-12-30): unshipped the `is_comments_disabled` field, and replaced it with a more flexible `commenting_mode` field.
+     * - [2025-09-23](https://docs.buttondown.com/api-changelog-2025-09-23): increased the maximum length of the `subject` field from 1000 to 2000 characters.
      */
-    SubscriberType: "blocked" | "complained" | "churning" | "churned" | "gifted" | "unactivated" | "unpaid" | "undeliverable" | "premium" | "past_due" | "paused" | "regular" | "removed" | "trialed" | "unsubscribed" | "upcoming";
-    /** Transition */
-    Transition: {
+    Email: {
       /**
-       * Date 
-       * Format: date-time
+       * Id 
+       * @description A unique TypeID associated with the object.
        */
-      date: string;
-      type: components["schemas"]["SubscriberType"];
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Absolute Url */
+      absolute_url: string;
+      analytics?: components["schemas"]["Analytics"];
+      /**
+       * Attachments 
+       * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
+       */
+      attachments?: (string)[];
+      /**
+       * Body 
+       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`.
+       */
+      body: string;
+      /**
+       * Canonical Url 
+       * @description The URL of the original source of the content.
+       */
+      canonical_url: string;
+      commenting_mode: components["schemas"]["EmailCommentingMode"];
+      /**
+       * Description 
+       * @description A human-readable description of the email, used for archives and SEO.
+       */
+      description: string;
+      /**
+       * @deprecated 
+       * @description The type of email. 
+       * @default public
+       */
+      email_type?: components["schemas"]["EmailType"];
+      /**
+       * Featured 
+       * @description Designated whether or not this email should be highlighted within the archives.
+       */
+      featured: boolean;
+      filters: components["schemas"]["FilterGroup"];
+      /**
+       * Image 
+       * @description A primary image to be used when previewing the email on the web or in other contexts.
+       */
+      image: string;
+      /**
+       * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
+      /**
+       * Modification Date 
+       * Format: date-time 
+       * @description The date and time at which the object was last modified.
+       */
+      modification_date: string;
+      /**
+       * Publish Date 
+       * Format: date-time 
+       * @description The date and time at which the email should be published in the future (for scheduled emails), or the date and time at which the email was published (for sent emails).
+       */
+      publish_date?: string;
+      /**
+       * Related Email Ids 
+       * @description A list of email IDs that are related to this email. Related emails are shown at the bottom of the email and archive pages.
+       */
+      related_email_ids: (string)[];
+      /**
+       * Secondary Id 
+       * @description An informal 'number' for the email, used in some templates ('This was issue #123').
+       */
+      secondary_id?: number;
+      /**
+       * Should Trigger Pay Per Email Billing 
+       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
+       */
+      should_trigger_pay_per_email_billing: boolean;
+      /**
+       * Slug 
+       * @description A short, human-readable identifier for the email. (Used in the URL of the email, and in the 'slug' field of the email object.) 
+       * @example welcome-to-the-newsletter
+       */
+      slug?: string;
+      /**
+       * @description The source of the email. 
+       * @example app
+       */
+      source: components["schemas"]["EmailSource"];
+      /**
+       * @description The current status of the email. 
+       * @example draft
+       */
+      status: components["schemas"]["EmailStatus"];
+      /**
+       * Subject 
+       * @description The subject line for the email.
+       */
+      subject: string;
+      /** @description Reason for suppression, if email is suppressed. */
+      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
+      /** @description If present, this template overrides your newsletter's default template. */
+      template?: components["schemas"]["NewsletterEmailTemplate"];
     };
     /** EmailTransition */
     EmailTransition: {
@@ -1911,12 +1940,6 @@ export interface components {
       /** New Email Address */
       new_email_address: string;
     };
-    /**
-     * FirewallReasonCode 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    FirewallReasonCode: "email_address_capital_letters" | "email_address_cleantalk_score" | "email_address_contains_prohibited_string" | "email_address_esp_suppression" | "email_address_extant_subscriber_count" | "email_address_gmail_word_numbers" | "email_address_has_gravatar" | "email_address_is_honeypot" | "email_address_is_pwned" | "email_address_length" | "email_address_local_part_has_many_periods" | "email_address_many_consonants_in_a_row" | "email_address_mx_record_is_valid" | "email_address_noreply_local_part" | "email_address_null_characters" | "email_address_peaceful_domain" | "email_address_plus_single_number" | "email_address_previous_evaluation" | "email_address_prohibited_via_domain" | "email_address_regex" | "email_address_sandbox_test" | "email_address_shannon_entropy" | "email_address_stopforumspam_score" | "email_address_tied_to_account" | "email_address_typo" | "fingerprint_missing" | "ip_address_cleantalk_score" | "ip_address_extant_subscriber_count" | "ip_address_peaceful" | "ip_address_prohibited" | "metadata_has_garbage" | "newsletter_age" | "newsletter_has_customized_transactional_email" | "newsletter_has_prohibited_string" | "newsletter_status" | "project_honeypot" | "referrer_url_prohibited" | "subscriber_import_provenance" | "subscriber_import_source" | "text_contains_malicious_url" | "text_contains_prohibited_string" | "turnstile_response_token_is_valid" | "user_agent_known";
     /** FirewallReason */
     FirewallReason: {
       /** @description The code of the firewall facet that flagged this subscriber. */
@@ -1928,21 +1951,22 @@ export interface components {
       reason: string;
     };
     /**
-     * UndeliverabilityReason 
-     * @description The reason Buttondown has marked the subscriber as undeliverable.
-     * Undeliverable subscribers are not sent emails, and may be periodically removed from the system (or restored, if the reason is no longer valid.)
-     * 
-     * These reasons are grouped into three categories:
-     * - PermanentFailure ("Failed (recipient)"): Address-based issues where the recipient is truly unreachable.
-     *   Includes: HARD_BOUNCE
-     * - MessageFailure ("Failed (message)"): Message/sender problems where future emails may succeed.
-     *   Includes: ACCESS_DENIED, AUTHENTICATION_ISSUE, DELIVERY_EXPIRED, DOMAIN_BLOCKED, EMAIL_BLOCKED,
-     *             IP_BLOCKED, ON_ESP_DENYLIST, OUT_OF_STORAGE, PROBLEMATIC_URL, SPAM
-     * - Deferral (not shown to customers): Transient delivery issues that will be retried.
-     *   Includes: RATE_LIMITED, TRANSIENT 
+     * FirewallReasonCode 
+     * @description An enumeration. 
      * @enum {string}
      */
-    SubscriberUndeliverabilityReason: "access_denied" | "authentication_issue" | "delivery_expired" | "domain_blocked" | "email_blocked" | "hard_bounce" | "ip_blocked" | "ip_undeliverable" | "malformed" | "on_esp_denylist" | "other" | "out_of_storage" | "problematic_url" | "rate_limited" | "spam" | "transient" | "disabled" | "does_not_exist" | "spf_failed" | "unreachable";
+    FirewallReasonCode: "email_address_capital_letters" | "email_address_cleantalk_score" | "email_address_contains_prohibited_string" | "email_address_esp_suppression" | "email_address_extant_subscriber_count" | "email_address_gmail_word_numbers" | "email_address_has_gravatar" | "email_address_is_honeypot" | "email_address_is_pwned" | "email_address_length" | "email_address_local_part_has_many_periods" | "email_address_many_consonants_in_a_row" | "email_address_mx_record_is_valid" | "email_address_noreply_local_part" | "email_address_null_characters" | "email_address_peaceful_domain" | "email_address_plus_single_number" | "email_address_previous_evaluation" | "email_address_prohibited_via_domain" | "email_address_regex" | "email_address_sandbox_test" | "email_address_shannon_entropy" | "email_address_stopforumspam_score" | "email_address_tied_to_account" | "email_address_typo" | "fingerprint_missing" | "ip_address_cleantalk_score" | "ip_address_extant_subscriber_count" | "ip_address_peaceful" | "ip_address_prohibited" | "metadata_has_garbage" | "newsletter_age" | "newsletter_has_customized_transactional_email" | "newsletter_has_prohibited_string" | "newsletter_status" | "project_honeypot" | "referrer_url_prohibited" | "subscriber_import_provenance" | "subscriber_import_source" | "text_contains_malicious_url" | "text_contains_prohibited_string" | "turnstile_response_token_is_valid" | "user_agent_known";
+    /** StripeCoupon */
+    StripeCoupon: {
+      /** Coupon Id */
+      coupon_id: string;
+      /** Percent Off */
+      percent_off?: string;
+      /** Amount Off */
+      amount_off?: number;
+      /** Name */
+      name?: string;
+    };
     /**
      * Subscriber 
      * @description Subscribers are the main way you collect email addresses and
@@ -2037,7 +2061,9 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Notes 
        * @description Any notes you want to attach to the subscriber. These are not publicly visible. 
@@ -2120,213 +2146,18 @@ export interface components {
       /** Utm Source */
       utm_source: string;
       /** Stripe Customer */
-      stripe_customer?: Record<string, unknown>;
+      stripe_customer?: {
+        [key: string]: unknown | undefined;
+      };
     };
-    /**
-     * CommentingMode 
-     * @description Governs who can comment on this email.
-     * 
-     * This enum replaces the `is_comments_disabled` field, which has been deprecated. (Also note that this field may be superseded by newsletter-level settings; for instance, "enabled" is an invalid and inert value if the newsletter itself has comments disabled.) 
-     * @enum {string}
-     */
-    EmailCommentingMode: "disabled" | "enabled" | "enabled_for_paid_subscribers";
-    /**
-     * Type 
-     * @description Represents the audience of an email, and to whom it is visible both in the initial
-     * email and in online archives. 
-     * @enum {string}
-     */
-    EmailType: "public" | "private" | "premium" | "free" | "churned" | "archival";
-    /**
-     * Source 
-     * @description Represents the original provenance of an email. This value is not exposed
-     * to subscribers, but does determine some behavior of the email (e.g. whether
-     * or not analytics can be calculated.) 
-     * @enum {string}
-     */
-    EmailSource: "api" | "import" | "app" | "external_feed";
-    /**
-     * Status 
-     * @description Represents the state of an email.
-     * 
-     * No action is required to move from one state or another; Buttondown
-     * internally handles the transitions, and exposing the status is for
-     * observability purposes only. 
-     * @enum {string}
-     */
-    EmailStatus: "draft" | "managed_by_rss" | "about_to_send" | "scheduled" | "in_flight" | "paused" | "deleted" | "errored" | "sent" | "imported" | "throttled" | "resending" | "transactional" | "suppressed";
-    /**
-     * SuppressionReason 
-     * @description Represents the reason an email was suppressed. 
-     * @enum {string}
-     */
-    EmailSuppressionReason: "law_enforcement" | "internal_auditing";
-    /**
-     * EmailTemplate 
-     * @description Represents the template of an email.
-     * 
-     * Each template has a different layout/style; you can view screenshots and examples [in the docs](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates). 
-     * @enum {string}
-     */
-    NewsletterEmailTemplate: "classic" | "modern" | "plaintext" | "naked";
-    /**
-     * Email 
-     * @description Emails are why you're here on Buttondown, right?
-     * Creating an email via the API is just like creating one in the interface;
-     * it will instantly trigger sending actual emails,
-     * based on the tags and email type you provide.
-     * 
-     * Relevant changes to the schema:
-     * 
-     * - [2024-08-15](https://docs.buttondown.com/api-changelog-2024-08-15): unshipped the `included_tags` and `excluded_tags` fields.
-     * - [2024-12-30](https://docs.buttondown.com/api-changelog-2024-12-30): unshipped the `is_comments_disabled` field, and replaced it with a more flexible `commenting_mode` field.
-     * - [2025-09-23](https://docs.buttondown.com/api-changelog-2025-09-23): increased the maximum length of the `subject` field from 1000 to 2000 characters.
-     */
-    Email: {
+    /** Transition */
+    Transition: {
       /**
-       * Id 
-       * @description A unique TypeID associated with the object.
+       * Date 
+       * Format: date-time
        */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Absolute Url */
-      absolute_url: string;
-      analytics?: components["schemas"]["Analytics"];
-      /**
-       * Attachments 
-       * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
-       */
-      attachments?: (string)[];
-      /**
-       * Body 
-       * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`.
-       */
-      body: string;
-      /**
-       * Canonical Url 
-       * @description The URL of the original source of the content.
-       */
-      canonical_url: string;
-      commenting_mode: components["schemas"]["EmailCommentingMode"];
-      /**
-       * Description 
-       * @description A human-readable description of the email, used for archives and SEO.
-       */
-      description: string;
-      /**
-       * @deprecated 
-       * @description The type of email. 
-       * @default public
-       */
-      email_type?: components["schemas"]["EmailType"];
-      /**
-       * Featured 
-       * @description Designated whether or not this email should be highlighted within the archives.
-       */
-      featured: boolean;
-      filters: components["schemas"]["FilterGroup"];
-      /**
-       * Image 
-       * @description A primary image to be used when previewing the email on the web or in other contexts.
-       */
-      image: string;
-      /**
-       * Metadata 
-       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
-       * @default {}
-       */
-      metadata?: Record<string, unknown>;
-      /**
-       * Modification Date 
-       * Format: date-time 
-       * @description The date and time at which the object was last modified.
-       */
-      modification_date: string;
-      /**
-       * Publish Date 
-       * Format: date-time 
-       * @description The date and time at which the email should be published in the future (for scheduled emails), or the date and time at which the email was published (for sent emails).
-       */
-      publish_date?: string;
-      /**
-       * Related Email Ids 
-       * @description A list of email IDs that are related to this email. Related emails are shown at the bottom of the email and archive pages.
-       */
-      related_email_ids: (string)[];
-      /**
-       * Secondary Id 
-       * @description An informal 'number' for the email, used in some templates ('This was issue #123').
-       */
-      secondary_id?: number;
-      /**
-       * Should Trigger Pay Per Email Billing 
-       * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
-       */
-      should_trigger_pay_per_email_billing: boolean;
-      /**
-       * Slug 
-       * @description A short, human-readable identifier for the email. (Used in the URL of the email, and in the 'slug' field of the email object.) 
-       * @example welcome-to-the-newsletter
-       */
-      slug?: string;
-      /**
-       * @description The source of the email. 
-       * @example app
-       */
-      source: components["schemas"]["EmailSource"];
-      /**
-       * @description The current status of the email. 
-       * @example draft
-       */
-      status: components["schemas"]["EmailStatus"];
-      /**
-       * Subject 
-       * @description The subject line for the email.
-       */
-      subject: string;
-      /** @description Reason for suppression, if email is suppressed. */
-      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
-      /** @description If present, this template overrides your newsletter's default template. */
-      template?: components["schemas"]["NewsletterEmailTemplate"];
-    };
-    /**
-     * Comment 
-     * @description Comments are a way for subscribers to interact with newsletters. They're a way to
-     * provide feedback, ask questions, and generally engage with the content of an email.
-     * Comments exist in a tree structure; comments that reply to other comments are
-     * considered "children" of the parent comment.
-     */
-    Comment: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Email Id */
-      email_id: string;
-      /** Subscriber Id */
-      subscriber_id?: string;
-      /**
-       * Parent Id 
-       * @description The ID of the parent comment, if this comment is a reply to another comment.
-       */
-      parent_id?: string;
-      /** Text */
-      text: string;
-      status: components["schemas"]["CommentStatus"];
-      subscriber?: components["schemas"]["Subscriber"];
-      email?: components["schemas"]["Email"];
+      date: string;
+      type: components["schemas"]["SubscriberType"];
     };
     /** CommentInput */
     CommentInput: {
@@ -2351,17 +2182,12 @@ export interface components {
        */
       subscriber_id?: string;
     };
-    /** Page[Comment] */
-    CommentPage: {
-      /** Results */
-      results: (components["schemas"]["Comment"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
+    /**
+     * Ordering 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    Ordering: "creation_date" | "-creation_date" | "question" | "-question" | "identifier" | "-identifier" | "status" | "-status" | "response_count" | "-response_count";
     /** CommentUpdateInput */
     CommentUpdateInput: {
       /**
@@ -2370,17 +2196,6 @@ export interface components {
        * @enum {string}
        */
       status: "active" | "spammy";
-    };
-    /** Page[StripeCoupon] */
-    StripeCouponPage: {
-      /** Results */
-      results: (components["schemas"]["StripeCoupon"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
     };
     /**
      * EmailCreationErrorCode 
@@ -2393,7 +2208,8 @@ export interface components {
     EmailCreationErrorCode: "subject_invalid" | "email_duplicate" | "email_invalid" | "body_invalid" | "publish_date_invalid" | "publish_date_missing" | "status_invalid" | "body_contains_frontmatter" | "slug_invalid" | "canonical_url_invalid" | "tag_invalid";
     /** ErrorMessage[EmailCreationErrorCode] */
     ErrorMessage_EmailCreationErrorCode_: {
-      code: components["schemas"]["EmailCreationErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["EmailCreationErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -2458,11 +2274,12 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /** Secondary Id */
       secondary_id?: number;
       /**
-       * Filters 
        * @default {
        *   "filters": [],
        *   "groups": [],
@@ -2490,17 +2307,6 @@ export interface components {
        */
       should_trigger_pay_per_email_billing?: boolean;
     };
-    /** Page[Email] */
-    EmailPage: {
-      /** Results */
-      results: (components["schemas"]["Email"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
     /**
      * EmailListErrorCode 
      * @description Represents the type of error that occurred when listing emails.
@@ -2512,7 +2318,8 @@ export interface components {
     EmailListErrorCode: "creation_date_invalid" | "publish_date_invalid";
     /** ErrorMessage[EmailListErrorCode] */
     ErrorMessage_EmailListErrorCode_: {
-      code: components["schemas"]["EmailListErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["EmailListErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -2567,7 +2374,9 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Image 
        * @default
@@ -2597,12 +2406,65 @@ export interface components {
        */
       should_trigger_pay_per_email_billing?: boolean;
     };
+    /** EmailHistoryFilter */
+    EmailHistoryFilter: {
+      /**
+       * Expand 
+       * @description If provided, expand the given field.
+       */
+      expand?: ("user")[];
+      /**
+       * Field 
+       * @description The field to retrieve history for.
+       */
+      field: string;
+      /**
+       * Page 
+       * @description The page number of the paginated response. 
+       * @example 1
+       */
+      page?: number;
+      /**
+       * Ordering 
+       * @description The ordering to apply to the results. 
+       * @default creation_date 
+       * @enum {string}
+       */
+      ordering?: "creation_date" | "-creation_date";
+      /**
+       * Query 
+       * @description If provided, only return history entries matching the given query.
+       */
+      query?: string;
+      /**
+       * Page Size 
+       * @description The number of results per page. 
+       * @default 100
+       */
+      page_size?: number;
+    };
     /**
      * AccessLevel 
      * @description An enumeration. 
      * @enum {string}
      */
     AccessLevel: "none" | "read" | "write";
+    /** History */
+    History: {
+      /** History Id */
+      history_id: number;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Value */
+      value: string;
+      /** User Id */
+      user_id?: string;
+      user?: components["schemas"]["User"];
+    };
     /** Permissions */
     Permissions: {
       /**
@@ -2646,12 +2508,6 @@ export interface components {
        */
       forms?: components["schemas"]["AccessLevel"];
     };
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    InvitationStatus: "pending" | "accepted" | "declined" | "revoked" | "owner";
     /** User */
     User: {
       permissions: components["schemas"]["Permissions"];
@@ -2679,32 +2535,22 @@ export interface components {
        */
       last_logged_in?: string;
     };
-    /** History */
-    History: {
-      /** History Id */
-      history_id: number;
+    /** EmailExpandFilter */
+    EmailExpandFilter: {
       /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
+       * Expand 
+       * @description If provided, expand the given field.
        */
-      creation_date: string;
-      /** Value */
-      value: string;
-      /** User Id */
-      user_id?: string;
-      user?: components["schemas"]["User"];
+      expand?: ("user")[];
     };
-    /** Page[History] */
-    HistoryPage: {
-      /** Results */
-      results: (components["schemas"]["History"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
+    /** RenderTarget */
+    RenderTarget: {
+      /**
+       * Target 
+       * @description The target format for the rendered HTML. Use 'email' for rendered_html_for_email or 'html' for rendered_html_for_web. 
+       * @enum {string}
+       */
+      target: "email" | "html";
     };
     /** Render */
     Render: {
@@ -2733,6 +2579,35 @@ export interface components {
        * ]
        */
       recipients?: (string)[];
+    };
+    /** EmailEventFilter */
+    EmailEventFilter: {
+      event_type?: components["schemas"]["EmailEventType"];
+      /**
+       * @description The ordering to apply to the results. 
+       * @default -creation_date
+       */
+      ordering?: "creation_date" | "-creation_date";
+      /**
+       * Expand 
+       * @description If provided, expand the given field. (Only supported field: 'subscriber').
+       */
+      expand?: ("automation" | "subscriber" | "email")[];
+      /**
+       * Email Id 
+       * @description If provided, only return events for the given email.
+       */
+      email_id?: string;
+      /**
+       * Automation Id 
+       * @description If provided, only return events for the given automation.
+       */
+      automation_id?: string;
+      /**
+       * Subscriber Id 
+       * @description If provided, only return events for the given subscriber.
+       */
+      subscriber_id?: string;
     };
     /**
      * EmailEventType 
@@ -2768,39 +2643,14 @@ export interface components {
       email?: components["schemas"]["Email"];
       automation?: components["schemas"]["Automation"];
     };
-    /** Page[EmailEvent] */
-    EmailEventPage: {
-      /** Results */
-      results: (components["schemas"]["EmailEvent"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
+    /** EmailEventRetrieveFilter */
+    EmailEventRetrieveFilter: {
+      /**
+       * Expand 
+       * @description If provided, expand the given field. (Only supported field: 'subscriber').
+       */
+      expand?: ("automation" | "subscriber" | "email")[];
     };
-    /**
-     * Collection 
-     * @description A group of data that can be exported in an export. 
-     * @enum {string}
-     */
-    ExportCollection: "subscribers" | "emails" | "events" | "referrals" | "surveys" | "comments" | "requests" | "mentions" | "conversations" | "images" | "stripe_subscriptions" | "stripe_products" | "stripe_customers" | "stripe_prices" | "stripe_charges";
-    /**
-     * Format 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    ExportFormat: "csv" | "json";
-    /**
-     * Status 
-     * @description Represents the status of an export.
-     * 
-     * No action is required to move from one state or another; Buttondown
-     * internally handles the transitions, and exposing the status is for
-     * observability purposes only. 
-     * @enum {string}
-     */
-    ExportStatus: "error" | "in_progress" | "not_started" | "ready";
     /**
      * Export 
      * @description Some software applications may want programmatic access to their newsletter exports.
@@ -2814,13 +2664,18 @@ export interface components {
      * of the documentation.
      */
     Export: {
-      /** @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export. */
+      /**
+       * Collections 
+       * @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export.
+       */
       collections: (components["schemas"]["ExportCollection"])[];
       /**
        * Parameters 
        * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export.
        */
-      parameters?: Record<string, unknown>;
+      parameters?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
        * @default csv
@@ -2864,7 +2719,8 @@ export interface components {
     CreateExportErrorCode: "collection_empty_invalid" | "columns_empty_invalid" | "columns_invalid";
     /** ErrorMessage[CreateExportErrorCode] */
     ErrorMessage_CreateExportErrorCode_: {
-      code: components["schemas"]["CreateExportErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["CreateExportErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -2877,13 +2733,18 @@ export interface components {
     };
     /** ExportInput */
     ExportInput: {
-      /** @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export. */
+      /**
+       * Collections 
+       * @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export.
+       */
       collections: (components["schemas"]["ExportCollection"])[];
       /**
        * Parameters 
        * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export.
        */
-      parameters?: Record<string, unknown>;
+      parameters?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
        * @default csv
@@ -2895,35 +2756,6 @@ export interface components {
        */
       columns?: (string)[];
     };
-    /** Page[Export] */
-    ExportPage: {
-      /** Results */
-      results: (components["schemas"]["Export"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * Status 
-     * @description Represents the status of the automation, and whether or not it is active. Inactive automations will not be processed. Deleted automations will not be processed. 
-     * @enum {string}
-     */
-    ExternalFeedAutomationStatus: "active" | "failing" | "inactive" | "deleted";
-    /**
-     * Behavior 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    ExternalFeedAutomationBehavior: "draft" | "emails";
-    /**
-     * Cadence 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    ExternalFeedAutomationCadence: "every" | "daily" | "weekly" | "monthly";
     /**
      * ExternalFeed 
      * @description An automation is a one-to-one mapping between an external RSS feed and an action
@@ -2971,10 +2803,7 @@ export interface components {
       cadence_metadata: {
         [key: string]: string | undefined;
       };
-      /**
-       * Filters 
-       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
-       */
+      /** @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails. */
       filters: components["schemas"]["FilterGroup"];
       /**
        * Url 
@@ -3003,7 +2832,9 @@ export interface components {
        *   "foo": "bar"
        * }
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Skip Old Items 
        * @description Skip items with publish date older than one day from when they're discovered
@@ -3035,10 +2866,7 @@ export interface components {
       cadence_metadata: {
         [key: string]: string | undefined;
       };
-      /**
-       * Filters 
-       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
-       */
+      /** @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails. */
       filters: components["schemas"]["FilterGroup"];
       /**
        * Subject 
@@ -3063,24 +2891,15 @@ export interface components {
        *   "foo": "bar"
        * }
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Skip Old Items 
        * @description Skip items with publish date older than one day from when they're discovered 
        * @default false
        */
       skip_old_items?: boolean;
-    };
-    /** Page[ExternalFeed] */
-    ExternalFeedPage: {
-      /** Results */
-      results: (components["schemas"]["ExternalFeed"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
     };
     /** ExternalFeedUpdateInput */
     ExternalFeedUpdateInput: {
@@ -3101,10 +2920,7 @@ export interface components {
       cadence_metadata?: {
         [key: string]: string | undefined;
       };
-      /**
-       * Filters 
-       * @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails.
-       */
+      /** @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails. */
       filters?: components["schemas"]["FilterGroup"];
       /**
        * Subject 
@@ -3130,7 +2946,9 @@ export interface components {
        *   "foo": "bar"
        * }
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Skip Old Items 
        * @description Skip items with publish date older than one day from when they're discovered
@@ -3139,12 +2957,14 @@ export interface components {
     };
     /** Empty */
     Empty: Record<string, unknown>;
-    /**
-     * Status 
-     * @description The status of a given item (meaning a distinct URL) within an RSS feed. 
-     * @enum {string}
-     */
-    ExternalFeedItemStatus: "unprocessed" | "irrelevant" | "errored" | "skipped" | "queued" | "processed";
+    /** ItemFilter */
+    ItemFilter: {
+      /**
+       * Expand 
+       * @description If provided, expand the given field.
+       */
+      expand?: ("email")[];
+    };
     /**
      * ExternalFeedItem 
      * @description An external feed item is a single item in an external RSS feed. It is created
@@ -3201,29 +3021,9 @@ export interface components {
        * @description The ID of the generated email for this feed item, if one exists.
        */
       email_id?: string;
-      /**
-       * Email 
-       * @description If expanded, the email generated from this feed item.
-       */
+      /** @description If expanded, the email generated from this feed item. */
       email?: components["schemas"]["Email"];
     };
-    /** Page[ExternalFeedItem] */
-    ExternalFeedItemPage: {
-      /** Results */
-      results: (components["schemas"]["ExternalFeedItem"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    FormStatus: "active" | "inactive";
     /** Form */
     Form: {
       /**
@@ -3264,7 +3064,8 @@ export interface components {
     CreateFormErrorCode: "slug_already_exists";
     /** ErrorMessage[CreateFormErrorCode] */
     ErrorMessage_CreateFormErrorCode_: {
-      code: components["schemas"]["CreateFormErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["CreateFormErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -3322,17 +3123,6 @@ export interface components {
        */
       status?: components["schemas"]["FormStatus"];
     };
-    /** Page[Form] */
-    FormPage: {
-      /** Results */
-      results: (components["schemas"]["Form"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
     /** FormUpdateInput */
     FormUpdateInput: {
       /** Title */
@@ -3377,41 +3167,6 @@ export interface components {
        */
       image: string;
     };
-    /** Page[Image] */
-    ImagePage: {
-      /** Results */
-      results: (components["schemas"]["Image"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * AnnouncementBarVisibility 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    NewsletterAnnouncementBarVisibility: "disabled" | "everyone" | "free_only" | "logged_out_only" | "paid_only";
-    /**
-     * ArchiveTheme 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    NewsletterArchiveTheme: "classic" | "modern" | "arbus" | "lovelace" | "myrna";
-    /**
-     * AuditingMode 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    NewsletterAuditingMode: "disabled" | "enabled" | "aggressive";
-    /**
-     * Locale 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    NewsletterLocale: "cs-CZ" | "nl-NL" | "en-AU" | "en-CA" | "en-GB" | "en" | "fr" | "de" | "pl-PL" | "pt-BR" | "ru" | "es" | "tr" | "sv-SE";
     /**
      * Newsletter 
      * @description You will likely not need to interact with your newsletter settings
@@ -3466,7 +3221,7 @@ export interface components {
        * @description The auditing mode for your newsletter, which controls spam and abuse protection. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
        * @enum {unknown}
        */
-      auditing_mode?: "disabled" | "enabled" | "aggressive";
+      auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
       /**
        * Css 
        * @description Custom CSS styling applied to your newsletter emails. See [CSS customization](https://docs.buttondown.com/customizing-email-design#adding-custom-css) for more information. 
@@ -3679,7 +3434,9 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Name 
        * @description The display name of your newsletter, shown to subscribers and on your archive page.
@@ -3702,7 +3459,9 @@ export interface components {
        * @description A list of social media accounts linked to your newsletter, displayed on your archive page. Each entry has a `type`, `url`, and optional `label`. 
        * @default []
        */
-      socials?: (Record<string, unknown>)[];
+      socials?: ({
+          [key: string]: unknown | undefined;
+        })[];
       /**
        * Sort 
        * @description The default sorting method for listing subscribers or messages. Example values: 'creation_date', '-creation_date', 'email_address'. 
@@ -3764,17 +3523,6 @@ export interface components {
        */
       web_css?: string;
     };
-    /** Page[Newsletter] */
-    NewsletterPage: {
-      /** Results */
-      results: (components["schemas"]["Newsletter"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
     /**
      * CreateNewsletterErrorCode 
      * @description Represents the type of error that occurred when creating a newsletter.
@@ -3786,7 +3534,8 @@ export interface components {
     CreateNewsletterErrorCode: "username_already_exists" | "username_malformed";
     /** ErrorMessage[CreateNewsletterErrorCode] */
     ErrorMessage_CreateNewsletterErrorCode_: {
-      code: components["schemas"]["CreateNewsletterErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["CreateNewsletterErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -3937,7 +3686,9 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Name 
        * @description The display name of your newsletter, shown to subscribers and on your archive page. 
@@ -3967,13 +3718,15 @@ export interface components {
        * @default [] 
        * @example [
        *   {
+       *     "label": null,
        *     "type": "twitter",
-       *     "url": "https://x.com/sheinhardt",
-       *     "label": null
+       *     "url": "https://x.com/sheinhardt"
        *   }
        * ]
        */
-      socials?: (Record<string, unknown>)[];
+      socials?: ({
+          [key: string]: unknown | undefined;
+        })[];
       /**
        * Subscription Confirmation Redirect Url 
        * @description A URL to redirect subscribers to after they confirm their subscription via double opt-in. 
@@ -4286,7 +4039,9 @@ export interface components {
        *   "tier": "pro"
        * }
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Name 
        * @description The display name of your newsletter, shown to subscribers and on your archive page. 
@@ -4314,13 +4069,15 @@ export interface components {
        * @description A list of social media accounts linked to your newsletter, displayed on your archive page. Each entry has a `type`, `url`, and optional `label`. 
        * @example [
        *   {
+       *     "label": null,
        *     "type": "twitter",
-       *     "url": "https://x.com/sheinhardt",
-       *     "label": null
+       *     "url": "https://x.com/sheinhardt"
        *   }
        * ]
        */
-      socials?: (Record<string, unknown>)[];
+      socials?: ({
+          [key: string]: unknown | undefined;
+        })[];
       /**
        * Subscription Confirmation Redirect Url 
        * @description A URL to redirect subscribers to after they confirm their subscription via double opt-in. 
@@ -4411,7 +4168,9 @@ export interface components {
        */
       model_id: string;
       /** Metadata */
-      metadata: Record<string, unknown>;
+      metadata: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Source 
        * @description The source of the note. If the note was created by a Buttondown admin, this will be 'admin'; otherwise, it will be 'user'. 
@@ -4449,51 +4208,17 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
     };
-    /** Page[Note] */
-    NotePage: {
-      /** Results */
-      results: (components["schemas"]["Note"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /** Product */
-    Product: {
+    /** PriceListFilter */
+    PriceListFilter: {
       /**
-       * Id 
-       * @description The unique identifier of the product.
+       * Expand 
+       * @description If provided, expand the given field.
        */
-      id: string;
-      /**
-       * Product Id 
-       * @description The Stripe product ID.
-       */
-      product_id: string;
-      /**
-       * Name 
-       * @description The name of the product.
-       */
-      name: string;
-      /**
-       * Creation Date 
-       * @description The date the product was created in Stripe.
-       */
-      creation_date: string;
-      /**
-       * Active 
-       * @description Whether the product is currently active.
-       */
-      active: boolean;
-      /**
-       * Default Price 
-       * @description The ID of the default price for this product.
-       */
-      default_price?: string;
+      expand?: ("product")[];
     };
     /** Price */
     Price: {
@@ -4551,29 +4276,43 @@ export interface components {
       id: string;
       product?: components["schemas"]["Product"];
     };
-    /** Page[Price] */
-    PricePage: {
-      /** Results */
-      results: (components["schemas"]["Price"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
+    /** Product */
+    Product: {
+      /**
+       * Id 
+       * @description The unique identifier of the product.
+       */
+      id: string;
+      /**
+       * Product Id 
+       * @description The Stripe product ID.
+       */
+      product_id: string;
+      /**
+       * Name 
+       * @description The name of the product.
+       */
+      name: string;
+      /**
+       * Creation Date 
+       * @description The date the product was created in Stripe.
+       */
+      creation_date: string;
+      /**
+       * Active 
+       * @description Whether the product is currently active.
+       */
+      active: boolean;
+      /**
+       * Default Price 
+       * @description The ID of the default price for this product.
+       */
+      default_price?: string;
     };
-    /**
-     * ListPricesErrorCode 
-     * @description Represents the type of error that occurred when listing a price.
-     * 
-     * Human-readable error messages are provided in the `detail` field of the response;
-     * these values are meant to be parseable by code or client logic. 
-     * @enum {string}
-     */
-    ListPricesErrorCode: "paid_subscriptions_uninitialized";
     /** ErrorMessage[ListPricesErrorCode] */
     ErrorMessage_ListPricesErrorCode_: {
-      code: components["schemas"]["ListPricesErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["ListPricesErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -4585,6 +4324,15 @@ export interface components {
       };
     };
     /**
+     * ListPricesErrorCode 
+     * @description Represents the type of error that occurred when listing a price.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    ListPricesErrorCode: "paid_subscriptions_uninitialized";
+    /**
      * CreatePriceErrorCode 
      * @description Represents the type of error that occurred when listing a price.
      * 
@@ -4595,7 +4343,8 @@ export interface components {
     CreatePriceErrorCode: "invalid_amount" | "maximum_amount_too_high" | "minimum_amount_not_less_than_maximum" | "paid_subscriptions_uninitialized" | "product_deleted" | "suggested_amount_out_of_range";
     /** ErrorMessage[CreatePriceErrorCode] */
     ErrorMessage_CreatePriceErrorCode_: {
-      code: components["schemas"]["CreatePriceErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["CreatePriceErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -4656,6 +4405,20 @@ export interface components {
        */
       suggested_amount?: number;
     };
+    /** PublicEmailListFilters */
+    PublicEmailListFilters: {
+      /**
+       * Q 
+       * @description If provided, only return emails matching the given query.
+       */
+      q?: string;
+      /**
+       * Page 
+       * @description The page number to return. 
+       * @default 1
+       */
+      page?: number;
+    };
     /**
      * PublicEmail 
      * @description Public email schema for email search results.
@@ -4686,23 +4449,6 @@ export interface components {
       /** Absolute Url */
       absolute_url: string;
     };
-    /** Page[PublicEmail] */
-    PublicEmailPage: {
-      /** Results */
-      results: (components["schemas"]["PublicEmail"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * Mode 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    SnippetMode: "fancy" | "naked" | "plaintext";
     /** Snippet */
     Snippet: {
       /**
@@ -4753,17 +4499,6 @@ export interface components {
        */
       mode?: components["schemas"]["SnippetMode"];
     };
-    /** Page[Snippet] */
-    SnippetPage: {
-      /** Results */
-      results: (components["schemas"]["Snippet"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
     /** SnippetUpdateInput */
     SnippetUpdateInput: {
       /**
@@ -4784,17 +4519,15 @@ export interface components {
       mode?: components["schemas"]["SnippetMode"];
     };
     /**
-     * ValidationErrorCode 
-     * @description Represents the type of error that occurred when validating subscriber input.
-     * 
-     * Human-readable error messages are provided in the `detail` field of the response;
-     * these values are meant to be parseable by code or client logic. 
+     * CollisionBehavior 
+     * @description An enumeration. 
      * @enum {string}
      */
-    SubscriberInputValidationErrorCode: "email_already_exists" | "email_blocked" | "email_empty" | "email_invalid" | "ip_address_spammy" | "metadata_invalid" | "rate_limited" | "subscriber_already_exists" | "subscriber_blocked" | "subscriber_id_invalid" | "subscriber_suppressed" | "tag_invalid";
-    /** ErrorMessage[ValidationErrorCode] */
+    CollisionBehavior: "no_op" | "add" | "overwrite" | "fail";
+    /** ErrorMessage[SubscriberInput.ValidationErrorCode] */
     ErrorMessage_ValidationErrorCode_: {
-      code: components["schemas"]["SubscriberInputValidationErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["SubscriberInputValidationErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -4825,7 +4558,9 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /**
        * Tags 
        * @default []
@@ -4865,16 +4600,19 @@ export interface components {
        */
       ip_address?: string;
     };
-    /** Page[Subscriber] */
-    SubscriberPage: {
-      /** Results */
-      results: (components["schemas"]["Subscriber"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
+    /** ErrorMessage[ListSubscribersErrorCode] */
+    ErrorMessage_ListSubscribersErrorCode_: {
+      /** @description The error code. */
+      code?: components["schemas"]["ListSubscribersErrorCode"];
+      /** Detail */
+      detail: string;
+      /**
+       * Metadata 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
     };
     /**
      * ListSubscribersErrorCode 
@@ -4885,9 +4623,10 @@ export interface components {
      * @enum {string}
      */
     ListSubscribersErrorCode: "invalid_tag" | "date_invalid" | "invalid_ordering";
-    /** ErrorMessage[ListSubscribersErrorCode] */
-    ErrorMessage_ListSubscribersErrorCode_: {
-      code: components["schemas"]["ListSubscribersErrorCode"];
+    /** ErrorMessage[UpdateSubscriberErrorCode] */
+    ErrorMessage_UpdateSubscriberErrorCode_: {
+      /** @description The error code. */
+      code?: components["schemas"]["UpdateSubscriberErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -4907,19 +4646,6 @@ export interface components {
      * @enum {string}
      */
     UpdateSubscriberErrorCode: "email_already_exists" | "email_invalid" | "email_has_been_changed_too_many_times" | "firewall_blocked" | "subscriber_type_invalid" | "tag_invalid";
-    /** ErrorMessage[UpdateSubscriberErrorCode] */
-    ErrorMessage_UpdateSubscriberErrorCode_: {
-      code: components["schemas"]["UpdateSubscriberErrorCode"];
-      /** Detail */
-      detail: string;
-      /**
-       * Metadata 
-       * @default {}
-       */
-      metadata?: {
-        [key: string]: string | undefined;
-      };
-    };
     /** SubscriberUpdateInput */
     SubscriberUpdateInput: {
       /**
@@ -4944,7 +4670,9 @@ export interface components {
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: Record<string, unknown>;
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
       /** Tags */
       tags?: (string)[];
       /**
@@ -4958,12 +4686,6 @@ export interface components {
       /** Email Which Prompted Unsubscription Id */
       email_which_prompted_unsubscription_id?: string;
     };
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    AutomationAttemptStatus: "unprocessed" | "processed" | "failed" | "pending" | "skipped";
     /** AutomationForSubscriber */
     AutomationForSubscriber: {
       /** Id */
@@ -4979,31 +4701,14 @@ export interface components {
        */
       execution_date: string;
       /** Actions */
-      actions: (Record<string, unknown>)[];
+      actions: ({
+          [key: string]: unknown | undefined;
+        })[];
     };
-    /** Page[AutomationForSubscriber] */
-    AutomationForSubscriberPage: {
-      /** Results */
-      results: (components["schemas"]["AutomationForSubscriber"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * UpdateAutomationAttemptErrorCode 
-     * @description Represents the type of error that occurred when updating an automation attempt.
-     * 
-     * Human-readable error messages are provided in the `detail` field of the response;
-     * these values are meant to be parseable by code or client logic. 
-     * @enum {string}
-     */
-    UpdateAutomationAttemptErrorCode: "automation_attempt_not_found" | "invalid_status";
     /** ErrorMessage[UpdateAutomationAttemptErrorCode] */
     ErrorMessage_UpdateAutomationAttemptErrorCode_: {
-      code: components["schemas"]["UpdateAutomationAttemptErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["UpdateAutomationAttemptErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -5014,116 +4719,23 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
+    /**
+     * UpdateAutomationAttemptErrorCode 
+     * @description Represents the type of error that occurred when updating an automation attempt.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    UpdateAutomationAttemptErrorCode: "automation_attempt_not_found" | "invalid_status";
     /** AutomationAttemptUpdateInput */
     AutomationAttemptUpdateInput: {
       /**
        * Status 
        * @description The status to set for the automation attempt. Only 'skipped' is allowed. 
-       * @enum {string}
+       * @constant
        */
       status: "skipped";
-    };
-    /** StripeSubscription */
-    StripeSubscription: {
-      /** Subscription Id */
-      subscription_id: string;
-      /** Url */
-      url: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /**
-       * Ending Date 
-       * Format: date-time
-       */
-      ending_date?: string;
-      /** Amount */
-      amount: number;
-      /** Currency */
-      currency: string;
-      /** Cadence */
-      cadence: string;
-      /** Status */
-      status: string;
-      /**
-       * Application Fee Percent 
-       * @description The application fee percent for the subscription.
-       */
-      application_fee_percent?: number;
-      /**
-       * Source 
-       * @description Buttondown attempts to detect the source of a subscription, but this is not always possible. 
-       * @enum {string}
-       */
-      source?: "substack" | "buttondown";
-      /**
-       * Product 
-       * @description The name of the product which the subscriber is subscribed to. (You can override this by setting the `buttondown_template_facing_id` metadata on the product in Stripe.)
-       */
-      product?: string;
-    };
-    /** Page[UnexpandableStripeSubscription] */
-    StripeSubscriptionPage: {
-      /** Results */
-      results: (components["schemas"]["StripeSubscription"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * ResponseCadence 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    SurveyResponseCadence: "once" | "once_per_email";
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    SurveyStatus: "active" | "inactive";
-    /**
-     * InputType 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    SurveyInputType: "radio" | "checkbox" | "text";
-    /** Survey */
-    Survey: {
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
-      /** Identifier */
-      identifier: string;
-      /** Question */
-      question: string;
-      /** Response Count */
-      response_count: number;
-      /** Answers */
-      answers: (string)[];
-      /** Notes */
-      notes: string;
-      /** Randomize Answers */
-      randomize_answers: boolean;
-      response_cadence: components["schemas"]["SurveyResponseCadence"];
-      status: components["schemas"]["SurveyStatus"];
-      /** Is Freeform Response Enabled */
-      is_freeform_response_enabled: boolean;
-      input_type: components["schemas"]["SurveyInputType"];
     };
     /** Response */
     Response: {
@@ -5161,16 +4773,36 @@ export interface components {
       email?: components["schemas"]["Email"];
       automation?: components["schemas"]["Automation"];
     };
-    /** Page[Response] */
-    ResponsePage: {
-      /** Results */
-      results: (components["schemas"]["Response"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
+    /** Survey */
+    Survey: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** Identifier */
+      identifier: string;
+      /** Question */
+      question: string;
+      /** Response Count */
+      response_count: number;
+      /** Answers */
+      answers: (string)[];
+      /** Notes */
+      notes: string;
+      /** Randomize Answers */
+      randomize_answers: boolean;
+      response_cadence: components["schemas"]["SurveyResponseCadence"];
+      status: components["schemas"]["SurveyStatus"];
+      /** Is Freeform Response Enabled */
+      is_freeform_response_enabled: boolean;
+      input_type: components["schemas"]["SurveyInputType"];
     };
     /** ResponseInput */
     ResponseInput: {
@@ -5202,7 +4834,8 @@ export interface components {
     CreateSurveyErrorCode: "identifier_already_exists" | "not_enough_answers";
     /** ErrorMessage[CreateSurveyErrorCode] */
     ErrorMessage_CreateSurveyErrorCode_: {
-      code: components["schemas"]["CreateSurveyErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["CreateSurveyErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -5241,6 +4874,11 @@ export interface components {
        */
       notes?: string;
       /**
+       * @default once 
+       * @example once
+       */
+      response_cadence?: components["schemas"]["SurveyResponseCadence"];
+      /**
        * Is Freeform Response Enabled 
        * @default false 
        * @example false
@@ -5257,32 +4895,11 @@ export interface components {
        * @example false
        */
       randomize_answers?: boolean;
-      /**
-       * @default once 
-       * @example once
-       */
-      response_cadence?: components["schemas"]["SurveyResponseCadence"];
     };
-    /** Page[Survey] */
-    SurveyPage: {
-      /** Results */
-      results: (components["schemas"]["Survey"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * UpdateSurveyErrorCode 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    UpdateSurveyErrorCode: "answers_empty" | "not_enough_answers" | "survey_has_responses";
     /** ErrorMessage[UpdateSurveyErrorCode] */
     ErrorMessage_UpdateSurveyErrorCode_: {
-      code: components["schemas"]["UpdateSurveyErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["UpdateSurveyErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -5293,6 +4910,12 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
+    /**
+     * UpdateSurveyErrorCode 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    UpdateSurveyErrorCode: "answers_empty" | "not_enough_answers" | "survey_has_responses";
     /** SurveyUpdateInput */
     SurveyUpdateInput: {
       /** Notes */
@@ -5406,26 +5029,10 @@ export interface components {
        */
       subscriber_editable?: boolean;
     };
-    /** Page[Tag] */
-    TagPage: {
-      /** Results */
-      results: (components["schemas"]["Tag"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * UpdateTagErrorCode 
-     * @description A potential error code that can be returned when updating a tag. 
-     * @enum {string}
-     */
-    UpdateTagErrorCode: "name_already_exists" | "name_too_long";
     /** ErrorMessage[UpdateTagErrorCode] */
     ErrorMessage_UpdateTagErrorCode_: {
-      code: components["schemas"]["UpdateTagErrorCode"];
+      /** @description The error code. */
+      code?: components["schemas"]["UpdateTagErrorCode"];
       /** Detail */
       detail: string;
       /**
@@ -5436,6 +5043,12 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
+    /**
+     * UpdateTagErrorCode 
+     * @description A potential error code that can be returned when updating a tag. 
+     * @enum {string}
+     */
+    UpdateTagErrorCode: "name_already_exists" | "name_too_long";
     /**
      * TagUpdateInput 
      * @description Input schema for updating an existing tag. All fields are optional.
@@ -5495,15 +5108,10 @@ export interface components {
        */
       open_rate: number;
     };
-    /**
-     * Failure 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    Failure: "email_already_exists";
     /** ErrorMessage[Failure] */
     ErrorMessage_Failure_: {
-      code: components["schemas"]["Failure"];
+      /** @description The error code. */
+      code?: components["schemas"]["Failure"];
       /** Detail */
       detail: string;
       /**
@@ -5514,6 +5122,12 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
+    /**
+     * Failure 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    Failure: "email_already_exists";
     /** UserInput */
     UserInput: {
       permissions: components["schemas"]["Permissions"];
@@ -5522,17 +5136,6 @@ export interface components {
        * @description The email address of the user.
        */
       email_address: string;
-    };
-    /** Page[User] */
-    UserPage: {
-      /** Results */
-      results: (components["schemas"]["User"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
     };
     /** UserUpdateInput */
     UserUpdateInput: {
@@ -5544,12 +5147,6 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
-    /**
-     * WebhookStatus 
-     * @description The status of a webhook. 
-     * @enum {string}
-     */
-    WebhookStatus: "enabled" | "disabled";
     /**
      * Webhook 
      * @description Webhooks are used to notify external services of events that occur in the
@@ -5575,6 +5172,7 @@ export interface components {
        */
       status?: components["schemas"]["WebhookStatus"];
       /**
+       * Event Types 
        * @description The types of event for which the webhook will be triggered. 
        * @example [
        *   "email.created",
@@ -5604,6 +5202,12 @@ export interface components {
        */
       signing_key?: string;
     };
+    /**
+     * WebhookStatus 
+     * @description The status of a webhook. 
+     * @enum {string}
+     */
+    WebhookStatus: "enabled" | "disabled";
     /** WebhookInput */
     WebhookInput: {
       /**
@@ -5613,6 +5217,7 @@ export interface components {
        */
       status?: components["schemas"]["WebhookStatus"];
       /**
+       * Event Types 
        * @description The types of event for which the webhook will be triggered. 
        * @example [
        *   "email.created",
@@ -5642,23 +5247,6 @@ export interface components {
        */
       signing_key?: string;
     };
-    /** Page[Webhook] */
-    WebhookPage: {
-      /** Results */
-      results: (components["schemas"]["Webhook"])[];
-      /** Next */
-      next?: string;
-      /** Previous */
-      previous?: string;
-      /** Count */
-      count: number;
-    };
-    /**
-     * Status 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    WebhookAttemptStatus: "unattempted" | "successful" | "failed";
     /** WebhookAttemptOutput */
     WebhookAttemptOutput: {
       /**
@@ -5678,6 +5266,537 @@ export interface components {
        */
       status: components["schemas"]["WebhookAttemptStatus"];
     };
+    /**
+     * ExcludableField 
+     * @description Represents a field on the Email model that can be excluded from
+     * the API response. 
+     * @enum {string}
+     */
+    EmailExcludableField: "body";
+    /**
+     * Status 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    AdvertisingSKUStatus: "active" | "inactive";
+    /**
+     * Status 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    AdvertisingSlotStatus: "expired" | "executed" | "finalized" | "open" | "sold";
+    /**
+     * Status 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    CommentStatus: "pending" | "active" | "spammy";
+    /**
+     * Source 
+     * @description Represents the original provenance of an email. This value is not exposed
+     * to subscribers, but does determine some behavior of the email (e.g. whether
+     * or not analytics can be calculated.) 
+     * @enum {string}
+     */
+    EmailSource: "api" | "import" | "app" | "external_feed";
+    /**
+     * Status 
+     * @description Represents the state of an email.
+     * 
+     * No action is required to move from one state or another; Buttondown
+     * internally handles the transitions, and exposing the status is for
+     * observability purposes only. 
+     * @enum {string}
+     */
+    EmailStatus: "draft" | "managed_by_rss" | "about_to_send" | "scheduled" | "in_flight" | "paused" | "deleted" | "errored" | "sent" | "imported" | "throttled" | "resending" | "transactional" | "suppressed";
+    /**
+     * Type 
+     * @description Represents the audience of an email, and to whom it is visible both in the initial
+     * email and in online archives. 
+     * @enum {string}
+     */
+    EmailType: "public" | "private" | "premium" | "free" | "churned" | "archival";
+    /**
+     * Source 
+     * @description Represents the original provenance of a subscriber. This value is not exposed
+     * to subscribers; it's only used for internal tracking purposes and governs some
+     * of the behavior of the subscriber (i.e. whether or not to require double
+     * opt-in.) 
+     * @enum {string}
+     */
+    SubscriberSource: "admin" | "api" | "carrd" | "comment" | "embedded_form" | "form" | "import" | "memberful" | "organic" | "patreon" | "stripe" | "user" | "zapier";
+    /**
+     * Type 
+     * @description Represents the state of a subscriber and what emails they
+     * should or should not be receiving. This type is meant to be fully expressive
+     * so as to consolidate the logic of determining what emails a subscriber should
+     * receive into a single place.
+     * 
+     * Note that the only types that can be set programmatically are REGULAR, UNSUBSCRIBED,
+     * GIFTED and UNPAID. All other types are meant to be user-visible and cannot
+     * be set programmatically. 
+     * @enum {string}
+     */
+    SubscriberType: "blocked" | "complained" | "churning" | "churned" | "gifted" | "unactivated" | "unpaid" | "undeliverable" | "premium" | "past_due" | "paused" | "regular" | "removed" | "trialed" | "unsubscribed" | "upcoming";
+    /**
+     * Status 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    AutomationStatus: "active" | "inactive";
+    /**
+     * Type 
+     * @description Various types of events that are recorded by Buttondown, both in terms of exogenous systems
+     * like Stripe and Memberful, and endogenous ones like email opens and clicks. (In general, if anything
+     * important ever happens that could be relevant to your newsletter, we have an event type for it!)
+     * 
+     * These event types power lots of things within Buttondown. They're used to trigger automations, webhooks,
+     * and analytics.
+     * 
+     * (Note that Buttondown also has a different thing we call "events"; those are `EmailEvents` and are used
+     * for tracking aggregate details about an email. Alas, we shouldn't have used the term "event" for two different
+     * things, but it's too late to go back now!)
+     * 
+     * In general, our event namespacing tries to hew to the following pattern:
+     * 
+     * `<source>.<object>.<action>`
+     * 
+     * When wondering which object we are referring to, default to the _more granular_ object.
+     * 
+     * For instance, an email being sent to a subscriber is `subscriber.delivered`, not `email.sent`. 
+     * @enum {string}
+     */
+    ExternalEventType: "advertising_slot.purchased" | "automation.invoked" | "date.day.started" | "date.month.started" | "date.week.started" | "date.year.started" | "email.created" | "email.deleted" | "email.sent" | "email.status.changed" | "email.updated" | "external_feed_item.created" | "export.completed" | "export.created" | "export.failed" | "firewall.blocked" | "mention.created" | "memberful.member.updated" | "memberful.subscription.created" | "memberful.subscription.deleted" | "note.created" | "note.deleted" | "patreon.member.updated" | "patreon.membership.created" | "patreon.membership.deleted" | "shopify.customer.created" | "shopify.customer.updated" | "social_mention.created" | "stripe.checkout.session.completed" | "stripe.customer.updated" | "stripe.subscription.activated" | "stripe.subscription.churning" | "stripe.subscription.deactivated" | "subscriber.bounced" | "subscriber.changed_email" | "subscriber.churned" | "subscriber.clicked" | "subscriber.commented" | "subscriber.complained" | "subscriber.confirmed" | "subscriber.created" | "subscriber.deleted" | "subscriber.delivered" | "subscriber.opened" | "subscriber.paid" | "subscriber.paused" | "subscriber.resumed" | "subscriber.referred" | "subscriber.referred.paid" | "subscriber.rejected" | "subscriber.replied" | "subscriber.responded_to_survey" | "subscriber.tags.changed" | "subscriber.trial_ended" | "subscriber.trial_started" | "subscriber.type.changed" | "subscriber.unsubscribed" | "subscriber.updated" | "subscriber.viewed_checkout_page" | "survey.cleared_responses" | "survey.created" | "survey.deleted" | "survey.updated" | "form.created" | "form.deleted" | "form.updated";
+    /**
+     * Status 
+     * @description The status of a given item (meaning a distinct URL) within an RSS feed. 
+     * @enum {string}
+     */
+    ExternalFeedItemStatus: "unprocessed" | "irrelevant" | "errored" | "skipped" | "queued" | "processed";
+    /**
+     * Status 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SurveyStatus: "active" | "inactive";
+    /**
+     * ActionType 
+     * @description The action that is triggered when the automation is successfully run. 
+     * @enum {string}
+     */
+    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_arena_post" | "create_bluesky_post" | "create_linkedin_post" | "create_mastodon_post" | "create_tumblr_post" | "create_twitter_post" | "create_export" | "send_post_request" | "send_confirmation_reminder";
+    /**
+     * AnnouncementBarVisibility 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    NewsletterAnnouncementBarVisibility: "disabled" | "everyone" | "free_only" | "logged_out_only" | "paid_only";
+    /**
+     * ArchiveTheme 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    NewsletterArchiveTheme: "classic" | "modern" | "arbus" | "lovelace" | "myrna";
+    /**
+     * AuditingMode 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    NewsletterAuditingMode: "disabled" | "enabled" | "aggressive";
+    /**
+     * Behavior 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ExternalFeedAutomationBehavior: "draft" | "emails";
+    /**
+     * Cadence 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ExternalFeedAutomationCadence: "every" | "daily" | "weekly" | "monthly";
+    /**
+     * Collection 
+     * @description A group of data that can be exported in an export. 
+     * @enum {string}
+     */
+    ExportCollection: "subscribers" | "emails" | "events" | "referrals" | "surveys" | "comments" | "requests" | "mentions" | "conversations" | "images" | "stripe_subscriptions" | "stripe_products" | "stripe_customers" | "stripe_prices" | "stripe_charges";
+    /**
+     * CommentingMode 
+     * @description Governs who can comment on this email.
+     * 
+     * This enum replaces the `is_comments_disabled` field, which has been deprecated. (Also note that this field may be superseded by newsletter-level settings; for instance, "enabled" is an invalid and inert value if the newsletter itself has comments disabled.) 
+     * @enum {string}
+     */
+    EmailCommentingMode: "disabled" | "enabled" | "enabled_for_paid_subscribers";
+    /**
+     * EmailTemplate 
+     * @description Represents the template of an email.
+     * 
+     * Each template has a different layout/style; you can view screenshots and examples [in the docs](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates). 
+     * @enum {string}
+     */
+    NewsletterEmailTemplate: "classic" | "modern" | "plaintext" | "naked";
+    /**
+     * Format 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ExportFormat: "csv" | "json";
+    /**
+     * InputType 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SurveyInputType: "radio" | "checkbox" | "text";
+    /**
+     * Locale 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    NewsletterLocale: "cs-CZ" | "nl-NL" | "en-AU" | "en-CA" | "en-GB" | "en" | "fr" | "de" | "pl-PL" | "pt-BR" | "ru" | "es" | "tr" | "sv-SE";
+    /**
+     * Mode 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SnippetMode: "fancy" | "naked" | "plaintext";
+    /**
+     * ResponseCadence 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SurveyResponseCadence: "once" | "once_per_email";
+    /**
+     * SuppressionReason 
+     * @description Represents the reason an email was suppressed. 
+     * @enum {string}
+     */
+    EmailSuppressionReason: "law_enforcement" | "internal_auditing";
+    /**
+     * UndeliverabilityReason 
+     * @description The reason Buttondown has marked the subscriber as undeliverable.
+     * Undeliverable subscribers are not sent emails, and may be periodically removed from the system (or restored, if the reason is no longer valid.)
+     * 
+     * These reasons are grouped into three categories:
+     * - PermanentFailure ("Failed (recipient)"): Address-based issues where the recipient is truly unreachable.
+     *   Includes: HARD_BOUNCE
+     * - MessageFailure ("Failed (message)"): Message/sender problems where future emails may succeed.
+     *   Includes: ACCESS_DENIED, AUTHENTICATION_ISSUE, DELIVERY_EXPIRED, DOMAIN_BLOCKED, EMAIL_BLOCKED,
+     *             IP_BLOCKED, ON_ESP_DENYLIST, OUT_OF_STORAGE, PROBLEMATIC_URL, SPAM
+     * - Deferral (not shown to customers): Transient delivery issues that will be retried.
+     *   Includes: RATE_LIMITED, TRANSIENT 
+     * @enum {string}
+     */
+    SubscriberUndeliverabilityReason: "access_denied" | "authentication_issue" | "delivery_expired" | "domain_blocked" | "email_blocked" | "hard_bounce" | "ip_blocked" | "ip_undeliverable" | "malformed" | "on_esp_denylist" | "other" | "out_of_storage" | "problematic_url" | "rate_limited" | "spam" | "transient" | "disabled" | "does_not_exist" | "spf_failed" | "unreachable";
+    /** Page[AdvertisingUnit] */
+    AdvertisingUnitPage: {
+      /** Results */
+      results: (components["schemas"]["AdvertisingUnit"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[AdvertisingSlot] */
+    AdvertisingSlotPage: {
+      /** Results */
+      results: (components["schemas"]["AdvertisingSlot"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Attachment] */
+    AttachmentPage: {
+      /** Results */
+      results: (components["schemas"]["Attachment"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Automation] */
+    AutomationPage: {
+      /** Results */
+      results: (components["schemas"]["Automation"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Book] */
+    BookPage: {
+      /** Results */
+      results: (components["schemas"]["Book"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Comment] */
+    CommentPage: {
+      /** Results */
+      results: (components["schemas"]["Comment"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[StripeCoupon] */
+    StripeCouponPage: {
+      /** Results */
+      results: (components["schemas"]["StripeCoupon"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Email] */
+    EmailPage: {
+      /** Results */
+      results: (components["schemas"]["Email"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[History] */
+    HistoryPage: {
+      /** Results */
+      results: (components["schemas"]["History"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[EmailEvent] */
+    EmailEventPage: {
+      /** Results */
+      results: (components["schemas"]["EmailEvent"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Export] */
+    ExportPage: {
+      /** Results */
+      results: (components["schemas"]["Export"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[ExternalFeed] */
+    ExternalFeedPage: {
+      /** Results */
+      results: (components["schemas"]["ExternalFeed"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[ExternalFeedItem] */
+    ExternalFeedItemPage: {
+      /** Results */
+      results: (components["schemas"]["ExternalFeedItem"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Form] */
+    FormPage: {
+      /** Results */
+      results: (components["schemas"]["Form"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Image] */
+    ImagePage: {
+      /** Results */
+      results: (components["schemas"]["Image"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Newsletter] */
+    NewsletterPage: {
+      /** Results */
+      results: (components["schemas"]["Newsletter"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Note] */
+    NotePage: {
+      /** Results */
+      results: (components["schemas"]["Note"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Price] */
+    PricePage: {
+      /** Results */
+      results: (components["schemas"]["Price"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[PublicEmail] */
+    PublicEmailPage: {
+      /** Results */
+      results: (components["schemas"]["PublicEmail"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Snippet] */
+    SnippetPage: {
+      /** Results */
+      results: (components["schemas"]["Snippet"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Subscriber] */
+    SubscriberPage: {
+      /** Results */
+      results: (components["schemas"]["Subscriber"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[AutomationForSubscriber] */
+    AutomationForSubscriberPage: {
+      /** Results */
+      results: (components["schemas"]["AutomationForSubscriber"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[UnexpandableStripeSubscription] */
+    StripeSubscriptionPage: {
+      /** Results */
+      results: (components["schemas"]["StripeSubscription"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Response] */
+    ResponsePage: {
+      /** Results */
+      results: (components["schemas"]["Response"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Survey] */
+    SurveyPage: {
+      /** Results */
+      results: (components["schemas"]["Survey"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Tag] */
+    TagPage: {
+      /** Results */
+      results: (components["schemas"]["Tag"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[User] */
+    UserPage: {
+      /** Results */
+      results: (components["schemas"]["User"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
+    /** Page[Webhook] */
+    WebhookPage: {
+      /** Results */
+      results: (components["schemas"]["Webhook"])[];
+      /** Next */
+      next?: string;
+      /** Previous */
+      previous?: string;
+      /** Count */
+      count: number;
+    };
     /** Page[WebhookAttemptOutput] */
     WebhookAttemptOutputPage: {
       /** Results */
@@ -5689,8 +5808,178 @@ export interface components {
       /** Count */
       count: number;
     };
-    /** @enum {string} */
-    EmailExcludableField: "body";
+    /** StripeSubscription */
+    StripeSubscription: {
+      /** Subscription Id */
+      subscription_id: string;
+      /** Url */
+      url: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /**
+       * Ending Date 
+       * Format: date-time
+       */
+      ending_date?: string;
+      /** Amount */
+      amount: number;
+      /** Currency */
+      currency: string;
+      /** Cadence */
+      cadence: string;
+      /** Status */
+      status: string;
+      /**
+       * Application Fee Percent 
+       * @description The application fee percent for the subscription.
+       */
+      application_fee_percent?: number;
+      /**
+       * Source 
+       * @description Buttondown attempts to detect the source of a subscription, but this is not always possible. 
+       * @enum {string}
+       */
+      source?: "substack" | "buttondown";
+      /**
+       * Product 
+       * @description The name of the product which the subscriber is subscribed to. (You can override this by setting the `buttondown_template_facing_id` metadata on the product in Stripe.)
+       */
+      product?: string;
+    };
+    /**
+     * ValidationErrorCode 
+     * @description Represents the type of error that occurred when validating subscriber input.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    SubscriberInputValidationErrorCode: "email_already_exists" | "email_blocked" | "email_empty" | "email_invalid" | "ip_address_spammy" | "metadata_invalid" | "rate_limited" | "subscriber_already_exists" | "subscriber_blocked" | "subscriber_id_invalid" | "subscriber_suppressed" | "tag_invalid";
+    /**
+     * APIRequestSource 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    APIRequestSource: "api" | "app" | "carrd" | "zapier" | "cli" | "make";
+    /**
+     * ArchiveImportSource 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ArchiveImportSource: "active_campaign" | "aweber_zip" | "beehiiv" | "blogger" | "buttondown" | "convertkit" | "convertkit_api" | "convertkit_v3" | "doc_zip" | "drip" | "ghost" | "google" | "html_zip" | "hey" | "jekyll_zip" | "mailchimp" | "mailchimp_v2" | "mailchimp_v3" | "mailerlite" | "medium" | "other" | "outlook" | "revue" | "rss" | "sandpaper" | "substack" | "substack_zip" | "tinyletter" | "tinyletter_csv" | "typepad" | "wordpress" | "write_as";
+    /**
+     * ArchiveImportStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ArchiveImportStatus: "failed" | "in_progress" | "not_started" | "succeeded" | "succeeded_with_errors";
+    /**
+     * AutomationAttemptStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    AutomationAttemptStatus: "unprocessed" | "processed" | "failed" | "pending" | "skipped";
+    /**
+     * BulkActionStatus 
+     * @description 
+     *         Represents the status of a bulk action.
+     * 
+     *         No action is required to move from one state or another; Buttondown
+     *         internally handles the transitions, and exposing the status is for
+     *         observability purposes only.
+     *          
+     * @enum {string}
+     */
+    BulkActionStatus: "not_started" | "in_progress" | "processed" | "failed";
+    /**
+     * BulkActionType 
+     * @description 
+     *         Represents the action being performed on a bulk of objects.
+     * 
+     *         (Not to be coy, but these names should be self-explanatory.)
+     *          
+     * @enum {string}
+     */
+    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "change_tags_colors" | "delete_comments" | "delete_surveys" | "delete_survey_responses" | "delete_tags" | "mark_comments_as_active" | "mark_comments_as_spammy" | "replay_events" | "update_survey_statuses" | "modify_stripe_subscriptions";
+    /**
+     * ConversationStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ConversationStatus: "active" | "archived" | "spammy" | "starred";
+    /**
+     * ExportStatus 
+     * @description 
+     *         Represents the status of an export.
+     * 
+     *         No action is required to move from one state or another; Buttondown
+     *         internally handles the transitions, and exposing the status is for
+     *         observability purposes only.
+     *          
+     * @enum {string}
+     */
+    ExportStatus: "error" | "in_progress" | "not_started" | "ready";
+    /**
+     * ExternalEventStatus 
+     * @description Note that these statuses are _independent_ of the statuses of various actions (automations, webhooks) triggered by the external event.
+     * 
+     *         An ExternalEvent may be marked as 'processed' even if the action triggered by the event fails or has yet to be processed.
+     *          
+     * @enum {string}
+     */
+    ExternalEventStatus: "pending" | "processed" | "failed";
+    /**
+     * ExternalFeedAutomationStatus 
+     * @description Represents the status of the automation, and whether or not it is active. Inactive automations will not be processed. Deleted automations will not be processed. 
+     * @enum {string}
+     */
+    ExternalFeedAutomationStatus: "active" | "failing" | "inactive" | "deleted";
+    /**
+     * FormStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    FormStatus: "active" | "inactive";
+    /**
+     * InboxItemStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    InboxItemStatus: "unread" | "read";
+    /**
+     * InvitationStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    InvitationStatus: "pending" | "accepted" | "declined" | "revoked" | "owner";
+    /**
+     * NewsletterStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    NewsletterStatus: "active" | "deleting" | "disabled" | "unconfirmed" | "permanently_active" | "super_permanently_active" | "permanently_disabled" | "undeliverable" | "staging" | "prospective" | "dormant";
+    /**
+     * SubscriberImportSource 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SubscriberImportSource: "substack" | "tinyletter" | "mailchimp" | "buttondown" | "sender_dot_net" | "sendy" | "shopify" | "flodesk" | "squarespace" | "ghost" | "memberful" | "sparkloop" | "google" | "mailerlite" | "bare" | "custom" | "standard";
+    /**
+     * SubscriberImportStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SubscriberImportStatus: "not_started" | "in_progress" | "validating" | "failed" | "succeeded";
+    /**
+     * WebhookAttemptStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    WebhookAttemptStatus: "unattempted" | "successful" | "failed";
   };
   responses: never;
   parameters: never;
@@ -5998,6 +6287,7 @@ export interface operations {
       query: {
         /** @description If provided, only return attachments matching the given IDs. */
         ids?: (string)[];
+        /** @description The number of results per page. */
         page_size?: number;
       };
     };
@@ -6580,8 +6870,7 @@ export interface operations {
         /** @description If provided, expand the given field. (Only supported fields: 'subscriber', 'email'). */
         expand?: ("subscriber" | "email")[];
         ordering?: "creation_date" | "-creation_date" | "email" | "-email" | "subscriber" | "-subscriber";
-        /** @description An enumeration. */
-        status?: "pending" | "active" | "spammy";
+        status?: components["schemas"]["CommentStatus"];
       };
     };
     responses: {
@@ -6788,7 +7077,10 @@ export interface operations {
         publish_date__end?: string;
         excluded_fields?: (components["schemas"]["EmailExcludableField"])[];
         source?: (components["schemas"]["EmailSource"])[];
-        /** @description The type of emails to return. Defaults to all types. */
+        /**
+         * @deprecated 
+         * @description The type of emails to return. Defaults to all types.
+         */
         email_type?: (components["schemas"]["EmailType"])[];
         /** @description If provided, only return emails with a subject that contains the given string. */
         subject?: string;
@@ -6983,11 +7275,18 @@ export interface operations {
       query: {
         /** @description If provided, expand the given field. */
         expand?: ("user")[];
+        /** @description The field to retrieve history for. */
         field: string;
-        /** @description The page number of the paginated response. */
+        /**
+         * @description The page number of the paginated response. 
+         * @example 1
+         */
         page?: number;
+        /** @description The ordering to apply to the results. */
         ordering?: "creation_date" | "-creation_date";
+        /** @description If provided, only return history entries matching the given query. */
         query?: string;
+        /** @description The number of results per page. */
         page_size?: number;
       };
       path: {
@@ -7179,11 +7478,15 @@ export interface operations {
     parameters: {
       query: {
         event_type?: components["schemas"]["EmailEventType"];
+        /** @description The ordering to apply to the results. */
         ordering?: "creation_date" | "-creation_date";
         /** @description If provided, expand the given field. (Only supported field: 'subscriber'). */
         expand?: ("automation" | "subscriber" | "email")[];
+        /** @description If provided, only return events for the given email. */
         email_id?: string;
+        /** @description If provided, only return events for the given automation. */
         automation_id?: string;
+        /** @description If provided, only return events for the given subscriber. */
         subscriber_id?: string;
       };
     };
@@ -7972,7 +8275,7 @@ export interface operations {
     parameters: {
       query: {
         /** @description Filter notes by the type of object they are attached to. */
-        model_type?: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
+        model_type?: string;
         /** @description Filter notes by the ID of the object they are attached to. */
         model_id?: string;
         /** @description If provided, expand the given field. */
@@ -8148,7 +8451,9 @@ export interface operations {
   list_public_emails: {
     parameters: {
       query: {
+        /** @description If provided, only return emails matching the given query. */
         q?: string;
+        /** @description The page number to return. */
         page?: number;
       };
       path: {
@@ -8346,7 +8651,12 @@ export interface operations {
         date__end?: string;
         /** @description If provided, only return subscribers created on or after the given date. */
         date__start?: string;
-        /** @description If provided, only return subscribers whose email domain matches the given domain(s). */
+        /**
+         * @description If provided, only return subscribers whose email domain matches the given domain(s). 
+         * @example [
+         *   "gmail.com"
+         * ]
+         */
         domain?: (string)[];
         /** @description If provided, only return subscribers whose email address contains the given string. */
         email_address?: string | (string)[];
@@ -8366,7 +8676,12 @@ export interface operations {
         last_open_date__end?: string;
         /** @description If provided, only return subscribers with the given last open date(s). */
         last_open_date__start?: string;
-        /** @description If provided, only return subscribers whose email domain does not match the given domain(s). */
+        /**
+         * @description If provided, only return subscribers whose email domain does not match the given domain(s). 
+         * @example [
+         *   "gmail.com"
+         * ]
+         */
         "-domain"?: (string)[];
         "-tag"?: string;
         /** @description If provided, only return subscribers without the given type. */
@@ -8390,12 +8705,22 @@ export interface operations {
         risk_score__end?: number;
         /** @description If provided, only return subscribers with a risk score greater than or equal to the given value. */
         risk_score__start?: number;
-        /** @description If provided, only return subscribers with the given source(s). */
+        /**
+         * @description If provided, only return subscribers with the given source(s). 
+         * @example [
+         *   "api"
+         * ]
+         */
         source?: (components["schemas"]["SubscriberSource"])[];
         /** @description If provided, only return subscribers that were imported by the given subscriber import. */
         subscriber_import?: (string)[];
         tag?: (string)[];
-        /** @description If provided, only return subscribers with the given type. */
+        /**
+         * @description If provided, only return subscribers with the given type. 
+         * @example [
+         *   "regular"
+         * ]
+         */
         type?: (components["schemas"]["SubscriberType"])[];
         /** @description If provided, only return subscribers with the given undeliverability date(s). */
         undeliverability_date__end?: string;
@@ -8413,11 +8738,26 @@ export interface operations {
         upgrade_date__end?: string;
         /** @description If provided, only return subscribers with the given upgrade date(s). */
         upgrade_date__start?: string;
-        /** @description If provided, only return subscribers with the given UTM campaign(s). */
+        /**
+         * @description If provided, only return subscribers with the given UTM campaign(s). 
+         * @example [
+         *   "paid_campaign_2024"
+         * ]
+         */
         utm_campaign?: (string)[];
-        /** @description If provided, only return subscribers with the given UTM medium(s). */
+        /**
+         * @description If provided, only return subscribers with the given UTM medium(s). 
+         * @example [
+         *   "paid_campaign_2024"
+         * ]
+         */
         utm_medium?: (string)[];
-        /** @description If provided, only return subscribers with the given UTM source(s). */
+        /**
+         * @description If provided, only return subscribers with the given UTM source(s). 
+         * @example [
+         *   "paid_campaign_2024"
+         * ]
+         */
         utm_source?: (string)[];
       };
     };
@@ -8470,7 +8810,7 @@ export interface operations {
          * - "overwrite", which will overwrite the existing subscriber's data with the new one.
          * - "add", which will add the new subscriber data to the existing one.
          */
-        "X-Buttondown-Collision-Behavior"?: "no_op" | "add" | "overwrite" | "fail";
+        "X-Buttondown-Collision-Behavior"?: components["schemas"]["CollisionBehavior"];
         /** @description Bypass the firewall for this subscriber creation. Subject to aggressive rate limiting (5 per hour per newsletter). */
         "X-Buttondown-Bypass-Firewall"?: boolean;
       };
@@ -9164,6 +9504,7 @@ export interface operations {
       query: {
         /** @description If provided, only return tags matching the given IDs. */
         ids?: (string)[];
+        /** @description The number of results per page. */
         page_size?: number;
       };
     };
@@ -9712,27 +10053,7 @@ export interface operations {
   test_webhook: {
     parameters: {
       query: {
-        /**
-         * @description Various types of events that are recorded by Buttondown, both in terms of exogenous systems
-         * like Stripe and Memberful, and endogenous ones like email opens and clicks. (In general, if anything
-         * important ever happens that could be relevant to your newsletter, we have an event type for it!)
-         * 
-         * These event types power lots of things within Buttondown. They're used to trigger automations, webhooks,
-         * and analytics.
-         * 
-         * (Note that Buttondown also has a different thing we call "events"; those are `EmailEvents` and are used
-         * for tracking aggregate details about an email. Alas, we shouldn't have used the term "event" for two different
-         * things, but it's too late to go back now!)
-         * 
-         * In general, our event namespacing tries to hew to the following pattern:
-         * 
-         * `<source>.<object>.<action>`
-         * 
-         * When wondering which object we are referring to, default to the _more granular_ object.
-         * 
-         * For instance, an email being sent to a subscriber is `subscriber.delivered`, not `email.sent`.
-         */
-        event_type?: "advertising_slot.purchased" | "automation.invoked" | "date.day.started" | "date.month.started" | "date.week.started" | "date.year.started" | "email.created" | "email.deleted" | "email.sent" | "email.status.changed" | "email.updated" | "external_feed_item.created" | "export.completed" | "export.created" | "export.failed" | "firewall.blocked" | "mention.created" | "memberful.member.updated" | "memberful.subscription.created" | "memberful.subscription.deleted" | "note.created" | "note.deleted" | "patreon.member.updated" | "patreon.membership.created" | "patreon.membership.deleted" | "shopify.customer.created" | "shopify.customer.updated" | "social_mention.created" | "stripe.checkout.session.completed" | "stripe.customer.updated" | "stripe.subscription.activated" | "stripe.subscription.churning" | "stripe.subscription.deactivated" | "subscriber.bounced" | "subscriber.changed_email" | "subscriber.churned" | "subscriber.clicked" | "subscriber.commented" | "subscriber.complained" | "subscriber.confirmed" | "subscriber.created" | "subscriber.deleted" | "subscriber.delivered" | "subscriber.opened" | "subscriber.paid" | "subscriber.paused" | "subscriber.resumed" | "subscriber.referred" | "subscriber.referred.paid" | "subscriber.rejected" | "subscriber.replied" | "subscriber.responded_to_survey" | "subscriber.tags.changed" | "subscriber.trial_ended" | "subscriber.trial_started" | "subscriber.type.changed" | "subscriber.unsubscribed" | "subscriber.updated" | "subscriber.viewed_checkout_page" | "survey.cleared_responses" | "survey.created" | "survey.deleted" | "survey.updated" | "form.created" | "form.deleted" | "form.updated";
+        event_type?: components["schemas"]["ExternalEventType"];
       };
       path: {
         id: string;
