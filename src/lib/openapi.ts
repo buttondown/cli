@@ -1846,6 +1846,11 @@ export interface components {
       canonical_url: string;
       commenting_mode: components["schemas"]["EmailCommentingMode"];
       /**
+       * @description The draft review mode for the email. Use `unlisted` to allow draft comments via link, or `disabled` to turn draft comments off. 
+       * @default disabled
+       */
+      review_mode?: components["schemas"]["ReviewMode"];
+      /**
        * Description 
        * @description A human-readable description of the email, used for archives and SEO.
        */
@@ -1956,6 +1961,12 @@ export interface components {
      * @enum {string}
      */
     FirewallReasonCode: "email_address_capital_letters" | "email_address_cleantalk_score" | "email_address_contains_prohibited_string" | "email_address_esp_suppression" | "email_address_extant_subscriber_count" | "email_address_gmail_word_numbers" | "email_address_has_gravatar" | "email_address_is_honeypot" | "email_address_is_pwned" | "email_address_length" | "email_address_local_part_has_many_periods" | "email_address_many_consonants_in_a_row" | "email_address_mx_record_is_valid" | "email_address_noreply_local_part" | "email_address_null_characters" | "email_address_peaceful_domain" | "email_address_plus_single_number" | "email_address_previous_evaluation" | "email_address_prohibited_via_domain" | "email_address_regex" | "email_address_sandbox_test" | "email_address_shannon_entropy" | "email_address_stopforumspam_score" | "email_address_tied_to_account" | "email_address_typo" | "fingerprint_missing" | "ip_address_cleantalk_score" | "ip_address_extant_subscriber_count" | "ip_address_peaceful" | "ip_address_prohibited" | "metadata_has_garbage" | "newsletter_age" | "newsletter_has_customized_transactional_email" | "newsletter_has_prohibited_string" | "newsletter_status" | "project_honeypot" | "referrer_url_prohibited" | "subscriber_import_provenance" | "subscriber_import_source" | "text_contains_malicious_url" | "text_contains_prohibited_string" | "turnstile_response_token_is_valid" | "user_agent_known";
+    /**
+     * ReviewMode 
+     * @description Represents the review mode of an email. 
+     * @enum {string}
+     */
+    ReviewMode: "disabled" | "unlisted";
     /** StripeCoupon */
     StripeCoupon: {
       /** Coupon Id */
@@ -2393,6 +2404,11 @@ export interface components {
       /** Template */
       template?: components["schemas"]["NewsletterEmailTemplate"] | "none";
       commenting_mode?: components["schemas"]["EmailCommentingMode"];
+      /**
+       * @description The draft review mode for the email. Use `unlisted` to allow draft comments via link, or `disabled` to turn draft comments off. 
+       * @default disabled
+       */
+      review_mode?: components["schemas"]["ReviewMode"];
       /** Related Email Ids */
       related_email_ids?: (string)[];
       /**
