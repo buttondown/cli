@@ -1113,20 +1113,6 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
-    /** ListFilter */
-    ListFilter: {
-      /**
-       * Ids 
-       * @description If provided, only return tags matching the given IDs.
-       */
-      ids?: (string)[];
-      /**
-       * Page Size 
-       * @description The number of results per page. 
-       * @default 100
-       */
-      page_size?: number;
-    };
     /**
      * APIRequest 
      * @description Represents a request to the API (api.buttondown.com).
@@ -1205,20 +1191,6 @@ export interface components {
        * @example 1000
        */
       size: number;
-    };
-    /** AttachmentListFilter */
-    AttachmentListFilter: {
-      /**
-       * Ids 
-       * @description If provided, only return attachments matching the given IDs.
-       */
-      ids?: (string)[];
-      /**
-       * Page Size 
-       * @description The number of results per page. 
-       * @default 100
-       */
-      page_size?: number;
     };
     /** Action */
     Action: {
@@ -2193,12 +2165,6 @@ export interface components {
        */
       subscriber_id?: string;
     };
-    /**
-     * Ordering 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    Ordering: "creation_date" | "-creation_date" | "question" | "-question" | "identifier" | "-identifier" | "status" | "-status" | "response_count" | "-response_count";
     /** CommentUpdateInput */
     CommentUpdateInput: {
       /**
@@ -2422,43 +2388,6 @@ export interface components {
        */
       should_trigger_pay_per_email_billing?: boolean;
     };
-    /** EmailHistoryFilter */
-    EmailHistoryFilter: {
-      /**
-       * Expand 
-       * @description If provided, expand the given field.
-       */
-      expand?: ("user")[];
-      /**
-       * Field 
-       * @description The field to retrieve history for.
-       */
-      field: string;
-      /**
-       * Page 
-       * @description The page number of the paginated response. 
-       * @example 1
-       */
-      page?: number;
-      /**
-       * Ordering 
-       * @description The ordering to apply to the results. 
-       * @default creation_date 
-       * @enum {string}
-       */
-      ordering?: "creation_date" | "-creation_date";
-      /**
-       * Query 
-       * @description If provided, only return history entries matching the given query.
-       */
-      query?: string;
-      /**
-       * Page Size 
-       * @description The number of results per page. 
-       * @default 100
-       */
-      page_size?: number;
-    };
     /**
      * AccessLevel 
      * @description An enumeration. 
@@ -2551,23 +2480,6 @@ export interface components {
        */
       last_logged_in?: string;
     };
-    /** EmailExpandFilter */
-    EmailExpandFilter: {
-      /**
-       * Expand 
-       * @description If provided, expand the given field.
-       */
-      expand?: ("user")[];
-    };
-    /** RenderTarget */
-    RenderTarget: {
-      /**
-       * Target 
-       * @description The target format for the rendered HTML. Use 'email' for rendered_html_for_email or 'html' for rendered_html_for_web. 
-       * @enum {string}
-       */
-      target: "email" | "html";
-    };
     /** Render */
     Render: {
       /**
@@ -2595,35 +2507,6 @@ export interface components {
        * ]
        */
       recipients?: (string)[];
-    };
-    /** EmailEventFilter */
-    EmailEventFilter: {
-      event_type?: components["schemas"]["EmailEventType"];
-      /**
-       * @description The ordering to apply to the results. 
-       * @default -creation_date
-       */
-      ordering?: "creation_date" | "-creation_date";
-      /**
-       * Expand 
-       * @description If provided, expand the given field. (Only supported field: 'subscriber').
-       */
-      expand?: ("automation" | "subscriber" | "email")[];
-      /**
-       * Email Id 
-       * @description If provided, only return events for the given email.
-       */
-      email_id?: string;
-      /**
-       * Automation Id 
-       * @description If provided, only return events for the given automation.
-       */
-      automation_id?: string;
-      /**
-       * Subscriber Id 
-       * @description If provided, only return events for the given subscriber.
-       */
-      subscriber_id?: string;
     };
     /**
      * EmailEventType 
@@ -2658,14 +2541,6 @@ export interface components {
       subscriber?: components["schemas"]["Subscriber"];
       email?: components["schemas"]["Email"];
       automation?: components["schemas"]["Automation"];
-    };
-    /** EmailEventRetrieveFilter */
-    EmailEventRetrieveFilter: {
-      /**
-       * Expand 
-       * @description If provided, expand the given field. (Only supported field: 'subscriber').
-       */
-      expand?: ("automation" | "subscriber" | "email")[];
     };
     /**
      * Export 
@@ -2973,14 +2848,6 @@ export interface components {
     };
     /** Empty */
     Empty: Record<string, unknown>;
-    /** ItemFilter */
-    ItemFilter: {
-      /**
-       * Expand 
-       * @description If provided, expand the given field.
-       */
-      expand?: ("email")[];
-    };
     /**
      * ExternalFeedItem 
      * @description An external feed item is a single item in an external RSS feed. It is created
@@ -4228,14 +4095,6 @@ export interface components {
         [key: string]: unknown | undefined;
       };
     };
-    /** PriceListFilter */
-    PriceListFilter: {
-      /**
-       * Expand 
-       * @description If provided, expand the given field.
-       */
-      expand?: ("product")[];
-    };
     /** Price */
     Price: {
       /**
@@ -4420,20 +4279,6 @@ export interface components {
        * @description The suggested amount for pay-what-you-want prices.
        */
       suggested_amount?: number;
-    };
-    /** PublicEmailListFilters */
-    PublicEmailListFilters: {
-      /**
-       * Q 
-       * @description If provided, only return emails matching the given query.
-       */
-      q?: string;
-      /**
-       * Page 
-       * @description The page number to return. 
-       * @default 1
-       */
-      page?: number;
     };
     /**
      * PublicEmail 
@@ -5882,18 +5727,6 @@ export interface components {
      */
     APIRequestSource: "api" | "app" | "carrd" | "zapier" | "cli" | "make";
     /**
-     * ArchiveImportSource 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    ArchiveImportSource: "active_campaign" | "aweber_zip" | "beehiiv" | "blogger" | "buttondown" | "convertkit" | "convertkit_api" | "convertkit_v3" | "doc_zip" | "drip" | "ghost" | "google" | "html_zip" | "hey" | "jekyll_zip" | "mailchimp" | "mailchimp_v2" | "mailchimp_v3" | "mailerlite" | "medium" | "other" | "outlook" | "revue" | "rss" | "sandpaper" | "substack" | "substack_zip" | "tinyletter" | "tinyletter_csv" | "typepad" | "wordpress" | "write_as";
-    /**
-     * ArchiveImportStatus 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    ArchiveImportStatus: "failed" | "in_progress" | "not_started" | "succeeded" | "succeeded_with_errors";
-    /**
      * AutomationAttemptStatus 
      * @description An enumeration. 
      * @enum {string}
@@ -5922,12 +5755,6 @@ export interface components {
      */
     BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "change_tags_colors" | "delete_comments" | "delete_surveys" | "delete_survey_responses" | "delete_tags" | "mark_comments_as_active" | "mark_comments_as_spammy" | "replay_events" | "update_survey_statuses" | "modify_stripe_subscriptions";
     /**
-     * ConversationStatus 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    ConversationStatus: "active" | "archived" | "spammy" | "starred";
-    /**
      * ExportStatus 
      * @description 
      *         Represents the status of an export.
@@ -5939,15 +5766,6 @@ export interface components {
      * @enum {string}
      */
     ExportStatus: "error" | "in_progress" | "not_started" | "ready";
-    /**
-     * ExternalEventStatus 
-     * @description Note that these statuses are _independent_ of the statuses of various actions (automations, webhooks) triggered by the external event.
-     * 
-     *         An ExternalEvent may be marked as 'processed' even if the action triggered by the event fails or has yet to be processed.
-     *          
-     * @enum {string}
-     */
-    ExternalEventStatus: "pending" | "processed" | "failed";
     /**
      * ExternalFeedAutomationStatus 
      * @description Represents the status of the automation, and whether or not it is active. Inactive automations will not be processed. Deleted automations will not be processed. 
@@ -5961,35 +5779,11 @@ export interface components {
      */
     FormStatus: "active" | "inactive";
     /**
-     * InboxItemStatus 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    InboxItemStatus: "unread" | "read";
-    /**
      * InvitationStatus 
      * @description An enumeration. 
      * @enum {string}
      */
     InvitationStatus: "pending" | "accepted" | "declined" | "revoked" | "owner";
-    /**
-     * NewsletterStatus 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    NewsletterStatus: "active" | "deleting" | "disabled" | "unconfirmed" | "permanently_active" | "super_permanently_active" | "permanently_disabled" | "undeliverable" | "staging" | "prospective" | "dormant";
-    /**
-     * SubscriberImportSource 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    SubscriberImportSource: "substack" | "tinyletter" | "mailchimp" | "buttondown" | "sender_dot_net" | "sendy" | "shopify" | "flodesk" | "squarespace" | "ghost" | "memberful" | "sparkloop" | "google" | "mailerlite" | "bare" | "custom" | "standard";
-    /**
-     * SubscriberImportStatus 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    SubscriberImportStatus: "not_started" | "in_progress" | "validating" | "failed" | "succeeded";
     /**
      * WebhookAttemptStatus 
      * @description An enumeration. 
@@ -6258,17 +6052,54 @@ export interface operations {
   list_api_requests: {
     parameters: {
       query: {
+        /** @description If provided, only return requests made with the given [API key](https://docs.buttondown.com/api-authentication) ID(s). */
         api_key_id?: (string)[];
-        status_code?: (string)[];
-        method?: (string)[];
-        source?: (components["schemas"]["APIRequestSource"])[];
-        version?: ("2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01")[];
-        date__start?: string;
-        date__end?: string;
-        creation_date__lt?: string;
+        /**
+         * @description If provided, only return requests created after the given datetime. 
+         * @example 2024-01-01T00:00:00Z
+         */
         creation_date__gt?: string;
-        path?: (string)[];
+        /**
+         * @description If provided, only return requests created before the given datetime. 
+         * @example 2024-12-31T23:59:59Z
+         */
+        creation_date__lt?: string;
+        /** @description If provided, only return requests created on or before the given date. */
+        date__end?: string;
+        /** @description If provided, only return requests created on or after the given date. */
+        date__start?: string;
+        /**
+         * @description The maximum number of results to return per page. 
+         * @example 100
+         */
         limit?: number;
+        /**
+         * @description If provided, only return requests with the given HTTP method(s). 
+         * @example [
+         *   "GET",
+         *   "POST"
+         * ]
+         */
+        method?: (string)[];
+        /** @description If provided, only return requests matching the given API path(s). */
+        path?: (string)[];
+        /**
+         * @description If provided, only return requests from the given source(s). 
+         * @example [
+         *   "api"
+         * ]
+         */
+        source?: (components["schemas"]["APIRequestSource"])[];
+        /**
+         * @description If provided, only return requests with the given HTTP status code(s). 
+         * @example [
+         *   "200",
+         *   "404"
+         * ]
+         */
+        status_code?: (string)[];
+        /** @description If provided, only return requests made with the given [API version](https://docs.buttondown.com/api-versioning)(s). */
+        version?: ("2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01")[];
       };
     };
     responses: {
@@ -6877,14 +6708,27 @@ export interface operations {
   list_comments: {
     parameters: {
       query: {
-        /** @description If provided, only return comments for the given email. */
+        /**
+         * @description If provided, only return comments for the given [email](https://docs.buttondown.com/api-emails-introduction). 
+         * @example email_abc123
+         */
         email_id?: string;
-        /** @description If provided, only return comments for the given subscriber. */
+        /**
+         * @description If provided, only return comments for the given [subscriber](https://docs.buttondown.com/api-subscribers-introduction). 
+         * @example sub_abc123
+         */
         subscriber_id?: string;
-        /** @description If provided, only return comments that are replies to the given parent comment. */
+        /**
+         * @description If provided, only return comments that are replies to the given parent comment. 
+         * @example comment_abc123
+         */
         parent_id?: string;
         /** @description If provided, expand the given field. (Only supported fields: 'subscriber', 'email'). */
         expand?: ("subscriber" | "email")[];
+        /**
+         * @description The ordering to apply to the results. 
+         * @example -creation_date
+         */
         ordering?: "creation_date" | "-creation_date" | "email" | "-email" | "subscriber" | "-subscriber";
         status?: components["schemas"]["CommentStatus"];
       };
@@ -7076,12 +6920,21 @@ export interface operations {
   list_emails: {
     parameters: {
       query: {
-        /** @description If provided, only return emails with the given status. */
+        /** @description If provided, only return [emails](https://docs.buttondown.com/api-emails-introduction) with the given status. */
         status?: (components["schemas"]["EmailStatus"])[];
-        /** @description If provided, only return emails without the given status. */
+        /**
+         * @description If provided, only return [emails](https://docs.buttondown.com/api-emails-introduction) without the given status. 
+         * @example [
+         *   "draft"
+         * ]
+         */
         "-status"?: (components["schemas"]["EmailStatus"])[];
-        /** @description If provided, only return emails with the given ids. */
+        /** @description If provided, only return emails with the given IDs. */
         ids?: (string)[];
+        /**
+         * @description The ordering to apply to the results. 
+         * @example -publish_date
+         */
         ordering?: "creation_date" | "-creation_date" | "status" | "-status" | "publish_date" | "-publish_date" | "subject" | "-subject" | "email_type" | "-email_type" | "modification_date" | "-modification_date" | "clicks" | "-clicks" | "opens" | "-opens" | "click_rate" | "-click_rate" | "open_rate" | "-open_rate" | "page_views_lifetime" | "-page_views_lifetime" | "page_views_30" | "-page_views_30" | "page_views_7" | "-page_views_7" | "webmentions" | "-webmentions" | "subscriptions" | "-subscriptions" | "paid_subscriptions" | "-paid_subscriptions" | "unsubscriptions" | "-unsubscriptions" | "replies" | "-replies" | "comments" | "-comments" | "social_mentions" | "-social_mentions" | "permanent_failure_rate" | "-permanent_failure_rate" | "complaint_rate" | "-complaint_rate";
         /** @description If provided, only return emails created after the given date. */
         creation_date__start?: string;
@@ -7091,7 +6944,19 @@ export interface operations {
         publish_date__start?: string;
         /** @description If provided, only return emails published before the given date. */
         publish_date__end?: string;
+        /**
+         * @description If provided, exclude the given field(s) from the response. This can improve performance for large responses. 
+         * @example [
+         *   "body"
+         * ]
+         */
         excluded_fields?: (components["schemas"]["EmailExcludableField"])[];
+        /**
+         * @description If provided, only return emails from the given source(s). 
+         * @example [
+         *   "api"
+         * ]
+         */
         source?: (components["schemas"]["EmailSource"])[];
         /**
          * @deprecated 
@@ -7102,19 +6967,37 @@ export interface operations {
         subject?: string;
         /** @description If provided, only return emails with the given attachments. */
         attachments?: (string)[];
-        /** @description If provided, only return emails that reference the given snippets. */
+        /** @description If provided, only return emails that reference the given [snippets](https://docs.buttondown.com/api-snippets-introduction). */
         snippet_id?: (string)[];
-        /** @description If provided, only return emails with at least this many deliveries. */
+        /**
+         * @description If provided, only return emails with at least this many deliveries. 
+         * @example 100
+         */
         deliveries__start?: number;
-        /** @description If provided, only return emails with at most this many deliveries. */
+        /**
+         * @description If provided, only return emails with at most this many deliveries. 
+         * @example 1000
+         */
         deliveries__end?: number;
-        /** @description If provided, only return emails with a click rate greater than or equal to the given value. */
+        /**
+         * @description If provided, only return emails with a click rate greater than or equal to the given value. 
+         * @example 0.1
+         */
         click_rate__start?: number;
-        /** @description If provided, only return emails with a click rate less than or equal to the given value. */
+        /**
+         * @description If provided, only return emails with a click rate less than or equal to the given value. 
+         * @example 0.5
+         */
         click_rate__end?: number;
-        /** @description If provided, only return emails with an open rate greater than or equal to the given value. */
+        /**
+         * @description If provided, only return emails with an open rate greater than or equal to the given value. 
+         * @example 0.2
+         */
         open_rate__start?: number;
-        /** @description If provided, only return emails with an open rate less than or equal to the given value. */
+        /**
+         * @description If provided, only return emails with an open rate less than or equal to the given value. 
+         * @example 0.8
+         */
         open_rate__end?: number;
       };
     };
@@ -7902,12 +7785,26 @@ export interface operations {
   list_forms: {
     parameters: {
       query: {
-        /** @description If provided, only return forms with the given status. */
+        /**
+         * @description If provided, only return forms with the given status. 
+         * @example [
+         *   "active"
+         * ]
+         */
         status?: (components["schemas"]["FormStatus"])[];
-        /** @description If provided, only return forms without the given status. */
+        /**
+         * @description If provided, only return forms without the given status. 
+         * @example [
+         *   "disabled"
+         * ]
+         */
         "-status"?: (components["schemas"]["FormStatus"])[];
         /** @description If provided, filter by admin-only flag. */
         admin?: boolean;
+        /**
+         * @description The ordering to apply to the results. 
+         * @example -creation_date
+         */
         ordering?: "creation_date" | "-creation_date" | "title" | "-title" | "slug" | "-slug" | "status" | "-status";
       };
     };
@@ -8655,9 +8552,9 @@ export interface operations {
   list_subscribers: {
     parameters: {
       query: {
-        /** @description If provided, only return subscribers with the given churn date(s). */
+        /** @description If provided, only return subscribers who churned on or before the given date. */
         churn_date__end?: string;
-        /** @description If provided, only return subscribers with the given churn date(s). */
+        /** @description If provided, only return subscribers who churned on or after the given date. */
         churn_date__start?: string;
         /** @description If provided, only return subscribers with the given coupon ID(s). */
         coupon?: (string)[];
@@ -8678,19 +8575,24 @@ export interface operations {
         email_address?: string | (string)[];
         /** @description If provided, expand the given field. (Only supported fields: 'stripe_customer') */
         expand?: ("stripe_customer")[];
-        /** @description If provided, only return subscribers that came through the given form(s). */
+        /**
+         * @description If provided, only return subscribers that came through the given [form(s)](https://docs.buttondown.com/registration-forms). 
+         * @example [
+         *   "form_abc123"
+         * ]
+         */
         form?: (string)[];
         /** @description If provided, only return subscribers with the given IDs. */
         ids?: (string)[];
         /** @description If provided, only return subscribers with the given IP address(es). */
         ip_address?: (string)[];
-        /** @description If provided, only return subscribers with the given last click date(s). */
+        /** @description If provided, only return subscribers whose last click was on or before the given date. */
         last_click_date__end?: string;
-        /** @description If provided, only return subscribers with the given last click date(s). */
+        /** @description If provided, only return subscribers whose last click was on or after the given date. */
         last_click_date__start?: string;
-        /** @description If provided, only return subscribers with the given last open date(s). */
+        /** @description If provided, only return subscribers whose last open was on or before the given date. */
         last_open_date__end?: string;
-        /** @description If provided, only return subscribers with the given last open date(s). */
+        /** @description If provided, only return subscribers whose last open was on or after the given date. */
         last_open_date__start?: string;
         /**
          * @description If provided, only return subscribers whose email domain does not match the given domain(s). 
@@ -8699,9 +8601,17 @@ export interface operations {
          * ]
          */
         "-domain"?: (string)[];
+        /**
+         * @description If provided, only return subscribers without the given [tag](https://docs.buttondown.com/api-tags-introduction). 
+         * @example vip
+         */
         "-tag"?: string;
         /** @description If provided, only return subscribers without the given type. */
         "-type"?: (components["schemas"]["SubscriberType"])[];
+        /**
+         * @description The ordering to apply to the results. 
+         * @example -creation_date
+         */
         ordering?: string;
         /** @description If provided, only return subscribers who have at one point subscribed to the given price ID(s). */
         price?: (string)[];
@@ -8717,9 +8627,9 @@ export interface operations {
         click_rate__end?: number;
         /** @description If provided, only return subscribers with a click rate greater than or equal to the given value. */
         click_rate__start?: number;
-        /** @description If provided, only return subscribers with a risk score less than or equal to the given value. */
+        /** @description If provided, only return subscribers with a [risk score](https://docs.buttondown.com/firewall) less than or equal to the given value. */
         risk_score__end?: number;
-        /** @description If provided, only return subscribers with a risk score greater than or equal to the given value. */
+        /** @description If provided, only return subscribers with a [risk score](https://docs.buttondown.com/firewall) greater than or equal to the given value. */
         risk_score__start?: number;
         /**
          * @description If provided, only return subscribers with the given source(s). 
@@ -8728,8 +8638,14 @@ export interface operations {
          * ]
          */
         source?: (components["schemas"]["SubscriberSource"])[];
-        /** @description If provided, only return subscribers that were imported by the given subscriber import. */
+        /**
+         * @description If provided, only return subscribers that were imported by the given subscriber import. 
+         * @example [
+         *   "import_abc123"
+         * ]
+         */
         subscriber_import?: (string)[];
+        /** @description If provided, only return subscribers with the given [tag(s)](https://docs.buttondown.com/api-tags-introduction). */
         tag?: (string)[];
         /**
          * @description If provided, only return subscribers with the given type. 
@@ -8738,21 +8654,26 @@ export interface operations {
          * ]
          */
         type?: (components["schemas"]["SubscriberType"])[];
-        /** @description If provided, only return subscribers with the given undeliverability date(s). */
+        /** @description If provided, only return subscribers who became undeliverable on or before the given date. */
         undeliverability_date__end?: string;
-        /** @description If provided, only return subscribers with the given undeliverability date(s). */
+        /** @description If provided, only return subscribers who became undeliverable on or after the given date. */
         undeliverability_date__start?: string;
         /** @description If provided, only return subscribers with the given undeliverability reason(s). */
         undeliverability_reason?: (components["schemas"]["SubscriberUndeliverabilityReason"])[];
-        /** @description If provided, only return subscribers with the given unsubscription date(s). */
+        /** @description If provided, only return subscribers who unsubscribed on or before the given date. */
         unsubscription_date__end?: string;
-        /** @description If provided, only return subscribers with the given unsubscription date(s). */
+        /** @description If provided, only return subscribers who unsubscribed on or after the given date. */
         unsubscription_date__start?: string;
-        /** @description If provided, only return subscribers with the given unsubscription reason(s). */
+        /**
+         * @description If provided, only return subscribers with the given unsubscription reason(s). 
+         * @example [
+         *   "no longer interested"
+         * ]
+         */
         unsubscription_reason?: (string)[];
-        /** @description If provided, only return subscribers with the given upgrade date(s). */
+        /** @description If provided, only return subscribers who upgraded on or before the given date. */
         upgrade_date__end?: string;
-        /** @description If provided, only return subscribers with the given upgrade date(s). */
+        /** @description If provided, only return subscribers who upgraded on or after the given date. */
         upgrade_date__start?: string;
         /**
          * @description If provided, only return subscribers with the given UTM campaign(s). 
@@ -9223,11 +9144,22 @@ export interface operations {
   retrieve_survey_responses: {
     parameters: {
       query: {
-        /** @description If provided, only return responses made to the given email. */
+        /**
+         * @description If provided, only return responses made to the given [email](https://docs.buttondown.com/api-emails-introduction). 
+         * @example email_abc123
+         */
         email_id?: string;
-        /** @description If provided, only return responses made by the given subscriber. */
+        /**
+         * @description If provided, only return responses made by the given [subscriber](https://docs.buttondown.com/api-subscribers-introduction). 
+         * @example sub_abc123
+         */
         subscriber_id?: string;
-        /** @description If provided, only return responses made to the given survey(s). */
+        /**
+         * @description If provided, only return responses made to the given [survey(s)](https://docs.buttondown.com/api-surveys-introduction). 
+         * @example [
+         *   "survey_abc123"
+         * ]
+         */
         survey?: (string)[];
         /** @description If provided, only return responses made after the given date. */
         creation_date__start?: string;
@@ -9342,10 +9274,24 @@ export interface operations {
   list_surveys: {
     parameters: {
       query: {
-        /** @description If provided, only return surveys with the given status. */
+        /**
+         * @description If provided, only return surveys with the given status. 
+         * @example [
+         *   "active"
+         * ]
+         */
         status?: (components["schemas"]["SurveyStatus"])[];
-        /** @description If provided, only return surveys without the given status. */
+        /**
+         * @description If provided, only return surveys without the given status. 
+         * @example [
+         *   "disabled"
+         * ]
+         */
         "-status"?: (components["schemas"]["SurveyStatus"])[];
+        /**
+         * @description The ordering to apply to the results. 
+         * @example -creation_date
+         */
         ordering?: "creation_date" | "-creation_date" | "question" | "-question" | "identifier" | "-identifier" | "status" | "-status" | "response_count" | "-response_count";
       };
     };
@@ -9518,7 +9464,12 @@ export interface operations {
   list_tags: {
     parameters: {
       query: {
-        /** @description If provided, only return tags matching the given IDs. */
+        /**
+         * @description If provided, only return tags matching the given IDs. 
+         * @example [
+         *   "tag_abc123"
+         * ]
+         */
         ids?: (string)[];
         /** @description The number of results per page. */
         page_size?: number;

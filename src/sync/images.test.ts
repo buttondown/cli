@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it, mock } from "bun:test";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { afterEach, describe, expect, it, mock, spyOn } from "bun:test";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import {
@@ -85,6 +85,85 @@ describe("images", () => {
       const result = LOCAL_IMAGES_RESOURCE.deserialize(buffers);
 
       expect(result).toEqual([]);
+    });
+
+    it("should count HTTP errors as failures and skip writing files", async () => {
+      const tempDir = await mkdtemp(path.join(tmpdir(), "images-test-"));
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = mock(
+        async () => new Response("Not Found", { status: 404 }),
+      ) as unknown as typeof fetch;
+      const warnSpy = spyOn(console, "warn").mockImplementation(() => {});
+
+      try {
+        const result = await LOCAL_IMAGES_RESOURCE.set(
+          [
+            { id: "1", image: "https://example.com/missing.png", creation_date: "2023-01-01" },
+          ],
+          { baseUrl: "https://api.buttondown.com", apiKey: "test", directory: tempDir },
+        );
+
+        expect(result.failed).toBe(1);
+        expect(warnSpy).toHaveBeenCalled();
+        const files = await import("node:fs").then((fs) =>
+          fs.readdirSync(path.join(tempDir, "media")),
+        );
+        expect(files).toEqual([]);
+      } finally {
+        globalThis.fetch = originalFetch;
+        warnSpy.mockRestore();
+        await rm(tempDir, { recursive: true, force: true });
+      }
+    });
+
+    it("should count network errors as failures", async () => {
+      const tempDir = await mkdtemp(path.join(tmpdir(), "images-test-"));
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = mock(async () => {
+        throw new Error("DNS resolution failed");
+      }) as unknown as typeof fetch;
+      const warnSpy = spyOn(console, "warn").mockImplementation(() => {});
+
+      try {
+        const result = await LOCAL_IMAGES_RESOURCE.set(
+          [
+            { id: "1", image: "https://broken.invalid/img.png", creation_date: "2023-01-01" },
+          ],
+          { baseUrl: "https://api.buttondown.com", apiKey: "test", directory: tempDir },
+        );
+
+        expect(result.failed).toBe(1);
+        expect(warnSpy).toHaveBeenCalled();
+      } finally {
+        globalThis.fetch = originalFetch;
+        warnSpy.mockRestore();
+        await rm(tempDir, { recursive: true, force: true });
+      }
+    });
+
+    it("should download successfully when response is ok", async () => {
+      const tempDir = await mkdtemp(path.join(tmpdir(), "images-test-"));
+      const originalFetch = globalThis.fetch;
+      const imageData = Buffer.from("fake-image-data");
+      globalThis.fetch = mock(
+        async () => new Response(imageData, { status: 200 }),
+      ) as unknown as typeof fetch;
+
+      try {
+        const result = await LOCAL_IMAGES_RESOURCE.set(
+          [
+            { id: "1", image: "https://example.com/good.png", creation_date: "2023-01-01" },
+          ],
+          { baseUrl: "https://api.buttondown.com", apiKey: "test", directory: tempDir },
+        );
+
+        expect(result.failed).toBe(0);
+        const written = await readFile(path.join(tempDir, "media", "good.png"));
+        expect(written).toEqual(imageData);
+      } finally {
+        globalThis.fetch = originalFetch;
+        await rm(tempDir, { recursive: true, force: true });
+      }
     });
   });
 

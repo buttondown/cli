@@ -99,18 +99,29 @@ export const LOCAL_IMAGES_RESOURCE: Resource<Image[], Buffer[]> = {
   async set(value, configuration) {
     const mediaDir = path.join(configuration.directory, "media");
     await mkdir(mediaDir, { recursive: true });
+    let failed = 0;
     for (const image of value) {
       const filename = path.basename(image.image);
       const localPath = path.join(mediaDir, filename);
-      const response = await fetch(image.image);
-      const arrayBuffer = await response.arrayBuffer();
-      await writeFile(localPath, Buffer.from(arrayBuffer));
+      try {
+        const response = await fetch(image.image);
+        if (!response.ok) {
+          console.warn(`Failed to download ${image.image}: HTTP ${response.status}`);
+          failed++;
+          continue;
+        }
+        const arrayBuffer = await response.arrayBuffer();
+        await writeFile(localPath, Buffer.from(arrayBuffer));
+      } catch (error) {
+        console.warn(`Failed to download ${image.image}: ${error}`);
+        failed++;
+      }
     }
     return {
       updated: 0,
       created: 0,
       deleted: 0,
-      failed: 0,
+      failed,
     };
   },
   serialize: () => [],

@@ -1,0 +1,96 @@
+name: Publish to NPM
+
+on:
+  push:
+    paths:
+      - 'package.json'
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version type (patch, minor, major)'
+        required: false
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      
+      - name: Install dependencies
+        run: bun install
+      
+      - name: Run tests
+        run: bun test
+      
+      - name: Build
+        run: bun run build
+      
+      - name: Configure Git
+        run: |
+          git config --global user.email "noreply@buttondown.com"
+          git config --global user.name "Buttondown Bot"
+      
+      - name: Bump version (manual trigger)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          VERSION=$(node -p "require('./package.json').version")
+          git add package.json
+          git commit -m "chore(cli): bump version to v$VERSION"
+          git push
+      
+      - name: Check if version changed (auto trigger)
+        if: github.event_name == 'push'
+        id: version_check
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          git fetch origin main~1
+          git show origin/main~1:package.json > /tmp/old-package.json 2>/dev/null || echo '{"version":"0.0.0"}' > /tmp/old-package.json
+          OLD_VERSION=$(node -p "require('/tmp/old-package.json').version")
+          if [ "$CURRENT_VERSION" != "$OLD_VERSION" ]; then
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+            echo "new_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Publish to NPM
+        if: |
+          github.event_name == 'workflow_dispatch' || 
+          (github.event_name == 'push' && steps.version_check.outputs.version_changed == 'true')
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      - name: Create GitHub Release
+        if: |
+          github.event_name == 'workflow_dispatch' || 
+          (github.event_name == 'push' && steps.version_check.outputs.version_changed == 'true')
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          gh release create "cli-v$VERSION" \
+            --title "@buttondown/cli v$VERSION" \
+            --notes "Release of @buttondown/cli version $VERSION" \
+            --target main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
