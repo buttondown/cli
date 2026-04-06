@@ -6,13 +6,16 @@ import { useEffect, useState } from "react";
 type CreateProps = {
   directory: string;
   title: string;
+  json?: boolean;
 };
 
-export default function Create({ directory, title }: CreateProps) {
+export default function Create({ directory, title, json }: CreateProps) {
   const { exit } = useApp();
   const [status, setStatus] = useState<string>("Creating new draft email...");
   const [error, setError] = useState<string | null>(null);
   const [created, setCreated] = useState<boolean>(false);
+  const [filePath, setFilePath] = useState<string>("");
+  const [slug, setSlug] = useState<string>("");
 
   useEffect(() => {
     const createDraft = async () => {
@@ -20,20 +23,22 @@ export default function Create({ directory, title }: CreateProps) {
         const emailsDir = path.join(directory, "emails");
         await fs.ensureDir(emailsDir);
 
-        const slug = title
+        const newSlug = title
           .toLowerCase()
           .replaceAll(/[^a-z\d]+/g, "-")
           .replaceAll(/(^-|-$)/g, "");
 
-        if (!slug) {
+        if (!newSlug) {
           setError("Title must contain at least one alphanumeric character");
           return;
         }
 
-        const filePath = path.join(emailsDir, `${slug}.md`);
+        const newFilePath = path.join(emailsDir, `${newSlug}.md`);
 
-        if (await fs.pathExists(filePath)) {
-          setError(`Email with slug "${slug}" already exists at ${filePath}`);
+        if (await fs.pathExists(newFilePath)) {
+          setError(
+            `Email with slug "${newSlug}" already exists at ${newFilePath}`,
+          );
           return;
         }
 
@@ -42,7 +47,7 @@ export default function Create({ directory, title }: CreateProps) {
 subject: ${title}
 status: draft
 email_type: public
-slug: ${slug}
+slug: ${newSlug}
 created: ${date}
 modified: ${date}
 ---
@@ -50,9 +55,11 @@ modified: ${date}
 Write your email content here...
 `;
 
-        await fs.writeFile(filePath, content);
+        await fs.writeFile(newFilePath, content);
 
-        setStatus(`Created new draft email: ${filePath}`);
+        setFilePath(newFilePath);
+        setSlug(newSlug);
+        setStatus(`Created new draft email: ${newFilePath}`);
         setCreated(true);
       } catch (error_) {
         setError(error_ instanceof Error ? error_.message : String(error_));
@@ -72,6 +79,22 @@ Write your email content here...
       };
     }
   }, [created, error, exit]);
+
+  if (json && created) {
+    return (
+      <Text>
+        {JSON.stringify({
+          status: "created",
+          path: filePath,
+          slug,
+          title,
+        })}
+      </Text>
+    );
+  }
+  if (json && error) {
+    return <Text>{JSON.stringify({ status: "error", error })}</Text>;
+  }
 
   return (
     <Box flexDirection="column">

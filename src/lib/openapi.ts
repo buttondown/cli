@@ -395,6 +395,11 @@ export interface paths {
      * @description Delete an uploaded image
      */
     delete: operations["delete_image"];
+    /**
+     * Update Image 
+     * @description Update an image's metadata
+     */
+    patch: operations["update_image"];
   };
   "/newsletters": {
     /**
@@ -766,7 +771,7 @@ export interface components {
        * Invoice Url 
        * @description URL to the Stripe invoice PDF for this slot, if available.
        */
-      invoice_url?: string;
+      invoice_url?: string | null;
       /**
        * Sku Id 
        * @description The ID of the advertising unit this slot belongs to.
@@ -801,7 +806,7 @@ export interface components {
        * Content Image Id 
        * @description The ID of the image attached to this ad, if any.
        */
-      content_image_id?: string;
+      content_image_id?: string | null;
       /**
        * Content Url 
        * @description The URL the ad links to.
@@ -809,16 +814,14 @@ export interface components {
       content_url: string;
       /**
        * Content Approved At 
-       * Format: date-time 
        * @description When the ad content was approved, if applicable.
        */
-      content_approved_at?: string;
+      content_approved_at?: string | null;
       /**
        * Content Rejected At 
-       * Format: date-time 
        * @description When the ad content was rejected, if applicable.
        */
-      content_rejected_at?: string;
+      content_rejected_at?: string | null;
       /**
        * Content Rejection Reason 
        * @description The reason the ad content was rejected, if applicable.
@@ -826,10 +829,9 @@ export interface components {
       content_rejection_reason: string;
       /**
        * Content Submitted At 
-       * Format: date-time 
        * @description When the ad content was submitted for review.
        */
-      content_submitted_at?: string;
+      content_submitted_at?: string | null;
     };
     /** AdvertisingUnit */
     AdvertisingUnit: {
@@ -875,7 +877,7 @@ export interface components {
        * Price 
        * @description The price in the smallest currency unit, or null if not set.
        */
-      price?: number;
+      price?: number | null;
       /**
        * Allows Html 
        * @description Whether the advertising unit accepts HTML content.
@@ -890,7 +892,7 @@ export interface components {
        * Max Characters 
        * @description Maximum number of characters allowed for the ad content.
        */
-      max_characters?: number;
+      max_characters?: number | null;
       /**
        * Submission Deadline Days 
        * @description Number of days before the slot date that content must be submitted.
@@ -920,12 +922,12 @@ export interface components {
        * Title 
        * @description The title of the advertising unit.
        */
-      title?: string;
+      title?: string | null;
       /**
        * Description 
        * @description A description of the advertising unit.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Behavior 
        * @description The behavior type of the advertising unit. 
@@ -942,7 +944,7 @@ export interface components {
        * Price 
        * @description The price in the smallest currency unit.
        */
-      price?: number;
+      price?: number | null;
       /**
        * Allows Html 
        * @description Whether the advertising unit accepts HTML content. 
@@ -959,7 +961,7 @@ export interface components {
        * Max Characters 
        * @description Maximum number of characters allowed for the ad content.
        */
-      max_characters?: number;
+      max_characters?: number | null;
       /**
        * Submission Deadline Days 
        * @description Number of days before the slot date that content must be submitted. 
@@ -973,12 +975,12 @@ export interface components {
        * Title 
        * @description The title of the advertising unit.
        */
-      title?: string;
+      title?: string | null;
       /**
        * Description 
        * @description A description of the advertising unit.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Dates 
        * @description The dates for this advertising unit's slots.
@@ -988,37 +990,37 @@ export interface components {
        * Behavior 
        * @description The behavior type of the advertising unit.
        */
-      behavior?: string;
+      behavior?: string | null;
       /**
        * Url 
        * @description The URL for the advertising unit's landing page.
        */
-      url?: string;
+      url?: string | null;
       /**
        * Price 
        * @description The price in the smallest currency unit.
        */
-      price?: number;
+      price?: number | null;
       /**
        * Allows Html 
        * @description Whether the advertising unit accepts HTML content.
        */
-      allows_html?: boolean;
+      allows_html?: boolean | null;
       /**
        * Allows Image 
        * @description Whether the advertising unit accepts an image.
        */
-      allows_image?: boolean;
+      allows_image?: boolean | null;
       /**
        * Max Characters 
        * @description Maximum number of characters allowed for the ad content.
        */
-      max_characters?: number;
+      max_characters?: number | null;
       /**
        * Submission Deadline Days 
        * @description Number of days before the slot date that content must be submitted.
        */
-      submission_deadline_days?: number;
+      submission_deadline_days?: number | null;
     };
     /** AdvertisingSlotUpdateInput */
     AdvertisingSlotUpdateInput: {
@@ -1026,49 +1028,47 @@ export interface components {
        * Content 
        * @description The ad content text.
        */
-      content?: string;
+      content?: string | null;
       /**
        * Content Approved At 
-       * Format: date-time 
        * @description When the ad content was approved.
        */
-      content_approved_at?: string;
+      content_approved_at?: string | null;
       /**
        * Content Image Id 
        * @description The ID of the image attached to this ad.
        */
-      content_image_id?: string;
+      content_image_id?: string | null;
       /**
        * Content Rejection Reason 
        * @description The reason the ad content was rejected.
        */
-      content_rejection_reason?: string;
+      content_rejection_reason?: string | null;
       /**
        * Content Url 
        * @description The URL the ad links to.
        */
-      content_url?: string;
+      content_url?: string | null;
       /**
        * Sponsor Company 
        * @description The name of the sponsoring company.
        */
-      sponsor_company?: string;
+      sponsor_company?: string | null;
       /**
        * Sponsor Email 
        * @description The email address of the sponsor contact.
        */
-      sponsor_email?: string;
+      sponsor_email?: string | null;
       /**
        * Sponsor Name 
        * @description The name of the sponsor contact.
        */
-      sponsor_name?: string;
+      sponsor_name?: string | null;
       /**
        * Status 
-       * @description Set to 'approve' or 'reject' to update the content review status. 
-       * @enum {string}
+       * @description Set to 'approve' or 'reject' to update the content review status.
        */
-      status?: "approve" | "reject";
+      status?: ("approve" | "reject") | null;
     };
     /**
      * APIRequestDetail 
@@ -1097,13 +1097,13 @@ export interface components {
        * Version 
        * @enum {string}
        */
-      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01";
+      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01" | "2026-04-01";
       /** Ip Address */
       ip_address: string;
       /** Api Key Id */
-      api_key_id?: string;
+      api_key_id?: string | null;
       /** Api Key Label */
-      api_key_label?: string;
+      api_key_label?: string | null;
       /** Request Data */
       request_data: string;
       /** Response Data */
@@ -1140,20 +1140,20 @@ export interface components {
        * Version 
        * @enum {string}
        */
-      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01";
+      version: "2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01" | "2026-04-01";
       /** Ip Address */
       ip_address: string;
       /** Api Key Id */
-      api_key_id?: string;
+      api_key_id?: string | null;
       /** Api Key Label */
-      api_key_label?: string;
+      api_key_label?: string | null;
     };
     /** APIRequestList */
     APIRequestList: {
       /** Results */
       results: (components["schemas"]["APIRequest"])[];
       /** Cursor */
-      cursor?: string;
+      cursor?: string | null;
     };
     /**
      * Attachment 
@@ -1199,7 +1199,7 @@ export interface components {
       metadata: {
         [key: string]: unknown | undefined;
       };
-      timing?: components["schemas"]["Timing"];
+      timing?: components["schemas"]["Timing"] | null;
     };
     /** Automation */
     Automation: {
@@ -1240,11 +1240,8 @@ export interface components {
        * @enum {string}
        */
       unit: "minutes" | "hours" | "days" | "weeks";
-      /**
-       * Time Of Day 
-       * @enum {string}
-       */
-      time_of_day?: "morning" | "evening" | "";
+      /** Time Of Day */
+      time_of_day?: ("morning" | "evening" | "") | null;
     };
     /**
      * Filter 
@@ -1355,7 +1352,7 @@ export interface components {
        * @enum {string}
        */
       time: "immediate" | "delay";
-      delay?: components["schemas"]["Delay"];
+      delay?: components["schemas"]["Delay"] | null;
     };
     /**
      * AutomationCreationErrorCode 
@@ -1405,22 +1402,22 @@ export interface components {
     /** AutomationUpdateInput */
     AutomationUpdateInput: {
       /** Name */
-      name?: string;
-      status?: components["schemas"]["AutomationStatus"];
-      trigger?: components["schemas"]["ExternalEventType"];
-      timing?: components["schemas"]["Timing"];
+      name?: string | null;
+      status?: components["schemas"]["AutomationStatus"] | null;
+      trigger?: components["schemas"]["ExternalEventType"] | null;
+      timing?: components["schemas"]["Timing"] | null;
       /** Actions */
-      actions?: (components["schemas"]["Action"])[];
-      filters?: components["schemas"]["FilterGroup"];
+      actions?: (components["schemas"]["Action"])[] | null;
+      filters?: components["schemas"]["FilterGroup"] | null;
       /** Metadata */
-      metadata?: {
+      metadata?: ({
         [key: string]: unknown | undefined;
-      };
+      }) | null;
       /**
        * Should Evaluate Filter After Delay 
        * @description If true, filters are re-evaluated after the delay has passed.
        */
-      should_evaluate_filter_after_delay?: boolean;
+      should_evaluate_filter_after_delay?: boolean | null;
     };
     /** Analytics */
     Analytics: {
@@ -1563,27 +1560,27 @@ export interface components {
        * Url 
        * @description The URL where the book can be purchased or viewed.
        */
-      url?: string;
+      url?: string | null;
       /**
        * Image Url 
        * @description The URL of the book's cover image.
        */
-      image_url?: string;
+      image_url?: string | null;
       /**
        * Description 
        * @description A description of the book.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Year 
        * @description The year the book was published.
        */
-      year?: number;
+      year?: number | null;
       /**
        * Isbn 
        * @description The ISBN of the book.
        */
-      isbn?: string;
+      isbn?: string | null;
       /**
        * Shared 
        * @description Whether the book is displayed publicly on the archive. 
@@ -1602,27 +1599,27 @@ export interface components {
        * Url 
        * @description The URL where the book can be purchased or viewed.
        */
-      url?: string;
+      url?: string | null;
       /**
        * Image Url 
        * @description The URL of the book's cover image.
        */
-      image_url?: string;
+      image_url?: string | null;
       /**
        * Description 
        * @description A description of the book.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Year 
        * @description The year the book was published.
        */
-      year?: number;
+      year?: number | null;
       /**
        * Isbn 
        * @description The ISBN of the book.
        */
-      isbn?: string;
+      isbn?: string | null;
       /**
        * Shared 
        * @description Whether the book is displayed publicly on the archive. 
@@ -1636,37 +1633,37 @@ export interface components {
        * Title 
        * @description The title of the book.
        */
-      title?: string;
+      title?: string | null;
       /**
        * Url 
        * @description The URL where the book can be purchased or viewed.
        */
-      url?: string;
+      url?: string | null;
       /**
        * Image Url 
        * @description The URL of the book's cover image.
        */
-      image_url?: string;
+      image_url?: string | null;
       /**
        * Description 
        * @description A description of the book.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Year 
        * @description The year the book was published.
        */
-      year?: number;
+      year?: number | null;
       /**
        * Isbn 
        * @description The ISBN of the book.
        */
-      isbn?: string;
+      isbn?: string | null;
       /**
        * Shared 
        * @description Whether the book is displayed publicly on the archive.
        */
-      shared?: boolean;
+      shared?: boolean | null;
     };
     /**
      * BulkAction 
@@ -1712,10 +1709,9 @@ export interface components {
       status: components["schemas"]["BulkActionStatus"];
       /**
        * Completion Date 
-       * Format: date-time 
        * @description The date and time at which the bulk action was completed.
        */
-      completion_date?: string;
+      completion_date?: string | null;
     };
     /** BulkActionInput */
     BulkActionInput: {
@@ -1740,6 +1736,12 @@ export interface components {
       };
     };
     /**
+     * ArchivalMode 
+     * @description Governs who can view this email in the archive. 
+     * @enum {string}
+     */
+    ArchivalMode: "disabled" | "enabled" | "enabled_for_paid_subscribers";
+    /**
      * Comment 
      * @description Comments are a way for subscribers to interact with newsletters. They're a way to
      * provide feedback, ask questions, and generally engage with the content of an email.
@@ -1761,17 +1763,17 @@ export interface components {
       /** Email Id */
       email_id: string;
       /** Subscriber Id */
-      subscriber_id?: string;
+      subscriber_id?: string | null;
       /**
        * Parent Id 
        * @description The ID of the parent comment, if this comment is a reply to another comment.
        */
-      parent_id?: string;
+      parent_id?: string | null;
       /** Text */
       text: string;
       status: components["schemas"]["CommentStatus"];
-      subscriber?: components["schemas"]["Subscriber"];
-      email?: components["schemas"]["Email"];
+      subscriber?: components["schemas"]["Subscriber"] | null;
+      email?: components["schemas"]["Email"] | null;
     };
     /**
      * Email 
@@ -1800,12 +1802,12 @@ export interface components {
       creation_date: string;
       /** Absolute Url */
       absolute_url: string;
-      analytics?: components["schemas"]["Analytics"];
+      analytics?: components["schemas"]["Analytics"] | null;
       /**
        * Attachments 
        * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
        */
-      attachments?: (string)[];
+      attachments?: (string)[] | null;
       /**
        * Body 
        * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`.
@@ -1827,6 +1829,8 @@ export interface components {
        * @description A human-readable description of the email, used for archives and SEO.
        */
       description: string;
+      /** @description Controls who can view this email in the archive. */
+      archival_mode: components["schemas"]["ArchivalMode"];
       /**
        * @deprecated 
        * @description The type of email. 
@@ -1860,10 +1864,9 @@ export interface components {
       modification_date: string;
       /**
        * Publish Date 
-       * Format: date-time 
        * @description The date and time at which the email should be published in the future (for scheduled emails), or the date and time at which the email was published (for sent emails).
        */
-      publish_date?: string;
+      publish_date?: string | null;
       /**
        * Related Email Ids 
        * @description A list of email IDs that are related to this email. Related emails are shown at the bottom of the email and archive pages.
@@ -1873,7 +1876,7 @@ export interface components {
        * Secondary Id 
        * @description An informal 'number' for the email, used in some templates ('This was issue #123').
        */
-      secondary_id?: number;
+      secondary_id?: number | null;
       /**
        * Should Trigger Pay Per Email Billing 
        * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
@@ -1884,7 +1887,7 @@ export interface components {
        * @description A short, human-readable identifier for the email. (Used in the URL of the email, and in the 'slug' field of the email object.) 
        * @example welcome-to-the-newsletter
        */
-      slug?: string;
+      slug?: string | null;
       /**
        * @description The source of the email. 
        * @example app
@@ -1901,9 +1904,9 @@ export interface components {
        */
       subject: string;
       /** @description Reason for suppression, if email is suppressed. */
-      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
+      suppression_reason?: components["schemas"]["EmailSuppressionReason"] | null;
       /** @description If present, this template overrides your newsletter's default template. */
-      template?: components["schemas"]["NewsletterEmailTemplate"];
+      template?: components["schemas"]["NewsletterEmailTemplate"] | null;
     };
     /** EmailTransition */
     EmailTransition: {
@@ -1913,7 +1916,7 @@ export interface components {
        */
       date: string;
       /** Old Email Address */
-      old_email_address?: string;
+      old_email_address?: string | null;
       /** New Email Address */
       new_email_address: string;
     };
@@ -1932,7 +1935,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    FirewallReasonCode: "email_address_capital_letters" | "email_address_cleantalk_score" | "email_address_contains_prohibited_string" | "email_address_esp_suppression" | "email_address_extant_subscriber_count" | "email_address_gmail_word_numbers" | "email_address_has_gravatar" | "email_address_is_honeypot" | "email_address_is_pwned" | "email_address_length" | "email_address_local_part_has_many_periods" | "email_address_many_consonants_in_a_row" | "email_address_mx_record_is_valid" | "email_address_noreply_local_part" | "email_address_null_characters" | "email_address_peaceful_domain" | "email_address_plus_single_number" | "email_address_previous_evaluation" | "email_address_prohibited_via_domain" | "email_address_regex" | "email_address_sandbox_test" | "email_address_shannon_entropy" | "email_address_stopforumspam_score" | "email_address_tied_to_account" | "email_address_typo" | "fingerprint_missing" | "ip_address_cleantalk_score" | "ip_address_extant_subscriber_count" | "ip_address_peaceful" | "ip_address_prohibited" | "metadata_has_garbage" | "newsletter_age" | "newsletter_has_customized_transactional_email" | "newsletter_has_prohibited_string" | "newsletter_status" | "project_honeypot" | "referrer_url_prohibited" | "subscriber_import_provenance" | "subscriber_import_source" | "text_contains_malicious_url" | "text_contains_prohibited_string" | "turnstile_response_token_is_valid" | "user_agent_known";
+    FirewallReasonCode: "email_address_capital_letters" | "email_address_cleantalk_score" | "email_address_contains_prohibited_string" | "email_address_esp_suppression" | "email_address_extant_subscriber_count" | "email_address_gmail_word_numbers" | "email_address_has_gravatar" | "email_address_is_honeypot" | "email_address_length" | "email_address_local_part_has_many_periods" | "email_address_many_consonants_in_a_row" | "email_address_mx_record_is_valid" | "email_address_noreply_local_part" | "email_address_null_characters" | "email_address_peaceful_domain" | "email_address_plus_single_number" | "email_address_previous_evaluation" | "email_address_prohibited_via_domain" | "email_address_regex" | "email_address_sandbox_test" | "email_address_shannon_entropy" | "email_address_stopforumspam_score" | "email_address_tied_to_account" | "email_address_typo" | "fingerprint_missing" | "ip_address_cleantalk_score" | "ip_address_extant_subscriber_count" | "ip_address_peaceful" | "ip_address_previous_evaluation" | "ip_address_prohibited" | "metadata_has_garbage" | "newsletter_age" | "newsletter_has_customized_transactional_email" | "newsletter_has_prohibited_string" | "newsletter_status" | "project_honeypot" | "referrer_url_prohibited" | "subscriber_import_provenance" | "subscriber_import_source" | "text_contains_malicious_url" | "text_contains_prohibited_string" | "turnstile_response_token_is_valid" | "user_agent_known";
     /**
      * ReviewMode 
      * @description Represents the review mode of an email. 
@@ -1944,11 +1947,11 @@ export interface components {
       /** Coupon Id */
       coupon_id: string;
       /** Percent Off */
-      percent_off?: string;
+      percent_off?: string | null;
       /** Amount Off */
-      amount_off?: number;
+      amount_off?: number | null;
       /** Name */
-      name?: string;
+      name?: string | null;
     };
     /**
      * Subscriber 
@@ -1974,12 +1977,9 @@ export interface components {
        */
       creation_date: string;
       /** Avatar Url */
-      avatar_url?: string;
-      /**
-       * Churn Date 
-       * Format: date-time
-       */
-      churn_date?: string;
+      avatar_url?: string | null;
+      /** Churn Date */
+      churn_date?: string | null;
       /**
        * Commenting Disabled 
        * @description Whether this subscriber is prevented from commenting. 
@@ -1996,49 +1996,43 @@ export interface components {
        * Gift Subscription Message 
        * @description A custom message that was sent to the subscriber when the gift subscription was created.
        */
-      gift_subscription_message?: string;
+      gift_subscription_message?: string | null;
       /** Ip Address */
-      ip_address?: string;
-      /**
-       * Last Click Date 
-       * Format: date-time
-       */
-      last_click_date?: string;
-      /**
-       * Last Open Date 
-       * Format: date-time
-       */
-      last_open_date?: string;
+      ip_address?: string | null;
+      /** Last Click Date */
+      last_click_date?: string | null;
+      /** Last Open Date */
+      last_open_date?: string | null;
       /**
        * Delivered Count 
        * @description The subscriber's delivered count. 
        * @example 12
        */
-      delivered_count?: number;
+      delivered_count?: number | null;
       /**
        * Open Count 
        * @description The subscriber's open count. 
        * @example 7
        */
-      open_count?: number;
+      open_count?: number | null;
       /**
        * Clicked Count 
        * @description The subscriber's clicked count. 
        * @example 3
        */
-      clicked_count?: number;
+      clicked_count?: number | null;
       /**
        * Open Rate 
        * @description The subscriber's open rate, computed from engagement counts. Null if delivered_count is 0 or null. 
        * @example 0.5833
        */
-      open_rate?: number;
+      open_rate?: number | null;
       /**
        * Click Rate 
        * @description The subscriber's click rate, computed from engagement counts. Null if delivered_count is 0 or null. 
        * @example 0.25
        */
-      click_rate?: number;
+      click_rate?: number | null;
       /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
@@ -2057,12 +2051,12 @@ export interface components {
        * Purchased By 
        * @description The email address of the individual who purchased this subscription on behalf of the subscriber.
        */
-      purchased_by?: string;
+      purchased_by?: string | null;
       /**
        * Purchased Message 
        * @description A custom message that was sent to the subscriber when the subscription was purchased on behalf of the subscriber.
        */
-      purchased_message?: string;
+      purchased_message?: string | null;
       /** Referral Code */
       referral_code: string;
       /**
@@ -2074,15 +2068,15 @@ export interface components {
        * Risk Score 
        * @description The risk score of the subscriber. Positive numbers represent a higher risk; negative numbers represent a lower risk.
        */
-      risk_score?: number;
+      risk_score?: number | null;
       /** Secondary Id */
       secondary_id: number;
       source: components["schemas"]["SubscriberSource"];
-      stripe_coupon?: components["schemas"]["StripeCoupon"];
+      stripe_coupon?: components["schemas"]["StripeCoupon"] | null;
       /** Stripe Customer Id */
-      stripe_customer_id?: string;
+      stripe_customer_id?: string | null;
       /** Subscriber Import Id */
-      subscriber_import_id?: string;
+      subscriber_import_id?: string | null;
       /** Tags */
       tags: (string)[];
       /**
@@ -2096,32 +2090,23 @@ export interface components {
        */
       email_transitions?: (components["schemas"]["EmailTransition"])[];
       /** Form Id */
-      form_id?: string;
+      form_id?: string | null;
       /**
        * Firewall Reasons 
        * @description Information collected by Buttondown's firewall about this subscriber. See [the firewall](https://docs.buttondown.com/firewall) for more information.
        */
       firewall_reasons?: (components["schemas"]["FirewallReason"])[];
       type: components["schemas"]["SubscriberType"];
-      /**
-       * Undeliverability Date 
-       * Format: date-time
-       */
-      undeliverability_date?: string;
+      /** Undeliverability Date */
+      undeliverability_date?: string | null;
       /** @description The reason the subscriber is undeliverable. (Only populated for undeliverable subscribers.) */
-      undeliverability_reason?: components["schemas"]["SubscriberUndeliverabilityReason"];
-      /**
-       * Unsubscription Date 
-       * Format: date-time
-       */
-      unsubscription_date?: string;
+      undeliverability_reason?: components["schemas"]["SubscriberUndeliverabilityReason"] | null;
+      /** Unsubscription Date */
+      unsubscription_date?: string | null;
       /** Unsubscription Reason */
-      unsubscription_reason?: string;
-      /**
-       * Upgrade Date 
-       * Format: date-time
-       */
-      upgrade_date?: string;
+      unsubscription_reason?: string | null;
+      /** Upgrade Date */
+      upgrade_date?: string | null;
       /** Utm Campaign */
       utm_campaign: string;
       /** Utm Medium */
@@ -2129,9 +2114,9 @@ export interface components {
       /** Utm Source */
       utm_source: string;
       /** Stripe Customer */
-      stripe_customer?: {
+      stripe_customer?: ({
         [key: string]: unknown | undefined;
-      };
+      }) | null;
     };
     /** Transition */
     Transition: {
@@ -2153,17 +2138,17 @@ export interface components {
        * Parent Id 
        * @description The ID of the parent comment, if this comment is a reply to another comment.
        */
-      parent_id?: string;
+      parent_id?: string | null;
       /**
        * Email Id 
        * @description The ID of the email this comment is for. Required if parent_id is not provided.
        */
-      email_id?: string;
+      email_id?: string | null;
       /**
        * Subscriber Id 
        * @description The ID of the subscriber to attribute the comment to. If not provided, the comment is attributed to the newsletter author.
        */
-      subscriber_id?: string;
+      subscriber_id?: string | null;
     };
     /** CommentUpdateInput */
     CommentUpdateInput: {
@@ -2182,7 +2167,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    EmailCreationErrorCode: "subject_invalid" | "email_duplicate" | "email_invalid" | "body_invalid" | "publish_date_invalid" | "publish_date_missing" | "status_invalid" | "body_contains_frontmatter" | "slug_invalid" | "canonical_url_invalid" | "tag_invalid";
+    EmailCreationErrorCode: "body_contains_frontmatter" | "email_duplicate" | "body_invalid" | "canonical_url_invalid" | "email_invalid" | "slug_invalid" | "subject_invalid" | "publish_date_invalid" | "publish_date_missing" | "sending_requires_confirmation" | "status_invalid" | "tag_invalid";
     /** ErrorMessage[EmailCreationErrorCode] */
     ErrorMessage_EmailCreationErrorCode_: {
       /** @description The error code. */
@@ -2204,18 +2189,15 @@ export interface components {
        * @default []
        */
       attachments?: (string)[];
-      /**
-       * Publish Date 
-       * Format: date-time
-       */
-      publish_date?: string;
+      /** Publish Date */
+      publish_date?: string | null;
       /**
        * Subject 
        * @example The subject line for the email
        */
       subject: string;
       /** Slug */
-      slug?: string;
+      slug?: string | null;
       /**
        * Description 
        * @default
@@ -2239,11 +2221,16 @@ export interface components {
        */
       body?: string;
       /**
+       * @description Controls who can view this email in the archive. 
+       * @default enabled
+       */
+      archival_mode?: components["schemas"]["ArchivalMode"];
+      /**
        * @deprecated 
        * @description The type of email to create. Defaults to `PUBLIC`. 
        * @default public
        */
-      email_type?: components["schemas"]["EmailType"];
+      email_type?: components["schemas"]["EmailType"] | null;
       /** @default about_to_send */
       status?: components["schemas"]["EmailStatus"];
       /**
@@ -2255,7 +2242,7 @@ export interface components {
         [key: string]: unknown | undefined;
       };
       /** Secondary Id */
-      secondary_id?: number;
+      secondary_id?: number | null;
       /**
        * @default {
        *   "filters": [],
@@ -2270,7 +2257,7 @@ export interface components {
        * Related Email Ids 
        * @default []
        */
-      related_email_ids?: (string)[];
+      related_email_ids?: (string)[] | null;
       /**
        * Featured 
        * @description Designated whether or not this email should be highlighted within the archives. 
@@ -2313,47 +2300,49 @@ export interface components {
        * Attachments 
        * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
        */
-      attachments?: (string)[];
+      attachments?: (string)[] | null;
       /** Publish Date */
-      publish_date?: string | "none";
+      publish_date?: string | "none" | null;
       /**
        * Subject 
        * @description The subject line for the email. 
        * @example The subject line for the email
        */
-      subject?: string;
+      subject?: string | null;
       /**
        * Description 
        * @description A human-readable description of the email, used for archives and SEO.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Canonical Url 
        * @description The URL of the original source of the content. 
        * @example https://sheinhardtwig.com/2025/01/17/our-nbc-partnership
        */
-      canonical_url?: string;
+      canonical_url?: string | null;
       /**
        * Body 
        * @description The body of the email, in either HTML or markdown format. Buttondown attempts to intelligently detect the format of the body automatically, but you can also specify the format explicitly by prepending the text with the `buttondown-editor-mode` comment: `<!-- buttondown-editor-mode: fancy -->` or `<!-- buttondown-editor-mode: plaintext -->`. 
        * @example This is an example of the body of an email.
        */
-      body?: string;
+      body?: string | null;
+      /** @description Controls who can view this email in the archive. */
+      archival_mode?: components["schemas"]["ArchivalMode"] | null;
       /**
        * @deprecated 
        * @description The type of email to create. Defaults to `PUBLIC`.
        */
-      email_type?: components["schemas"]["EmailType"];
-      status?: components["schemas"]["EmailStatus"];
-      suppression_reason?: components["schemas"]["EmailSuppressionReason"];
+      email_type?: components["schemas"]["EmailType"] | null;
+      status?: components["schemas"]["EmailStatus"] | null;
+      suppression_reason?: components["schemas"]["EmailSuppressionReason"] | null;
       /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: {
+      metadata?: ({
         [key: string]: unknown | undefined;
-      };
+      }) | null;
       /**
        * Image 
        * @default
@@ -2363,30 +2352,30 @@ export interface components {
        * Slug 
        * @example hello-world
        */
-      slug?: string;
+      slug?: string | null;
       /** Secondary Id */
-      secondary_id?: number;
-      filters?: components["schemas"]["FilterGroup"];
+      secondary_id?: number | null;
+      filters?: components["schemas"]["FilterGroup"] | null;
       /** Template */
-      template?: components["schemas"]["NewsletterEmailTemplate"] | "none";
-      commenting_mode?: components["schemas"]["EmailCommentingMode"];
+      template?: components["schemas"]["NewsletterEmailTemplate"] | "none" | null;
+      commenting_mode?: components["schemas"]["EmailCommentingMode"] | null;
       /**
        * @description The draft review mode for the email. Use `unlisted` to allow draft comments via link, or `disabled` to turn draft comments off. 
        * @default disabled
        */
       review_mode?: components["schemas"]["ReviewMode"];
       /** Related Email Ids */
-      related_email_ids?: (string)[];
+      related_email_ids?: (string)[] | null;
       /**
        * Featured 
        * @description Designated whether or not this email should be highlighted within the archives.
        */
-      featured?: boolean;
+      featured?: boolean | null;
       /**
        * Should Trigger Pay Per Email Billing 
        * @description Whether this email should trigger pay-per-email billing for paid subscribers. Use this to differentiate between free updates and premium newsletters.
        */
-      should_trigger_pay_per_email_billing?: boolean;
+      should_trigger_pay_per_email_billing?: boolean | null;
     };
     /**
      * AccessLevel 
@@ -2407,8 +2396,8 @@ export interface components {
       /** Value */
       value: string;
       /** User Id */
-      user_id?: string;
-      user?: components["schemas"]["User"];
+      user_id?: string | null;
+      user?: components["schemas"]["User"] | null;
     };
     /** Permissions */
     Permissions: {
@@ -2475,10 +2464,9 @@ export interface components {
       status: components["schemas"]["InvitationStatus"];
       /**
        * Last Logged In 
-       * Format: date-time 
        * @description When the user last logged in, or null if they haven't accepted the invitation.
        */
-      last_logged_in?: string;
+      last_logged_in?: string | null;
     };
     /** Render */
     Render: {
@@ -2498,7 +2486,7 @@ export interface components {
        *   "24ee3338-daaf-42b0-bf7b-0cab38972fe5"
        * ]
        */
-      subscribers?: (string)[];
+      subscribers?: (string)[] | null;
       /**
        * Recipients 
        * @description A list of email addresses to send the email to. 
@@ -2506,7 +2494,7 @@ export interface components {
        *   "telemachus@buttondown.email"
        * ]
        */
-      recipients?: (string)[];
+      recipients?: (string)[] | null;
     };
     /**
      * EmailEventType 
@@ -2528,19 +2516,19 @@ export interface components {
        */
       creation_date: string;
       /** Subscriber Id */
-      subscriber_id?: string;
+      subscriber_id?: string | null;
       /** Email Id */
-      email_id?: string;
+      email_id?: string | null;
       /** Automation Id */
-      automation_id?: string;
+      automation_id?: string | null;
       /** Metadata */
       metadata: {
         [key: string]: string | undefined;
       };
       event_type: components["schemas"]["EmailEventType"];
-      subscriber?: components["schemas"]["Subscriber"];
-      email?: components["schemas"]["Email"];
-      automation?: components["schemas"]["Automation"];
+      subscriber?: components["schemas"]["Subscriber"] | null;
+      email?: components["schemas"]["Email"] | null;
+      automation?: components["schemas"]["Automation"] | null;
     };
     /**
      * Export 
@@ -2564,9 +2552,9 @@ export interface components {
        * Parameters 
        * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export.
        */
-      parameters?: {
+      parameters?: ({
         [key: string]: unknown | undefined;
-      };
+      }) | null;
       /**
        * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
        * @default csv
@@ -2576,7 +2564,7 @@ export interface components {
        * Columns 
        * @description If provided, the export will only include these columns.
        */
-      columns?: (string)[];
+      columns?: (string)[] | null;
       /**
        * Id 
        * @description A unique TypeID associated with the object.
@@ -2592,13 +2580,12 @@ export interface components {
        * Url 
        * @description The URL of the export file. This is only available after the export has completed.
        */
-      url?: string;
+      url?: string | null;
       /**
        * Completion Date 
-       * Format: date-time 
        * @description The date and time the export completed.
        */
-      completion_date?: string;
+      completion_date?: string | null;
       /** @description The status of the export. */
       status: components["schemas"]["ExportStatus"];
     };
@@ -2633,9 +2620,9 @@ export interface components {
        * Parameters 
        * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export.
        */
-      parameters?: {
+      parameters?: ({
         [key: string]: unknown | undefined;
-      };
+      }) | null;
       /**
        * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
        * @default csv
@@ -2645,7 +2632,7 @@ export interface components {
        * Columns 
        * @description If provided, the export will only include these columns.
        */
-      columns?: (string)[];
+      columns?: (string)[] | null;
     };
     /**
      * ExternalFeed 
@@ -2677,10 +2664,9 @@ export interface components {
       creation_date: string;
       /**
        * Last Checked Date 
-       * Format: date-time 
        * @description The most recent date and time this feed was checked for new items.
        */
-      last_checked_date?: string;
+      last_checked_date?: string | null;
       /** @description The current status of the external feed automation. */
       status: components["schemas"]["ExternalFeedAutomationStatus"];
       /** @description Whether feed items are sent immediately or drafted for manual review. */
@@ -2774,7 +2760,7 @@ export interface components {
        * @description An optional internal label for this feed. 
        * @default
        */
-      label?: string;
+      label?: string | null;
       /**
        * Metadata 
        * @description Metadata to be passed to emails rendered by this RSS feed. 
@@ -2782,9 +2768,9 @@ export interface components {
        *   "foo": "bar"
        * }
        */
-      metadata?: {
+      metadata?: ({
         [key: string]: unknown | undefined;
-      };
+      }) | null;
       /**
        * Skip Old Items 
        * @description Skip items with publish date older than one day from when they're discovered 
@@ -2798,38 +2784,38 @@ export interface components {
        * @description The [behavior](https://docs.buttondown.com/api-external-feed-behavior) of the external feed. 
        * @example draft
        */
-      behavior?: components["schemas"]["ExternalFeedAutomationBehavior"];
+      behavior?: components["schemas"]["ExternalFeedAutomationBehavior"] | null;
       /**
        * @description How frequently this feed should create or draft emails. 
        * @example daily
        */
-      cadence?: components["schemas"]["ExternalFeedAutomationCadence"];
+      cadence?: components["schemas"]["ExternalFeedAutomationCadence"] | null;
       /**
        * Cadence Metadata 
        * @description Additional scheduling details for the selected cadence, such as weekday or time.
        */
-      cadence_metadata?: {
+      cadence_metadata?: ({
         [key: string]: string | undefined;
-      };
+      }) | null;
       /** @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails. */
-      filters?: components["schemas"]["FilterGroup"];
+      filters?: components["schemas"]["FilterGroup"] | null;
       /**
        * Subject 
        * @description The subject line template for emails generated from this feed.
        */
-      subject?: string;
+      subject?: string | null;
       /**
        * Body 
        * @description The body template for emails generated from this feed.
        */
-      body?: string;
+      body?: string | null;
       /**
        * Label 
        * @description An optional internal label for this feed.
        */
-      label?: string;
+      label?: string | null;
       /** @description The current status of the external feed automation. */
-      status?: components["schemas"]["ExternalFeedAutomationStatus"];
+      status?: components["schemas"]["ExternalFeedAutomationStatus"] | null;
       /**
        * Metadata 
        * @description Metadata to be passed to emails rendered by this RSS feed. 
@@ -2837,14 +2823,14 @@ export interface components {
        *   "foo": "bar"
        * }
        */
-      metadata?: {
+      metadata?: ({
         [key: string]: unknown | undefined;
-      };
+      }) | null;
       /**
        * Skip Old Items 
        * @description Skip items with publish date older than one day from when they're discovered
        */
-      skip_old_items?: boolean;
+      skip_old_items?: boolean | null;
     };
     /** Empty */
     Empty: Record<string, unknown>;
@@ -2903,9 +2889,9 @@ export interface components {
        * Email Id 
        * @description The ID of the generated email for this feed item, if one exists.
        */
-      email_id?: string;
+      email_id?: string | null;
       /** @description If expanded, the email generated from this feed item. */
-      email?: components["schemas"]["Email"];
+      email?: components["schemas"]["Email"] | null;
     };
     /** Form */
     Form: {
@@ -2935,6 +2921,21 @@ export interface components {
       /** Admin */
       admin: boolean;
       status: components["schemas"]["FormStatus"];
+      /**
+       * Subscriber Count 
+       * @description The number of subscribers who signed up through this form.
+       */
+      subscriber_count: number;
+      /**
+       * Confirmed Subscriber Count 
+       * @description The number of confirmed subscribers who signed up through this form.
+       */
+      confirmed_subscriber_count: number;
+      /**
+       * Page View Count 
+       * @description The number of page views for this form.
+       */
+      page_view_count: number;
     };
     /**
      * CreateFormErrorCode 
@@ -3009,20 +3010,20 @@ export interface components {
     /** FormUpdateInput */
     FormUpdateInput: {
       /** Title */
-      title?: string;
+      title?: string | null;
       /** Slug */
-      slug?: string;
+      slug?: string | null;
       /** Body */
-      body?: string;
+      body?: string | null;
       /** Css */
-      css?: string;
+      css?: string | null;
       /** Success Body */
-      success_body?: string;
+      success_body?: string | null;
       /** Surveys */
-      surveys?: (string)[];
+      surveys?: (string)[] | null;
       /** Admin */
-      admin?: boolean;
-      status?: components["schemas"]["FormStatus"];
+      admin?: boolean | null;
+      status?: components["schemas"]["FormStatus"] | null;
     };
     /**
      * Image 
@@ -3049,6 +3050,25 @@ export interface components {
        * @example https://placecats.com/408/287
        */
       image: string;
+      /**
+       * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
+    };
+    /** ImageUpdateInput */
+    ImageUpdateInput: {
+      /**
+       * Metadata 
+       * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
     };
     /**
      * Newsletter 
@@ -3104,7 +3124,7 @@ export interface components {
        * @description The auditing mode for your newsletter, which controls spam and abuse protection. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
        * @enum {unknown}
        */
-      auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
+      auditing_mode?: "disabled" | "enabled" | "aggressive";
       /**
        * Css 
        * @description Custom CSS styling applied to your newsletter emails. See [CSS customization](https://docs.buttondown.com/customizing-email-design#adding-custom-css) for more information. 
@@ -3123,16 +3143,13 @@ export interface components {
        * @default
        */
       custom_churn_email_subject?: string;
-      /**
-       * Custom Churn Email Template 
-       * @description The email template to use for churn emails. If not set, uses the newsletter's default template.
-       */
-      custom_churn_email_template?: string;
+      /** @description The email template to use for churn emails. If not set, uses the newsletter's default template. */
+      custom_churn_email_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Email Template 
        * @description The identifier for a custom email template. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options.
        */
-      custom_email_template?: string;
+      custom_email_template?: string | null;
       /**
        * Custom Expired Trial Notification Body 
        * @description Custom body content for the email sent when a subscriber's free trial expires. Supports template tags. 
@@ -3145,11 +3162,8 @@ export interface components {
        * @default
        */
       custom_expired_trial_notification_subject?: string;
-      /**
-       * Custom Expired Trial Notification Template 
-       * @description The email template to use for expired trial notification emails. If not set, uses the newsletter's default template.
-       */
-      custom_expired_trial_notification_template?: string;
+      /** @description The email template to use for expired trial notification emails. If not set, uses the newsletter's default template. */
+      custom_expired_trial_notification_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Gift Subscription Email Body 
        * @description Custom body content for the email sent when someone receives a gift subscription. Supports template tags. 
@@ -3162,11 +3176,8 @@ export interface components {
        * @default
        */
       custom_gift_subscription_email_subject?: string;
-      /**
-       * Custom Gift Subscription Email Template 
-       * @description The email template to use for gift subscription emails. If not set, uses the newsletter's default template.
-       */
-      custom_gift_subscription_email_template?: string;
+      /** @description The email template to use for gift subscription emails. If not set, uses the newsletter's default template. */
+      custom_gift_subscription_email_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Gift Unsubscription Email Body 
        * @description Custom body content for the email sent when a gift subscription ends. Supports template tags. 
@@ -3179,11 +3190,8 @@ export interface components {
        * @default
        */
       custom_gift_unsubscription_email_subject?: string;
-      /**
-       * Custom Gift Unsubscription Email Template 
-       * @description The email template to use for gift unsubscription emails. If not set, uses the newsletter's default template.
-       */
-      custom_gift_unsubscription_email_template?: string;
+      /** @description The email template to use for gift unsubscription emails. If not set, uses the newsletter's default template. */
+      custom_gift_unsubscription_email_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Premium Confirmation Email Body 
        * @description Custom body content for the email sent when a subscriber upgrades to a paid plan. Supports template tags. 
@@ -3196,22 +3204,16 @@ export interface components {
        * @default
        */
       custom_premium_confirmation_email_subject?: string;
-      /**
-       * Custom Premium Confirmation Email Template 
-       * @description The email template to use for premium confirmation emails. If not set, uses the newsletter's default template.
-       */
-      custom_premium_confirmation_email_template?: string;
+      /** @description The email template to use for premium confirmation emails. If not set, uses the newsletter's default template. */
+      custom_premium_confirmation_email_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Subscription Confirmation Email Subject 
        * @description Custom subject line for the double opt-in confirmation email sent to new subscribers. Supports template tags. 
        * @default
        */
       custom_subscription_confirmation_email_subject?: string;
-      /**
-       * Custom Subscription Confirmation Email Template 
-       * @description The email template to use for subscription confirmation emails. If not set, uses the newsletter's default template.
-       */
-      custom_subscription_confirmation_email_template?: string;
+      /** @description The email template to use for subscription confirmation emails. If not set, uses the newsletter's default template. */
+      custom_subscription_confirmation_email_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Subscription Confirmation Email Text 
        * @description Custom body content for the double opt-in confirmation email. Must contain `{{ confirmation_url }}` as an HTML or Markdown link. 
@@ -3301,12 +3303,12 @@ export interface components {
        * Icon 
        * @description URL to your newsletter's icon image, used as a favicon and in various UI contexts.
        */
-      icon?: string;
+      icon?: string | null;
       /**
        * Image 
        * @description URL to your newsletter's header or branding image, displayed on archive pages and in social previews.
        */
-      image?: string;
+      image?: string | null;
       /**
        * @description The language/locale for your newsletter's UI elements (confirmation emails, unsubscribe pages, etc.). See [localization](https://docs.buttondown.com/localization) for supported locales. 
        * @default en
@@ -3342,9 +3344,7 @@ export interface components {
        * @description A list of social media accounts linked to your newsletter, displayed on your archive page. Each entry has a `type`, `url`, and optional `label`. 
        * @default []
        */
-      socials?: ({
-          [key: string]: unknown | undefined;
-        })[];
+      socials?: (components["schemas"]["SocialAccountSchema"])[];
       /**
        * Sort 
        * @description The default sorting method for listing subscribers or messages. Example values: 'creation_date', '-creation_date', 'email_address'. 
@@ -3406,6 +3406,27 @@ export interface components {
        */
       web_css?: string;
     };
+    /** SocialAccountSchema */
+    SocialAccountSchema: {
+      /** @description The type of social media account. */
+      type: components["schemas"]["SocialAccountType"];
+      /**
+       * Url 
+       * @description The URL of the social media profile.
+       */
+      url: string;
+      /**
+       * Label 
+       * @description An optional display label for the social media account.
+       */
+      label?: string | null;
+    };
+    /**
+     * SocialAccountType 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SocialAccountType: "generic" | "bluesky" | "bookbub" | "bookshop" | "facebook" | "github" | "goodreads" | "instagram" | "kofi" | "letterboxd" | "linkedin" | "linktree" | "mastodon" | "patreon" | "pinterest" | "threads" | "tiktok" | "twitch" | "twitter" | "youtube";
     /**
      * CreateNewsletterErrorCode 
      * @description Represents the type of error that occurred when creating a newsletter.
@@ -3448,9 +3469,10 @@ export interface components {
       /**
        * @description Controls who sees the announcement bar on your archive page. 
        * @default disabled 
-       * @example everyone
+       * @example everyone 
+       * @enum {unknown}
        */
-      announcement_bar_visibility?: components["schemas"]["NewsletterAnnouncementBarVisibility"];
+      announcement_bar_visibility?: "disabled" | "everyone" | "free_only" | "logged_out_only" | "paid_only";
       /**
        * @description The visual theme for your newsletter's archive page. See [archive themes](https://docs.buttondown.com/customizing-web-design) for previews. 
        * @default modern 
@@ -3461,7 +3483,7 @@ export interface components {
        * @description The auditing mode for your newsletter, which controls spam and abuse protection. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
        * @example enabled
        */
-      auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
+      auditing_mode?: components["schemas"]["NewsletterAuditingMode"] | null;
       /**
        * Css 
        * @description Custom CSS styling applied to your newsletter emails. See [CSS customization](https://docs.buttondown.com/customizing-email-design#adding-custom-css) for more information. 
@@ -3474,7 +3496,7 @@ export interface components {
        * @description The identifier for a custom email template. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options. 
        * @example modern
        */
-      custom_email_template?: string;
+      custom_email_template?: string | null;
       /**
        * Description 
        * @description A brief description of your newsletter, displayed on your public archive page and used for SEO. 
@@ -3493,7 +3515,7 @@ export interface components {
        * @description The 'From' email address used when sending your newsletter. Must be verified before use. 
        * @example newsletter@sheinhardt.com
        */
-      email_address?: string;
+      email_address?: string | null;
       /**
        * Email Domain 
        * @description The custom domain from which your newsletter emails are sent (e.g., 'mail.example.com'). See [sending domains](https://docs.buttondown.com/sending-from-a-custom-domain) for setup instructions. 
@@ -3583,18 +3605,7 @@ export interface components {
        * @description An alternative email address that receives replies to your newsletter emails, instead of the sending address. 
        * @example newsletter@sheinhardt.com
        */
-      reply_to_address?: string;
-      /**
-       * Sharing Networks 
-       * @description A list of social networks to show share buttons for on your archive pages. 
-       * @default [] 
-       * @example [
-       *   "twitter",
-       *   "facebook",
-       *   "linkedin"
-       * ]
-       */
-      sharing_networks?: (string)[];
+      reply_to_address?: string | null;
       /**
        * Socials 
        * @description A list of social media accounts linked to your newsletter, displayed on your archive page. Each entry has a `type`, `url`, and optional `label`. 
@@ -3607,9 +3618,7 @@ export interface components {
        *   }
        * ]
        */
-      socials?: ({
-          [key: string]: unknown | undefined;
-        })[];
+      socials?: (components["schemas"]["SocialAccountSchema"])[];
       /**
        * Subscription Confirmation Redirect Url 
        * @description A URL to redirect subscribers to after they confirm their subscription via double opt-in. 
@@ -3634,7 +3643,7 @@ export interface components {
        * Test Mode 
        * @description Whether test mode is enabled. When enabled, emails are not actually sent to subscribers, useful for testing automations and workflows.
        */
-      test_mode?: boolean;
+      test_mode?: boolean | null;
       /**
        * Theme Configuration 
        * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
@@ -3681,34 +3690,35 @@ export interface components {
        * @description The background color for the announcement bar on your archive page. Must be a valid hex color code. 
        * @example #FF6600
        */
-      announcement_bar_background_color?: string;
+      announcement_bar_background_color?: string | null;
       /**
        * Announcement Bar Text 
        * @description Text displayed in the announcement bar on your archive page. Useful for promotions, updates, or calls to action. 
        * @example Subscribe to get 20% off your first order!
        */
-      announcement_bar_text?: string;
+      announcement_bar_text?: string | null;
       /**
        * @description Controls who sees the announcement bar on your archive page. 
-       * @example everyone
+       * @example everyone 
+       * @enum {unknown}
        */
-      announcement_bar_visibility?: components["schemas"]["NewsletterAnnouncementBarVisibility"];
+      announcement_bar_visibility?: "disabled" | "everyone" | "free_only" | "logged_out_only" | "paid_only";
       /**
        * @description The visual theme for your newsletter's archive page. See [archive themes](https://docs.buttondown.com/customizing-web-design) for previews. 
        * @example modern
        */
-      archive_theme?: components["schemas"]["NewsletterArchiveTheme"];
+      archive_theme?: components["schemas"]["NewsletterArchiveTheme"] | null;
       /**
        * @description The auditing mode for your newsletter, which controls spam and abuse protection. See [the Firewall](https://docs.buttondown.com/firewall) for more information. 
        * @example enabled
        */
-      auditing_mode?: components["schemas"]["NewsletterAuditingMode"];
+      auditing_mode?: components["schemas"]["NewsletterAuditingMode"] | null;
       /**
        * Css 
        * @description Custom CSS styling applied to your newsletter emails. See [CSS customization](https://docs.buttondown.com/customizing-email-design#adding-custom-css) for more information. 
        * @example .header { color: #000; }
        */
-      css?: string;
+      css?: string | null;
       /**
        * Custom Churn Email Body 
        * @description Custom body content for the email sent when a paid subscriber cancels. Supports template tags like `{{ subscriber.email }}` and `{{ newsletter.name }}`. 
@@ -3716,149 +3726,143 @@ export interface components {
        * 
        * We're sorry to see you go!
        */
-      custom_churn_email_body?: string;
+      custom_churn_email_body?: string | null;
       /**
        * Custom Churn Email Subject 
        * @description Custom subject line for the email sent when a paid subscriber cancels. Supports template tags like `{{ newsletter.name }}`. 
        * @example You've canceled your premium subscription to {{ newsletter.name }}
        */
-      custom_churn_email_subject?: string;
+      custom_churn_email_subject?: string | null;
       /**
-       * Custom Churn Email Template 
        * @description The email template to use for churn emails. If not set, uses the newsletter's default template. 
        * @example modern
        */
-      custom_churn_email_template?: string;
+      custom_churn_email_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Email Template 
        * @description The identifier for a custom email template. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options. 
        * @example modern
        */
-      custom_email_template?: string;
+      custom_email_template?: string | null;
       /**
        * Custom Expired Trial Notification Body 
        * @description Custom body content for the email sent when a subscriber's free trial expires. Supports template tags.
        */
-      custom_expired_trial_notification_body?: string;
+      custom_expired_trial_notification_body?: string | null;
       /**
        * Custom Expired Trial Notification Subject 
        * @description Custom subject line for the email sent when a subscriber's free trial expires. Supports template tags.
        */
-      custom_expired_trial_notification_subject?: string;
+      custom_expired_trial_notification_subject?: string | null;
       /**
-       * Custom Expired Trial Notification Template 
        * @description The email template to use for expired trial notification emails. If not set, uses the newsletter's default template. 
        * @example modern
        */
-      custom_expired_trial_notification_template?: string;
+      custom_expired_trial_notification_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Gift Subscription Email Body 
        * @description Custom body content for the email sent when someone receives a gift subscription. Supports template tags.
        */
-      custom_gift_subscription_email_body?: string;
+      custom_gift_subscription_email_body?: string | null;
       /**
        * Custom Gift Subscription Email Subject 
        * @description Custom subject line for the email sent when someone receives a gift subscription. Supports template tags.
        */
-      custom_gift_subscription_email_subject?: string;
+      custom_gift_subscription_email_subject?: string | null;
       /**
-       * Custom Gift Subscription Email Template 
        * @description The email template to use for gift subscription emails. If not set, uses the newsletter's default template. 
        * @example modern
        */
-      custom_gift_subscription_email_template?: string;
+      custom_gift_subscription_email_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Gift Unsubscription Email Body 
        * @description Custom body content for the email sent when a gift subscription ends. Supports template tags.
        */
-      custom_gift_unsubscription_email_body?: string;
+      custom_gift_unsubscription_email_body?: string | null;
       /**
        * Custom Gift Unsubscription Email Subject 
        * @description Custom subject line for the email sent when a gift subscription ends. Supports template tags.
        */
-      custom_gift_unsubscription_email_subject?: string;
+      custom_gift_unsubscription_email_subject?: string | null;
       /**
-       * Custom Gift Unsubscription Email Template 
        * @description The email template to use for gift unsubscription emails. If not set, uses the newsletter's default template. 
        * @example modern
        */
-      custom_gift_unsubscription_email_template?: string;
+      custom_gift_unsubscription_email_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Premium Confirmation Email Body 
        * @description Custom body content for the email sent when a subscriber upgrades to a paid plan. Supports template tags.
        */
-      custom_premium_confirmation_email_body?: string;
+      custom_premium_confirmation_email_body?: string | null;
       /**
        * Custom Premium Confirmation Email Subject 
        * @description Custom subject line for the email sent when a subscriber upgrades to a paid plan. Supports template tags.
        */
-      custom_premium_confirmation_email_subject?: string;
+      custom_premium_confirmation_email_subject?: string | null;
       /**
-       * Custom Premium Confirmation Email Template 
        * @description The email template to use for premium confirmation emails. If not set, uses the newsletter's default template. 
        * @example modern
        */
-      custom_premium_confirmation_email_template?: string;
+      custom_premium_confirmation_email_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Subscription Confirmation Email Subject 
        * @description Custom subject line for the double opt-in confirmation email sent to new subscribers. Supports template tags.
        */
-      custom_subscription_confirmation_email_subject?: string;
+      custom_subscription_confirmation_email_subject?: string | null;
       /**
        * Custom Subscription Confirmation Email Text 
        * @description Custom body content for the double opt-in confirmation email. Must contain `{{ confirmation_url }}` as an HTML or Markdown link.
        */
-      custom_subscription_confirmation_email_text?: string;
+      custom_subscription_confirmation_email_text?: string | null;
       /**
-       * Custom Subscription Confirmation Email Template 
        * @description The email template to use for subscription confirmation emails. If not set, uses the newsletter's default template. 
        * @example modern
        */
-      custom_subscription_confirmation_email_template?: string;
+      custom_subscription_confirmation_email_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Subscription Confirmation Reminder Email Subject 
        * @description Custom subject line for the reminder email sent to subscribers who haven't confirmed. Supports template tags.
        */
-      custom_subscription_confirmation_reminder_email_subject?: string;
+      custom_subscription_confirmation_reminder_email_subject?: string | null;
       /**
        * Custom Subscription Confirmation Reminder Email Text 
        * @description Custom body content for the reminder email sent to subscribers who haven't confirmed. Supports template tags.
        */
-      custom_subscription_confirmation_reminder_email_text?: string;
+      custom_subscription_confirmation_reminder_email_text?: string | null;
       /**
        * Custom Subscription Confirmed Email Subject 
        * @description Custom subject line for the email sent after a subscriber confirms their subscription. Supports template tags.
        */
-      custom_subscription_confirmed_email_subject?: string;
+      custom_subscription_confirmed_email_subject?: string | null;
       /**
        * Custom Subscription Confirmed Email Text 
        * @description Custom body content for the email sent after a subscriber confirms their subscription. Supports template tags.
        */
-      custom_subscription_confirmed_email_text?: string;
+      custom_subscription_confirmed_email_text?: string | null;
       /**
        * Description 
        * @description A brief description of your newsletter, displayed on your public archive page and used for SEO. 
        * @example Stay up to date with the latest trends in wigs and hairpieces
        */
-      description?: string;
+      description?: string | null;
       /**
        * Domain 
        * @description The custom domain where your newsletter archives are hosted (e.g., 'newsletter.example.com'). See [custom domains](https://docs.buttondown.com/hosting-on-a-custom-domain) for setup instructions. 
        * @example sheinhardt.com
        */
-      domain?: string;
+      domain?: string | null;
       /**
        * Email Address 
        * @description The 'From' email address used when sending your newsletter. Must be verified before use. 
        * @example newsletter@sheinhardt.com
        */
-      email_address?: string;
+      email_address?: string | null;
       /**
        * Email Domain 
        * @description The custom domain from which your newsletter emails are sent (e.g., 'mail.example.com'). See [sending domains](https://docs.buttondown.com/sending-from-a-custom-domain) for setup instructions. 
        * @example mail.sheinhardt.com
        */
-      email_domain?: string;
+      email_domain?: string | null;
       /**
        * Email Theme Configuration 
        * @description A dictionary of CSS token overrides for the email theme. 
@@ -3866,9 +3870,9 @@ export interface components {
        *   "primary-color": "#0069FF"
        * }
        */
-      email_theme_configuration?: {
+      email_theme_configuration?: ({
         [key: string]: string | undefined;
-      };
+      }) | null;
       /**
        * Enabled Features 
        * @description A list of features enabled for your newsletter. Common values include 'archives', 'portal', 'surveys', 'comments', 'paid_subscriptions', 'automations', 'webhooks', 'tracking', and 'referrals'. 
@@ -3878,42 +3882,42 @@ export interface components {
        *   "surveys"
        * ]
        */
-      enabled_features?: (string)[];
+      enabled_features?: (string)[] | null;
       /**
        * Footer 
        * @description HTML content displayed at the bottom of your newsletter emails. Supports [template tags](https://docs.buttondown.com/template-tags). 
        * @example <p>Thanks for reading!</p>
        */
-      footer?: string;
+      footer?: string | null;
       /**
        * From Name 
        * @description The display name shown in the 'From' field of your emails (e.g., 'Jane from Acme Newsletter'). 
        * @example Sheinhardt Wig Company
        */
-      from_name?: string;
+      from_name?: string | null;
       /**
        * Header 
        * @description HTML content displayed at the top of your newsletter emails. Supports [template tags](https://docs.buttondown.com/template-tags). 
        * @example <p>Welcome to our newsletter!</p>
        */
-      header?: string;
+      header?: string | null;
       /**
        * Icon 
        * @description URL to your newsletter's icon image, used as a favicon and in various UI contexts. 
        * @example https://example.com/icon.png
        */
-      icon?: string;
+      icon?: string | null;
       /**
        * Image 
        * @description URL to your newsletter's header or branding image, displayed on archive pages and in social previews. 
        * @example https://example.com/header.jpg
        */
-      image?: string;
+      image?: string | null;
       /**
        * @description The language/locale for your newsletter's UI elements (confirmation emails, unsubscribe pages, etc.). See [localization](https://docs.buttondown.com/localization) for supported locales. 
        * @example en
        */
-      locale?: components["schemas"]["NewsletterLocale"];
+      locale?: components["schemas"]["NewsletterLocale"] | null;
       /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
@@ -3922,31 +3926,21 @@ export interface components {
        *   "tier": "pro"
        * }
        */
-      metadata?: {
+      metadata?: ({
         [key: string]: unknown | undefined;
-      };
+      }) | null;
       /**
        * Name 
        * @description The display name of your newsletter, shown to subscribers and on your archive page. 
        * @example Sheinhardt Wig Company
        */
-      name?: string;
+      name?: string | null;
       /**
        * Reply To Address 
        * @description An alternative email address that receives replies to your newsletter emails, instead of the sending address. 
        * @example newsletter@sheinhardt.com
        */
-      reply_to_address?: string;
-      /**
-       * Sharing Networks 
-       * @description A list of social networks to show share buttons for on your archive pages. 
-       * @example [
-       *   "twitter",
-       *   "facebook",
-       *   "linkedin"
-       * ]
-       */
-      sharing_networks?: (string)[];
+      reply_to_address?: string | null;
       /**
        * Socials 
        * @description A list of social media accounts linked to your newsletter, displayed on your archive page. Each entry has a `type`, `url`, and optional `label`. 
@@ -3958,31 +3952,29 @@ export interface components {
        *   }
        * ]
        */
-      socials?: ({
-          [key: string]: unknown | undefined;
-        })[];
+      socials?: (components["schemas"]["SocialAccountSchema"])[] | null;
       /**
        * Subscription Confirmation Redirect Url 
        * @description A URL to redirect subscribers to after they confirm their subscription via double opt-in. 
        * @example https://example.com/confirmed
        */
-      subscription_confirmation_redirect_url?: string;
+      subscription_confirmation_redirect_url?: string | null;
       /**
        * Subscription Redirect Url 
        * @description A URL to redirect subscribers to immediately after they submit the subscription form (before confirmation). 
        * @example https://example.com/thanks
        */
-      subscription_redirect_url?: string;
+      subscription_redirect_url?: string | null;
       /**
        * @description The default email template for your newsletter. See [email templates](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates) for available options. 
        * @example modern
        */
-      template?: components["schemas"]["NewsletterEmailTemplate"];
+      template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Test Mode 
        * @description Whether test mode is enabled. When enabled, emails are not actually sent to subscribers, useful for testing automations and workflows.
        */
-      test_mode?: boolean;
+      test_mode?: boolean | null;
       /**
        * Theme Configuration 
        * @description Custom theme configuration (variables) for your newsletter. These can be referenced in your CSS and templates to maintain consistent styling. 
@@ -3990,33 +3982,33 @@ export interface components {
        *   "primary-color": "#0069FF"
        * }
        */
-      theme_configuration?: {
+      theme_configuration?: ({
         [key: string]: string | undefined;
-      };
+      }) | null;
       /**
        * Timezone 
        * @description The timezone used for scheduling and displaying dates in your newsletter (e.g., 'America/New_York', 'Europe/London'). 
        * @example America/New_York
        */
-      timezone?: string;
+      timezone?: string | null;
       /**
        * Tint Color 
        * @description The accent color for your newsletter, used in emails and on your archive page. Must be a valid hex color code. 
        * @example #0069FF
        */
-      tint_color?: string;
+      tint_color?: string | null;
       /**
        * Username 
        * @description The unique URL-safe identifier for your newsletter, used in your archive URL (e.g., 'buttondown.com/username'). 
        * @example sheinhardt
        */
-      username?: string;
+      username?: string | null;
       /**
        * Web Css 
        * @description Custom CSS styling applied to your newsletter's web presence (archive pages, subscription forms, etc.). 
        * @example .container { max-width: 800px; }
        */
-      web_css?: string;
+      web_css?: string | null;
     };
     /** Note */
     Note: {
@@ -4062,8 +4054,8 @@ export interface components {
        */
       source: "admin" | "user";
       /** User Id */
-      user_id?: string;
-      user?: components["schemas"]["User"];
+      user_id?: string | null;
+      user?: components["schemas"]["User"] | null;
     };
     /** NoteInput */
     NoteInput: {
@@ -4101,7 +4093,7 @@ export interface components {
        * Amount 
        * @description The price amount in the smallest currency unit (e.g. cents).
        */
-      amount?: number;
+      amount?: number | null;
       /**
        * Cadence 
        * @description The billing cadence for this price. 
@@ -4117,22 +4109,22 @@ export interface components {
        * Description 
        * @description An optional human-readable description of the price.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Maximum Amount 
        * @description The maximum amount for pay-what-you-want prices.
        */
-      maximum_amount?: number;
+      maximum_amount?: number | null;
       /**
        * Minimum Amount 
        * @description The minimum amount for pay-what-you-want prices.
        */
-      minimum_amount?: number;
+      minimum_amount?: number | null;
       /**
        * Product Id 
        * @description The ID of the Stripe product this price belongs to.
        */
-      product_id?: string;
+      product_id?: string | null;
       /**
        * Style 
        * @description The pricing style: 'fixed', 'pay-what-you-want', or 'usage-based'. 
@@ -4143,13 +4135,13 @@ export interface components {
        * Suggested Amount 
        * @description The suggested amount for pay-what-you-want prices.
        */
-      suggested_amount?: number;
+      suggested_amount?: number | null;
       /**
        * Id 
        * @description The unique identifier of the price.
        */
       id: string;
-      product?: components["schemas"]["Product"];
+      product?: components["schemas"]["Product"] | null;
     };
     /** Product */
     Product: {
@@ -4182,7 +4174,7 @@ export interface components {
        * Default Price 
        * @description The ID of the default price for this product.
        */
-      default_price?: string;
+      default_price?: string | null;
     };
     /** ErrorMessage[ListPricesErrorCode] */
     ErrorMessage_ListPricesErrorCode_: {
@@ -4236,7 +4228,7 @@ export interface components {
        * Amount 
        * @description The price amount in the smallest currency unit (e.g. cents).
        */
-      amount?: number;
+      amount?: number | null;
       /**
        * Cadence 
        * @description The billing cadence for this price. 
@@ -4252,22 +4244,22 @@ export interface components {
        * Description 
        * @description An optional human-readable description of the price.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Maximum Amount 
        * @description The maximum amount for pay-what-you-want prices.
        */
-      maximum_amount?: number;
+      maximum_amount?: number | null;
       /**
        * Minimum Amount 
        * @description The minimum amount for pay-what-you-want prices.
        */
-      minimum_amount?: number;
+      minimum_amount?: number | null;
       /**
        * Product Id 
        * @description The ID of the Stripe product this price belongs to.
        */
-      product_id?: string;
+      product_id?: string | null;
       /**
        * Style 
        * @description The pricing style: 'fixed', 'pay-what-you-want', or 'usage-based'. 
@@ -4278,7 +4270,7 @@ export interface components {
        * Suggested Amount 
        * @description The suggested amount for pay-what-you-want prices.
        */
-      suggested_amount?: number;
+      suggested_amount?: number | null;
     };
     /**
      * PublicEmail 
@@ -4299,12 +4291,9 @@ export interface components {
       /** Subject */
       subject: string;
       /** Slug */
-      slug?: string;
-      /**
-       * Publish Date 
-       * Format: date-time
-       */
-      publish_date?: string;
+      slug?: string | null;
+      /** Publish Date */
+      publish_date?: string | null;
       /** Description */
       description: string;
       /** Absolute Url */
@@ -4366,18 +4355,18 @@ export interface components {
        * Identifier 
        * @example footer
        */
-      identifier?: string;
+      identifier?: string | null;
       /**
        * Name 
        * @example Footer
        */
-      name?: string;
+      name?: string | null;
       /**
        * Content 
        * @example Thanks for reading!
        */
-      content?: string;
-      mode?: components["schemas"]["SnippetMode"];
+      content?: string | null;
+      mode?: components["schemas"]["SnippetMode"] | null;
     };
     /**
      * CollisionBehavior 
@@ -4451,15 +4440,15 @@ export interface components {
        * Referring Subscriber Id 
        * @description The ID of the subscriber that referred this subscriber.
        */
-      referring_subscriber_id?: string;
+      referring_subscriber_id?: string | null;
       /** @example regular */
-      type?: components["schemas"]["SubscriberType"];
+      type?: components["schemas"]["SubscriberType"] | null;
       /**
        * Ip Address 
        * @description The IP address of the subscriber. If provided, we will use this IP address to determine the subscriber's location and validate their legitimacy. 
        * @example 127.0.0.1
        */
-      ip_address?: string;
+      ip_address?: string | null;
     };
     /** ErrorMessage[ListSubscribersErrorCode] */
     ErrorMessage_ListSubscribersErrorCode_: {
@@ -4513,39 +4502,39 @@ export interface components {
        * Commenting Disabled 
        * @description Whether this subscriber is prevented from commenting.
        */
-      commenting_disabled?: boolean;
+      commenting_disabled?: boolean | null;
       /**
        * Email Address 
        * @description The email address of the subscriber. 
        * @example telemachus@buttondown.email
        */
-      email_address?: string;
+      email_address?: string | null;
       /**
        * Notes 
        * @description Any notes you want to attach to the subscriber. These are not publicly visible. 
        * @example One of our first subscribers!
        */
-      notes?: string;
+      notes?: string | null;
       /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
        * @default {}
        */
-      metadata?: {
+      metadata?: ({
         [key: string]: unknown | undefined;
-      };
+      }) | null;
       /** Tags */
-      tags?: (string)[];
+      tags?: (string)[] | null;
       /**
        * Referrer Url 
        * @default
        */
-      referrer_url?: string;
-      type?: components["schemas"]["SubscriberType"];
+      referrer_url?: string | null;
+      type?: components["schemas"]["SubscriberType"] | null;
       /** Unsubscription Reason */
-      unsubscription_reason?: string;
+      unsubscription_reason?: string | null;
       /** Email Which Prompted Unsubscription Id */
-      email_which_prompted_unsubscription_id?: string;
+      email_which_prompted_unsubscription_id?: string | null;
     };
     /** AutomationForSubscriber */
     AutomationForSubscriber: {
@@ -4626,13 +4615,13 @@ export interface components {
       /** Subscriber Id */
       subscriber_id: string;
       /** Email Id */
-      email_id?: string;
+      email_id?: string | null;
       /** Automation Id */
-      automation_id?: string;
-      subscriber?: components["schemas"]["Subscriber"];
-      survey?: components["schemas"]["Survey"];
-      email?: components["schemas"]["Email"];
-      automation?: components["schemas"]["Automation"];
+      automation_id?: string | null;
+      subscriber?: components["schemas"]["Subscriber"] | null;
+      survey?: components["schemas"]["Survey"] | null;
+      email?: components["schemas"]["Email"] | null;
+      automation?: components["schemas"]["Automation"] | null;
     };
     /** Survey */
     Survey: {
@@ -4682,7 +4671,7 @@ export interface components {
        * Text 
        * @description The text response to update. Only applicable if the survey has freeform responses enabled.
        */
-      text?: string;
+      text?: string | null;
     };
     /**
      * CreateSurveyErrorCode 
@@ -4780,7 +4769,7 @@ export interface components {
     /** SurveyUpdateInput */
     SurveyUpdateInput: {
       /** Notes */
-      notes?: string;
+      notes?: string | null;
       /**
        * Answers 
        * @example [
@@ -4789,18 +4778,18 @@ export interface components {
        *   "Blue"
        * ]
        */
-      answers?: (string)[];
+      answers?: (string)[] | null;
       /** @example once */
-      response_cadence?: components["schemas"]["SurveyResponseCadence"];
-      status?: components["schemas"]["SurveyStatus"];
+      response_cadence?: components["schemas"]["SurveyResponseCadence"] | null;
+      status?: components["schemas"]["SurveyStatus"] | null;
       /**
        * Is Freeform Response Enabled 
        * @default false
        */
-      is_freeform_response_enabled?: boolean;
-      input_type?: components["schemas"]["SurveyInputType"];
+      is_freeform_response_enabled?: boolean | null;
+      input_type?: components["schemas"]["SurveyInputType"] | null;
       /** Randomize Answers */
-      randomize_answers?: boolean;
+      randomize_answers?: boolean | null;
     };
     /**
      * Tag 
@@ -4827,12 +4816,12 @@ export interface components {
        * Description 
        * @description An internal description of the tag, only visible to the newsletter author.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Public Description 
        * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
        */
-      public_description?: string;
+      public_description?: string | null;
       /**
        * Subscriber Editable 
        * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
@@ -4877,12 +4866,12 @@ export interface components {
        * Description 
        * @description An internal description of the tag, only visible to the newsletter author.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Public Description 
        * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
        */
-      public_description?: string;
+      public_description?: string | null;
       /**
        * Subscriber Editable 
        * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
@@ -4920,33 +4909,33 @@ export interface components {
        * @description The name of the tag. 
        * @example VIP
        */
-      name?: string;
+      name?: string | null;
       /**
        * Color 
        * @description The hex color code associated with the tag. 
        * @example #FFD700
        */
-      color?: string;
+      color?: string | null;
       /**
        * Description 
        * @description An internal description of the tag, only visible to the newsletter author.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Public Description 
        * @description A public-facing description of the tag, visible to subscribers in the subscriber portal.
        */
-      public_description?: string;
+      public_description?: string | null;
       /**
        * Secondary Id 
        * @description The secondary ID of the tag, used as a human-readable numeric identifier.
        */
-      secondary_id?: number;
+      secondary_id?: number | null;
       /**
        * Subscriber Editable 
        * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal.
        */
-      subscriber_editable?: boolean;
+      subscriber_editable?: boolean | null;
     };
     /**
      * TagAnalytics 
@@ -5054,14 +5043,14 @@ export interface components {
        * @default  
        * @example Trigger when an email is created to notify in Slack.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Signing Key 
        * @description Optional HMAC signing key for webhook verification. When set, webhook requests will include an X-Buttondown-Signature header with sha256=<signature>. 
        * @default  
        * @example
        */
-      signing_key?: string;
+      signing_key?: string | null;
     };
     /**
      * WebhookStatus 
@@ -5099,14 +5088,14 @@ export interface components {
        * @default  
        * @example Trigger when an email is created to notify in Slack.
        */
-      description?: string;
+      description?: string | null;
       /**
        * Signing Key 
        * @description Optional HMAC signing key for webhook verification. When set, webhook requests will include an X-Buttondown-Signature header with sha256=<signature>. 
        * @default  
        * @example
        */
-      signing_key?: string;
+      signing_key?: string | null;
     };
     /** WebhookAttemptOutput */
     WebhookAttemptOutput: {
@@ -5185,7 +5174,7 @@ export interface components {
      * opt-in.) 
      * @enum {string}
      */
-    SubscriberSource: "admin" | "api" | "carrd" | "comment" | "embedded_form" | "form" | "import" | "memberful" | "organic" | "patreon" | "stripe" | "user" | "zapier";
+    SubscriberSource: "admin" | "api" | "carrd" | "comment" | "embedded_form" | "form" | "import" | "memberful" | "netlify" | "organic" | "patreon" | "stripe" | "user" | "zapier";
     /**
      * Type 
      * @description Represents the state of a subscriber and what emails they
@@ -5245,7 +5234,7 @@ export interface components {
      * @description The action that is triggered when the automation is successfully run. 
      * @enum {string}
      */
-    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_arena_post" | "create_bluesky_post" | "create_linkedin_post" | "create_mastodon_post" | "create_tumblr_post" | "create_twitter_post" | "create_export" | "send_post_request" | "send_confirmation_reminder";
+    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_arena_post" | "create_bluesky_post" | "create_linkedin_post" | "create_mastodon_post" | "create_tumblr_post" | "create_twitter_post" | "create_export" | "create_gift_subscriber" | "send_post_request" | "send_confirmation_reminder" | "update_email_type";
     /**
      * AnnouncementBarVisibility 
      * @description An enumeration. 
@@ -5315,7 +5304,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    NewsletterLocale: "cs-CZ" | "nl-NL" | "en-AU" | "en-CA" | "en-GB" | "en" | "fr" | "de" | "pl-PL" | "pt-BR" | "ru" | "es" | "tr" | "sv-SE";
+    NewsletterLocale: "cs-CZ" | "nl-NL" | "en-AU" | "en-CA" | "en-GB" | "en" | "fr" | "de" | "ne" | "pl-PL" | "pt-BR" | "ru" | "es" | "tr" | "sv-SE";
     /**
      * Mode 
      * @description An enumeration. 
@@ -5355,9 +5344,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["AdvertisingUnit"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5366,9 +5355,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["AdvertisingSlot"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5377,9 +5366,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Attachment"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5388,9 +5377,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Automation"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5399,9 +5388,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Book"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5410,9 +5399,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Comment"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5421,9 +5410,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["StripeCoupon"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5432,9 +5421,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Email"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5443,9 +5432,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["History"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5454,9 +5443,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["EmailEvent"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5465,9 +5454,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Export"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5476,9 +5465,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["ExternalFeed"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5487,9 +5476,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["ExternalFeedItem"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5498,9 +5487,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Form"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5509,9 +5498,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Image"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5520,9 +5509,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Newsletter"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5531,9 +5520,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Note"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5542,9 +5531,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Price"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5553,9 +5542,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["PublicEmail"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5564,9 +5553,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Snippet"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5575,9 +5564,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Subscriber"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5586,9 +5575,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["AutomationForSubscriber"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5597,9 +5586,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["StripeSubscription"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5608,9 +5597,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Response"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5619,9 +5608,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Survey"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5630,9 +5619,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Tag"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5641,9 +5630,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["User"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5652,9 +5641,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["Webhook"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5663,9 +5652,9 @@ export interface components {
       /** Results */
       results: (components["schemas"]["WebhookAttemptOutput"])[];
       /** Next */
-      next?: string;
+      next?: string | null;
       /** Previous */
-      previous?: string;
+      previous?: string | null;
       /** Count */
       count: number;
     };
@@ -5681,11 +5670,8 @@ export interface components {
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
-      /**
-       * Ending Date 
-       * Format: date-time
-       */
-      ending_date?: string;
+      /** Ending Date */
+      ending_date?: string | null;
       /** Amount */
       amount: number;
       /** Currency */
@@ -5698,18 +5684,17 @@ export interface components {
        * Application Fee Percent 
        * @description The application fee percent for the subscription.
        */
-      application_fee_percent?: number;
+      application_fee_percent?: number | null;
       /**
        * Source 
-       * @description Buttondown attempts to detect the source of a subscription, but this is not always possible. 
-       * @enum {string}
+       * @description Buttondown attempts to detect the source of a subscription, but this is not always possible.
        */
-      source?: "substack" | "buttondown";
+      source?: ("substack" | "buttondown") | null;
       /**
        * Product 
        * @description The name of the product which the subscriber is subscribed to. (You can override this by setting the `buttondown_template_facing_id` metadata on the product in Stripe.)
        */
-      product?: string;
+      product?: string | null;
     };
     /**
      * ValidationErrorCode 
@@ -5725,7 +5710,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    APIRequestSource: "api" | "app" | "carrd" | "zapier" | "cli" | "make";
+    APIRequestSource: "api" | "app" | "carrd" | "zapier" | "cli" | "make" | "netlify" | "python";
     /**
      * AutomationAttemptStatus 
      * @description An enumeration. 
@@ -5753,7 +5738,7 @@ export interface components {
      *          
      * @enum {string}
      */
-    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "change_tags_colors" | "delete_comments" | "delete_surveys" | "delete_survey_responses" | "delete_tags" | "mark_comments_as_active" | "mark_comments_as_spammy" | "replay_events" | "update_survey_statuses" | "modify_stripe_subscriptions";
+    BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_emails" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "change_tags_colors" | "delete_comments" | "delete_surveys" | "delete_survey_responses" | "delete_tags" | "mark_comments_as_active" | "mark_comments_as_spammy" | "replay_events" | "update_survey_statuses" | "cancel_stripe_subscriptions" | "modify_stripe_subscriptions" | "pause_stripe_subscriptions";
     /**
      * ExportStatus 
      * @description 
@@ -6099,7 +6084,7 @@ export interface operations {
          */
         status_code?: (string)[];
         /** @description If provided, only return requests made with the given [API version](https://docs.buttondown.com/api-versioning)(s). */
-        version?: ("2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01")[];
+        version?: ("2024-07-01" | "2024-08-01" | "2024-08-15" | "2024-09-30" | "2024-12-30" | "2025-01-02" | "2025-05-19" | "2025-06-01" | "2026-01-01" | "2026-04-01")[];
       };
     };
     responses: {
@@ -6189,6 +6174,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -6958,6 +6949,8 @@ export interface operations {
          * ]
          */
         source?: (components["schemas"]["EmailSource"])[];
+        /** @description If provided, only return emails with the given archival mode. */
+        archival_mode?: (components["schemas"]["ArchivalMode"])[];
         /**
          * @deprecated 
          * @description The type of emails to return. Defaults to all types.
@@ -8032,6 +8025,44 @@ export interface operations {
       204: never;
       /** @description Forbidden */
       403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Update Image 
+   * @description Update an image's metadata
+   */
+  update_image: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ImageUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Image"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };

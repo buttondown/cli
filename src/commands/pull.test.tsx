@@ -1,9 +1,11 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import delay from "delay";
 import { render } from "ink-testing-library";
+import { serialize } from "../sync/emails.js";
+import { writeSyncState } from "../sync/state.js";
 import Pull from "./pull.js";
 
 function jsonResponse(body: unknown, status = 200) {
@@ -241,5 +243,108 @@ describe("pull", () => {
       await readFile(path.join(tempDir, ".buttondown.json"), "utf8"),
     );
     expect(Object.keys(state.syncedImages)).toHaveLength(2);
+  });
+
+  test("should preserve existing sync state and not re-download already-synced images", async () => {
+    // Simulate state after a push: sync state maps img_1 to a local path
+    // with original filename (photo.png), but remote URL has a UUID filename
+    const mediaDir = path.join(tempDir, "media");
+    await mkdir(mediaDir, { recursive: true });
+    await writeFile(
+      path.join(mediaDir, "photo.png"),
+      Buffer.from("original-png-data"),
+    );
+
+    await writeSyncState(tempDir, {
+      syncedImages: {
+        img_1: {
+          id: "img_1",
+          localPath: path.join(tempDir, "media", "photo.png"),
+          url: "https://assets.buttondown.email/images/abc123.png",
+          filename: "photo.png",
+        },
+      },
+    });
+
+    let imageDownloadCount = 0;
+
+    globalThis.fetch = mock(async (input: Request | string) => {
+      const url = parseUrl(input);
+
+      if (url.pathname.includes("/automations"))
+        return jsonResponse({ results: [], count: 0 });
+      if (url.pathname.includes("/newsletters"))
+        return jsonResponse({ results: [], count: 0 });
+      if (url.pathname.includes("/snippets"))
+        return jsonResponse({ results: [], count: 0 });
+
+      if (url.pathname === "/images") {
+        return jsonResponse({
+          results: [
+            {
+              id: "img_1",
+              image: "https://assets.buttondown.email/images/abc123.png",
+              creation_date: "2025-01-01",
+            },
+          ],
+          count: 1,
+        });
+      }
+
+      if (url.hostname === "assets.buttondown.email") {
+        imageDownloadCount++;
+        return new Response(Buffer.from("downloaded-data"), { status: 200 });
+      }
+
+      if (url.pathname === "/emails") {
+        return jsonResponse({
+          results: [
+            {
+              id: "email_1",
+              subject: "Test Email",
+              slug: "test-email",
+              body: "Check this: ![photo](https://assets.buttondown.email/images/abc123.png)",
+            },
+          ],
+          count: 1,
+        });
+      }
+
+      return jsonResponse({});
+    }) as unknown as typeof fetch;
+
+    render(
+      <Pull
+        baseUrl="https://api.buttondown.com"
+        apiKey="test-key"
+        directory={tempDir}
+      />,
+    );
+
+    await delay(1000);
+
+    // Should NOT re-download the already-synced image
+    expect(imageDownloadCount).toBe(0);
+
+    // Original file should be untouched
+    const imageData = await readFile(path.join(mediaDir, "photo.png"));
+    expect(imageData.toString()).toBe("original-png-data");
+
+    // Email should use the preserved local path (photo.png, not abc123.png)
+    const emailContent = await readFile(
+      path.join(tempDir, "emails", "test-email.md"),
+      "utf8",
+    );
+    expect(emailContent).toContain("../media/photo.png");
+    expect(emailContent).not.toContain("abc123.png");
+
+    // Sync state should preserve the original localPath
+    const state = JSON.parse(
+      await readFile(path.join(tempDir, ".buttondown.json"), "utf8"),
+    );
+    expect(state.syncedImages.img_1.localPath).toBe(
+      path.join(tempDir, "media", "photo.png"),
+    );
+    expect(state.syncedImages.img_1.filename).toBe("photo.png");
   });
 });

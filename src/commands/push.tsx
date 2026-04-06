@@ -19,6 +19,11 @@ import {
 import { serialize as serializeSnippet } from "../sync/snippets.js";
 import type { OperationResult } from "../sync/types.js";
 
+type DryRunResult = {
+  resource: string;
+  count: number;
+};
+
 type State =
   | {
       status: "not_started";
@@ -36,6 +41,10 @@ type State =
       };
     }
   | {
+      status: "dry_run";
+      changes: DryRunResult[];
+    }
+  | {
       status: "error";
       error: string;
     };
@@ -51,6 +60,10 @@ type Action =
     }
   | {
       type: "finish_pushing";
+    }
+  | {
+      type: "finish_dry_run";
+      changes: DryRunResult[];
     }
   | {
       type: "register_error";
@@ -74,12 +87,16 @@ const reducer = (state: State, action: Action): State => {
         throw new Error("Cannot finish pushing if not pushing");
       }
       return { status: "pushed", stats: { ...state.stats } };
+    case "finish_dry_run":
+      return { status: "dry_run", changes: action.changes };
     case "register_error":
       return { status: "error", error: action.error };
   }
 };
 
-export default function Push(configuration: Configuration) {
+type PushProps = Configuration & { dryRun?: boolean; json?: boolean };
+
+export default function Push(configuration: PushProps) {
   const { exit } = useApp();
   const [state, dispatch] = useReducer(reducer, {
     status: "not_started",
@@ -97,6 +114,10 @@ export default function Push(configuration: Configuration) {
         const localEmails = await LOCAL_EMAILS_RESOURCE.get(configuration);
         const emailsDir = path.join(configuration.directory, "emails");
 
+        // Collect changes for dry-run reporting
+        const dryRunChanges: DryRunResult[] = [];
+        let newImageCount = 0;
+
         if (localEmails) {
           // 3. Collect all referenced images, upload new ones
           for (const email of localEmails) {
@@ -105,16 +126,25 @@ export default function Push(configuration: Configuration) {
             for (const ref of refs) {
               const absolutePath = path.resolve(emailsDir, ref.relativePath);
               const alreadySynced = Object.values(syncedImages).find(
-                (img) => img.localPath === absolutePath,
+                (img) =>
+                  img.localPath === absolutePath ||
+                  img.filename === path.basename(absolutePath),
               );
               if (!alreadySynced) {
-                const result = await uploadImage(configuration, absolutePath);
-                syncedImages[result.id] = {
-                  id: result.id,
-                  localPath: absolutePath,
-                  url: result.url,
-                  filename: result.filename,
-                };
+                if (configuration.dryRun) {
+                  newImageCount++;
+                } else {
+                  const result = await uploadImage(
+                    configuration,
+                    absolutePath,
+                  );
+                  syncedImages[result.id] = {
+                    id: result.id,
+                    localPath: absolutePath,
+                    url: result.url,
+                    filename: result.filename,
+                  };
+                }
               }
             }
           }
@@ -152,16 +182,25 @@ export default function Push(configuration: Configuration) {
               return serialize(email) !== serialize(remote);
             });
 
-          // 6. Push only changed emails
-          const emailResult = await REMOTE_EMAILS_RESOURCE.set(
-            changedEmails,
-            configuration,
-          );
-          dispatch({
-            type: "register_new_push",
-            resource: "emails",
-            result: emailResult,
-          });
+          if (configuration.dryRun) {
+            if (changedEmails.length > 0) {
+              dryRunChanges.push({
+                resource: "emails",
+                count: changedEmails.length,
+              });
+            }
+          } else {
+            // 6. Push only changed emails
+            const emailResult = await REMOTE_EMAILS_RESOURCE.set(
+              changedEmails,
+              configuration,
+            );
+            dispatch({
+              type: "register_new_push",
+              resource: "emails",
+              result: emailResult,
+            });
+          }
         }
 
         // 7. Push automations (only changed)
@@ -179,19 +218,27 @@ export default function Push(configuration: Configuration) {
             if (!a.id) return true;
             const remote = remoteAutomationsById.get(a.id);
             if (!remote) return true;
-            return (
-              serializeAutomation(a) !== serializeAutomation(remote)
+            return serializeAutomation(a) !== serializeAutomation(remote);
+          });
+
+          if (configuration.dryRun) {
+            if (changedAutomations.length > 0) {
+              dryRunChanges.push({
+                resource: "automations",
+                count: changedAutomations.length,
+              });
+            }
+          } else {
+            const output = await AUTOMATIONS_RESOURCE.remote.set(
+              changedAutomations,
+              configuration,
             );
-          });
-          const output = await AUTOMATIONS_RESOURCE.remote.set(
-            changedAutomations,
-            configuration,
-          );
-          dispatch({
-            type: "register_new_push",
-            resource: "automations",
-            result: output,
-          });
+            dispatch({
+              type: "register_new_push",
+              resource: "automations",
+              result: output,
+            });
+          }
         }
 
         // 8. Push snippets (only changed)
@@ -211,15 +258,25 @@ export default function Push(configuration: Configuration) {
             if (!remote) return true;
             return serializeSnippet(s) !== serializeSnippet(remote);
           });
-          const output = await SNIPPETS_RESOURCE.remote.set(
-            changedSnippets,
-            configuration,
-          );
-          dispatch({
-            type: "register_new_push",
-            resource: "snippets",
-            result: output,
-          });
+
+          if (configuration.dryRun) {
+            if (changedSnippets.length > 0) {
+              dryRunChanges.push({
+                resource: "snippets",
+                count: changedSnippets.length,
+              });
+            }
+          } else {
+            const output = await SNIPPETS_RESOURCE.remote.set(
+              changedSnippets,
+              configuration,
+            );
+            dispatch({
+              type: "register_new_push",
+              resource: "snippets",
+              result: output,
+            });
+          }
         }
 
         // 9. Push newsletter (only if changed)
@@ -228,29 +285,52 @@ export default function Push(configuration: Configuration) {
         if (localNewsletter) {
           const remoteNewsletter =
             await NEWSLETTER_RESOURCE.remote.get(configuration);
-          if (
+          const newsletterChanged =
             !remoteNewsletter ||
             JSON.stringify(localNewsletter) !==
-              JSON.stringify(remoteNewsletter)
-          ) {
-            const output = await NEWSLETTER_RESOURCE.remote.set(
-              localNewsletter,
-              configuration,
-            );
-            dispatch({
-              type: "register_new_push",
-              resource: "newsletter",
-              result: output,
-            });
+              JSON.stringify(remoteNewsletter);
+
+          if (configuration.dryRun) {
+            if (newsletterChanged) {
+              dryRunChanges.push({
+                resource: "newsletter",
+                count: 1,
+              });
+            }
+          } else {
+            if (newsletterChanged) {
+              const output = await NEWSLETTER_RESOURCE.remote.set(
+                localNewsletter,
+                configuration,
+              );
+              dispatch({
+                type: "register_new_push",
+                resource: "newsletter",
+                result: output,
+              });
+            }
           }
         }
 
-        // 10. Write updated sync state
-        await writeSyncState(configuration.directory, { syncedImages });
+        if (configuration.dryRun) {
+          if (newImageCount > 0) {
+            dryRunChanges.push({
+              resource: "images",
+              count: newImageCount,
+            });
+          }
+          dispatch({
+            type: "finish_dry_run",
+            changes: dryRunChanges,
+          });
+        } else {
+          // 10. Write updated sync state
+          await writeSyncState(configuration.directory, { syncedImages });
 
-        dispatch({
-          type: "finish_pushing",
-        });
+          dispatch({
+            type: "finish_pushing",
+          });
+        }
       } catch (error_) {
         dispatch({
           type: "register_error",
@@ -263,7 +343,11 @@ export default function Push(configuration: Configuration) {
   }, [configuration]);
 
   useEffect(() => {
-    if (state.status !== "not_started") {
+    if (
+      state.status === "pushed" ||
+      state.status === "dry_run" ||
+      state.status === "error"
+    ) {
       const timer = setTimeout(() => {
         exit();
       }, 500);
@@ -273,22 +357,68 @@ export default function Push(configuration: Configuration) {
     }
   }, [state.status, exit]);
 
+  if (configuration.json) {
+    if (state.status === "pushed") {
+      return (
+        <Text>
+          {JSON.stringify({
+            status: "pushed",
+            directory: configuration.directory,
+            resources: state.stats,
+          })}
+        </Text>
+      );
+    }
+    if (state.status === "dry_run") {
+      return (
+        <Text>
+          {JSON.stringify({
+            status: "dry_run",
+            changes: state.changes,
+          })}
+        </Text>
+      );
+    }
+    if (state.status === "error") {
+      return (
+        <Text>{JSON.stringify({ status: "error", error: state.error })}</Text>
+      );
+    }
+  }
+
   return (
     <Box flexDirection="column">
       {state.status === "error" ? (
         <Text color="red">Error: {state.error}</Text>
-      ) : (
+      ) : state.status === "dry_run" ? (
         <>
-          <Text color="blue">{state.status}</Text>
-
-          {state.status === "pushing" &&
-            Object.entries(state.stats).map(([resource, result]) => (
-              <Box key={resource}>
-                <Text color="green">{`${resource} pushed: ${result.updated} updated, ${result.created} created, ${result.deleted} deleted, ${result.failed} failed`}</Text>
-              </Box>
-            ))}
+          {state.changes.length === 0 ? (
+            <Text>No changes to push.</Text>
+          ) : (
+            <>
+              <Text>Would push the following changes:</Text>
+              {state.changes.map(({ resource, count }) => (
+                <Box key={resource}>
+                  <Text>{`  ${resource}: ${count} changed`}</Text>
+                </Box>
+              ))}
+            </>
+          )}
+          <Box marginTop={1}>
+            <Text color="blue">No changes made.</Text>
+          </Box>
         </>
-      )}
+      ) : state.status === "pushed" ? (
+        <>
+          {Object.entries(state.stats).map(([resource, result]) => (
+            <Box key={resource}>
+              <Text color="green">{`${resource}: ${result.updated} updated, ${result.created} created, ${result.deleted} deleted, ${result.failed} failed`}</Text>
+            </Box>
+          ))}
+        </>
+      ) : state.status === "pushing" ? (
+        <Text color="blue">Pushing...</Text>
+      ) : null}
     </Box>
   );
 }

@@ -295,8 +295,13 @@ export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {
         });
         updated++;
       } else {
+        const { attachments, ...rest } = emailWithSigil;
         await constructClient(configuration).post("/emails", {
-          body: { ...emailWithSigil, subject: email.subject || "" },
+          body: {
+            ...rest,
+            attachments: attachments ?? undefined,
+            subject: email.subject || "",
+          },
         });
         created++;
       }

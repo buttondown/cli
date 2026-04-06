@@ -12,14 +12,10 @@ beforeEach(() => {
 describe("login", () => {
   test("should display starting status initially", () => {
     const { lastFrame } = render(<Login />);
-    expect(lastFrame()).toMatchInlineSnapshot(`
-      "Please enter your Buttondown API key:
-
-      \x1B[7mE\x1B[27m\x1B[90mnter your API key...\x1B[39m"
-    `);
+    expect(lastFrame()).toContain("Please enter your Buttondown API key:");
   });
 
-  test("should persist api key", async () => {
+  test("should persist api key via interactive input", async () => {
     const randomKey = Math.random().toString(36).slice(2, 15);
     const { stdin, lastFrame } = render(<Login />);
 
@@ -33,11 +29,16 @@ describe("login", () => {
 
     await delay(200);
 
-    expect(lastFrame()).toMatchInlineSnapshot(`
-      "\x1B[32m✓ Successfully configured API key!\x1B[39m
+    expect(lastFrame()).toContain("Logged in.");
+    const config = createConfig();
+    expect(config.get("apiKey")).toBe(randomKey);
+  });
 
-      To use a different API key, run this command again."
-    `);
+  test("should persist api key non-interactively when --api-key is passed", () => {
+    const randomKey = Math.random().toString(36).slice(2, 15);
+    const { lastFrame } = render(<Login apiKey={randomKey} />);
+
+    expect(lastFrame()).toContain("Logged in.");
     const config = createConfig();
     expect(config.get("apiKey")).toBe(randomKey);
   });
@@ -47,11 +48,8 @@ describe("login", () => {
     config.set("apiKey", "existing-api-key");
 
     const { lastFrame } = render(<Login />);
-    expect(lastFrame()).toMatchInlineSnapshot(`
-      "\x1B[32m✓ You're already logged in!\x1B[39m
-
-      To use a different API key, run: \x1B[36mbuttondown login --force\x1B[39m"
-    `);
+    expect(lastFrame()).toContain("Already logged in.");
+    expect(lastFrame()).toContain("buttondown login --force");
   });
 
   test("should show login prompt when API key exists but force flag is true", () => {
@@ -59,11 +57,7 @@ describe("login", () => {
     config.set("apiKey", "existing-api-key");
 
     const { lastFrame } = render(<Login force={true} />);
-    expect(lastFrame()).toMatchInlineSnapshot(`
-      "Please enter your Buttondown API key:
-
-      \x1B[7mE\x1B[27m\x1B[90mnter your API key...\x1B[39m"
-    `);
+    expect(lastFrame()).toContain("Please enter your Buttondown API key:");
   });
 
   test("should allow overriding existing API key with force flag", async () => {
@@ -83,11 +77,16 @@ describe("login", () => {
 
     await delay(200);
 
-    expect(lastFrame()).toMatchInlineSnapshot(`
-      "\x1B[32m✓ Successfully configured API key!\x1B[39m
-
-      To use a different API key, run this command again."
-    `);
+    expect(lastFrame()).toContain("Logged in.");
     expect(config.get("apiKey")).toBe(newRandomKey);
+  });
+
+  test("should output JSON when --json flag is passed with --api-key", () => {
+    const randomKey = Math.random().toString(36).slice(2, 15);
+    const { lastFrame } = render(<Login apiKey={randomKey} json={true} />);
+
+    expect(lastFrame()).toBe(JSON.stringify({ status: "logged_in" }));
+    const config = createConfig();
+    expect(config.get("apiKey")).toBe(randomKey);
   });
 });

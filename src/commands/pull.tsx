@@ -8,6 +8,7 @@ import {
   IMAGES_RESOURCE,
   LOCAL_EMAILS_RESOURCE,
   REMOTE_EMAILS_RESOURCE,
+  readSyncState,
   writeSyncState,
 } from "../sync/index.js";
 import type { SyncedImage } from "../sync/state.js";
@@ -73,7 +74,9 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export default function Pull(configuration: Configuration) {
+export default function Pull(
+  configuration: Configuration & { json?: boolean },
+) {
   const { exit } = useApp();
   const [state, dispatch] = useReducer(reducer, {
     status: "not_started",
@@ -98,11 +101,27 @@ export default function Pull(configuration: Configuration) {
 
         // 2. Pull images → download to media/ → build URL→localPath mapping
         const remoteImages = await IMAGES_RESOURCE.remote.get(configuration);
-        const syncedImages: Record<string, SyncedImage> = {};
+
+        // Preserve existing sync state so that already-synced images keep
+        // their original localPath. The server renames uploads to UUID
+        // filenames (e.g. photo.png → <uuid>.png), so recomputing the
+        // localPath from the remote URL would create a new file on every
+        // pull and rewrite email markdown references, causing an endless
+        // duplication cycle on subsequent pushes.
+        const existingState = await readSyncState(configuration.directory);
+        const syncedImages: Record<string, SyncedImage> = {
+          ...existingState.syncedImages,
+        };
 
         if (remoteImages) {
+          // Skip images already tracked in sync state — they've already
+          // been downloaded and their localPath is stable.
+          const newImages = remoteImages.filter(
+            (image) => !syncedImages[image.id],
+          );
+
           const output = await IMAGES_RESOURCE.local.set(
-            remoteImages,
+            newImages,
             configuration,
           );
           dispatch({
@@ -111,7 +130,10 @@ export default function Pull(configuration: Configuration) {
             result: output,
           });
 
-          for (const image of remoteImages) {
+          // Only record new images; existing entries are left untouched
+          // so their localPath (which may differ from the URL basename)
+          // stays consistent with what emails reference on disk.
+          for (const image of newImages) {
             const filename = path.basename(image.image);
             const localPath = path.join(
               configuration.directory,
@@ -175,7 +197,7 @@ export default function Pull(configuration: Configuration) {
   }, [configuration]);
 
   useEffect(() => {
-    if (state.status !== "not_started") {
+    if (state.status === "pulled" || state.status === "error") {
       const timer = setTimeout(() => {
         exit();
       }, 500);
@@ -185,28 +207,45 @@ export default function Pull(configuration: Configuration) {
     }
   }, [state.status, exit]);
 
+  if (configuration.json) {
+    if (state.status === "pulled") {
+      return (
+        <Text>
+          {JSON.stringify({
+            status: "pulled",
+            directory: configuration.directory,
+            resources: state.stats,
+          })}
+        </Text>
+      );
+    }
+    if (state.status === "error") {
+      return (
+        <Text>{JSON.stringify({ status: "error", error: state.error })}</Text>
+      );
+    }
+  }
+
   return (
     <Box flexDirection="column">
       {state.status === "error" ? (
         <Text color="red">Error: {state.error}</Text>
-      ) : (
+      ) : state.status === "pulled" ? (
         <>
-          <Text color="blue">{state.status}</Text>
-
-          {state.status === "pulling" && (
-            <>
-              {Object.entries(state.stats).map(([resource, result]) => (
-                <Box key={resource}>
-                  <Text color="green">{`${resource} pulled: ${result.updated} updated, ${result.created} created, ${result.deleted} deleted, ${result.failed} failed`}</Text>
-                </Box>
-              ))}
-              <Box marginTop={1}>
-                <Text>All content saved to: {configuration.directory}</Text>
-              </Box>
-            </>
-          )}
+          {Object.entries(state.stats).map(([resource, result]) => (
+            <Box key={resource}>
+              <Text color="green">{`${resource}: ${result.updated} updated, ${result.created} created, ${result.deleted} deleted, ${result.failed} failed`}</Text>
+            </Box>
+          ))}
+          <Box marginTop={1}>
+            <Text>
+              directory: {configuration.directory}
+            </Text>
+          </Box>
         </>
-      )}
+      ) : state.status === "pulling" ? (
+        <Text color="blue">Pulling...</Text>
+      ) : null}
     </Box>
   );
 }
