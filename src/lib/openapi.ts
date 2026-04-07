@@ -1740,7 +1740,7 @@ export interface components {
      * @description Governs who can view this email in the archive. 
      * @enum {string}
      */
-    ArchivalMode: "disabled" | "enabled" | "enabled_for_paid_subscribers";
+    ArchivalMode: "disabled" | "enabled" | "enabled_for_paid_subscribers" | "enabled_for_subscribers";
     /**
      * Comment 
      * @description Comments are a way for subscribers to interact with newsletters. They're a way to
