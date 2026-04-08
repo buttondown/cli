@@ -1192,16 +1192,27 @@ export interface components {
        */
       size: number;
     };
-    /** Action */
+    /**
+     * Action 
+     * @description An action to perform when the automation's trigger fires.
+     */
     Action: {
+      /** @description The type of action to perform. */
       type: components["schemas"]["AutomationActionType"];
-      /** Metadata */
+      /**
+       * Metadata 
+       * @description Configuration specific to the action type.
+       */
       metadata: {
         [key: string]: unknown | undefined;
       };
+      /** @description When to execute this action. Defaults to immediate if not specified. */
       timing?: components["schemas"]["Timing"] | null;
     };
-    /** Automation */
+    /**
+     * Automation 
+     * @description A rule that automatically performs actions in response to events.
+     */
     Automation: {
       /**
        * Id 
@@ -1214,14 +1225,26 @@ export interface components {
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
-      /** Name */
+      /**
+       * Name 
+       * @description The name of the automation.
+       */
       name: string;
+      /** @description Whether the automation is enabled or disabled. */
       status: components["schemas"]["AutomationStatus"];
+      /** @description The event that causes this automation to run. */
       trigger: components["schemas"]["ExternalEventType"];
-      /** Actions */
+      /**
+       * Actions 
+       * @description The actions to perform when the trigger fires.
+       */
       actions: (components["schemas"]["Action"])[];
+      /** @description Conditions that must be met for the automation to run. */
       filters: components["schemas"]["FilterGroup"];
-      /** Metadata */
+      /**
+       * Metadata 
+       * @description Additional metadata for the automation.
+       */
       metadata: {
         [key: string]: unknown | undefined;
       };
@@ -1231,16 +1254,26 @@ export interface components {
        */
       should_evaluate_filter_after_delay: boolean;
     };
-    /** Delay */
+    /**
+     * Delay 
+     * @description Configuration for how long to wait before executing the automation's action.
+     */
     Delay: {
-      /** Value */
+      /**
+       * Value 
+       * @description The number of time units to delay.
+       */
       value: string;
       /**
        * Unit 
+       * @description The unit of time for the delay. 
        * @enum {string}
        */
       unit: "minutes" | "hours" | "days" | "weeks";
-      /** Time Of Day */
+      /**
+       * Time Of Day 
+       * @description If set, the action will be executed at this time of day after the delay has passed.
+       */
       time_of_day?: ("morning" | "evening" | "") | null;
     };
     /**
@@ -1345,13 +1378,18 @@ export interface components {
      * @enum {string}
      */
     Operator: "equals" | "not_equals" | "contains" | "not_contains" | "is_empty" | "is_not_empty" | "greater_than" | "less_than";
-    /** Timing */
+    /**
+     * Timing 
+     * @description Controls when an automation's action executes after the trigger fires.
+     */
     Timing: {
       /**
        * Time 
+       * @description Whether the action should execute immediately or after a delay. 
        * @enum {string}
        */
       time: "immediate" | "delay";
+      /** @description The delay configuration. Required when `time` is `delay`; null when `time` is `immediate`. */
       delay?: components["schemas"]["Delay"] | null;
     };
     /**
@@ -1379,14 +1417,23 @@ export interface components {
     };
     /** AutomationInput */
     AutomationInput: {
-      /** Name */
+      /**
+       * Name 
+       * @description The name of the automation.
+       */
       name: string;
+      /** @description The event that causes this automation to run. */
       trigger: components["schemas"]["ExternalEventType"];
-      /** Actions */
+      /**
+       * Actions 
+       * @description The actions to perform when the trigger fires.
+       */
       actions: (components["schemas"]["Action"])[];
+      /** @description Conditions that must be met for the automation to run. */
       filters: components["schemas"]["FilterGroup"];
       /**
        * Metadata 
+       * @description Additional metadata for the automation. 
        * @default {}
        */
       metadata?: {
@@ -1401,15 +1448,28 @@ export interface components {
     };
     /** AutomationUpdateInput */
     AutomationUpdateInput: {
-      /** Name */
+      /**
+       * Name 
+       * @description The name of the automation.
+       */
       name?: string | null;
+      /** @description Whether the automation is enabled or disabled. */
       status?: components["schemas"]["AutomationStatus"] | null;
+      /** @description The event that causes this automation to run. */
       trigger?: components["schemas"]["ExternalEventType"] | null;
+      /** @description When to execute the automation's actions. */
       timing?: components["schemas"]["Timing"] | null;
-      /** Actions */
+      /**
+       * Actions 
+       * @description The actions to perform when the trigger fires.
+       */
       actions?: (components["schemas"]["Action"])[] | null;
+      /** @description Conditions that must be met for the automation to run. */
       filters?: components["schemas"]["FilterGroup"] | null;
-      /** Metadata */
+      /**
+       * Metadata 
+       * @description Additional metadata for the automation.
+       */
       metadata?: ({
         [key: string]: unknown | undefined;
       }) | null;
