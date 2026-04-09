@@ -5364,7 +5364,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    NewsletterLocale: "cs-CZ" | "nl-NL" | "en-AU" | "en-CA" | "en-GB" | "en" | "fr" | "de" | "ne" | "pl-PL" | "pt-BR" | "ru" | "es" | "tr" | "sv-SE";
+    NewsletterLocale: "cs-CZ" | "nl-NL" | "en-AU" | "en-CA" | "en-GB" | "en" | "et" | "fr" | "de" | "ne" | "pl-PL" | "pt-BR" | "ru" | "es" | "tr" | "sv-SE";
     /**
      * Mode 
      * @description An enumeration. 
