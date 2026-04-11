@@ -424,6 +424,11 @@ export interface paths {
      * @description Delete an import
      */
     delete: operations["delete_import"];
+    /**
+     * Update Import 
+     * @description Update an import's properties
+     */
+    patch: operations["update_import"];
   };
   "/newsletters": {
     /**
@@ -3287,6 +3292,23 @@ export interface components {
       metadata?: {
         [key: string]: string | undefined;
       };
+    };
+    /** UpdateImportInput */
+    UpdateImportInput: {
+      /**
+       * Label 
+       * @description An optional label for the import.
+       */
+      label?: string | null;
+      /**
+       * Metadata 
+       * @description Metadata about the import, such as detected column mappings.
+       */
+      metadata?: ({
+        [key: string]: unknown | undefined;
+      }) | null;
+      /** @description The status of the import. Set to 'in_progress' to begin executing the import. */
+      status?: components["schemas"]["ImportStatus"] | null;
     };
     /**
      * Newsletter 
@@ -8833,6 +8855,50 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+    };
+  };
+  /**
+   * Update Import 
+   * @description Update an import's properties
+   */
+  update_import: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateImportInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Import"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
     };
   };
   /**
