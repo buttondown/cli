@@ -401,6 +401,30 @@ export interface paths {
      */
     patch: operations["update_image"];
   };
+  "/imports": {
+    /**
+     * List Imports 
+     * @description List all imports
+     */
+    get: operations["list_imports"];
+    /**
+     * Create Import 
+     * @description Create a new import by uploading a file
+     */
+    post: operations["create_import"];
+  };
+  "/imports/{id}": {
+    /**
+     * Retrieve Import 
+     * @description Retrieve a specific import by its ID
+     */
+    get: operations["retrieve_import"];
+    /**
+     * Delete Import 
+     * @description Delete an import
+     */
+    delete: operations["delete_import"];
+  };
   "/newsletters": {
     /**
      * List Newsletters 
@@ -906,10 +930,14 @@ export interface components {
        * @description The error code.
        */
       code?: Record<string, unknown>;
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -1405,10 +1433,14 @@ export interface components {
     ErrorMessage_AutomationCreationErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["AutomationCreationErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -2232,10 +2264,14 @@ export interface components {
     ErrorMessage_EmailCreationErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["EmailCreationErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -2344,10 +2380,14 @@ export interface components {
     ErrorMessage_EmailListErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["EmailListErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -2659,10 +2699,14 @@ export interface components {
     ErrorMessage_CreateExportErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["CreateExportErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -3010,10 +3054,14 @@ export interface components {
     ErrorMessage_CreateFormErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["CreateFormErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -3128,6 +3176,116 @@ export interface components {
        */
       metadata?: {
         [key: string]: unknown | undefined;
+      };
+    };
+    /**
+     * Import 
+     * @description Imports let you bring data into Buttondown in bulk by uploading a file.
+     * Currently, subscriber imports are supported.
+     */
+    Import: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /** @description The type of import. */
+      type: components["schemas"]["ImportType"];
+      /** @description The current status of the import. */
+      status: components["schemas"]["ImportStatus"];
+      /** @description The detected source of the import file. */
+      source: components["schemas"]["ImportSource"];
+      /**
+       * Label 
+       * @description An optional label for the import.
+       */
+      label?: string | null;
+      /**
+       * Metadata 
+       * @description Metadata about the import, such as detected column mappings.
+       */
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
+      /** @description The results of the import, available after completion. */
+      results?: components["schemas"]["ImportResult"] | null;
+    };
+    /** ImportResult */
+    ImportResult: {
+      /**
+       * New Subscribers 
+       * @description The number of new subscribers created by the import.
+       */
+      new_subscribers?: number | null;
+      /**
+       * Updated Subscribers 
+       * @description The number of existing subscribers updated by the import.
+       */
+      updated_subscribers?: number | null;
+      /**
+       * Existing Subscribers 
+       * @description The number of subscribers that already existed and were skipped.
+       */
+      existing_subscribers?: number | null;
+      /**
+       * Reason To Bad Subscribers 
+       * @description A mapping of error reasons to the list of email addresses that failed for that reason.
+       */
+      reason_to_bad_subscribers?: {
+        [key: string]: (string)[] | undefined;
+      };
+      /**
+       * New Tags 
+       * @description The number of new tags created by the import.
+       */
+      new_tags?: number | null;
+    };
+    /**
+     * ImportSource 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ImportSource: "bare" | "buttondown" | "custom" | "flodesk" | "ghost" | "google" | "mailchimp" | "mailerlite" | "memberful" | "sender_dot_net" | "sendy" | "shopify" | "sparkloop" | "squarespace" | "standard" | "substack" | "tinyletter";
+    /**
+     * ImportStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ImportStatus: "not_started" | "in_progress" | "validating" | "failed" | "succeeded";
+    /**
+     * ImportType 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    ImportType: "subscriber_import";
+    /**
+     * CreateImportErrorCode 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    CreateImportErrorCode: "import_failure" | "invalid_file_type" | "malformed_csv";
+    /** ErrorMessage[CreateImportErrorCode] */
+    ErrorMessage_CreateImportErrorCode_: {
+      /** @description The error code. */
+      code?: components["schemas"]["CreateImportErrorCode"];
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
+      detail: string;
+      /**
+       * Metadata 
+       * @description Additional context about the error. 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
       };
     };
     /**
@@ -3500,10 +3658,14 @@ export interface components {
     ErrorMessage_CreateNewsletterErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["CreateNewsletterErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -4240,10 +4402,14 @@ export interface components {
     ErrorMessage_ListPricesErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["ListPricesErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -4272,10 +4438,14 @@ export interface components {
     ErrorMessage_CreatePriceErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["CreatePriceErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -4438,10 +4608,14 @@ export interface components {
     ErrorMessage_ValidationErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["SubscriberInputValidationErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -4514,10 +4688,14 @@ export interface components {
     ErrorMessage_ListSubscribersErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["ListSubscribersErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -4537,10 +4715,14 @@ export interface components {
     ErrorMessage_UpdateSubscriberErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["UpdateSubscriberErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -4619,10 +4801,14 @@ export interface components {
     ErrorMessage_UpdateAutomationAttemptErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["UpdateAutomationAttemptErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -4746,10 +4932,14 @@ export interface components {
     ErrorMessage_CreateSurveyErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["CreateSurveyErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -4810,10 +5000,14 @@ export interface components {
     ErrorMessage_UpdateSurveyErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["UpdateSurveyErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -4943,10 +5137,14 @@ export interface components {
     ErrorMessage_UpdateTagErrorCode_: {
       /** @description The error code. */
       code?: components["schemas"]["UpdateTagErrorCode"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -5022,10 +5220,14 @@ export interface components {
     ErrorMessage_Failure_: {
       /** @description The error code. */
       code?: components["schemas"]["Failure"];
-      /** Detail */
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
       detail: string;
       /**
        * Metadata 
+       * @description Additional context about the error. 
        * @default {}
        */
       metadata?: {
@@ -5401,321 +5603,692 @@ export interface components {
     SubscriberUndeliverabilityReason: "access_denied" | "authentication_issue" | "delivery_expired" | "domain_blocked" | "email_blocked" | "hard_bounce" | "ip_blocked" | "ip_undeliverable" | "malformed" | "on_esp_denylist" | "other" | "out_of_storage" | "problematic_url" | "rate_limited" | "spam" | "transient" | "disabled" | "does_not_exist" | "spf_failed" | "unreachable";
     /** Page[AdvertisingUnit] */
     AdvertisingUnitPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["AdvertisingUnit"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[AdvertisingSlot] */
     AdvertisingSlotPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["AdvertisingSlot"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Attachment] */
     AttachmentPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Attachment"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Automation] */
     AutomationPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Automation"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Book] */
     BookPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Book"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Comment] */
     CommentPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Comment"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[StripeCoupon] */
     StripeCouponPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["StripeCoupon"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Email] */
     EmailPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Email"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[History] */
     HistoryPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["History"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[EmailEvent] */
     EmailEventPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["EmailEvent"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Export] */
     ExportPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Export"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[ExternalFeed] */
     ExternalFeedPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["ExternalFeed"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[ExternalFeedItem] */
     ExternalFeedItemPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["ExternalFeedItem"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Form] */
     FormPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Form"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Image] */
     ImagePage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Image"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
+      count: number;
+    };
+    /** Page[Import] */
+    ImportPage: {
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
+      results: (components["schemas"]["Import"])[];
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
+      next?: string | null;
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
+      previous?: string | null;
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Newsletter] */
     NewsletterPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Newsletter"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Note] */
     NotePage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Note"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Price] */
     PricePage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Price"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[PublicEmail] */
     PublicEmailPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["PublicEmail"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Snippet] */
     SnippetPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Snippet"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Subscriber] */
     SubscriberPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Subscriber"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[AutomationForSubscriber] */
     AutomationForSubscriberPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["AutomationForSubscriber"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[UnexpandableStripeSubscription] */
     StripeSubscriptionPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["StripeSubscription"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Response] */
     ResponsePage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Response"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Survey] */
     SurveyPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Survey"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Tag] */
     TagPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Tag"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[User] */
     UserPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["User"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[Webhook] */
     WebhookPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["Webhook"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** Page[WebhookAttemptOutput] */
     WebhookAttemptOutputPage: {
-      /** Results */
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
       results: (components["schemas"]["WebhookAttemptOutput"])[];
-      /** Next */
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
       next?: string | null;
-      /** Previous */
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
       previous?: string | null;
-      /** Count */
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
       count: number;
     };
     /** StripeSubscription */
@@ -8135,6 +8708,131 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+    };
+  };
+  /**
+   * List Imports 
+   * @description List all imports
+   */
+  list_imports: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportPage"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+    };
+  };
+  /**
+   * Create Import 
+   * @description Create a new import by uploading a file
+   */
+  create_import: {
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          /**
+           * File 
+           * Format: binary
+           */
+          file: string;
+          /** Metadata */
+          metadata?: string | null;
+        };
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Import"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_CreateImportErrorCode_"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Retrieve Import 
+   * @description Retrieve a specific import by its ID
+   */
+  retrieve_import: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Import"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Delete Import 
+   * @description Delete an import
+   */
+  delete_import: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
