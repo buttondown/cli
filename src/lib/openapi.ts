@@ -5400,10 +5400,11 @@ export interface components {
        */
       creation_date: string;
       /**
+       * Status 
        * @description The status of the webhook attempt. 
        * @example successful
        */
-      status: components["schemas"]["WebhookAttemptStatus"];
+      status: string;
     };
     /**
      * ExcludableField 
@@ -6429,12 +6430,6 @@ export interface components {
      * @enum {string}
      */
     InvitationStatus: "pending" | "accepted" | "declined" | "revoked" | "owner";
-    /**
-     * WebhookAttemptStatus 
-     * @description An enumeration. 
-     * @enum {string}
-     */
-    WebhookAttemptStatus: "unattempted" | "successful" | "failed";
   };
   responses: never;
   parameters: never;
