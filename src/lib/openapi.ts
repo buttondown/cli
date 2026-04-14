@@ -939,7 +939,7 @@ export interface components {
        * Code 
        * @description The error code.
        */
-      code?: Record<string, unknown>;
+      code?: string;
       /**
        * Detail 
        * @description A human-readable description of the error.
