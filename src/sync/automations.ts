@@ -3,9 +3,9 @@ import path from "node:path";
 import fg from "fast-glob";
 import type { components } from "../lib/openapi.js";
 import {
+  bulkSet,
   constructClient,
-  type OperationResult,
-  PAGE_SIZE,
+  paginatedList,
   type Resource,
   type ResourceGroup,
 } from "./types.js";
@@ -84,48 +84,23 @@ export function deserialize(content: string): {
 
 export const REMOTE_AUTOMATIONS_RESOURCE: Resource<Automation[], Automation[]> =
   {
-    async get(configuration) {
-      const automations: Automation[] = [];
-      let page = 1;
-      let hasMore = true;
-
-      while (hasMore) {
+    get: (configuration) =>
+      paginatedList<Automation>(async (page, pageSize) => {
         const response = await constructClient(configuration).get(
           "/automations",
-          {
-            params: {
-              query: {
-                page,
-                page_size: PAGE_SIZE,
-              },
-            },
-          },
+          { params: { query: { page, page_size: pageSize } } },
         );
-
-        if (response.data?.results) {
-          automations.push(...response.data.results);
-          hasMore = response.data.results.length === PAGE_SIZE;
-        } else {
-          hasMore = false;
-        }
-        page++;
-      }
-
-      return automations;
-    },
-    async set(value, configuration): Promise<OperationResult> {
-      let updated = 0;
-      let created = 0;
-      const deleted = 0;
-      const failed = 0;
-      for (const automation of value) {
-        if (automation.id) {
+        return response.data;
+      }),
+    set: (value, configuration) =>
+      bulkSet(value, {
+        update: async (automation) => {
           await constructClient(configuration).patch("/automations/{id}", {
             params: { path: { id: automation.id } },
             body: automation,
           });
-          updated++;
-        } else {
+        },
+        create: async (automation) => {
           await constructClient(configuration).post("/automations", {
             body: {
               name: automation.name || "",
@@ -137,16 +112,8 @@ export const REMOTE_AUTOMATIONS_RESOURCE: Resource<Automation[], Automation[]> =
                 automation.should_evaluate_filter_after_delay,
             },
           });
-          created++;
-        }
-      }
-      return {
-        updated,
-        created,
-        deleted,
-        failed,
-      };
-    },
+        },
+      }),
     serialize: (d) => d,
     deserialize: (d) => d,
   };

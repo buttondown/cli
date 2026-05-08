@@ -5,7 +5,7 @@ import {
   type Configuration,
   constructClient,
   type OperationResult,
-  PAGE_SIZE,
+  paginatedList,
   type Resource,
   type ResourceGroup,
 } from "./types.js";
@@ -53,40 +53,17 @@ export async function uploadImage(
 }
 
 export const REMOTE_IMAGES_RESOURCE: Resource<Image[], Image[]> = {
-  async get(configuration) {
-    const images: Image[] = [];
-    let page = 1;
-    let hasMore = true;
-
-    while (hasMore) {
+  get: (configuration) =>
+    paginatedList<Image>(async (page, pageSize) => {
       const response = await constructClient(configuration).get("/images", {
-        params: {
-          query: {
-            page,
-            page_size: PAGE_SIZE,
-          },
-        },
+        params: { query: { page, page_size: pageSize } },
       });
-
-      if (response.data?.results) {
-        images.push(...response.data.results);
-        hasMore = response.data.results.length === PAGE_SIZE;
-      } else {
-        hasMore = false;
-      }
-      page++;
-    }
-
-    return images;
-  },
+      return response.data;
+    }),
+  // Bulk image upload not supported via API; uploads happen one-at-a-time
+  // through the standalone uploadImage function.
   async set(): Promise<OperationResult> {
-    // Bulk image upload not supported via API
-    return {
-      updated: 0,
-      created: 0,
-      deleted: 0,
-      failed: 0,
-    };
+    return { updated: 0, created: 0, deleted: 0, failed: 0 };
   },
   serialize: (d) => d,
   deserialize: (d) => d,
@@ -106,7 +83,9 @@ export const LOCAL_IMAGES_RESOURCE: Resource<Image[], Buffer[]> = {
       try {
         const response = await fetch(image.image);
         if (!response.ok) {
-          console.warn(`Failed to download ${image.image}: HTTP ${response.status}`);
+          console.warn(
+            `Failed to download ${image.image}: HTTP ${response.status}`,
+          );
           failed++;
           continue;
         }

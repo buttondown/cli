@@ -4,21 +4,9 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import delay from "delay";
 import { render } from "ink-testing-library";
-import { serialize } from "../sync/emails.js";
 import { writeSyncState } from "../sync/state.js";
+import { jsonResponse, parseUrl } from "../test-helpers.js";
 import Pull from "./pull.js";
-
-function jsonResponse(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json" },
-  });
-}
-
-function parseUrl(input: Request | string): URL {
-  if (typeof input === "string") return new URL(input);
-  return new URL(input.url);
-}
 
 describe("pull", () => {
   let tempDir: string;

@@ -4,9 +4,9 @@ import fg from "fast-glob";
 import { parse as parseYAML, stringify as stringifyYAML } from "yaml";
 import type { components } from "../lib/openapi.js";
 import {
+  bulkSet,
   constructClient,
-  type OperationResult,
-  PAGE_SIZE,
+  paginatedList,
   type Resource,
   type ResourceGroup,
 } from "./types.js";
@@ -250,52 +250,35 @@ export function convertAbsoluteToRelativeImages(
   });
 }
 
-export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {
-  async get(configuration) {
-    const emails: Email[] = [];
-    let page = 1;
-    let hasMore = true;
+function withMarkdownSigil(email: Partial<Email>): Partial<Email> {
+  const body = email.body ? `${MARKDOWN_MODE_SIGIL}${email.body}` : email.body;
+  return { ...email, body };
+}
 
-    while (hasMore) {
+export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {
+  get: (configuration) =>
+    paginatedList<Email>(async (page, pageSize) => {
       const response = await constructClient(configuration).get("/emails", {
         params: {
           query: {
             // @ts-expect-error
             page,
-            page_size: PAGE_SIZE,
+            page_size: pageSize,
           },
         },
       });
-
-      if (response.data?.results) {
-        emails.push(...response.data.results);
-        hasMore = response.data.results.length === PAGE_SIZE;
-      } else {
-        hasMore = false;
-      }
-      page++;
-    }
-
-    return emails;
-  },
-  async set(value, configuration): Promise<OperationResult> {
-    let updated = 0;
-    let created = 0;
-    const deleted = 0;
-    const failed = 0;
-    for (const email of value) {
-      const body = email.body
-        ? `${MARKDOWN_MODE_SIGIL}${email.body}`
-        : email.body;
-      const emailWithSigil = { ...email, body };
-      if (email.id) {
+      return response.data;
+    }),
+  set: (value, configuration) =>
+    bulkSet(value, {
+      update: async (email) => {
         await constructClient(configuration).patch("/emails/{id}", {
           params: { path: { id: email.id } },
-          body: emailWithSigil,
+          body: withMarkdownSigil(email),
         });
-        updated++;
-      } else {
-        const { attachments, ...rest } = emailWithSigil;
+      },
+      create: async (email) => {
+        const { attachments, ...rest } = withMarkdownSigil(email);
         await constructClient(configuration).post("/emails", {
           body: {
             ...rest,
@@ -303,16 +286,8 @@ export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {
             subject: email.subject || "",
           },
         });
-        created++;
-      }
-    }
-    return {
-      updated: updated,
-      created: created,
-      deleted: deleted,
-      failed: failed,
-    };
-  },
+      },
+    }),
   serialize: (d) => d,
   deserialize: (d) => d,
 };

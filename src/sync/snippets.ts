@@ -4,9 +4,9 @@ import fg from "fast-glob";
 import { parse as parseYAML, stringify as stringifyYAML } from "yaml";
 import type { components } from "../lib/openapi.js";
 import {
+  bulkSet,
   constructClient,
-  type OperationResult,
-  PAGE_SIZE,
+  paginatedList,
   type Resource,
   type ResourceGroup,
 } from "./types.js";
@@ -33,7 +33,7 @@ export function deserialize(content: string): {
 
   const [_, frontmatter, ...bodyParts] = parts;
 
-  const parsedYAML = parseYAML(frontmatter) as Record<string, any>;
+  const parsedYAML = (parseYAML(frontmatter) ?? {}) as Record<string, any>;
   if (Object.keys(parsedYAML).length === 0) {
     return {
       snippet: { content },
@@ -74,45 +74,22 @@ export function serialize(snippet: Partial<Snippet>): string {
 }
 
 export const REMOTE_SNIPPETS_RESOURCE: Resource<Snippet[], Snippet[]> = {
-  async get(configuration) {
-    const snippets: Snippet[] = [];
-    let page = 1;
-    let hasMore = true;
-
-    while (hasMore) {
+  get: (configuration) =>
+    paginatedList<Snippet>(async (page, pageSize) => {
       const response = await constructClient(configuration).get("/snippets", {
-        params: {
-          query: {
-            page,
-            page_size: PAGE_SIZE,
-          },
-        },
+        params: { query: { page, page_size: pageSize } },
       });
-
-      if (response.data?.results) {
-        snippets.push(...response.data.results);
-        hasMore = response.data.results.length === PAGE_SIZE;
-      } else {
-        hasMore = false;
-      }
-      page++;
-    }
-
-    return snippets;
-  },
-  async set(value, configuration): Promise<OperationResult> {
-    let updated = 0;
-    let created = 0;
-    const deleted = 0;
-    const failed = 0;
-    for (const snippet of value) {
-      if (snippet.id) {
+      return response.data;
+    }),
+  set: (value, configuration) =>
+    bulkSet(value, {
+      update: async (snippet) => {
         await constructClient(configuration).patch("/snippets/{id}", {
           params: { path: { id: snippet.id } },
           body: snippet,
         });
-        updated++;
-      } else {
+      },
+      create: async (snippet) => {
         await constructClient(configuration).post("/snippets", {
           body: {
             identifier: snippet.identifier || "",
@@ -120,16 +97,8 @@ export const REMOTE_SNIPPETS_RESOURCE: Resource<Snippet[], Snippet[]> = {
             content: snippet.content || "",
           },
         });
-        created++;
-      }
-    }
-    return {
-      updated,
-      created,
-      deleted,
-      failed,
-    };
-  },
+      },
+    }),
   serialize: (d) => d,
   deserialize: (d) => d,
 };

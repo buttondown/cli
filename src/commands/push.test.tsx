@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -8,34 +8,8 @@ import { serialize as serializeAutomation } from "../sync/automations.js";
 import { serialize } from "../sync/emails.js";
 import { serialize as serializeSnippet } from "../sync/snippets.js";
 import { writeSyncState } from "../sync/state.js";
+import { jsonResponse, mockFetch } from "../test-helpers.js";
 import Push from "./push.js";
-
-function jsonResponse(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json" },
-  });
-}
-
-type RouteHandler = (
-  request: Request,
-  url: URL,
-) => Response | Promise<Response | undefined> | undefined;
-
-function mockFetch(...handlers: RouteHandler[]) {
-  globalThis.fetch = mock(async (request: Request) => {
-    const url = new URL(request.url);
-    for (const handler of handlers) {
-      const response = await handler(request, url);
-      if (response) return response;
-    }
-    // Default: newsletter PATCH succeeds, everything else returns empty list
-    if (url.pathname.includes("/newsletters/") && request.method === "PATCH") {
-      return jsonResponse({});
-    }
-    return jsonResponse({ results: [], count: 0 });
-  }) as unknown as typeof fetch;
-}
 
 describe("push", () => {
   let tempDir: string;
@@ -298,7 +272,9 @@ describe("push", () => {
       name: "Unchanged Automation",
       status: "active" as const,
       trigger: "subscriber.created" as const,
-      actions: [{ type: "send_email" as const, metadata: {} as Record<string, string> }],
+      actions: [
+        { type: "send_email" as const, metadata: {} as Record<string, string> },
+      ],
       filters: { filters: [], groups: [], predicate: "and" as const },
       metadata: {} as Record<string, string>,
     };
@@ -307,7 +283,9 @@ describe("push", () => {
       name: "Changed Automation",
       status: "active" as const,
       trigger: "subscriber.created" as const,
-      actions: [{ type: "send_email" as const, metadata: {} as Record<string, string> }],
+      actions: [
+        { type: "send_email" as const, metadata: {} as Record<string, string> },
+      ],
       filters: { filters: [], groups: [], predicate: "and" as const },
       metadata: {} as Record<string, string>,
     };
@@ -394,10 +372,7 @@ describe("push", () => {
         }
       },
       async (request, url) => {
-        if (
-          url.pathname.includes("/snippets/") &&
-          request.method === "PATCH"
-        ) {
+        if (url.pathname.includes("/snippets/") && request.method === "PATCH") {
           const id = url.pathname.split("/snippets/")[1];
           patchedSnippetIds.push(id);
           return jsonResponse({});
