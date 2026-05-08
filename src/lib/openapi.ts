@@ -7590,6 +7590,12 @@ export interface operations {
     responses: {
       /** @description OK */
       200: never;
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
