@@ -2513,6 +2513,39 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
+    /** EmailFilter */
+    EmailFilter: {
+      /**
+       * Field 
+       * @description The subscriber attribute to evaluate. Must be a recognized field or a `subscriber.metadata.*` path.
+       */
+      field: ("subscriber.churn_date" | "subscriber.click_rate" | "subscriber.last_click_date" | "subscriber.last_open_date" | "subscriber.open_rate" | "subscriber.price" | "subscriber.source" | "subscriber.status" | "subscriber.subscription_date" | "subscriber.tags" | "subscriber.upgrade_date") | string;
+      operator: components["schemas"]["Operator"];
+      /**
+       * Value 
+       * @description The value to compare the field against.
+       */
+      value: string;
+    };
+    /** EmailFilterGroup */
+    EmailFilterGroup: {
+      /**
+       * Filters 
+       * @description The leaf-level filters to apply to the audience.
+       */
+      filters: (components["schemas"]["EmailFilter"])[];
+      /**
+       * Groups 
+       * @description The nested groups to apply to the audience.
+       */
+      groups: (components["schemas"]["EmailFilterGroup"])[];
+      /**
+       * Predicate 
+       * @description The logical operator to use when combining filters. 
+       * @enum {string}
+       */
+      predicate: "and" | "or";
+    };
     /** EmailInput */
     EmailInput: {
       /**
@@ -2599,7 +2632,7 @@ export interface components {
        *   "predicate": "and"
        * }
        */
-      filters?: components["schemas"]["FilterGroup"];
+      filters?: components["schemas"]["EmailFilterGroup"];
       /**
        * @description Controls whether subscribers can comment on this email. 
        * @default enabled
@@ -2723,7 +2756,7 @@ export interface components {
        */
       secondary_id?: number | null;
       /** @description Tag-based filter rules determining which subscribers receive this email. */
-      filters?: components["schemas"]["FilterGroup"] | null;
+      filters?: components["schemas"]["EmailFilterGroup"] | null;
       /**
        * Template 
        * @description If present, this template overrides your newsletter's default email template. Pass `"none"` to clear an override.
