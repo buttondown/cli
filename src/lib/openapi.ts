@@ -7000,6 +7000,12 @@ export interface operations {
           "application/json": components["schemas"]["Account"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Conflict */
       409: never;
     };
@@ -7018,6 +7024,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -7055,6 +7067,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -7080,6 +7098,12 @@ export interface operations {
       204: never;
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -7122,6 +7146,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Not Found */
       404: {
         content: {
@@ -7146,6 +7176,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -7188,6 +7224,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Not Found */
       404: {
         content: {
@@ -7213,6 +7255,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["APIRequestDetail"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -7301,6 +7349,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -7329,6 +7383,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["AttachmentPage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -7367,6 +7427,12 @@ export interface operations {
           "application/json": components["schemas"]["Attachment"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -7400,6 +7466,12 @@ export interface operations {
           "application/json": components["schemas"]["Attachment"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -7427,6 +7499,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -7457,6 +7535,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -7494,6 +7578,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_AutomationCreationErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -7519,6 +7609,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Automation"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -7550,6 +7646,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -7594,6 +7696,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -7629,6 +7737,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -7660,6 +7774,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Analytics"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -7904,6 +8024,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -7929,6 +8055,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["BulkAction"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -7986,6 +8118,12 @@ export interface operations {
           "application/json": components["schemas"]["CommentPage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8015,6 +8153,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -8052,6 +8196,12 @@ export interface operations {
           "application/json": components["schemas"]["Comment"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8081,6 +8231,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8117,6 +8273,12 @@ export interface operations {
           "application/json": components["schemas"]["Comment"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8145,6 +8307,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -8262,6 +8430,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_EmailListErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8297,6 +8471,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_EmailCreationErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8322,6 +8502,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Email"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -8353,6 +8539,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8393,6 +8585,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -8447,6 +8645,12 @@ export interface operations {
           "application/json": components["schemas"]["HistoryPage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8485,6 +8689,12 @@ export interface operations {
           "application/json": components["schemas"]["History"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8516,6 +8726,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Analytics"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -8561,6 +8777,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8597,6 +8819,12 @@ export interface operations {
       200: never;
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -8651,6 +8879,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8682,6 +8916,12 @@ export interface operations {
           "application/json": components["schemas"]["EmailEvent"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8710,6 +8950,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -8747,6 +8993,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_CreateExportErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8772,6 +9024,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Export"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -8800,6 +9058,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ExternalFeedPage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -8835,6 +9099,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8860,6 +9130,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ExternalFeed"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -8891,6 +9167,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -8931,6 +9213,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -8978,6 +9266,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9009,6 +9303,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Empty"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -9064,6 +9364,12 @@ export interface operations {
           "application/json": components["schemas"]["FormPage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9097,6 +9403,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_CreateFormErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9122,6 +9434,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Form"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -9153,6 +9471,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9197,6 +9521,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Not Found */
       404: {
         content: {
@@ -9217,6 +9547,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ImagePage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -9256,6 +9592,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9279,6 +9621,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9323,6 +9671,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Not Found */
       404: {
         content: {
@@ -9347,6 +9701,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -9392,6 +9752,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_CreateImportErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9415,6 +9781,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Import"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -9444,6 +9816,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9486,6 +9864,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9516,6 +9900,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -9553,6 +9943,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_CreateNewsletterErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9576,6 +9972,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9616,6 +10018,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -9800,6 +10208,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_ListPricesErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9831,6 +10245,12 @@ export interface operations {
       400: {
         content: {
           "application/json": components["schemas"]["ErrorMessage_CreatePriceErrorCode_"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -9882,6 +10302,12 @@ export interface operations {
           "application/json": components["schemas"]["SnippetPage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9915,6 +10341,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -9944,6 +10376,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -9983,6 +10421,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Not Found */
       404: {
         content: {
@@ -10017,6 +10461,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -10203,6 +10653,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_ListSubscribersErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10262,6 +10718,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_ValidationErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10298,6 +10760,12 @@ export interface operations {
           "application/json": components["schemas"]["Subscriber"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10327,6 +10795,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10371,6 +10845,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_UpdateSubscriberErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10400,6 +10880,12 @@ export interface operations {
     responses: {
       /** @description OK */
       200: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10429,6 +10915,12 @@ export interface operations {
     responses: {
       /** @description OK */
       200: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10469,6 +10961,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10502,6 +11000,12 @@ export interface operations {
           "application/json": components["schemas"]["SubscriberPage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10533,6 +11037,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["AutomationForSubscriberPage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -10580,6 +11090,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage_UpdateAutomationAttemptErrorCode_"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10611,6 +11127,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["StripeSubscriptionPage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -10672,6 +11194,12 @@ export interface operations {
           "application/json": components["schemas"]["ResponsePage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10701,6 +11229,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -10745,6 +11279,12 @@ export interface operations {
       };
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -10798,6 +11338,12 @@ export interface operations {
           "application/json": components["schemas"]["SurveyPage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10829,6 +11375,12 @@ export interface operations {
       400: {
         content: {
           "application/json": components["schemas"]["ErrorMessage_CreateSurveyErrorCode_"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -10864,6 +11416,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -10895,6 +11453,12 @@ export interface operations {
       204: never;
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -10941,6 +11505,12 @@ export interface operations {
       400: {
         content: {
           "application/json": components["schemas"]["ErrorMessage_UpdateSurveyErrorCode_"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Not Found */
@@ -11117,6 +11687,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11232,6 +11808,12 @@ export interface operations {
           "application/json": components["schemas"]["UserPage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -11263,6 +11845,12 @@ export interface operations {
       400: {
         content: {
           "application/json": components["schemas"]["ErrorMessage_Failure_"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -11298,6 +11886,12 @@ export interface operations {
           "application/json": components["schemas"]["User"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -11327,6 +11921,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -11371,6 +11971,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -11402,6 +12008,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["WebhookPage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -11437,6 +12049,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -11462,6 +12080,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Webhook"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -11493,6 +12117,12 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Forbidden */
       403: {
         content: {
@@ -11537,6 +12167,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Not Found */
       404: {
         content: {
@@ -11565,6 +12201,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["WebhookAttemptOutputPage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Forbidden */
@@ -11601,6 +12243,12 @@ export interface operations {
       204: never;
       /** @description Bad Request */
       400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
