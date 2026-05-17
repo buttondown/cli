@@ -2253,6 +2253,12 @@ export interface components {
        */
       commenting_disabled?: boolean;
       /**
+       * Country 
+       * @description The ISO 3166-1 alpha-2 country code inferred from the subscriber's IP address at signup, if available. 
+       * @example US
+       */
+      country?: string | null;
+      /**
        * Email Address 
        * @description The email address of the subscriber. 
        * @example telemachus@buttondown.email
