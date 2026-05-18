@@ -2444,8 +2444,18 @@ export interface components {
        * @description The UTM source the subscriber was attributed to at signup.
        */
       utm_source: string;
-      /** Stripe Customer */
+      /**
+       * Stripe Customer 
+       * @description If expanded, the Stripe customer associated with this subscriber.
+       */
       stripe_customer?: ({
+        [key: string]: unknown | undefined;
+      }) | null;
+      /**
+       * Stripe Subscription 
+       * @description If expanded, the Stripe subscription backing this subscriber's paid subscription.
+       */
+      stripe_subscription?: ({
         [key: string]: unknown | undefined;
       }) | null;
     };
@@ -10521,8 +10531,8 @@ export interface operations {
         domain?: (string)[];
         /** @description If provided, only return subscribers whose email address contains the given string. */
         email_address?: string | (string)[];
-        /** @description If provided, expand the given field. (Only supported fields: 'stripe_customer') */
-        expand?: ("stripe_customer")[];
+        /** @description If provided, expand the given field. (Supported: 'stripe_customer', 'stripe_subscription'.) */
+        expand?: ("stripe_customer" | "stripe_subscription")[];
         /**
          * @description If provided, only return subscribers that came through the given [form(s)](https://docs.buttondown.com/registration-forms). 
          * @example [
@@ -10753,7 +10763,7 @@ export interface operations {
   retrieve_subscriber: {
     parameters: {
       query: {
-        expand?: ("stripe_customer")[];
+        expand?: ("stripe_customer" | "stripe_subscription")[];
       };
       path: {
         id_or_email: string;
