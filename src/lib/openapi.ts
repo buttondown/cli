@@ -1960,6 +1960,13 @@ export interface components {
      */
     ArchivalMode: "disabled" | "enabled" | "enabled_for_paid_subscribers" | "enabled_for_subscribers";
     /**
+     * Callout 
+     * @description Surfacing-time flags about an email that the UI uses to render contextual
+     * callouts (e.g. in the analytics panel). Computed on read; not persisted. 
+     * @enum {string}
+     */
+    Callout: "first_send_on_sending_domain";
+    /**
      * Comment 
      * @description Comments are a way for subscribers to interact with newsletters. They're a way to
      * provide feedback, ask questions, and generally engage with the content of an email.
@@ -2035,6 +2042,11 @@ export interface components {
       absolute_url: string;
       /** @description Aggregate analytics for the email. Null until the email has been sent. */
       analytics?: components["schemas"]["Analytics"] | null;
+      /**
+       * Callouts 
+       * @description A list of callouts that apply to this email — surfaced in the UI alongside analytics to flag context the reader should know about (e.g., first send on a custom sending domain).
+       */
+      callouts?: (components["schemas"]["Callout"])[];
       /**
        * Attachments 
        * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
