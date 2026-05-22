@@ -4712,10 +4712,10 @@ export interface components {
        * @example email 
        * @enum {string}
        */
-      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
+      model_type: "automation" | "comment" | "conversation" | "email" | "external_feed" | "socialmention" | "stripe_customer" | "subscriber" | "survey" | "tag" | "webmention";
       /**
        * Model Id 
-       * @description The ID of the object this note is attached to. 
+       * @description The UUID or TypeID of the object this note is attached to. 
        * @example 13121cd6-0dfc-424c-bb12-988b0a32fcb3
        */
       model_id: string;
@@ -4748,10 +4748,10 @@ export interface components {
        * @example email 
        * @enum {string}
        */
-      model_type: "email" | "subscriber" | "external_feed" | "automation" | "survey" | "stripe_customer" | "tag" | "comment" | "conversation" | "webmention" | "socialmention";
+      model_type: "automation" | "comment" | "conversation" | "email" | "external_feed" | "socialmention" | "stripe_customer" | "subscriber" | "survey" | "tag" | "webmention";
       /**
        * Model Id 
-       * @description The ID of the object this note is attached to. 
+       * @description The UUID or TypeID of the object this note is attached to. 
        * @example 13121cd6-0dfc-424c-bb12-988b0a32fcb3
        */
       model_id: string;
@@ -10080,8 +10080,8 @@ export interface operations {
     parameters: {
       query: {
         /** @description Filter notes by the type of object they are attached to. */
-        model_type?: string;
-        /** @description Filter notes by the ID of the object they are attached to. */
+        model_type?: "automation" | "comment" | "conversation" | "email" | "external_feed" | "socialmention" | "stripe_customer" | "subscriber" | "survey" | "tag" | "webmention";
+        /** @description Filter notes by the UUID or TypeID of the object they are attached to. */
         model_id?: string;
         /** @description If provided, expand the given field. */
         expand?: ("user")[];
@@ -10092,6 +10092,12 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["NotePage"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
       /** @description Unauthorized */
