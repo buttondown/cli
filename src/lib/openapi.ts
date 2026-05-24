@@ -5457,7 +5457,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    CreateSurveyErrorCode: "identifier_already_exists" | "not_enough_answers";
+    CreateSurveyErrorCode: "identifier_already_exists";
     /** ErrorMessage[CreateSurveyErrorCode] */
     ErrorMessage_CreateSurveyErrorCode_: {
       /** @description The error code. */
@@ -5557,7 +5557,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    UpdateSurveyErrorCode: "answers_empty" | "not_enough_answers" | "survey_has_responses";
+    UpdateSurveyErrorCode: "survey_has_responses";
     /** SurveyUpdateInput */
     SurveyUpdateInput: {
       /**
@@ -11354,7 +11354,7 @@ export interface operations {
         /**
          * @description If provided, only return surveys without the given status. 
          * @example [
-         *   "disabled"
+         *   "inactive"
          * ]
          */
         "-status"?: (components["schemas"]["SurveyStatus"])[];
@@ -11372,6 +11372,12 @@ export interface operations {
           "application/json": components["schemas"]["SurveyPage"];
         };
       };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Unauthorized */
       401: {
         content: {
@@ -11386,6 +11392,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11425,6 +11437,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11555,6 +11573,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
