@@ -966,7 +966,7 @@ export interface components {
        * Title 
        * @description The title of the advertising unit.
        */
-      title?: string | null;
+      title: string;
       /**
        * Description 
        * @description A description of the advertising unit.
