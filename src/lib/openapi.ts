@@ -969,9 +969,10 @@ export interface components {
       title: string;
       /**
        * Description 
-       * @description A description of the advertising unit.
+       * @description A description of the advertising unit. 
+       * @default
        */
-      description?: string | null;
+      description?: string;
       /**
        * Behavior 
        * @description The behavior type of the advertising unit. 
@@ -2633,7 +2634,7 @@ export interface components {
        * @description The type of email. Defaults to `PUBLIC`. 
        * @default public
        */
-      email_type?: components["schemas"]["EmailType"] | null;
+      email_type?: components["schemas"]["EmailType"];
       /**
        * @description The status of the email (e.g. `draft`, `about_to_send`, `sent`, `scheduled`). 
        * @default about_to_send
@@ -2668,10 +2669,9 @@ export interface components {
       commenting_mode?: components["schemas"]["EmailCommentingMode"];
       /**
        * Related Email Ids 
-       * @description IDs of emails related to this one. Shown at the bottom of the email and archive pages. 
-       * @default []
+       * @description IDs of emails related to this one. Shown at the bottom of the email and archive pages.
        */
-      related_email_ids?: (string)[] | null;
+      related_email_ids?: (string)[];
       /**
        * Featured 
        * @description Designated whether or not this email should be highlighted within the archives. 
@@ -3238,7 +3238,7 @@ export interface components {
        * @description An optional internal label for this feed. 
        * @default
        */
-      label?: string | null;
+      label?: string;
       /**
        * Metadata 
        * @description Metadata to be passed to emails rendered by this RSS feed. 
@@ -3246,9 +3246,9 @@ export interface components {
        *   "foo": "bar"
        * }
        */
-      metadata?: ({
+      metadata?: {
         [key: string]: unknown | undefined;
-      }) | null;
+      };
       /**
        * Skip Old Items 
        * @description Skip items with publish date older than one day from when they're discovered 
@@ -5848,14 +5848,14 @@ export interface components {
        * @default  
        * @example Trigger when an email is created to notify in Slack.
        */
-      description?: string | null;
+      description?: string;
       /**
        * Signing Key 
        * @description Optional HMAC signing key for webhook verification. When set, webhook requests will include an X-Buttondown-Signature header with sha256=<signature>. 
        * @default  
        * @example
        */
-      signing_key?: string | null;
+      signing_key?: string;
     };
     /**
      * WebhookStatus 
@@ -5893,14 +5893,14 @@ export interface components {
        * @default  
        * @example Trigger when an email is created to notify in Slack.
        */
-      description?: string | null;
+      description?: string;
       /**
        * Signing Key 
        * @description Optional HMAC signing key for webhook verification. When set, webhook requests will include an X-Buttondown-Signature header with sha256=<signature>. 
        * @default  
        * @example
        */
-      signing_key?: string | null;
+      signing_key?: string;
     };
     /**
      * WebhookAttemptStatus 
