@@ -5430,15 +5430,59 @@ export interface components {
       /** @description The UI control used to collect responses (e.g. `radio`, `checkbox`). */
       input_type: components["schemas"]["SurveyInputType"];
     };
+    /**
+     * CreateSurveyResponseErrorCode 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    CreateSurveyResponseErrorCode: "invalid_input";
+    /** ErrorMessage[CreateSurveyResponseErrorCode] */
+    ErrorMessage_CreateSurveyResponseErrorCode_: {
+      /** @description The error code. */
+      code?: components["schemas"]["CreateSurveyResponseErrorCode"];
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
+      detail: string;
+      /**
+       * Metadata 
+       * @description Additional context about the error. 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
     /** ResponseInput */
     ResponseInput: {
-      /** Subscriber Id */
+      /**
+       * Subscriber Id 
+       * @description The subscriber who submitted the response. 
+       * @example [
+       *   "sub_01jv2m9q8r7s6t5w4x3y2z1abc"
+       * ]
+       */
       subscriber_id: string;
-      /** Survey Id */
+      /**
+       * Survey Id 
+       * @description The survey being answered. 
+       * @example [
+       *   "srv_01jv2m9q8r7s6t5w4x3y2z1abc"
+       * ]
+       */
       survey_id: string;
-      /** Email Id */
+      /**
+       * Email Id 
+       * @description The email ID, automation ID, or arbitrary source string where the survey was answered. 
+       * @example em_01jv2m9q8r7s6t5w4x3y2z1abc
+       */
       email_id: string;
-      /** Answer */
+      /**
+       * Answer 
+       * @description The 1-based index of the selected answer in the survey's `answers` list. 
+       * @example 1
+       */
       answer: number;
     };
     /** ResponseUpdateInput */
@@ -11193,23 +11237,23 @@ export interface operations {
     parameters: {
       query: {
         /**
-         * @description If provided, only return responses made to the given [email(s)](https://docs.buttondown.com/api-emails-introduction). 
+         * @description If provided, only return responses made to the given email ID, automation ID, or arbitrary source string. 
          * @example [
-         *   "email_abc123"
+         *   "em_01jv2m9q8r7s6t5w4x3y2z1abc"
          * ]
          */
         email_id?: (string)[];
         /**
          * @description If provided, only return responses made by the given [subscriber(s)](https://docs.buttondown.com/api-subscribers-introduction). 
          * @example [
-         *   "sub_abc123"
+         *   "sub_01jv2m9q8r7s6t5w4x3y2z1abc"
          * ]
          */
         subscriber_id?: (string)[];
         /**
          * @description If provided, only return responses made to the given [survey(s)](https://docs.buttondown.com/api-surveys-introduction). 
          * @example [
-         *   "survey_abc123"
+         *   "srv_01jv2m9q8r7s6t5w4x3y2z1abc"
          * ]
          */
         survey_id?: (string)[];
@@ -11242,6 +11286,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11264,7 +11314,7 @@ export interface operations {
       /** @description Bad Request */
       400: {
         content: {
-          "application/json": components["schemas"]["ErrorMessage"];
+          "application/json": components["schemas"]["ErrorMessage_CreateSurveyResponseErrorCode_"];
         };
       };
       /** @description Unauthorized */
@@ -11287,6 +11337,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11333,6 +11389,12 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
     };
