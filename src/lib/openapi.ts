@@ -1292,6 +1292,32 @@ export interface components {
        */
       size: number;
     };
+    /** ValidationErrorDetail */
+    ValidationErrorDetail: {
+      /**
+       * Type 
+       * @description The type of validation error.
+       */
+      type: string;
+      /**
+       * Loc 
+       * @description The location of the error in the request.
+       */
+      loc: (string | number)[];
+      /**
+       * Msg 
+       * @description A human-readable error message.
+       */
+      msg: string;
+    };
+    /** ValidationErrorMessage */
+    ValidationErrorMessage: {
+      /**
+       * Detail 
+       * @description A list of validation errors.
+       */
+      detail: (components["schemas"]["ValidationErrorDetail"])[];
+    };
     /**
      * Action 
      * @description An action to perform when the automation's trigger fires.
@@ -1773,32 +1799,6 @@ export interface components {
        * @default true
        */
       shared?: boolean;
-    };
-    /** ValidationErrorDetail */
-    ValidationErrorDetail: {
-      /**
-       * Type 
-       * @description The type of validation error.
-       */
-      type: string;
-      /**
-       * Loc 
-       * @description The location of the error in the request.
-       */
-      loc: (string | number)[];
-      /**
-       * Msg 
-       * @description A human-readable error message.
-       */
-      msg: string;
-    };
-    /** ValidationErrorMessage */
-    ValidationErrorMessage: {
-      /**
-       * Detail 
-       * @description A list of validation errors.
-       */
-      detail: (components["schemas"]["ValidationErrorDetail"])[];
     };
     /** BookInput */
     BookInput: {
@@ -7444,7 +7444,12 @@ export interface operations {
   list_attachments: {
     parameters: {
       query: {
-        /** @description If provided, only return attachments matching the given IDs. */
+        /**
+         * @description If provided, only return attachments matching the given IDs. 
+         * @example [
+         *   "att_01h8xg4j3k2m1n0p9q8r7s6t5v"
+         * ]
+         */
         ids?: (string)[];
         /** @description The number of results per page. */
         page_size?: number;
@@ -7469,6 +7474,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7476,11 +7487,6 @@ export interface operations {
    * @description Upload a new attachment
    */
   create_attachment: {
-    parameters: {
-      query: {
-        name?: string;
-      };
-    };
     requestBody: {
       content: {
         "multipart/form-data": {
@@ -7489,6 +7495,8 @@ export interface operations {
            * Format: binary
            */
           file: string;
+          /** Name */
+          name?: string | null;
         };
       };
     };
@@ -7516,7 +7524,7 @@ export interface operations {
       /** @description Unprocessable Entity */
       422: {
         content: {
-          "application/json": components["schemas"]["ErrorMessage"];
+          "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
     };
