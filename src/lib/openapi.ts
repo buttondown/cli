@@ -11245,12 +11245,19 @@ export interface operations {
     parameters: {
       query: {
         /**
-         * @description If provided, only return responses made to the given email ID, automation ID, or arbitrary source string. 
+         * @description If provided, only return responses submitted from the given email ID(s). 
          * @example [
          *   "em_01jv2m9q8r7s6t5w4x3y2z1abc"
          * ]
          */
         email_id?: (string)[];
+        /**
+         * @description If provided, only return responses submitted from the given automation ID(s). 
+         * @example [
+         *   "aut_01jv2m9q8r7s6t5w4x3y2z1abc"
+         * ]
+         */
+        automation_id?: (string)[];
         /**
          * @description If provided, only return responses made by the given [subscriber(s)](https://docs.buttondown.com/api-subscribers-introduction). 
          * @example [
@@ -11258,6 +11265,13 @@ export interface operations {
          * ]
          */
         subscriber_id?: (string)[];
+        /**
+         * @description If provided, only return responses submitted from the given arbitrary source string(s). 
+         * @example [
+         *   "landing-page"
+         * ]
+         */
+        source?: (string)[];
         /**
          * @description If provided, only return responses made to the given [survey(s)](https://docs.buttondown.com/api-surveys-introduction). 
          * @example [
