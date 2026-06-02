@@ -1545,6 +1545,23 @@ export interface components {
         [key: string]: string | undefined;
       };
     };
+    /**
+     * ActionInput 
+     * @description Request payload for an action to perform when the automation's trigger fires.
+     */
+    ActionInput: {
+      /** @description The type of action to perform. */
+      type: components["schemas"]["AutomationActionType"];
+      /**
+       * Metadata 
+       * @description Configuration specific to the action type.
+       */
+      metadata?: {
+        [key: string]: unknown | undefined;
+      };
+      /** @description When to execute this action. Defaults to immediate if not specified. */
+      timing?: components["schemas"]["TimingInput"] | null;
+    };
     /** AutomationInput */
     AutomationInput: {
       /**
@@ -1558,16 +1575,15 @@ export interface components {
        * Actions 
        * @description The actions to perform when the trigger fires.
        */
-      actions: (components["schemas"]["Action"])[];
+      actions: (components["schemas"]["ActionInput"])[];
       /** @description Conditions that must be met for the automation to run. */
       filters: components["schemas"]["FilterGroup"];
       /**
        * Metadata 
-       * @description Additional metadata for the automation. 
-       * @default {}
+       * @description Additional metadata for the automation.
        */
       metadata?: {
-        [key: string]: string | undefined;
+        [key: string]: unknown | undefined;
       };
       /**
        * Should Evaluate Filter After Delay 
@@ -1575,6 +1591,42 @@ export interface components {
        * @default false
        */
       should_evaluate_filter_after_delay?: boolean;
+    };
+    /**
+     * DelayInput 
+     * @description Request payload configuration for delaying an automation action.
+     */
+    DelayInput: {
+      /**
+       * Value 
+       * @description The number of time units to delay.
+       */
+      value: string;
+      /**
+       * Unit 
+       * @description The unit of time for the delay. 
+       * @enum {string}
+       */
+      unit: "minutes" | "hours" | "days" | "weeks";
+      /**
+       * Time Of Day 
+       * @description If set, the action will be executed at this time of day after the delay has passed.
+       */
+      time_of_day?: ("morning" | "evening" | "") | null;
+    };
+    /**
+     * TimingInput 
+     * @description Request payload controls for when an automation action executes.
+     */
+    TimingInput: {
+      /**
+       * Time 
+       * @description Whether the action should execute immediately or after a delay. 
+       * @enum {string}
+       */
+      time: "immediate" | "delay";
+      /** @description The delay configuration. Required when `time` is `delay`; null when `time` is `immediate`. */
+      delay?: components["schemas"]["DelayInput"] | null;
     };
     /** AutomationUpdateInput */
     AutomationUpdateInput: {
@@ -1588,12 +1640,12 @@ export interface components {
       /** @description The event that causes this automation to run. */
       trigger?: components["schemas"]["ExternalEventType"] | null;
       /** @description When to execute the automation's actions. */
-      timing?: components["schemas"]["Timing"] | null;
+      timing?: components["schemas"]["TimingInput"] | null;
       /**
        * Actions 
        * @description The actions to perform when the trigger fires.
        */
-      actions?: (components["schemas"]["Action"])[] | null;
+      actions?: (components["schemas"]["ActionInput"])[] | null;
       /** @description Conditions that must be met for the automation to run. */
       filters?: components["schemas"]["FilterGroup"] | null;
       /**
@@ -7672,6 +7724,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7796,6 +7854,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
