@@ -1893,6 +1893,17 @@ export interface components {
      */
     BulkAction: {
       /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /**
        * @description The type of bulk action to perform. 
        * @example delete_emails
        */
@@ -1912,17 +1923,6 @@ export interface components {
           [key: string]: unknown | undefined;
         })) | undefined;
       };
-      /**
-       * Id 
-       * @description A unique TypeID associated with the object.
-       */
-      id: string;
-      /**
-       * Creation Date 
-       * Format: date-time 
-       * @description The date and time at which the object was first created.
-       */
-      creation_date: string;
       /** @description The current processing status of the bulk action. */
       status: components["schemas"]["BulkActionStatus"];
       /**
