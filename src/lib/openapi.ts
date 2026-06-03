@@ -2528,7 +2528,7 @@ export interface components {
     CommentInput: {
       /**
        * Text 
-       * @description The text content of the comment
+       * @description The text content of the comment.
        */
       text: string;
       /**
@@ -8216,17 +8216,23 @@ export interface operations {
       query: {
         /**
          * @description If provided, only return comments for the given [email](https://docs.buttondown.com/api-emails-introduction). 
-         * @example email_abc123
+         * @example [
+         *   "em_01h8xg4j3k2m1n0p9q8r7s6t5v"
+         * ]
          */
         email_id?: string;
         /**
          * @description If provided, only return comments for the given [subscriber](https://docs.buttondown.com/api-subscribers-introduction). 
-         * @example sub_abc123
+         * @example [
+         *   "sub_01h8xg4j3k2m1n0p9q8r7s6t5v"
+         * ]
          */
         subscriber_id?: string;
         /**
          * @description If provided, only return comments that are replies to the given parent comment. 
-         * @example comment_abc123
+         * @example [
+         *   "com_01h8xg4j3k2m1n0p9q8r7s6t5v"
+         * ]
          */
         parent_id?: string;
         /** @description If provided, expand the given field. (Only supported fields: 'subscriber', 'email'). */
@@ -8246,6 +8252,12 @@ export interface operations {
           "application/json": components["schemas"]["CommentPage"];
         };
       };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Unauthorized */
       401: {
         content: {
@@ -8260,6 +8272,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8305,6 +8323,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8377,6 +8401,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8417,6 +8447,12 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
     };
