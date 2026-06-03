@@ -4748,7 +4748,7 @@ export interface components {
        * @example email 
        * @enum {string}
        */
-      model_type: "automation" | "comment" | "conversation" | "email" | "external_feed" | "socialmention" | "stripe_customer" | "subscriber" | "survey" | "tag" | "webmention";
+      model_type: "automation" | "comment" | "conversation" | "email" | "external_feed" | "invitation" | "socialmention" | "stripe_customer" | "subscriber" | "survey" | "tag" | "webmention";
       /**
        * Model Id 
        * @description The UUID or TypeID of the object this note is attached to. 
@@ -4784,7 +4784,7 @@ export interface components {
        * @example email 
        * @enum {string}
        */
-      model_type: "automation" | "comment" | "conversation" | "email" | "external_feed" | "socialmention" | "stripe_customer" | "subscriber" | "survey" | "tag" | "webmention";
+      model_type: "automation" | "comment" | "conversation" | "email" | "external_feed" | "invitation" | "socialmention" | "stripe_customer" | "subscriber" | "survey" | "tag" | "webmention";
       /**
        * Model Id 
        * @description The UUID or TypeID of the object this note is attached to. 
@@ -10180,7 +10180,7 @@ export interface operations {
     parameters: {
       query: {
         /** @description Filter notes by the type of object they are attached to. */
-        model_type?: "automation" | "comment" | "conversation" | "email" | "external_feed" | "socialmention" | "stripe_customer" | "subscriber" | "survey" | "tag" | "webmention";
+        model_type?: "automation" | "comment" | "conversation" | "email" | "external_feed" | "invitation" | "socialmention" | "stripe_customer" | "subscriber" | "survey" | "tag" | "webmention";
         /** @description Filter notes by the UUID or TypeID of the object they are attached to. */
         model_id?: string;
         /** @description If provided, expand the given field. */
