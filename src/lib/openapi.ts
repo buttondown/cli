@@ -5418,6 +5418,11 @@ export interface components {
        * @description The ID of the automation where this response was submitted, if any.
        */
       automation_id?: string | null;
+      /**
+       * Source 
+       * @description For responses not tied to an email or automation, the origin the survey was answered from (e.g. a `transactional:*` template). Null otherwise.
+       */
+      source?: string | null;
       subscriber?: components["schemas"]["Subscriber"] | null;
       survey?: components["schemas"]["Survey"] | null;
       email?: components["schemas"]["Email"] | null;
