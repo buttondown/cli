@@ -8449,6 +8449,12 @@ export interface operations {
           "application/json": components["schemas"]["Comment"];
         };
       };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Unauthorized */
       401: {
         content: {
