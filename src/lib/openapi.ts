@@ -2564,7 +2564,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    EmailCreationErrorCode: "body_contains_frontmatter" | "email_duplicate" | "email_not_confirmed" | "body_invalid" | "canonical_url_invalid" | "email_invalid" | "slug_invalid" | "subject_invalid" | "publish_date_invalid" | "publish_date_missing" | "sending_requires_confirmation" | "status_invalid" | "tag_invalid";
+    EmailCreationErrorCode: "body_contains_frontmatter" | "email_duplicate" | "email_not_confirmed" | "body_invalid" | "canonical_url_invalid" | "email_invalid" | "slug_invalid" | "subject_invalid" | "pay_per_email_billing_locked" | "publish_date_invalid" | "publish_date_missing" | "sending_requires_confirmation" | "status_invalid" | "tag_invalid";
     /** ErrorMessage[EmailCreationErrorCode] */
     ErrorMessage_EmailCreationErrorCode_: {
       /** @description The error code. */
