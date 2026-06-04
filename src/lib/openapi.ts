@@ -5398,13 +5398,25 @@ export interface components {
        * @description Optional text included by the subscriber with the response. Subscribers are only prompted to supply a text response if the `is_freeform_response_enabled` field is set to `true` on the survey.
        */
       text: string;
-      /** Survey Id */
+      /**
+       * Survey Id 
+       * @description The ID of the survey this response was submitted to.
+       */
       survey_id: string;
-      /** Subscriber Id */
+      /**
+       * Subscriber Id 
+       * @description The ID of the subscriber who submitted this response.
+       */
       subscriber_id: string;
-      /** Email Id */
+      /**
+       * Email Id 
+       * @description The ID of the email where this response was submitted, if any.
+       */
       email_id?: string | null;
-      /** Automation Id */
+      /**
+       * Automation Id 
+       * @description The ID of the automation where this response was submitted, if any.
+       */
       automation_id?: string | null;
       subscriber?: components["schemas"]["Subscriber"] | null;
       survey?: components["schemas"]["Survey"] | null;
@@ -8242,6 +8254,7 @@ export interface operations {
          * @example -creation_date
          */
         ordering?: "creation_date" | "-creation_date" | "email" | "-email" | "subscriber" | "-subscriber";
+        /** @description If provided, only return comments with the given status. Only the newsletter owner can filter by status; subscribers always see active comments. */
         status?: components["schemas"]["CommentStatus"];
       };
     };
@@ -10917,6 +10930,7 @@ export interface operations {
   retrieve_subscriber: {
     parameters: {
       query: {
+        /** @description If provided, expand the given field. */
         expand?: ("stripe_customer" | "stripe_subscription")[];
       };
       path: {
@@ -12226,6 +12240,7 @@ export interface operations {
   list_webhooks: {
     parameters: {
       query: {
+        /** @description If provided, only return webhooks with the given status. */
         status?: components["schemas"]["WebhookStatus"];
       };
     };
@@ -12416,6 +12431,7 @@ export interface operations {
   retrieve_webhook_attempts: {
     parameters: {
       query: {
+        /** @description If provided, only return webhook attempts with the given status. */
         status?: components["schemas"]["WebhookAttemptStatus"];
       };
       path: {
@@ -12458,6 +12474,7 @@ export interface operations {
   test_webhook: {
     parameters: {
       query: {
+        /** @description The event type to send. Defaults to the webhook's first configured event type. */
         event_type?: components["schemas"]["ExternalEventType"];
       };
       path: {
