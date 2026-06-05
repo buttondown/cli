@@ -2345,7 +2345,7 @@ export interface components {
       last_open_date?: string | null;
       /**
        * Delivered Count 
-       * @description The subscriber's delivered count. 
+       * @description The number of distinct emails — both broadcasts and automation sends — delivered to this subscriber. Cached and refreshed periodically, so it may lag recent activity. 
        * @example 12
        */
       delivered_count?: number | null;
