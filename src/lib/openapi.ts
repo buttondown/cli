@@ -7042,7 +7042,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    APIRequestSource: "api" | "app" | "carrd" | "zapier" | "cli" | "make" | "netlify" | "python";
+    APIRequestSource: "api" | "app" | "axios" | "carrd" | "cli" | "curl" | "go" | "make" | "netlify" | "node" | "pipedream" | "powershell" | "python" | "ruby" | "wordpress" | "zapier";
     /**
      * AutomationAttemptStatus 
      * @description An enumeration. 
