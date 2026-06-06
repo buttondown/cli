@@ -953,7 +953,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -1538,7 +1538,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -1576,8 +1576,8 @@ export interface components {
        * @description The actions to perform when the trigger fires.
        */
       actions: (components["schemas"]["ActionInput"])[];
-      /** @description Conditions that must be met for the automation to run. */
-      filters: components["schemas"]["FilterGroup"];
+      /** @description Conditions that must be met for the automation to run. Omit or pass null for no filter. */
+      filters?: components["schemas"]["FilterGroup"] | null;
       /**
        * Metadata 
        * @description Additional metadata for the automation.
@@ -2582,7 +2582,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -2752,7 +2752,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -3108,7 +3108,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -3494,7 +3494,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -3744,7 +3744,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -4151,7 +4151,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -4906,7 +4906,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -4942,7 +4942,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -5130,7 +5130,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -5218,7 +5218,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -5245,7 +5245,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -5356,7 +5356,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -5511,7 +5511,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -5577,7 +5577,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -5653,7 +5653,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -5766,7 +5766,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
@@ -5884,7 +5884,7 @@ export interface components {
       detail: string;
       /**
        * Metadata 
-       * @description Additional context about the error. 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
        * @default {}
        */
       metadata?: {
