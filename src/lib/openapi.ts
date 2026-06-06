@@ -5745,7 +5745,7 @@ export interface components {
        */
       public_description?: string | null;
       /**
-       * Subscribers can edit 
+       * Subscriber Editable 
        * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal.
        */
       subscriber_editable: boolean;
@@ -5807,7 +5807,7 @@ export interface components {
        */
       public_description?: string | null;
       /**
-       * Subscribers can edit 
+       * Subscriber Editable 
        * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal. 
        * @default false 
        * @example false
@@ -5847,7 +5847,7 @@ export interface components {
        */
       secondary_id?: number | null;
       /**
-       * Subscribers can edit 
+       * Subscriber Editable 
        * @description If true, subscribers can add or remove this tag from their own profile via the subscriber portal.
        */
       subscriber_editable?: boolean | null;
