@@ -7062,35 +7062,29 @@ export interface components {
     AutomationAttemptStatus: "unprocessed" | "processed" | "failed" | "pending" | "skipped";
     /**
      * BulkActionStatus 
-     * @description 
-     *         Represents the status of a bulk action.
+     * @description Represents the status of a bulk action.
      * 
-     *         No action is required to move from one state or another; Buttondown
-     *         internally handles the transitions, and exposing the status is for
-     *         observability purposes only.
-     *          
+     * No action is required to move from one state or another; Buttondown
+     * internally handles the transitions, and exposing the status is for
+     * observability purposes only. 
      * @enum {string}
      */
     BulkActionStatus: "not_started" | "in_progress" | "processed" | "failed";
     /**
      * BulkActionType 
-     * @description 
-     *         Represents the action being performed on a bulk of objects.
+     * @description Represents the action being performed on a bulk of objects.
      * 
-     *         (Not to be coy, but these names should be self-explanatory.)
-     *          
+     * (Not to be coy, but these names should be self-explanatory.) 
      * @enum {string}
      */
     BulkActionType: "add_notes" | "apply_tags" | "apply_metadata" | "rename_metadata" | "ban_subscribers" | "delete_subscribers" | "gift_subscribers" | "ungift_subscribers" | "reactivate_subscribers" | "mark_subscribers_as_not_spammy" | "resubscribe_subscribers" | "send_emails" | "unban_subscribers" | "send_reminders" | "unsubscribe_subscribers" | "delete_attachments" | "delete_emails" | "delete_images" | "update_email_types" | "update_archival_modes" | "update_commenting_modes" | "mark_inbox_items_read" | "delete_inbox_items" | "change_tags_colors" | "delete_comments" | "delete_surveys" | "delete_survey_responses" | "delete_tags" | "mark_comments_as_active" | "mark_comments_as_spammy" | "replay_events" | "update_survey_statuses" | "cancel_stripe_subscriptions" | "modify_stripe_subscriptions" | "pause_stripe_subscriptions";
     /**
      * ExportStatus 
-     * @description 
-     *         Represents the status of an export.
+     * @description Represents the status of an export.
      * 
-     *         No action is required to move from one state or another; Buttondown
-     *         internally handles the transitions, and exposing the status is for
-     *         observability purposes only.
-     *          
+     * No action is required to move from one state or another; Buttondown
+     * internally handles the transitions, and exposing the status is for
+     * observability purposes only. 
      * @enum {string}
      */
     ExportStatus: "error" | "in_progress" | "not_started" | "ready";
