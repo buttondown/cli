@@ -9735,6 +9735,19 @@ export interface operations {
    * @description List all uploaded images
    */
   list_images: {
+    parameters: {
+      query: {
+        /**
+         * @description If provided, only return images matching the given IDs. 
+         * @example [
+         *   "img_01h8xg4j3k2m1n0p9q8r7s6t5v"
+         * ]
+         */
+        ids?: (string)[];
+        /** @description The number of results per page. */
+        page_size?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -9754,6 +9767,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9769,6 +9788,11 @@ export interface operations {
            * Format: binary
            */
           image: string;
+          /**
+           * Metadata 
+           * @default {}
+           */
+          metadata?: string;
         };
       };
     };
@@ -9799,6 +9823,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9834,6 +9864,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9878,6 +9914,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
     };
   };
   /**
