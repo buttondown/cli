@@ -261,7 +261,6 @@ export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {
       const response = await constructClient(configuration).get("/emails", {
         params: {
           query: {
-            // @ts-expect-error
             page,
             page_size: pageSize,
           },

@@ -764,7 +764,15 @@ export interface paths {
   };
 }
 
-export type webhooks = Record<string, never>;
+export interface webhooks {
+  "event": {
+    /**
+     * Event notification 
+     * @description When an event you've subscribed to occurs, Buttondown sends an HTTP `POST` to your configured webhook URL. If the webhook has a signing key, the request carries an `X-Buttondown-Signature: sha256=<hmac>` header — an HMAC-SHA256 of the raw request body keyed with your signing key. Respond with any 2xx status to acknowledge receipt; five consecutive non-2xx responses disable the webhook.
+     */
+    post: operations["webhook_event"];
+  };
+}
 
 export interface components {
   schemas: {
@@ -5141,6 +5149,7 @@ export interface components {
     SubscriberInput: {
       /**
        * Email Address 
+       * Format: email 
        * @description The email address of the subscriber. 
        * @example telemachus@buttondown.email
        */
@@ -7106,6 +7115,27 @@ export interface components {
      * @enum {string}
      */
     InvitationStatus: "pending" | "accepted" | "declined" | "revoked" | "owner";
+    /**
+     * WebhookEvent 
+     * @description The payload Buttondown delivers to a configured webhook URL when a subscribed event fires.
+     */
+    WebhookEvent: {
+      /**
+       * Id 
+       * @description The unique TypeID of the event that triggered this delivery. 
+       * @example ext_evt_00000000000000000000000000
+       */
+      id: string;
+      /** @description The type of event that triggered this delivery. */
+      event_type: components["schemas"]["ExternalEventType"];
+      /**
+       * Data 
+       * @description Event-specific metadata. The shape varies by `event_type`.
+       */
+      data: {
+        [key: string]: unknown | undefined;
+      };
+    };
   };
   responses: never;
   parameters: never;
@@ -7138,6 +7168,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7145,6 +7191,12 @@ export interface operations {
    * @description List all advertising units
    */
   list_advertising_units: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -7172,6 +7224,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7211,6 +7279,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7246,6 +7330,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7290,6 +7390,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7297,6 +7413,12 @@ export interface operations {
    * @description List all advertising slots
    */
   list_advertising_slots: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -7324,6 +7446,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7368,6 +7506,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7407,6 +7561,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7493,6 +7663,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7511,6 +7697,8 @@ export interface operations {
         ids?: (string)[];
         /** @description The number of results per page. */
         page_size?: number;
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -7536,6 +7724,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -7585,6 +7789,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7618,6 +7838,22 @@ export interface operations {
       };
       /** @description Not Found */
       404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -7657,6 +7893,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7664,6 +7916,12 @@ export interface operations {
    * @description List all automations
    */
   list_automations: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -7691,6 +7949,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7736,6 +8010,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7775,6 +8065,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7810,6 +8116,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7866,6 +8188,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7907,6 +8245,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7946,6 +8300,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -7953,6 +8323,12 @@ export interface operations {
    * @description List all books for the authenticated newsletter
    */
   list_books: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -7974,6 +8350,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8019,6 +8411,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8058,6 +8466,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8093,6 +8517,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8149,6 +8589,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8188,6 +8644,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8227,6 +8699,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8266,6 +8754,8 @@ export interface operations {
         ordering?: "creation_date" | "-creation_date" | "email" | "-email" | "subscriber" | "-subscriber";
         /** @description If provided, only return comments with the given status. Only the newsletter owner can filter by status; subscribers always see active comments. */
         status?: components["schemas"]["CommentStatus"];
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -8299,6 +8789,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -8352,6 +8858,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8391,6 +8913,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8428,6 +8966,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -8484,6 +9038,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8491,6 +9061,12 @@ export interface operations {
    * @description List all Stripe coupons
    */
   list_coupons: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -8518,6 +9094,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8608,6 +9200,8 @@ export interface operations {
          * @example 0.8
          */
         open_rate__end?: number;
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -8639,6 +9233,22 @@ export interface operations {
       404: never;
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8678,6 +9288,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8717,6 +9343,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8752,6 +9394,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8802,6 +9460,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8858,6 +9532,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8902,6 +9592,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8941,6 +9647,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -8990,6 +9712,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9036,6 +9774,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9057,6 +9811,8 @@ export interface operations {
         automation_id?: string;
         /** @description If provided, only return events for the given subscriber. */
         subscriber_id?: string;
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -9086,6 +9842,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9127,6 +9899,22 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9134,6 +9922,12 @@ export interface operations {
    * @description List all exports
    */
   list_exports: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -9161,6 +9955,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9200,6 +10010,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9239,6 +10065,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9246,6 +10088,12 @@ export interface operations {
    * @description List all external feeds
    */
   list_external_feed: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -9267,6 +10115,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9306,6 +10170,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9345,6 +10225,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9380,6 +10276,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9430,6 +10342,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9441,6 +10369,8 @@ export interface operations {
       query: {
         /** @description If provided, expand the given field. */
         expand?: ("email")[];
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
       path: {
         id: string;
@@ -9479,6 +10409,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9518,6 +10464,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9548,6 +10510,8 @@ export interface operations {
          * @example -creation_date
          */
         ordering?: "creation_date" | "-creation_date" | "title" | "-title" | "slug" | "-slug" | "status" | "-status";
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -9571,6 +10535,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9610,6 +10590,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9649,6 +10645,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9684,6 +10696,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9728,6 +10756,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9746,6 +10790,8 @@ export interface operations {
         ids?: (string)[];
         /** @description The number of results per page. */
         page_size?: number;
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -9771,6 +10817,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -9829,6 +10891,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9868,6 +10946,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -9920,6 +11014,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9927,6 +11037,12 @@ export interface operations {
    * @description List all imports
    */
   list_imports: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -9954,6 +11070,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -9999,6 +11131,22 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10036,6 +11184,22 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10065,6 +11229,22 @@ export interface operations {
       };
       /** @description Not Found */
       404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -10119,6 +11299,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10126,6 +11322,12 @@ export interface operations {
    * @description List all newsletters
    */
   list_newsletters: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -10153,6 +11355,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10192,6 +11410,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10227,6 +11461,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10277,6 +11527,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10292,6 +11558,8 @@ export interface operations {
         model_id?: string;
         /** @description If provided, expand the given field. */
         expand?: ("user")[];
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -10325,6 +11593,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -10372,6 +11656,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10407,6 +11707,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10423,6 +11739,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10434,6 +11766,8 @@ export interface operations {
       query: {
         /** @description If provided, expand the given field. */
         expand?: ("product")[];
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -10463,6 +11797,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10502,6 +11852,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10529,6 +11895,22 @@ export interface operations {
       };
       /** @description Not Found */
       404: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10536,6 +11918,12 @@ export interface operations {
    * @description List all snippets
    */
   list_snippets: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -10557,6 +11945,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10596,6 +12000,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10641,6 +12061,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10676,6 +12112,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10720,6 +12172,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -10879,6 +12347,8 @@ export interface operations {
          * ]
          */
         utm_source?: (string)[];
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -10916,6 +12386,22 @@ export interface operations {
       409: never;
       /** @description Unprocessable Entity */
       422: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -11022,6 +12508,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11057,6 +12559,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11107,6 +12625,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11142,6 +12676,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11177,6 +12727,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11223,6 +12789,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11231,6 +12813,10 @@ export interface operations {
    */
   get_referrals: {
     parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
       path: {
         id_or_email: string;
       };
@@ -11262,6 +12848,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11270,6 +12872,10 @@ export interface operations {
    */
   get_automations: {
     parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
       path: {
         id_or_email: string;
       };
@@ -11301,6 +12907,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11352,6 +12974,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11360,6 +12998,10 @@ export interface operations {
    */
   get_stripe_subscriptions: {
     parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
       path: {
         id_or_email: string;
       };
@@ -11391,6 +13033,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11441,6 +13099,8 @@ export interface operations {
         creation_date__end?: string;
         /** @description If provided, expand the given field. */
         expand?: ("email" | "subscriber" | "survey" | "automation")[];
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -11468,6 +13128,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -11519,6 +13195,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -11575,6 +13267,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11603,6 +13311,8 @@ export interface operations {
          * @example -creation_date
          */
         ordering?: "creation_date" | "-creation_date" | "question" | "-question" | "identifier" | "-identifier" | "status" | "-status" | "response_count" | "-response_count";
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -11636,6 +13346,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -11683,6 +13409,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11728,6 +13470,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11769,6 +13527,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11819,6 +13593,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11837,6 +13627,8 @@ export interface operations {
         ids?: (string)[];
         /** @description The number of results per page. */
         page_size?: number;
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -11864,6 +13656,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -11911,6 +13719,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11950,6 +13774,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -11989,6 +13829,22 @@ export interface operations {
       422: {
         content: {
           "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
         };
       };
     };
@@ -12047,6 +13903,22 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12099,6 +13971,12 @@ export interface operations {
    * @description List all users
    */
   list_users: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
     responses: {
       /** @description OK */
       200: {
@@ -12120,6 +13998,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12165,6 +14059,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12204,6 +14114,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12239,6 +14165,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12289,6 +14231,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12300,6 +14258,8 @@ export interface operations {
       query: {
         /** @description If provided, only return webhooks with the given status. */
         status?: components["schemas"]["WebhookStatus"];
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
     };
     responses: {
@@ -12323,6 +14283,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12362,6 +14338,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12401,6 +14393,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12436,6 +14444,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12480,6 +14504,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12491,6 +14531,8 @@ export interface operations {
       query: {
         /** @description If provided, only return webhook attempts with the given status. */
         status?: components["schemas"]["WebhookAttemptStatus"];
+        /** @description The page number of the paginated response. */
+        page?: number;
       };
       path: {
         id: string;
@@ -12523,6 +14565,22 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
     };
   };
   /**
@@ -12562,6 +14620,37 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Event notification 
+   * @description When an event you've subscribed to occurs, Buttondown sends an HTTP `POST` to your configured webhook URL. If the webhook has a signing key, the request carries an `X-Buttondown-Signature: sha256=<hmac>` header — an HMAC-SHA256 of the raw request body keyed with your signing key. Respond with any 2xx status to acknowledge receipt; five consecutive non-2xx responses disable the webhook.
+   */
+  webhook_event: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["WebhookEvent"];
+      };
+    };
+    responses: {
+      /** @description Return any 2xx status to acknowledge the event. */
+      "2XX": never;
     };
   };
 }
