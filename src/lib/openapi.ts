@@ -10788,10 +10788,10 @@ export interface operations {
          * ]
          */
         ids?: (string)[];
+        /** @description The page number to return. */
+        page?: number;
         /** @description The number of results per page. */
         page_size?: number;
-        /** @description The page number of the paginated response. */
-        page?: number;
       };
     };
     responses: {
