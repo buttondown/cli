@@ -5094,7 +5094,8 @@ export interface components {
       content?: string;
       /**
        * @description The editor mode for the snippet, which controls how `content` is rendered: `fancy` (Markdown), `plaintext`, or `naked` (raw HTML with no processing). 
-       * @default fancy
+       * @default fancy 
+       * @example fancy
        */
       mode?: components["schemas"]["SnippetMode"];
     };
@@ -5118,7 +5119,10 @@ export interface components {
        * @example Thanks for reading!
        */
       content?: string | null;
-      /** @description The editor mode for the snippet, which controls how `content` is rendered: `fancy` (Markdown), `plaintext`, or `naked` (raw HTML with no processing). */
+      /**
+       * @description The editor mode for the snippet, which controls how `content` is rendered: `fancy` (Markdown), `plaintext`, or `naked` (raw HTML with no processing). 
+       * @example fancy
+       */
       mode?: components["schemas"]["SnippetMode"] | null;
     };
     /**
@@ -11920,7 +11924,12 @@ export interface operations {
   list_snippets: {
     parameters: {
       query: {
-        /** @description The page number of the paginated response. */
+        /**
+         * @description The page number of the paginated response. 
+         * @example [
+         *   1
+         * ]
+         */
         page?: number;
       };
     };
@@ -11945,6 +11954,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12000,6 +12015,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -12092,14 +12113,14 @@ export interface operations {
     responses: {
       /** @description No Content */
       204: never;
-      /** @description Bad Request */
-      400: {
+      /** @description Unauthorized */
+      401: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
-      /** @description Unauthorized */
-      401: {
+      /** @description Forbidden */
+      403: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
@@ -12164,6 +12185,12 @@ export interface operations {
           "application/json": components["schemas"]["ErrorMessage"];
         };
       };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Not Found */
       404: {
         content: {
@@ -12172,6 +12199,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
