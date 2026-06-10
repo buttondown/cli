@@ -3722,13 +3722,13 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    ImportSource: "bare" | "buttondown" | "custom" | "flodesk" | "ghost" | "google" | "mailchimp" | "mailerlite" | "memberful" | "sender_dot_net" | "sendy" | "shopify" | "sparkloop" | "squarespace" | "standard" | "substack" | "tinyletter";
+    ImportSource: "bare" | "beehiiv" | "buttondown" | "custom" | "flodesk" | "ghost" | "google" | "mailchimp" | "mailerlite" | "memberful" | "pencilbooth" | "sender_dot_net" | "sendy" | "shopify" | "sparkloop" | "squarespace" | "standard" | "substack" | "tinyletter";
     /**
      * ImportStatus 
      * @description An enumeration. 
      * @enum {string}
      */
-    ImportStatus: "not_started" | "in_progress" | "validating" | "failed" | "succeeded";
+    ImportStatus: "failed" | "in_progress" | "not_started" | "succeeded" | "validating";
     /**
      * ImportType 
      * @description An enumeration. 
@@ -3763,18 +3763,29 @@ export interface components {
     UpdateImportInput: {
       /**
        * Label 
-       * @description An optional label for the import.
+       * @description An optional label for the import. 
+       * @example June 2025 migration
        */
       label?: string | null;
       /**
        * Metadata 
-       * @description Metadata about the import, such as detected column mappings.
+       * @description Metadata about the import, such as detected column mappings. 
+       * @example {
+       *   "email_column": 0,
+       *   "metadata_columns": {
+       *     "name": 1
+       *   }
+       * }
        */
       metadata?: ({
         [key: string]: unknown | undefined;
       }) | null;
-      /** @description The status of the import. Set to 'in_progress' to begin executing the import. */
-      status?: components["schemas"]["ImportStatus"] | null;
+      /**
+       * Status 
+       * @description The status of the import. Set to 'in_progress' to begin executing the import. 
+       * @example in_progress
+       */
+      status?: "in_progress" | null;
     };
     /**
      * Newsletter 
@@ -11303,6 +11314,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
