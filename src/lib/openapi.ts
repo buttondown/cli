@@ -5952,16 +5952,13 @@ export interface components {
        * @description The date and time at which the object was first created.
        */
       creation_date: string;
-      /**
-       * Status 
-       * @description Whether the webhook is enabled or not.
-       */
-      status: string;
+      /** @description Whether the webhook is enabled or not. */
+      status: components["schemas"]["WebhookStatus"];
       /**
        * Event Types 
        * @description The types of event for which the webhook will be triggered.
        */
-      event_types: (string)[] | null;
+      event_types: (components["schemas"]["ExternalEventType"])[];
       /**
        * Url 
        * @description The URL to which the webhook will send POST requests.
@@ -5980,6 +5977,12 @@ export interface components {
        */
       signing_key?: string;
     };
+    /**
+     * WebhookStatus 
+     * @description The status of a webhook. 
+     * @enum {string}
+     */
+    WebhookStatus: "enabled" | "disabled";
     /** WebhookInput */
     WebhookInput: {
       /**
@@ -6029,12 +6032,6 @@ export interface components {
        */
       signing_key?: string;
     };
-    /**
-     * WebhookStatus 
-     * @description The status of a webhook. 
-     * @enum {string}
-     */
-    WebhookStatus: "enabled" | "disabled";
     /**
      * WebhookAttemptStatus 
      * @description An enumeration. 
