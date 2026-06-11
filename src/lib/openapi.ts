@@ -3054,28 +3054,6 @@ export interface components {
      */
     Export: {
       /**
-       * Collections 
-       * @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export.
-       */
-      collections: (components["schemas"]["ExportCollection"])[];
-      /**
-       * Parameters 
-       * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export.
-       */
-      parameters?: ({
-        [key: string]: unknown | undefined;
-      }) | null;
-      /**
-       * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
-       * @default csv
-       */
-      format?: components["schemas"]["ExportFormat"];
-      /**
-       * Columns 
-       * @description If provided, the export will only include these columns.
-       */
-      columns?: (string)[] | null;
-      /**
        * Id 
        * @description A unique TypeID associated with the object.
        */
@@ -3087,6 +3065,39 @@ export interface components {
        */
       creation_date: string;
       /**
+       * Collections 
+       * @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export. 
+       * @example [
+       *   "subscribers"
+       * ]
+       */
+      collections: (components["schemas"]["ExportCollection"])[];
+      /**
+       * Parameters 
+       * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export. 
+       * @example {
+       *   "status": "active"
+       * }
+       */
+      parameters?: ({
+        [key: string]: unknown | undefined;
+      }) | null;
+      /**
+       * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
+       * @default csv 
+       * @example csv
+       */
+      format?: components["schemas"]["ExportFormat"];
+      /**
+       * Columns 
+       * @description If provided, the export will only include these columns. 
+       * @example [
+       *   "id",
+       *   "email"
+       * ]
+       */
+      columns?: (string)[] | null;
+      /**
        * Url 
        * @description The URL of the export file. This is only available after the export has completed.
        */
@@ -3096,7 +3107,10 @@ export interface components {
        * @description The date and time the export completed.
        */
       completion_date?: string | null;
-      /** @description The status of the export. */
+      /**
+       * @description The status of the export. 
+       * @example not_started
+       */
       status: components["schemas"]["ExportStatus"];
     };
     /**
@@ -3127,24 +3141,35 @@ export interface components {
     ExportInput: {
       /**
        * Collections 
-       * @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export.
+       * @description The [collections](https://docs.buttondown.com/api-exports-collections) of objects to export. 
+       * @example [
+       *   "subscribers"
+       * ]
        */
       collections: (components["schemas"]["ExportCollection"])[];
       /**
        * Parameters 
-       * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export.
+       * @description Parameters to pass to the exporter. These are specific to the collection and format, and constrain the export. 
+       * @example {
+       *   "status": "active"
+       * }
        */
       parameters?: ({
         [key: string]: unknown | undefined;
       }) | null;
       /**
        * @description The [format](https://docs.buttondown.com/api-exports-format) of the export files. 
-       * @default csv
+       * @default csv 
+       * @example csv
        */
       format?: components["schemas"]["ExportFormat"];
       /**
        * Columns 
-       * @description If provided, the export will only include these columns.
+       * @description If provided, the export will only include these columns. 
+       * @example [
+       *   "id",
+       *   "email"
+       * ]
        */
       columns?: (string)[] | null;
     };
@@ -10039,6 +10064,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
