@@ -5953,17 +5953,51 @@ export interface components {
        */
       creation_date: string;
       /**
+       * Status 
+       * @description Whether the webhook is enabled or not.
+       */
+      status: string;
+      /**
+       * Event Types 
+       * @description The types of event for which the webhook will be triggered.
+       */
+      event_types: (string)[] | null;
+      /**
+       * Url 
+       * @description The URL to which the webhook will send POST requests.
+       */
+      url: string;
+      /**
+       * Description 
+       * @description An optional description of the webhook, for reference. 
+       * @default
+       */
+      description?: string;
+      /**
+       * Signing Key 
+       * @description Optional HMAC signing key for webhook verification. When set, webhook requests will include an X-Buttondown-Signature header with sha256=<signature>. 
+       * @default
+       */
+      signing_key?: string;
+    };
+    /** WebhookInput */
+    WebhookInput: {
+      /**
        * @description Whether the webhook is enabled or not. 
        * @default enabled 
-       * @example enabled
+       * @example [
+       *   "enabled"
+       * ]
        */
       status?: components["schemas"]["WebhookStatus"];
       /**
        * Event Types 
        * @description The types of event for which the webhook will be triggered. 
        * @example [
-       *   "email.created",
-       *   "email.sent"
+       *   [
+       *     "email.created",
+       *     "email.sent"
+       *   ]
        * ]
        */
       event_types: (components["schemas"]["ExternalEventType"])[];
@@ -5971,21 +6005,27 @@ export interface components {
        * Url 
        * Format: uri 
        * @description The URL to which the webhook will send POST requests. 
-       * @example https://my.api/webhook
+       * @example [
+       *   "https://my.api/webhook"
+       * ]
        */
       url: string;
       /**
        * Description 
        * @description An optional description of the webhook, for reference. 
        * @default  
-       * @example Trigger when an email is created to notify in Slack.
+       * @example [
+       *   "Trigger when an email is created to notify in Slack."
+       * ]
        */
       description?: string;
       /**
        * Signing Key 
        * @description Optional HMAC signing key for webhook verification. When set, webhook requests will include an X-Buttondown-Signature header with sha256=<signature>. 
        * @default  
-       * @example
+       * @example [
+       *   ""
+       * ]
        */
       signing_key?: string;
     };
@@ -5995,45 +6035,6 @@ export interface components {
      * @enum {string}
      */
     WebhookStatus: "enabled" | "disabled";
-    /** WebhookInput */
-    WebhookInput: {
-      /**
-       * @description Whether the webhook is enabled or not. 
-       * @default enabled 
-       * @example enabled
-       */
-      status?: components["schemas"]["WebhookStatus"];
-      /**
-       * Event Types 
-       * @description The types of event for which the webhook will be triggered. 
-       * @example [
-       *   "email.created",
-       *   "email.sent"
-       * ]
-       */
-      event_types: (components["schemas"]["ExternalEventType"])[];
-      /**
-       * Url 
-       * Format: uri 
-       * @description The URL to which the webhook will send POST requests. 
-       * @example https://my.api/webhook
-       */
-      url: string;
-      /**
-       * Description 
-       * @description An optional description of the webhook, for reference. 
-       * @default  
-       * @example Trigger when an email is created to notify in Slack.
-       */
-      description?: string;
-      /**
-       * Signing Key 
-       * @description Optional HMAC signing key for webhook verification. When set, webhook requests will include an X-Buttondown-Signature header with sha256=<signature>. 
-       * @default  
-       * @example
-       */
-      signing_key?: string;
-    };
     /**
      * WebhookAttemptStatus 
      * @description An enumeration. 
@@ -6056,38 +6057,50 @@ export interface components {
       /**
        * Status 
        * @description The status of the webhook attempt. 
-       * @example successful
+       * @example [
+       *   "successful"
+       * ]
        */
       status: string;
       /**
        * Event Type 
        * @description The type of the event that triggered the attempt. 
-       * @example subscriber.created
+       * @example [
+       *   "subscriber.created"
+       * ]
        */
       event_type?: string | null;
       /**
        * Error Message 
        * @description The failure reason, if the attempt failed. Includes the response status code and a snippet of the response body when the endpoint returned a non-2xx response. 
-       * @example WebhookFailedError: Webhook returned 401: invalid signature
+       * @example [
+       *   "WebhookFailedError: Webhook returned 401: invalid signature"
+       * ]
        */
       error_message?: string | null;
       /**
        * Attempt Count 
        * @description The number of times this attempt has been retried. 
        * @default 0 
-       * @example 1
+       * @example [
+       *   1
+       * ]
        */
       attempt_count?: number;
       /**
        * Completion Date 
        * @description When the attempt finished, if it has. 
-       * @example 2026-04-27T05:25:19.819Z
+       * @example [
+       *   "2026-04-27T05:25:19.819Z"
+       * ]
        */
       completion_date?: string | null;
       /**
        * Duration Ms 
        * @description How long the HTTP request took, in milliseconds. 
-       * @example 412
+       * @example [
+       *   412
+       * ]
        */
       duration_ms?: number | null;
     };
@@ -14333,6 +14346,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14388,6 +14407,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14554,6 +14579,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14615,6 +14646,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -14670,6 +14707,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
