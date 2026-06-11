@@ -3210,7 +3210,10 @@ export interface components {
       status: components["schemas"]["ExternalFeedAutomationStatus"];
       /** @description Whether feed items are sent immediately or drafted for manual review. */
       behavior: components["schemas"]["ExternalFeedAutomationBehavior"];
-      /** @description How frequently this feed should create or draft emails. */
+      /**
+       * @description How frequently this feed should create or draft emails. 
+       * @example daily
+       */
       cadence: components["schemas"]["ExternalFeedAutomationCadence"];
       /**
        * Cadence Metadata 
@@ -3333,37 +3336,25 @@ export interface components {
     };
     /** ExternalFeedUpdateInput */
     ExternalFeedUpdateInput: {
-      /**
-       * @description The [behavior](https://docs.buttondown.com/api-external-feed-behavior) of the external feed. 
-       * @example draft
-       */
       behavior?: components["schemas"]["ExternalFeedAutomationBehavior"] | null;
-      /**
-       * @description How frequently this feed should create or draft emails. 
-       * @example daily
-       */
       cadence?: components["schemas"]["ExternalFeedAutomationCadence"] | null;
       /** @description Additional scheduling details for the selected cadence. `time` is required for `daily`/`weekly`/`monthly` cadences; `weekday` is required for `weekly`; `monthday` is required for `monthly`. See the [cadence metadata reference](https://docs.buttondown.com/api-external-feed-cadence-metadata) for allowed values. */
       cadence_metadata?: components["schemas"]["CadenceMetadata"] | null;
-      /** @description Tag-based filtering rules used to decide which subscribers receive feed-generated emails. */
       filters?: components["schemas"]["FilterGroup"] | null;
-      /**
-       * Subject 
-       * @description The subject line template for emails generated from this feed.
-       */
+      /** Subject */
       subject?: string | null;
-      /**
-       * Body 
-       * @description The body template for emails generated from this feed.
-       */
+      /** Body */
       body?: string | null;
       /**
        * Label 
        * @description An optional internal label for this feed.
        */
       label?: string | null;
-      /** @description The current status of the external feed automation. */
-      status?: components["schemas"]["ExternalFeedAutomationStatus"] | null;
+      /**
+       * Status 
+       * @description The current status of the external feed automation.
+       */
+      status?: ("active" | "failing" | "inactive") | null;
       /**
        * Metadata 
        * @description Metadata to be passed to emails rendered by this RSS feed. 
@@ -10230,6 +10221,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -10402,6 +10399,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -10469,6 +10472,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
