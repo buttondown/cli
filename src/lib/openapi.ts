@@ -4158,7 +4158,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    CreateNewsletterErrorCode: "username_already_exists" | "username_malformed";
+    CreateNewsletterErrorCode: "domain_incorrect" | "domain_path" | "domain_protocol" | "email_domain_conflicts_with_hosting_domain" | "email_domain_contains_at" | "email_domain_incorrect" | "email_domain_path" | "email_domain_protocol" | "email_domain_used_by_other_account" | "invalid_metadata" | "username_already_exists" | "username_malformed" | "username_reserved" | "username_too_short";
     /** ErrorMessage[CreateNewsletterErrorCode] */
     ErrorMessage_CreateNewsletterErrorCode_: {
       /** @description The error code. */
@@ -4185,7 +4185,7 @@ export interface components {
        * @default  
        * @example #FF6600
        */
-      announcement_bar_background_color?: string;
+      announcement_bar_background_color?: string | string;
       /**
        * Announcement Bar Text 
        * @description Text displayed in the announcement bar on your archive page. Useful for promotions, updates, or calls to action. 
@@ -4322,7 +4322,11 @@ export interface components {
       /**
        * Metadata 
        * @description A structured key-value blob that you can use to store arbitrary data on the object. Metadata can be nested — you can store objects and arrays within your metadata. (You can [read more about metadata.](https://docs.buttondown.com/metadata)) 
-       * @default {}
+       * @default {} 
+       * @example {
+       *   "source": "my-app",
+       *   "tier": "pro"
+       * }
        */
       metadata?: {
         [key: string]: unknown | undefined;
@@ -4423,7 +4427,7 @@ export interface components {
        * @description The background color for the announcement bar on your archive page. Must be a valid hex color code. 
        * @example #FF6600
        */
-      announcement_bar_background_color?: string | null;
+      announcement_bar_background_color?: string | string | null;
       /**
        * Announcement Bar Text 
        * @description Text displayed in the announcement bar on your archive page. Useful for promotions, updates, or calls to action. 
@@ -11441,6 +11445,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -11558,6 +11568,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
