@@ -6,6 +6,7 @@ import type { components } from "../lib/openapi.js";
 import {
   bulkSet,
   constructClient,
+  omit,
   paginatedList,
   type Resource,
   type ResourceGroup,
@@ -273,14 +274,32 @@ export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {
       update: async (email) => {
         await constructClient(configuration).patch("/emails/{id}", {
           params: { path: { id: email.id } },
-          body: withMarkdownSigil(email),
+          body: omit(withMarkdownSigil(email), [
+            "absolute_url",
+            "analytics",
+            "callouts",
+            "creation_date",
+            "id",
+            "modification_date",
+            "source",
+          ]),
         });
       },
       create: async (email) => {
         const { attachments, ...rest } = withMarkdownSigil(email);
         await constructClient(configuration).post("/emails", {
           body: {
-            ...rest,
+            ...omit(rest, [
+              "absolute_url",
+              "analytics",
+              "callouts",
+              "creation_date",
+              "id",
+              "modification_date",
+              "source",
+              "suppression_reason",
+              "template",
+            ]),
             attachments: attachments ?? undefined,
             subject: email.subject || "",
           },

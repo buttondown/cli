@@ -1,6 +1,6 @@
 import PACKAGE_JSON from "../../package.json" with { type: "json" };
 import type { paths } from "../lib/openapi.js";
-import { createClient } from "../lib/openapi-wrapper.js";
+import { createClient } from "../lib/openapi-core.js";
 
 export type Configuration = {
   baseUrl: string;
@@ -46,6 +46,20 @@ export type ResourceGroup<A, B, C> = {
 };
 
 export const PAGE_SIZE = 100;
+
+/**
+ * Drops read-only response fields before sending an object back as a
+ * request body. The API's update schemas don't accept them, and the typed
+ * client rejects unexpected body fields at compile time.
+ */
+export function omit<T extends object, K extends keyof T>(
+  obj: T,
+  keys: readonly K[],
+): Omit<T, K> {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key]) => !keys.includes(key as K)),
+  ) as Omit<T, K>;
+}
 
 /**
  * Walks a paginated endpoint and returns every result.

@@ -5,6 +5,7 @@ import type { components } from "../lib/openapi.js";
 import {
   bulkSet,
   constructClient,
+  omit,
   paginatedList,
   type Resource,
   type ResourceGroup,
@@ -97,7 +98,7 @@ export const REMOTE_AUTOMATIONS_RESOURCE: Resource<Automation[], Automation[]> =
         update: async (automation) => {
           await constructClient(configuration).patch("/automations/{id}", {
             params: { path: { id: automation.id } },
-            body: automation,
+            body: omit(automation, ["creation_date", "id"]),
           });
         },
         create: async (automation) => {

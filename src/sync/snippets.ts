@@ -6,6 +6,7 @@ import type { components } from "../lib/openapi.js";
 import {
   bulkSet,
   constructClient,
+  omit,
   paginatedList,
   type Resource,
   type ResourceGroup,
@@ -86,7 +87,7 @@ export const REMOTE_SNIPPETS_RESOURCE: Resource<Snippet[], Snippet[]> = {
       update: async (snippet) => {
         await constructClient(configuration).patch("/snippets/{id}", {
           params: { path: { id: snippet.id } },
-          body: snippet,
+          body: omit(snippet, ["creation_date", "id", "reference_count"]),
         });
       },
       create: async (snippet) => {

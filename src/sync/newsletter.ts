@@ -3,6 +3,7 @@ import path from "node:path";
 import type { components } from "../lib/openapi.js";
 import {
   constructClient,
+  omit,
   type OperationResult,
   type Resource,
   type ResourceGroup,
@@ -22,7 +23,13 @@ export const REMOTE_NEWSLETTER_RESOURCE: Resource<Newsletter, Newsletter> = {
   async set(value, configuration): Promise<OperationResult> {
     await constructClient(configuration).patch("/newsletters/{id}", {
       params: { path: { id: value.id } },
-      body: value,
+      body: omit(value, [
+        "api_key",
+        "creation_date",
+        "id",
+        "sharing_networks",
+        "sort",
+      ]),
     });
     return {
       updated: 1,
