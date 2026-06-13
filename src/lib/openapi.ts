@@ -2635,7 +2635,10 @@ export interface components {
       /**
        * Attachments 
        * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.) 
-       * @default []
+       * @default [] 
+       * @example [
+       *   "att_01h8xg4j3k2m1n0p9q8r7s6t5v"
+       * ]
        */
       attachments?: (string)[];
       /**
@@ -2651,7 +2654,8 @@ export interface components {
       subject: string;
       /**
        * Slug 
-       * @description A short, human-readable identifier for the email, used in the archive URL.
+       * @description A short, human-readable identifier for the email, used in the archive URL. 
+       * @example hello-world
        */
       slug?: string | null;
       /**
@@ -2724,7 +2728,10 @@ export interface components {
       commenting_mode?: components["schemas"]["EmailCommentingMode"];
       /**
        * Related Email Ids 
-       * @description IDs of emails related to this one. Shown at the bottom of the email and archive pages.
+       * @description IDs of emails related to this one. Shown at the bottom of the email and archive pages. 
+       * @example [
+       *   "em_01h8xg4j3k2m1n0p9q8r7s6t5v"
+       * ]
        */
       related_email_ids?: (string)[];
       /**
@@ -2771,7 +2778,10 @@ export interface components {
     EmailUpdateInput: {
       /**
        * Attachments 
-       * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.)
+       * @description A list of attachment IDs present on the email. (See [Attachments](https://docs.buttondown.com/api-attachments-introduction) for more information.) 
+       * @example [
+       *   "att_01h8xg4j3k2m1n0p9q8r7s6t5v"
+       * ]
        */
       attachments?: (string)[] | null;
       /**
@@ -2849,7 +2859,10 @@ export interface components {
       commenting_mode?: components["schemas"]["EmailCommentingMode"] | null;
       /**
        * Related Email Ids 
-       * @description IDs of emails related to this one. Shown at the bottom of the email and archive pages.
+       * @description IDs of emails related to this one. Shown at the bottom of the email and archive pages. 
+       * @example [
+       *   "em_01h8xg4j3k2m1n0p9q8r7s6t5v"
+       * ]
        */
       related_email_ids?: (string)[] | null;
       /**
@@ -2979,8 +2992,7 @@ export interface components {
        * Subscribers 
        * @description A list of subscriber ids to which to send the email. 
        * @example [
-       *   "bc5601f4-b180-4e02-8501-c18080662376",
-       *   "24ee3338-daaf-42b0-bf7b-0cab38972fe5"
+       *   "sub_01h8xg4j3k2m1n0p9q8r7s6t5v"
        * ]
        */
       subscribers?: (string)[] | null;
@@ -9278,6 +9290,12 @@ export interface operations {
       404: never;
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9333,6 +9351,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9388,6 +9412,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9439,6 +9469,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9505,6 +9541,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9557,6 +9599,12 @@ export interface operations {
           "application/json": components["schemas"]["HistoryPage"];
         };
       };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
       /** @description Unauthorized */
       401: {
         content: {
@@ -9577,6 +9625,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9637,6 +9691,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9692,6 +9752,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9757,6 +9823,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
@@ -9819,6 +9891,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
