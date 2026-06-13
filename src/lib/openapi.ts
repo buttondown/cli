@@ -5304,7 +5304,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    UpdateSubscriberErrorCode: "email_already_exists" | "email_invalid" | "email_has_been_changed_too_many_times" | "firewall_blocked" | "subscriber_type_invalid" | "tag_invalid";
+    UpdateSubscriberErrorCode: "email_already_exists" | "email_invalid" | "email_has_been_changed_too_many_times" | "firewall_blocked" | "metadata_invalid" | "subscriber_type_invalid" | "tag_invalid";
     /** SubscriberUpdateInput */
     SubscriberUpdateInput: {
       /**
@@ -12575,6 +12575,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         content: {
@@ -12741,6 +12747,12 @@ export interface operations {
       };
       /** @description Conflict */
       409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
