@@ -7187,7 +7187,7 @@ export interface components {
       event_type: components["schemas"]["ExternalEventType"];
       /**
        * Data 
-       * @description Event-specific metadata. The shape varies by `event_type`.
+       * @description Event-specific metadata. The shape varies by `event_type`. Accounts with more than one newsletter also receive a `newsletter` ID to disambiguate which one the event belongs to.
        */
       data: {
         [key: string]: unknown | undefined;
