@@ -6191,7 +6191,7 @@ export interface components {
      * opt-in.) 
      * @enum {string}
      */
-    SubscriberSource: "admin" | "api" | "carrd" | "comment" | "embedded_form" | "form" | "import" | "memberful" | "netlify" | "organic" | "patreon" | "stripe" | "user" | "zapier";
+    SubscriberSource: "admin" | "api" | "carrd" | "comment" | "embedded_form" | "form" | "import" | "memberful" | "netlify" | "organic" | "patreon" | "shopify" | "stripe" | "user" | "zapier";
     /**
      * Type 
      * @description Represents the state of a subscriber and what emails they
