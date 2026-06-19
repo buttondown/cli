@@ -4177,7 +4177,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    SocialAccountType: "generic" | "bluesky" | "bookbub" | "bookshop" | "facebook" | "github" | "goodreads" | "instagram" | "kofi" | "letterboxd" | "linkedin" | "linktree" | "mastodon" | "patreon" | "pinterest" | "threads" | "tiktok" | "twitch" | "twitter" | "youtube";
+    SocialAccountType: "generic" | "bluesky" | "bookbub" | "bookshop" | "discord" | "facebook" | "github" | "goodreads" | "instagram" | "kofi" | "letterboxd" | "linkedin" | "linktree" | "mastodon" | "patreon" | "pinterest" | "reddit" | "soundcloud" | "spotify" | "substack" | "telegram" | "threads" | "tiktok" | "tumblr" | "twitch" | "twitter" | "youtube";
     /**
      * CreateNewsletterErrorCode 
      * @description Represents the type of error that occurred when creating a newsletter.
