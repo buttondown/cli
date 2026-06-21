@@ -13887,12 +13887,27 @@ export interface operations {
    * @description Create a new tag
    */
   create_tag: {
+    parameters: {
+      header: {
+        /**
+         * @description The behavior to apply when a tag with the same name already exists.
+         * Defaults to "no_op", which returns a 400 error. Set to "overwrite" to update the existing tag with the supplied values and return it with a 200 status code instead.
+         */
+        "X-Buttondown-Collision-Behavior"?: "no_op" | "overwrite";
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["TagInput"];
       };
     };
     responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Tag"];
+        };
+      };
       /** @description Created */
       201: {
         content: {
