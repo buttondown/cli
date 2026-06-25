@@ -12575,7 +12575,7 @@ export interface operations {
       /** @description Unprocessable Entity */
       422: {
         content: {
-          "application/json": components["schemas"]["ErrorMessage"];
+          "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
       /** @description Too Many Requests */
