@@ -2473,7 +2473,7 @@ export interface components {
        * @description Information collected by Buttondown's firewall about this subscriber. See [the firewall](https://docs.buttondown.com/firewall) for more information.
        */
       firewall_reasons?: (components["schemas"]["FirewallReason"])[];
-      /** @description The subscriber's lifecycle state — e.g. `regular` (active), `premium` (paid), `unactivated` (pending confirmation), `unsubscribed`, `removed`. */
+      /** @description The subscriber's lifecycle state. One of: `blocked` (blocked by the newsletter), `churned` (previously paid, subscription ended), `churning` (paying but won't renew), `complained` (marked an email as spam), `gifted` (granted free premium access by the newsletter), `past_due` (paid subscription with an overdue invoice), `paused` (premium subscription paused), `premium` (paying subscriber), `regular` (active free subscriber), `removed` (removed by the newsletter), `trialed` (temporarily enrolled in premium), `unactivated` (pending double opt-in confirmation), `undeliverable` (determined undeliverable), `unpaid` (has not paid yet), `unsubscribed` (voluntarily unsubscribed), `upcoming` (paid subscription that has not started yet). Subscribers with `premium`, `gifted`, `trialed`, or `churning` have access to premium content; use these to distinguish paid from free subscribers. */
       type: components["schemas"]["SubscriberType"];
       /**
        * Undeliverability Date 
@@ -5252,7 +5252,7 @@ export interface components {
        */
       referring_subscriber_id?: string | null;
       /**
-       * @description The subscriber's lifecycle state — e.g. `regular` (active), `premium` (paid), `unactivated` (pending confirmation), `unsubscribed`, `removed`. 
+       * @description The subscriber's lifecycle state. One of: `blocked` (blocked by the newsletter), `churned` (previously paid, subscription ended), `churning` (paying but won't renew), `complained` (marked an email as spam), `gifted` (granted free premium access by the newsletter), `past_due` (paid subscription with an overdue invoice), `paused` (premium subscription paused), `premium` (paying subscriber), `regular` (active free subscriber), `removed` (removed by the newsletter), `trialed` (temporarily enrolled in premium), `unactivated` (pending double opt-in confirmation), `undeliverable` (determined undeliverable), `unpaid` (has not paid yet), `unsubscribed` (voluntarily unsubscribed), `upcoming` (paid subscription that has not started yet). Subscribers with `premium`, `gifted`, `trialed`, or `churning` have access to premium content; use these to distinguish paid from free subscribers. 
        * @example regular
        */
       type?: components["schemas"]["SubscriberType"] | null;
@@ -5355,7 +5355,7 @@ export interface components {
        * @default
        */
       referrer_url?: string | null;
-      /** @description The subscriber's lifecycle state — e.g. `regular` (active), `premium` (paid), `unactivated` (pending confirmation), `unsubscribed`, `removed`. */
+      /** @description The subscriber's lifecycle state. One of: `blocked` (blocked by the newsletter), `churned` (previously paid, subscription ended), `churning` (paying but won't renew), `complained` (marked an email as spam), `gifted` (granted free premium access by the newsletter), `past_due` (paid subscription with an overdue invoice), `paused` (premium subscription paused), `premium` (paying subscriber), `regular` (active free subscriber), `removed` (removed by the newsletter), `trialed` (temporarily enrolled in premium), `unactivated` (pending double opt-in confirmation), `undeliverable` (determined undeliverable), `unpaid` (has not paid yet), `unsubscribed` (voluntarily unsubscribed), `upcoming` (paid subscription that has not started yet). Subscribers with `premium`, `gifted`, `trialed`, or `churning` have access to premium content; use these to distinguish paid from free subscribers. */
       type?: components["schemas"]["SubscriberType"] | null;
       /**
        * Unsubscription Reason 
