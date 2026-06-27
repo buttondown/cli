@@ -324,15 +324,8 @@ describe("orchestrate", () => {
       );
     });
 
-    test("propagates errors mid-flight as thrown exceptions", async () => {
+    test("propagates network failures as thrown exceptions", async () => {
       await seedDirectory();
-      mockFetch(async (_, url) => {
-        if (url.pathname === "/emails")
-          return new Response("server boom", { status: 500 });
-      });
-
-      // The default openapi-wrapper does not throw on non-2xx by default;
-      // but a thrown fetch — emulating a network failure — should bubble.
       globalThis.fetch = mock(async (input: Request | string) => {
         const url = parseUrl(input);
         if (url.pathname === "/emails") throw new Error("network down");
@@ -340,6 +333,39 @@ describe("orchestrate", () => {
       }) as unknown as typeof fetch;
 
       await expect(collect(push(config()))).rejects.toThrow("network down");
+    });
+
+    test("surfaces a 422 PATCH failure with the API's validation detail", async () => {
+      const emailsDir = await seedDirectory();
+      await writeFile(
+        path.join(emailsDir, "post.md"),
+        serializeEmail({
+          id: "email_1",
+          subject: "New subject",
+          slug: "post",
+          body: "new body",
+        }),
+      );
+
+      mockFetch(
+        async (_, url) => {
+          if (url.pathname === "/emails")
+            return jsonResponse({
+              results: [
+                { id: "email_1", subject: "Old", slug: "post", body: "old" },
+              ],
+              count: 1,
+            });
+        },
+        async (request, url) => {
+          if (url.pathname.startsWith("/emails/") && request.method === "PATCH")
+            return jsonResponse({ detail: "id is not a valid field" }, 422);
+        },
+      );
+
+      await expect(collect(push(config()))).rejects.toThrow(
+        "id is not a valid field",
+      );
     });
   });
 });

@@ -8,6 +8,7 @@ import {
   paginatedList,
   type Resource,
   type ResourceGroup,
+  throwIfError,
 } from "./types.js";
 
 type Image = components["schemas"]["Image"];
@@ -41,9 +42,7 @@ export async function uploadImage(
     body: formData,
   });
 
-  if (response.error) {
-    throw new Error(`Failed to upload image ${filename}`);
-  }
+  throwIfError(response, `Failed to upload image ${filename}`);
 
   return {
     id: response.data.id,

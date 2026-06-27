@@ -9,6 +9,7 @@ import {
   paginatedList,
   type Resource,
   type ResourceGroup,
+  throwIfError,
 } from "./types.js";
 
 type Automation = components["schemas"]["Automation"];
@@ -96,23 +97,34 @@ export const REMOTE_AUTOMATIONS_RESOURCE: Resource<Automation[], Automation[]> =
     set: (value, configuration) =>
       bulkSet(value, {
         update: async (automation) => {
-          await constructClient(configuration).patch("/automations/{id}", {
-            params: { path: { id: automation.id } },
-            body: omit(automation, ["creation_date", "id"]),
-          });
+          const result = await constructClient(configuration).patch(
+            "/automations/{id}",
+            {
+              params: { path: { id: automation.id } },
+              body: omit(automation, ["creation_date", "id"]),
+            },
+          );
+          throwIfError(result, `Failed to update automation ${automation.id}`);
         },
         create: async (automation) => {
-          await constructClient(configuration).post("/automations", {
-            body: {
-              name: automation.name || "",
-              trigger: automation.trigger,
-              actions: automation.actions,
-              filters: automation.filters,
-              metadata: automation.metadata as Record<string, string>,
-              should_evaluate_filter_after_delay:
-                automation.should_evaluate_filter_after_delay,
+          const result = await constructClient(configuration).post(
+            "/automations",
+            {
+              body: {
+                name: automation.name || "",
+                trigger: automation.trigger,
+                actions: automation.actions,
+                filters: automation.filters,
+                metadata: automation.metadata as Record<string, string>,
+                should_evaluate_filter_after_delay:
+                  automation.should_evaluate_filter_after_delay,
+              },
             },
-          });
+          );
+          throwIfError(
+            result,
+            `Failed to create automation "${automation.name ?? ""}"`,
+          );
         },
       }),
     serialize: (d) => d,

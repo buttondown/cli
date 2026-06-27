@@ -10,6 +10,7 @@ import {
   paginatedList,
   type Resource,
   type ResourceGroup,
+  throwIfError,
 } from "./types.js";
 
 type Email = components["schemas"]["Email"];
@@ -272,22 +273,26 @@ export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {
   set: (value, configuration) =>
     bulkSet(value, {
       update: async (email) => {
-        await constructClient(configuration).patch("/emails/{id}", {
-          params: { path: { id: email.id } },
-          body: omit(withMarkdownSigil(email), [
-            "absolute_url",
-            "analytics",
-            "callouts",
-            "creation_date",
-            "id",
-            "modification_date",
-            "source",
-          ]),
-        });
+        const result = await constructClient(configuration).patch(
+          "/emails/{id}",
+          {
+            params: { path: { id: email.id } },
+            body: omit(withMarkdownSigil(email), [
+              "absolute_url",
+              "analytics",
+              "callouts",
+              "creation_date",
+              "id",
+              "modification_date",
+              "source",
+            ]),
+          },
+        );
+        throwIfError(result, `Failed to update email ${email.id}`);
       },
       create: async (email) => {
         const { attachments, ...rest } = withMarkdownSigil(email);
-        await constructClient(configuration).post("/emails", {
+        const result = await constructClient(configuration).post("/emails", {
           body: {
             ...omit(rest, [
               "absolute_url",
@@ -304,6 +309,7 @@ export const REMOTE_EMAILS_RESOURCE: Resource<Email[], Email[]> = {
             subject: email.subject || "",
           },
         });
+        throwIfError(result, `Failed to create email "${email.subject ?? ""}"`);
       },
     }),
   serialize: (d) => d,

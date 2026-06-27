@@ -7,6 +7,7 @@ import {
   type OperationResult,
   type Resource,
   type ResourceGroup,
+  throwIfError,
 } from "./types.js";
 
 type Newsletter = components["schemas"]["Newsletter"];
@@ -21,16 +22,20 @@ export const REMOTE_NEWSLETTER_RESOURCE: Resource<Newsletter, Newsletter> = {
     );
   },
   async set(value, configuration): Promise<OperationResult> {
-    await constructClient(configuration).patch("/newsletters/{id}", {
-      params: { path: { id: value.id } },
-      body: omit(value, [
-        "api_key",
-        "creation_date",
-        "id",
-        "sharing_networks",
-        "sort",
-      ]),
-    });
+    const result = await constructClient(configuration).patch(
+      "/newsletters/{id}",
+      {
+        params: { path: { id: value.id } },
+        body: omit(value, [
+          "api_key",
+          "creation_date",
+          "id",
+          "sharing_networks",
+          "sort",
+        ]),
+      },
+    );
+    throwIfError(result, `Failed to update newsletter ${value.id}`);
     return {
       updated: 1,
       created: 0,

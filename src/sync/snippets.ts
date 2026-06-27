@@ -10,6 +10,7 @@ import {
   paginatedList,
   type Resource,
   type ResourceGroup,
+  throwIfError,
 } from "./types.js";
 
 type Snippet = components["schemas"]["Snippet"];
@@ -85,19 +86,27 @@ export const REMOTE_SNIPPETS_RESOURCE: Resource<Snippet[], Snippet[]> = {
   set: (value, configuration) =>
     bulkSet(value, {
       update: async (snippet) => {
-        await constructClient(configuration).patch("/snippets/{id}", {
-          params: { path: { id: snippet.id } },
-          body: omit(snippet, ["creation_date", "id", "reference_count"]),
-        });
+        const result = await constructClient(configuration).patch(
+          "/snippets/{id}",
+          {
+            params: { path: { id: snippet.id } },
+            body: omit(snippet, ["creation_date", "id", "reference_count"]),
+          },
+        );
+        throwIfError(result, `Failed to update snippet ${snippet.id}`);
       },
       create: async (snippet) => {
-        await constructClient(configuration).post("/snippets", {
+        const result = await constructClient(configuration).post("/snippets", {
           body: {
             identifier: snippet.identifier || "",
             name: snippet.name || "",
             content: snippet.content || "",
           },
         });
+        throwIfError(
+          result,
+          `Failed to create snippet "${snippet.identifier ?? ""}"`,
+        );
       },
     }),
   serialize: (d) => d,

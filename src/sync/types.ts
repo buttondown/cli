@@ -62,6 +62,24 @@ export function omit<T extends object, K extends keyof T>(
 }
 
 /**
+ * The typed client returns `{ error }` on a non-2xx response instead of
+ * throwing, so write paths must opt in to surfacing failures. Throws a
+ * descriptive error including the serialized API response (e.g. the 422
+ * validation details) when the call did not succeed.
+ */
+export function throwIfError<T extends { error?: unknown }>(
+  result: T,
+  context: string,
+): asserts result is T & { error?: undefined } {
+  if (result.error === undefined) return;
+  const detail =
+    typeof result.error === "string"
+      ? result.error
+      : JSON.stringify(result.error);
+  throw new Error(`${context}: ${detail}`);
+}
+
+/**
  * Walks a paginated endpoint and returns every result.
  * `fetchPage` should return the page payload (typically `response.data`)
  * or null/undefined to terminate.
