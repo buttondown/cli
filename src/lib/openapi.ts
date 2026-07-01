@@ -6321,7 +6321,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    NewsletterLocale: "cs-CZ" | "nl-NL" | "en-AU" | "en-CA" | "en-GB" | "en" | "et" | "fr" | "ja-JP" | "de" | "ne" | "nb-NO" | "pl-PL" | "pt-BR" | "pt-PT" | "ru" | "es" | "tr" | "sv-SE";
+    NewsletterLocale: "cs-CZ" | "nl-NL" | "en-AU" | "en-CA" | "en-GB" | "en" | "et" | "fi-FI" | "fr" | "ja-JP" | "de" | "ne" | "nb-NO" | "pl-PL" | "pt-BR" | "pt-PT" | "ru" | "es" | "tr" | "sv-SE";
     /**
      * Mode 
      * @description An enumeration. 
