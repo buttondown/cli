@@ -499,6 +499,13 @@ export interface paths {
      */
     post: operations["create_price"];
   };
+  "/prices/{price_id}": {
+    /**
+     * Delete Price 
+     * @description Archive a price, making it unavailable for new subscriptions. Stripe prices cannot be deleted outright; archiving deactivates the price while leaving existing subscriptions on it untouched.
+     */
+    delete: operations["delete_price"];
+  };
   "/public/emails/{username}": {
     /**
      * Search public emails 
@@ -5056,6 +5063,33 @@ export interface components {
        * @description The suggested amount for pay-what-you-want prices.
        */
       suggested_amount?: number | null;
+    };
+    /**
+     * ArchivePriceErrorCode 
+     * @description Represents the type of error that occurred when archiving a price.
+     * 
+     * Human-readable error messages are provided in the `detail` field of the response;
+     * these values are meant to be parseable by code or client logic. 
+     * @enum {string}
+     */
+    ArchivePriceErrorCode: "default_price";
+    /** ErrorMessage[ArchivePriceErrorCode] */
+    ErrorMessage_ArchivePriceErrorCode_: {
+      /** @description The error code. */
+      code?: components["schemas"]["ArchivePriceErrorCode"];
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
+      detail: string;
+      /**
+       * Metadata 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
     };
     /**
      * PublicEmail 
@@ -12084,6 +12118,63 @@ export interface operations {
       };
       /** @description Forbidden */
       403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Delete Price 
+   * @description Archive a price, making it unavailable for new subscriptions. Stripe prices cannot be deleted outright; archiving deactivates the price while leaving existing subscriptions on it untouched.
+   */
+  delete_price: {
+    parameters: {
+      path: {
+        price_id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_ArchivePriceErrorCode_"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
         content: {
           "application/json": components["schemas"]["ErrorMessage"];
         };
