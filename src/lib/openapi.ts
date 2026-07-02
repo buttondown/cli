@@ -2735,6 +2735,8 @@ export interface components {
        * }
        */
       filters?: components["schemas"]["EmailFilterGroup"];
+      /** @description If present, this template overrides your newsletter's default email template. */
+      template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * @description Controls whether subscribers can comment on this email. 
        * @default enabled
