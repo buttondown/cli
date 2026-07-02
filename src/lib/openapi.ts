@@ -274,6 +274,13 @@ export interface paths {
      */
     post: operations["send_draft"];
   };
+  "/emails/{id}/publish": {
+    /**
+     * Publish Email 
+     * @description Publish an email
+     */
+    post: operations["publish_email"];
+  };
   "/events": {
     /**
      * List Events 
@@ -9865,6 +9872,78 @@ export interface operations {
     responses: {
       /** @description OK */
       200: never;
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Publish Email 
+   * @description Publish an email
+   */
+  publish_email: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EmailUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Email"];
+        };
+      };
       /** @description Bad Request */
       400: {
         content: {
