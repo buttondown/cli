@@ -6310,7 +6310,7 @@ export interface components {
      * Each template has a different layout/style; you can view screenshots and examples [in the docs](https://docs.buttondown.com/customizing-email-design#buttondowns-default-templates). 
      * @enum {string}
      */
-    NewsletterEmailTemplate: "classic" | "modern" | "plaintext" | "naked";
+    NewsletterEmailTemplate: "classic" | "custom" | "modern" | "plaintext" | "naked";
     /**
      * Format 
      * @description An enumeration. 
