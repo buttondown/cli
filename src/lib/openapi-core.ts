@@ -311,7 +311,9 @@ const serializePathParams = (
   params: Record<string, unknown> = {}
 ): string => {
   return path.replace(/\{([^}]+)\}/g, (_match, key) => {
-    return "" + params[key];
+    // Encode so an id containing "/" or "../" can't address a different
+    // endpoint than the one the call site named.
+    return encodeURIComponent("" + params[key]);
   });
 };
 

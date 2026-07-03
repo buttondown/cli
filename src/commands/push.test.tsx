@@ -12,408 +12,451 @@ import { jsonResponse, mockFetch } from "../test-helpers.js";
 import Push from "./push.js";
 
 describe("push", () => {
-  let tempDir: string;
-  let emailsDir: string;
-  let originalFetch: typeof fetch;
+	let tempDir: string;
+	let emailsDir: string;
+	let originalFetch: typeof fetch;
 
-  beforeEach(async () => {
-    tempDir = await mkdtemp(path.join(tmpdir(), "push-test-"));
-    emailsDir = path.join(tempDir, "emails");
-    originalFetch = globalThis.fetch;
-    await mkdir(emailsDir, { recursive: true });
-    await writeSyncState(tempDir, { syncedImages: {} });
-    await writeFile(
-      path.join(tempDir, "newsletter.json"),
-      JSON.stringify({ id: "nl_1", name: "Test" }),
-    );
-  });
+	beforeEach(async () => {
+		tempDir = await mkdtemp(path.join(tmpdir(), "push-test-"));
+		emailsDir = path.join(tempDir, "emails");
+		originalFetch = globalThis.fetch;
+		await mkdir(emailsDir, { recursive: true });
+		await writeSyncState(tempDir, { syncedImages: {} });
+		await writeFile(
+			path.join(tempDir, "newsletter.json"),
+			JSON.stringify({ id: "nl_1", name: "Test" }),
+		);
+	});
 
-  afterEach(async () => {
-    globalThis.fetch = originalFetch;
-    if (tempDir) {
-      await rm(tempDir, { recursive: true, force: true });
-    }
-  });
+	afterEach(async () => {
+		globalThis.fetch = originalFetch;
+		if (tempDir) {
+			await rm(tempDir, { recursive: true, force: true });
+		}
+	});
 
-  function renderPush() {
-    render(
-      <Push
-        baseUrl="https://api.buttondown.com"
-        apiKey="test-key"
-        directory={tempDir}
-      />,
-    );
-    return delay(500);
-  }
+	function renderPush() {
+		render(
+			<Push
+				baseUrl="https://api.buttondown.com"
+				apiKey="test-key"
+				directory={tempDir}
+			/>,
+		);
+		return delay(500);
+	}
 
-  test("should upload new images and replace relative paths with absolute URLs", async () => {
-    const mediaDir = path.join(tempDir, "media");
-    await mkdir(mediaDir, { recursive: true });
+	test("should upload new images and replace relative paths with absolute URLs", async () => {
+		const mediaDir = path.join(tempDir, "media");
+		await mkdir(mediaDir, { recursive: true });
 
-    await writeFile(
-      path.join(emailsDir, "test-post.md"),
-      serialize({
-        id: "email_1",
-        subject: "Test Post",
-        slug: "test-post",
-        body: "Here is ![photo](../media/photo.png) in my post",
-      }),
-    );
-    await writeFile(
-      path.join(mediaDir, "photo.png"),
-      Buffer.from("real-png-data"),
-    );
+		await writeFile(
+			path.join(emailsDir, "test-post.md"),
+			serialize({
+				id: "email_1",
+				subject: "Test Post",
+				slug: "test-post",
+				body: "Here is ![photo](../media/photo.png) in my post",
+			}),
+		);
+		await writeFile(
+			path.join(mediaDir, "photo.png"),
+			Buffer.from("real-png-data"),
+		);
 
-    const pushedEmails: any[] = [];
+		const pushedEmails: any[] = [];
 
-    mockFetch(
-      async (request, url) => {
-        if (url.pathname === "/images" && request.method === "POST") {
-          const formData = await request.formData();
-          const file = formData.get("image") as File;
-          expect(file).toBeTruthy();
-          expect(file.name).toBe("photo.png");
-          return jsonResponse(
-            {
-              id: "img_uploaded",
-              image: "https://assets.buttondown.email/images/photo.png",
-              creation_date: "2025-01-01",
-            },
-            201,
-          );
-        }
-      },
-      async (request, url) => {
-        if (url.pathname.includes("/emails/") && request.method === "PATCH") {
-          const body = await request.json();
-          pushedEmails.push(body);
-          return jsonResponse({});
-        }
-      },
-    );
+		mockFetch(
+			async (request, url) => {
+				if (url.pathname === "/images" && request.method === "POST") {
+					const formData = await request.formData();
+					const file = formData.get("image") as File;
+					expect(file).toBeTruthy();
+					expect(file.name).toBe("photo.png");
+					return jsonResponse(
+						{
+							id: "img_uploaded",
+							image: "https://assets.buttondown.email/images/photo.png",
+							creation_date: "2025-01-01",
+						},
+						201,
+					);
+				}
+			},
+			async (request, url) => {
+				if (url.pathname.includes("/emails/") && request.method === "PATCH") {
+					const body = await request.json();
+					pushedEmails.push(body);
+					return jsonResponse({});
+				}
+			},
+		);
 
-    await renderPush();
+		await renderPush();
 
-    expect(pushedEmails).toHaveLength(1);
-    expect(pushedEmails[0].body).toContain(
-      "https://assets.buttondown.email/images/photo.png",
-    );
-    expect(pushedEmails[0].body).not.toContain("../media/photo.png");
-    expect(pushedEmails[0].body).toContain(
-      "<!-- buttondown-editor-mode: plaintext -->",
-    );
+		expect(pushedEmails).toHaveLength(1);
+		expect(pushedEmails[0].body).toContain(
+			"https://assets.buttondown.email/images/photo.png",
+		);
+		expect(pushedEmails[0].body).not.toContain("../media/photo.png");
 
-    const state = JSON.parse(
-      await readFile(path.join(tempDir, ".buttondown.json"), "utf8"),
-    );
-    expect(state.syncedImages.img_uploaded).toEqual({
-      id: "img_uploaded",
-      localPath: path.join(tempDir, "media", "photo.png"),
-      url: "https://assets.buttondown.email/images/photo.png",
-      filename: "photo.png",
-    });
-  });
+		const state = JSON.parse(
+			await readFile(path.join(tempDir, ".buttondown.json"), "utf8"),
+		);
+		expect(state.syncedImages.img_uploaded).toEqual({
+			id: "img_uploaded",
+			localPath: "media/photo.png",
+			url: "https://assets.buttondown.email/images/photo.png",
+			filename: "photo.png",
+		});
+	});
 
-  test("should skip upload for already-synced images", async () => {
-    const mediaDir = path.join(tempDir, "media");
-    await mkdir(mediaDir, { recursive: true });
+	test("should skip upload for already-synced images", async () => {
+		const mediaDir = path.join(tempDir, "media");
+		await mkdir(mediaDir, { recursive: true });
 
-    await writeFile(
-      path.join(emailsDir, "reuse-post.md"),
-      serialize({
-        id: "email_2",
-        subject: "Reuse Post",
-        slug: "reuse-post",
-        body: "Reusing ![photo](../media/photo.png) again",
-      }),
-    );
-    await writeFile(path.join(mediaDir, "photo.png"), Buffer.from("png-data"));
+		await writeFile(
+			path.join(emailsDir, "reuse-post.md"),
+			serialize({
+				id: "email_2",
+				subject: "Reuse Post",
+				slug: "reuse-post",
+				body: "Reusing ![photo](../media/photo.png) again",
+			}),
+		);
+		await writeFile(path.join(mediaDir, "photo.png"), Buffer.from("png-data"));
 
-    await writeSyncState(tempDir, {
-      syncedImages: {
-        img_existing: {
-          id: "img_existing",
-          localPath: path.join(tempDir, "media", "photo.png"),
-          url: "https://assets.buttondown.email/images/photo.png",
-          filename: "photo.png",
-        },
-      },
-    });
+		await writeSyncState(tempDir, {
+			syncedImages: {
+				img_existing: {
+					id: "img_existing",
+					localPath: path.join(tempDir, "media", "photo.png"),
+					url: "https://assets.buttondown.email/images/photo.png",
+					filename: "photo.png",
+				},
+			},
+		});
 
-    let imageUploadCount = 0;
-    const pushedEmails: any[] = [];
+		let imageUploadCount = 0;
+		const pushedEmails: any[] = [];
 
-    mockFetch(
-      (request, url) => {
-        if (url.pathname === "/images" && request.method === "POST") {
-          imageUploadCount++;
-          return jsonResponse(
-            {
-              id: "img_new",
-              image: "https://example.com/new.png",
-              creation_date: "2025-01-01",
-            },
-            201,
-          );
-        }
-      },
-      async (request, url) => {
-        if (url.pathname.includes("/emails/") && request.method === "PATCH") {
-          const body = await request.json();
-          pushedEmails.push(body);
-          return jsonResponse({});
-        }
-      },
-    );
+		mockFetch(
+			(request, url) => {
+				if (url.pathname === "/images" && request.method === "POST") {
+					imageUploadCount++;
+					return jsonResponse(
+						{
+							id: "img_new",
+							image: "https://example.com/new.png",
+							creation_date: "2025-01-01",
+						},
+						201,
+					);
+				}
+			},
+			async (request, url) => {
+				if (url.pathname.includes("/emails/") && request.method === "PATCH") {
+					const body = await request.json();
+					pushedEmails.push(body);
+					return jsonResponse({});
+				}
+			},
+		);
 
-    await renderPush();
+		await renderPush();
 
-    expect(imageUploadCount).toBe(0);
-    expect(pushedEmails).toHaveLength(1);
-    expect(pushedEmails[0].body).toContain(
-      "https://assets.buttondown.email/images/photo.png",
-    );
-  });
+		expect(imageUploadCount).toBe(0);
+		expect(pushedEmails).toHaveLength(1);
+		expect(pushedEmails[0].body).toContain(
+			"https://assets.buttondown.email/images/photo.png",
+		);
+	});
 
-  test("should not push unchanged emails", async () => {
-    await writeFile(
-      path.join(emailsDir, "unchanged.md"),
-      serialize({
-        id: "email_unchanged",
-        subject: "Unchanged Post",
-        slug: "unchanged",
-        body: "Same content as remote",
-      }),
-    );
-    await writeFile(
-      path.join(emailsDir, "changed.md"),
-      serialize({
-        id: "email_changed",
-        subject: "Changed Post",
-        slug: "changed",
-        body: "Updated locally",
-      }),
-    );
+	test("should not push unchanged emails", async () => {
+		await writeFile(
+			path.join(emailsDir, "unchanged.md"),
+			serialize({
+				id: "email_unchanged",
+				subject: "Unchanged Post",
+				slug: "unchanged",
+				body: "Same content as remote",
+			}),
+		);
+		await writeFile(
+			path.join(emailsDir, "changed.md"),
+			serialize({
+				id: "email_changed",
+				subject: "Changed Post",
+				slug: "changed",
+				body: "Updated locally",
+			}),
+		);
 
-    const pushedEmailIds: string[] = [];
+		const pushedEmailIds: string[] = [];
 
-    mockFetch(
-      (request, url) => {
-        if (url.pathname === "/emails" && request.method === "GET") {
-          return jsonResponse({
-            results: [
-              {
-                id: "email_unchanged",
-                subject: "Unchanged Post",
-                slug: "unchanged",
-                body: "<!-- buttondown-editor-mode: plaintext -->Same content as remote",
-              },
-              {
-                id: "email_changed",
-                subject: "Changed Post",
-                slug: "changed",
-                body: "<!-- buttondown-editor-mode: plaintext -->Old content from remote",
-              },
-            ],
-            count: 2,
-          });
-        }
-      },
-      (request, url) => {
-        if (url.pathname.includes("/emails/") && request.method === "PATCH") {
-          const id = url.pathname.split("/emails/")[1];
-          pushedEmailIds.push(id);
-          return jsonResponse({});
-        }
-      },
-    );
+		mockFetch(
+			(request, url) => {
+				if (url.pathname === "/emails" && request.method === "GET") {
+					return jsonResponse({
+						results: [
+							{
+								id: "email_unchanged",
+								subject: "Unchanged Post",
+								slug: "unchanged",
+								body: "<!-- buttondown-editor-mode: plaintext -->Same content as remote",
+							},
+							{
+								id: "email_changed",
+								subject: "Changed Post",
+								slug: "changed",
+								body: "<!-- buttondown-editor-mode: plaintext -->Old content from remote",
+							},
+						],
+						count: 2,
+					});
+				}
+			},
+			(request, url) => {
+				if (url.pathname.includes("/emails/") && request.method === "PATCH") {
+					const id = url.pathname.split("/emails/")[1];
+					pushedEmailIds.push(id);
+					return jsonResponse({});
+				}
+			},
+		);
 
-    await renderPush();
+		await renderPush();
 
-    expect(pushedEmailIds).toHaveLength(1);
-    expect(pushedEmailIds[0]).toBe("email_changed");
-  });
+		expect(pushedEmailIds).toHaveLength(1);
+		expect(pushedEmailIds[0]).toBe("email_changed");
+	});
 
-  test("should push emails without images with plaintext sigil", async () => {
-    await writeFile(
-      path.join(emailsDir, "plain-post.md"),
-      serialize({
-        id: "email_3",
-        subject: "Plain Post",
-        slug: "plain-post",
-        body: "Just text, no images here.",
-      }),
-    );
+	test("should preserve the remote editor mode when the local file has none", async () => {
+		await writeFile(
+			path.join(emailsDir, "plain-post.md"),
+			serialize({
+				id: "email_3",
+				subject: "Plain Post",
+				slug: "plain-post",
+				body: "Just text, no images here.",
+			}),
+		);
 
-    const pushedEmails: any[] = [];
+		const pushedEmails: any[] = [];
 
-    mockFetch(async (request, url) => {
-      if (url.pathname.includes("/emails/") && request.method === "PATCH") {
-        const body = await request.json();
-        pushedEmails.push(body);
-        return jsonResponse({});
-      }
-    });
+		mockFetch(
+			(request, url) => {
+				if (url.pathname === "/emails" && request.method === "GET") {
+					return jsonResponse({
+						results: [
+							{
+								id: "email_3",
+								subject: "Plain Post",
+								slug: "plain-post",
+								body: "<!-- buttondown-editor-mode: plaintext -->Old content.",
+							},
+						],
+						count: 1,
+					});
+				}
+			},
+			async (request, url) => {
+				if (url.pathname.includes("/emails/") && request.method === "PATCH") {
+					const body = await request.json();
+					pushedEmails.push(body);
+					return jsonResponse({});
+				}
+			},
+		);
 
-    await renderPush();
+		await renderPush();
 
-    expect(pushedEmails).toHaveLength(1);
-    expect(pushedEmails[0].body).toBe(
-      "<!-- buttondown-editor-mode: plaintext -->Just text, no images here.",
-    );
-  });
+		expect(pushedEmails).toHaveLength(1);
+		expect(pushedEmails[0].body).toBe(
+			"<!-- buttondown-editor-mode: plaintext -->Just text, no images here.",
+		);
+	});
 
-  test("should not push unchanged automations", async () => {
-    const automationsDir = path.join(tempDir, "automations");
-    await mkdir(automationsDir, { recursive: true });
+	test("should push the declared editor mode from frontmatter", async () => {
+		await writeFile(
+			path.join(emailsDir, "fancy-post.md"),
+			serialize({
+				id: "email_4",
+				subject: "Fancy Post",
+				slug: "fancy-post",
+				body: "<!-- buttondown-editor-mode: fancy --><p>HTML content</p>",
+			}),
+		);
 
-    const unchangedAutomation = {
-      id: "auto_unchanged",
-      name: "Unchanged Automation",
-      status: "active" as const,
-      trigger: "subscriber.created" as const,
-      actions: [
-        { type: "send_email" as const, metadata: {} as Record<string, string> },
-      ],
-      filters: { filters: [], groups: [], predicate: "and" as const },
-      metadata: {} as Record<string, string>,
-    };
-    const changedAutomation = {
-      id: "auto_changed",
-      name: "Changed Automation",
-      status: "active" as const,
-      trigger: "subscriber.created" as const,
-      actions: [
-        { type: "send_email" as const, metadata: {} as Record<string, string> },
-      ],
-      filters: { filters: [], groups: [], predicate: "and" as const },
-      metadata: {} as Record<string, string>,
-    };
+		const pushedEmails: any[] = [];
 
-    await writeFile(
-      path.join(automationsDir, "unchanged-automation.json"),
-      serializeAutomation(unchangedAutomation),
-    );
-    await writeFile(
-      path.join(automationsDir, "changed-automation.json"),
-      serializeAutomation({
-        ...changedAutomation,
-        status: "inactive" as const,
-      }),
-    );
+		mockFetch(async (request, url) => {
+			if (url.pathname.includes("/emails/") && request.method === "PATCH") {
+				const body = await request.json();
+				pushedEmails.push(body);
+				return jsonResponse({});
+			}
+		});
 
-    const patchedAutomationIds: string[] = [];
+		await renderPush();
 
-    mockFetch(
-      (request, url) => {
-        if (url.pathname === "/automations" && request.method === "GET") {
-          return jsonResponse({
-            results: [unchangedAutomation, changedAutomation],
-            count: 2,
-          });
-        }
-      },
-      async (request, url) => {
-        if (
-          url.pathname.includes("/automations/") &&
-          request.method === "PATCH"
-        ) {
-          const id = url.pathname.split("/automations/")[1];
-          patchedAutomationIds.push(id);
-          return jsonResponse({});
-        }
-      },
-    );
+		expect(pushedEmails).toHaveLength(1);
+		expect(pushedEmails[0].body).toBe(
+			"<!-- buttondown-editor-mode: fancy --><p>HTML content</p>",
+		);
+	});
 
-    await renderPush();
+	test("should not push unchanged automations", async () => {
+		const automationsDir = path.join(tempDir, "automations");
+		await mkdir(automationsDir, { recursive: true });
 
-    expect(patchedAutomationIds).toHaveLength(1);
-    expect(patchedAutomationIds[0]).toBe("auto_changed");
-  });
+		const unchangedAutomation = {
+			id: "auto_unchanged",
+			name: "Unchanged Automation",
+			status: "active" as const,
+			trigger: "subscriber.created" as const,
+			actions: [
+				{ type: "send_email" as const, metadata: {} as Record<string, string> },
+			],
+			filters: { filters: [], groups: [], predicate: "and" as const },
+			metadata: {} as Record<string, string>,
+		};
+		const changedAutomation = {
+			id: "auto_changed",
+			name: "Changed Automation",
+			status: "active" as const,
+			trigger: "subscriber.created" as const,
+			actions: [
+				{ type: "send_email" as const, metadata: {} as Record<string, string> },
+			],
+			filters: { filters: [], groups: [], predicate: "and" as const },
+			metadata: {} as Record<string, string>,
+		};
 
-  test("should not push unchanged snippets", async () => {
-    const snippetsDir = path.join(tempDir, "snippets");
-    await mkdir(snippetsDir, { recursive: true });
+		await writeFile(
+			path.join(automationsDir, "unchanged-automation.json"),
+			serializeAutomation(unchangedAutomation),
+		);
+		await writeFile(
+			path.join(automationsDir, "changed-automation.json"),
+			serializeAutomation({
+				...changedAutomation,
+				status: "inactive" as const,
+			}),
+		);
 
-    const unchangedSnippet = {
-      id: "snip_unchanged",
-      name: "Unchanged Snippet",
-      identifier: "unchanged-snippet",
-      content: "Same content as remote",
-    };
-    const changedSnippet = {
-      id: "snip_changed",
-      name: "Changed Snippet",
-      identifier: "changed-snippet",
-      content: "Old content from remote",
-    };
+		const patchedAutomationIds: string[] = [];
 
-    await writeFile(
-      path.join(snippetsDir, "unchanged-snippet.md"),
-      serializeSnippet(unchangedSnippet),
-    );
-    await writeFile(
-      path.join(snippetsDir, "changed-snippet.md"),
-      serializeSnippet({
-        ...changedSnippet,
-        content: "Updated locally",
-      }),
-    );
+		mockFetch(
+			(request, url) => {
+				if (url.pathname === "/automations" && request.method === "GET") {
+					return jsonResponse({
+						results: [unchangedAutomation, changedAutomation],
+						count: 2,
+					});
+				}
+			},
+			async (request, url) => {
+				if (
+					url.pathname.includes("/automations/") &&
+					request.method === "PATCH"
+				) {
+					const id = url.pathname.split("/automations/")[1];
+					patchedAutomationIds.push(id);
+					return jsonResponse({});
+				}
+			},
+		);
 
-    const patchedSnippetIds: string[] = [];
+		await renderPush();
 
-    mockFetch(
-      (request, url) => {
-        if (url.pathname === "/snippets" && request.method === "GET") {
-          return jsonResponse({
-            results: [unchangedSnippet, changedSnippet],
-            count: 2,
-          });
-        }
-      },
-      async (request, url) => {
-        if (url.pathname.includes("/snippets/") && request.method === "PATCH") {
-          const id = url.pathname.split("/snippets/")[1];
-          patchedSnippetIds.push(id);
-          return jsonResponse({});
-        }
-      },
-    );
+		expect(patchedAutomationIds).toHaveLength(1);
+		expect(patchedAutomationIds[0]).toBe("auto_changed");
+	});
 
-    await renderPush();
+	test("should not push unchanged snippets", async () => {
+		const snippetsDir = path.join(tempDir, "snippets");
+		await mkdir(snippetsDir, { recursive: true });
 
-    expect(patchedSnippetIds).toHaveLength(1);
-    expect(patchedSnippetIds[0]).toBe("snip_changed");
-  });
+		const unchangedSnippet = {
+			id: "snip_unchanged",
+			name: "Unchanged Snippet",
+			identifier: "unchanged-snippet",
+			content: "Same content as remote",
+		};
+		const changedSnippet = {
+			id: "snip_changed",
+			name: "Changed Snippet",
+			identifier: "changed-snippet",
+			content: "Old content from remote",
+		};
 
-  test("should not push unchanged newsletter", async () => {
-    const newsletter = { id: "nl_1", name: "Test" };
+		await writeFile(
+			path.join(snippetsDir, "unchanged-snippet.md"),
+			serializeSnippet(unchangedSnippet),
+		);
+		await writeFile(
+			path.join(snippetsDir, "changed-snippet.md"),
+			serializeSnippet({
+				...changedSnippet,
+				content: "Updated locally",
+			}),
+		);
 
-    await writeFile(
-      path.join(tempDir, "newsletter.json"),
-      JSON.stringify(newsletter),
-    );
+		const patchedSnippetIds: string[] = [];
 
-    let newsletterPatched = false;
+		mockFetch(
+			(request, url) => {
+				if (url.pathname === "/snippets" && request.method === "GET") {
+					return jsonResponse({
+						results: [unchangedSnippet, changedSnippet],
+						count: 2,
+					});
+				}
+			},
+			async (request, url) => {
+				if (url.pathname.includes("/snippets/") && request.method === "PATCH") {
+					const id = url.pathname.split("/snippets/")[1];
+					patchedSnippetIds.push(id);
+					return jsonResponse({});
+				}
+			},
+		);
 
-    mockFetch((request, url) => {
-      if (url.pathname === "/newsletters" && request.method === "GET") {
-        return jsonResponse({
-          results: [newsletter],
-          count: 1,
-        });
-      }
-      if (
-        url.pathname.includes("/newsletters/") &&
-        request.method === "PATCH"
-      ) {
-        newsletterPatched = true;
-        return jsonResponse({});
-      }
-    });
+		await renderPush();
 
-    await renderPush();
+		expect(patchedSnippetIds).toHaveLength(1);
+		expect(patchedSnippetIds[0]).toBe("snip_changed");
+	});
 
-    expect(newsletterPatched).toBe(false);
-  });
+	test("should not push unchanged newsletter", async () => {
+		const newsletter = { id: "nl_1", name: "Test" };
+
+		await writeFile(
+			path.join(tempDir, "newsletter.json"),
+			JSON.stringify(newsletter),
+		);
+
+		let newsletterPatched = false;
+
+		mockFetch((request, url) => {
+			if (url.pathname === "/newsletters" && request.method === "GET") {
+				return jsonResponse({
+					results: [newsletter],
+					count: 1,
+				});
+			}
+			if (
+				url.pathname.includes("/newsletters/") &&
+				request.method === "PATCH"
+			) {
+				newsletterPatched = true;
+				return jsonResponse({});
+			}
+		});
+
+		await renderPush();
+
+		expect(newsletterPatched).toBe(false);
+	});
 });

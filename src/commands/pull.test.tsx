@@ -9,330 +9,328 @@ import { jsonResponse, parseUrl } from "../test-helpers.js";
 import Pull from "./pull.js";
 
 describe("pull", () => {
-  let tempDir: string;
-  let originalFetch: typeof fetch;
+	let tempDir: string;
+	let originalFetch: typeof fetch;
 
-  beforeEach(async () => {
-    tempDir = await mkdtemp(path.join(tmpdir(), "pull-test-"));
-    originalFetch = globalThis.fetch;
-  });
+	beforeEach(async () => {
+		tempDir = await mkdtemp(path.join(tmpdir(), "pull-test-"));
+		originalFetch = globalThis.fetch;
+	});
 
-  afterEach(async () => {
-    globalThis.fetch = originalFetch;
-    if (tempDir) {
-      await rm(tempDir, { recursive: true, force: true });
-    }
-  });
+	afterEach(async () => {
+		globalThis.fetch = originalFetch;
+		if (tempDir) {
+			await rm(tempDir, { recursive: true, force: true });
+		}
+	});
 
-  test("should convert absolute image URLs to relative paths in pulled emails", async () => {
-    globalThis.fetch = mock(async (input: Request | string) => {
-      const url = parseUrl(input);
+	test("should convert absolute image URLs to relative paths in pulled emails", async () => {
+		globalThis.fetch = mock(async (input: Request | string) => {
+			const url = parseUrl(input);
 
-      // Base resources return empty
-      if (url.pathname.includes("/automations"))
-        return jsonResponse({ results: [], count: 0 });
-      if (url.pathname.includes("/newsletters"))
-        return jsonResponse({ results: [], count: 0 });
-      if (url.pathname.includes("/snippets"))
-        return jsonResponse({ results: [], count: 0 });
+			// Base resources return empty
+			if (url.pathname.includes("/automations"))
+				return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/newsletters"))
+				return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/snippets"))
+				return jsonResponse({ results: [], count: 0 });
 
-      // Images API
-      if (url.pathname === "/images") {
-        return jsonResponse({
-          results: [
-            {
-              id: "img_1",
-              image: "https://assets.buttondown.email/images/photo.png",
-              creation_date: "2025-01-01",
-            },
-          ],
-          count: 1,
-        });
-      }
+			// Images API
+			if (url.pathname === "/images") {
+				return jsonResponse({
+					results: [
+						{
+							id: "img_1",
+							image: "https://assets.buttondown.email/images/photo.png",
+							creation_date: "2025-01-01",
+						},
+					],
+					count: 1,
+				});
+			}
 
-      // Image file download
-      if (url.hostname === "assets.buttondown.email") {
-        return new Response(Buffer.from("fake-png-data"), { status: 200 });
-      }
+			// Image file download
+			if (url.hostname === "assets.buttondown.email") {
+				return new Response(Buffer.from("fake-png-data"), { status: 200 });
+			}
 
-      // Emails API
-      if (url.pathname === "/emails") {
-        return jsonResponse({
-          results: [
-            {
-              id: "email_1",
-              subject: "Test Email",
-              slug: "test-email",
-              body: "Check this: ![photo](https://assets.buttondown.email/images/photo.png)",
-            },
-          ],
-          count: 1,
-        });
-      }
+			// Emails API
+			if (url.pathname === "/emails") {
+				return jsonResponse({
+					results: [
+						{
+							id: "email_1",
+							subject: "Test Email",
+							slug: "test-email",
+							body: "Check this: ![photo](https://assets.buttondown.email/images/photo.png)",
+						},
+					],
+					count: 1,
+				});
+			}
 
-      return jsonResponse({});
-    }) as unknown as typeof fetch;
+			return jsonResponse({});
+		}) as unknown as typeof fetch;
 
-    render(
-      <Pull
-        baseUrl="https://api.buttondown.com"
-        apiKey="test-key"
-        directory={tempDir}
-      />,
-    );
+		render(
+			<Pull
+				baseUrl="https://api.buttondown.com"
+				apiKey="test-key"
+				directory={tempDir}
+			/>,
+		);
 
-    await delay(1000);
+		await delay(1000);
 
-    // Email should have relative path, not absolute URL
-    const emailContent = await readFile(
-      path.join(tempDir, "emails", "test-email.md"),
-      "utf8",
-    );
-    expect(emailContent).toContain("../media/photo.png");
-    expect(emailContent).not.toContain(
-      "https://assets.buttondown.email/images/photo.png",
-    );
+		// Email should have relative path, not absolute URL
+		const emailContent = await readFile(
+			path.join(tempDir, "emails", "test-email.md"),
+			"utf8",
+		);
+		expect(emailContent).toContain("../media/photo.png");
+		expect(emailContent).not.toContain(
+			"https://assets.buttondown.email/images/photo.png",
+		);
 
-    // Image should be downloaded
-    const imageData = await readFile(path.join(tempDir, "media", "photo.png"));
-    expect(imageData.toString()).toBe("fake-png-data");
+		// Image should be downloaded
+		const imageData = await readFile(path.join(tempDir, "media", "photo.png"));
+		expect(imageData.toString()).toBe("fake-png-data");
 
-    // Sync state should be written
-    const stateContent = await readFile(
-      path.join(tempDir, ".buttondown.json"),
-      "utf8",
-    );
-    const state = JSON.parse(stateContent);
-    expect(state.syncedImages.img_1).toEqual({
-      id: "img_1",
-      localPath: path.join(tempDir, "media", "photo.png"),
-      url: "https://assets.buttondown.email/images/photo.png",
-      filename: "photo.png",
-    });
-  });
+		// Sync state should be written
+		const stateContent = await readFile(
+			path.join(tempDir, ".buttondown.json"),
+			"utf8",
+		);
+		const state = JSON.parse(stateContent);
+		expect(state.syncedImages.img_1).toEqual({
+			id: "img_1",
+			localPath: "media/photo.png",
+			url: "https://assets.buttondown.email/images/photo.png",
+			filename: "photo.png",
+		});
+	});
 
-  test("should leave non-image URLs intact in pulled emails", async () => {
-    globalThis.fetch = mock(async (input: Request | string) => {
-      const url = parseUrl(input);
+	test("should leave non-image URLs intact in pulled emails", async () => {
+		globalThis.fetch = mock(async (input: Request | string) => {
+			const url = parseUrl(input);
 
-      if (url.pathname.includes("/automations"))
-        return jsonResponse({ results: [], count: 0 });
-      if (url.pathname.includes("/newsletters"))
-        return jsonResponse({ results: [], count: 0 });
-      if (url.pathname.includes("/snippets"))
-        return jsonResponse({ results: [], count: 0 });
-      if (url.pathname === "/images")
-        return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/automations"))
+				return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/newsletters"))
+				return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/snippets"))
+				return jsonResponse({ results: [], count: 0 });
+			if (url.pathname === "/images")
+				return jsonResponse({ results: [], count: 0 });
 
-      if (url.pathname === "/emails") {
-        return jsonResponse({
-          results: [
-            {
-              id: "email_2",
-              subject: "Links Email",
-              slug: "links-email",
-              body: "Visit ![logo](https://other-cdn.com/logo.png) for more",
-            },
-          ],
-          count: 1,
-        });
-      }
+			if (url.pathname === "/emails") {
+				return jsonResponse({
+					results: [
+						{
+							id: "email_2",
+							subject: "Links Email",
+							slug: "links-email",
+							body: "Visit ![logo](https://other-cdn.com/logo.png) for more",
+						},
+					],
+					count: 1,
+				});
+			}
 
-      return jsonResponse({});
-    }) as unknown as typeof fetch;
+			return jsonResponse({});
+		}) as unknown as typeof fetch;
 
-    render(
-      <Pull
-        baseUrl="https://api.buttondown.com"
-        apiKey="test-key"
-        directory={tempDir}
-      />,
-    );
+		render(
+			<Pull
+				baseUrl="https://api.buttondown.com"
+				apiKey="test-key"
+				directory={tempDir}
+			/>,
+		);
 
-    await delay(1000);
+		await delay(1000);
 
-    const emailContent = await readFile(
-      path.join(tempDir, "emails", "links-email.md"),
-      "utf8",
-    );
-    expect(emailContent).toContain("https://other-cdn.com/logo.png");
-  });
+		const emailContent = await readFile(
+			path.join(tempDir, "emails", "links-email.md"),
+			"utf8",
+		);
+		expect(emailContent).toContain("https://other-cdn.com/logo.png");
+	});
 
-  test("should handle pull with multiple images", async () => {
-    globalThis.fetch = mock(async (input: Request | string) => {
-      const url = parseUrl(input);
+	test("should handle pull with multiple images", async () => {
+		globalThis.fetch = mock(async (input: Request | string) => {
+			const url = parseUrl(input);
 
-      if (url.pathname.includes("/automations"))
-        return jsonResponse({ results: [], count: 0 });
-      if (url.pathname.includes("/newsletters"))
-        return jsonResponse({ results: [], count: 0 });
-      if (url.pathname.includes("/snippets"))
-        return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/automations"))
+				return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/newsletters"))
+				return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/snippets"))
+				return jsonResponse({ results: [], count: 0 });
 
-      if (url.pathname === "/images") {
-        return jsonResponse({
-          results: [
-            {
-              id: "img_a",
-              image: "https://assets.buttondown.email/images/one.png",
-              creation_date: "2025-01-01",
-            },
-            {
-              id: "img_b",
-              image: "https://assets.buttondown.email/images/two.jpg",
-              creation_date: "2025-01-02",
-            },
-          ],
-          count: 2,
-        });
-      }
+			if (url.pathname === "/images") {
+				return jsonResponse({
+					results: [
+						{
+							id: "img_a",
+							image: "https://assets.buttondown.email/images/one.png",
+							creation_date: "2025-01-01",
+						},
+						{
+							id: "img_b",
+							image: "https://assets.buttondown.email/images/two.jpg",
+							creation_date: "2025-01-02",
+						},
+					],
+					count: 2,
+				});
+			}
 
-      if (url.hostname === "assets.buttondown.email") {
-        const filename = path.basename(url.pathname);
-        return new Response(Buffer.from(`data-${filename}`), { status: 200 });
-      }
+			if (url.hostname === "assets.buttondown.email") {
+				const filename = path.basename(url.pathname);
+				return new Response(Buffer.from(`data-${filename}`), { status: 200 });
+			}
 
-      if (url.pathname === "/emails") {
-        return jsonResponse({
-          results: [
-            {
-              id: "email_3",
-              subject: "Multi Image",
-              slug: "multi-image",
-              body: "![a](https://assets.buttondown.email/images/one.png) and ![b](https://assets.buttondown.email/images/two.jpg)",
-            },
-          ],
-          count: 1,
-        });
-      }
+			if (url.pathname === "/emails") {
+				return jsonResponse({
+					results: [
+						{
+							id: "email_3",
+							subject: "Multi Image",
+							slug: "multi-image",
+							body: "![a](https://assets.buttondown.email/images/one.png) and ![b](https://assets.buttondown.email/images/two.jpg)",
+						},
+					],
+					count: 1,
+				});
+			}
 
-      return jsonResponse({});
-    }) as unknown as typeof fetch;
+			return jsonResponse({});
+		}) as unknown as typeof fetch;
 
-    render(
-      <Pull
-        baseUrl="https://api.buttondown.com"
-        apiKey="test-key"
-        directory={tempDir}
-      />,
-    );
+		render(
+			<Pull
+				baseUrl="https://api.buttondown.com"
+				apiKey="test-key"
+				directory={tempDir}
+			/>,
+		);
 
-    await delay(1000);
+		await delay(1000);
 
-    const emailContent = await readFile(
-      path.join(tempDir, "emails", "multi-image.md"),
-      "utf8",
-    );
-    expect(emailContent).toContain("../media/one.png");
-    expect(emailContent).toContain("../media/two.jpg");
-    expect(emailContent).not.toContain("https://assets.buttondown.email");
+		const emailContent = await readFile(
+			path.join(tempDir, "emails", "multi-image.md"),
+			"utf8",
+		);
+		expect(emailContent).toContain("../media/one.png");
+		expect(emailContent).toContain("../media/two.jpg");
+		expect(emailContent).not.toContain("https://assets.buttondown.email");
 
-    const state = JSON.parse(
-      await readFile(path.join(tempDir, ".buttondown.json"), "utf8"),
-    );
-    expect(Object.keys(state.syncedImages)).toHaveLength(2);
-  });
+		const state = JSON.parse(
+			await readFile(path.join(tempDir, ".buttondown.json"), "utf8"),
+		);
+		expect(Object.keys(state.syncedImages)).toHaveLength(2);
+	});
 
-  test("should preserve existing sync state and not re-download already-synced images", async () => {
-    // Simulate state after a push: sync state maps img_1 to a local path
-    // with original filename (photo.png), but remote URL has a UUID filename
-    const mediaDir = path.join(tempDir, "media");
-    await mkdir(mediaDir, { recursive: true });
-    await writeFile(
-      path.join(mediaDir, "photo.png"),
-      Buffer.from("original-png-data"),
-    );
+	test("should preserve existing sync state and not re-download already-synced images", async () => {
+		// Simulate state after a push: sync state maps img_1 to a local path
+		// with original filename (photo.png), but remote URL has a UUID filename
+		const mediaDir = path.join(tempDir, "media");
+		await mkdir(mediaDir, { recursive: true });
+		await writeFile(
+			path.join(mediaDir, "photo.png"),
+			Buffer.from("original-png-data"),
+		);
 
-    await writeSyncState(tempDir, {
-      syncedImages: {
-        img_1: {
-          id: "img_1",
-          localPath: path.join(tempDir, "media", "photo.png"),
-          url: "https://assets.buttondown.email/images/abc123.png",
-          filename: "photo.png",
-        },
-      },
-    });
+		await writeSyncState(tempDir, {
+			syncedImages: {
+				img_1: {
+					id: "img_1",
+					localPath: path.join(tempDir, "media", "photo.png"),
+					url: "https://assets.buttondown.email/images/abc123.png",
+					filename: "photo.png",
+				},
+			},
+		});
 
-    let imageDownloadCount = 0;
+		let imageDownloadCount = 0;
 
-    globalThis.fetch = mock(async (input: Request | string) => {
-      const url = parseUrl(input);
+		globalThis.fetch = mock(async (input: Request | string) => {
+			const url = parseUrl(input);
 
-      if (url.pathname.includes("/automations"))
-        return jsonResponse({ results: [], count: 0 });
-      if (url.pathname.includes("/newsletters"))
-        return jsonResponse({ results: [], count: 0 });
-      if (url.pathname.includes("/snippets"))
-        return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/automations"))
+				return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/newsletters"))
+				return jsonResponse({ results: [], count: 0 });
+			if (url.pathname.includes("/snippets"))
+				return jsonResponse({ results: [], count: 0 });
 
-      if (url.pathname === "/images") {
-        return jsonResponse({
-          results: [
-            {
-              id: "img_1",
-              image: "https://assets.buttondown.email/images/abc123.png",
-              creation_date: "2025-01-01",
-            },
-          ],
-          count: 1,
-        });
-      }
+			if (url.pathname === "/images") {
+				return jsonResponse({
+					results: [
+						{
+							id: "img_1",
+							image: "https://assets.buttondown.email/images/abc123.png",
+							creation_date: "2025-01-01",
+						},
+					],
+					count: 1,
+				});
+			}
 
-      if (url.hostname === "assets.buttondown.email") {
-        imageDownloadCount++;
-        return new Response(Buffer.from("downloaded-data"), { status: 200 });
-      }
+			if (url.hostname === "assets.buttondown.email") {
+				imageDownloadCount++;
+				return new Response(Buffer.from("downloaded-data"), { status: 200 });
+			}
 
-      if (url.pathname === "/emails") {
-        return jsonResponse({
-          results: [
-            {
-              id: "email_1",
-              subject: "Test Email",
-              slug: "test-email",
-              body: "Check this: ![photo](https://assets.buttondown.email/images/abc123.png)",
-            },
-          ],
-          count: 1,
-        });
-      }
+			if (url.pathname === "/emails") {
+				return jsonResponse({
+					results: [
+						{
+							id: "email_1",
+							subject: "Test Email",
+							slug: "test-email",
+							body: "Check this: ![photo](https://assets.buttondown.email/images/abc123.png)",
+						},
+					],
+					count: 1,
+				});
+			}
 
-      return jsonResponse({});
-    }) as unknown as typeof fetch;
+			return jsonResponse({});
+		}) as unknown as typeof fetch;
 
-    render(
-      <Pull
-        baseUrl="https://api.buttondown.com"
-        apiKey="test-key"
-        directory={tempDir}
-      />,
-    );
+		render(
+			<Pull
+				baseUrl="https://api.buttondown.com"
+				apiKey="test-key"
+				directory={tempDir}
+			/>,
+		);
 
-    await delay(1000);
+		await delay(1000);
 
-    // Should NOT re-download the already-synced image
-    expect(imageDownloadCount).toBe(0);
+		// Should NOT re-download the already-synced image
+		expect(imageDownloadCount).toBe(0);
 
-    // Original file should be untouched
-    const imageData = await readFile(path.join(mediaDir, "photo.png"));
-    expect(imageData.toString()).toBe("original-png-data");
+		// Original file should be untouched
+		const imageData = await readFile(path.join(mediaDir, "photo.png"));
+		expect(imageData.toString()).toBe("original-png-data");
 
-    // Email should use the preserved local path (photo.png, not abc123.png)
-    const emailContent = await readFile(
-      path.join(tempDir, "emails", "test-email.md"),
-      "utf8",
-    );
-    expect(emailContent).toContain("../media/photo.png");
-    expect(emailContent).not.toContain("abc123.png");
+		// Email should use the preserved local path (photo.png, not abc123.png)
+		const emailContent = await readFile(
+			path.join(tempDir, "emails", "test-email.md"),
+			"utf8",
+		);
+		expect(emailContent).toContain("../media/photo.png");
+		expect(emailContent).not.toContain("abc123.png");
 
-    // Sync state should preserve the original localPath
-    const state = JSON.parse(
-      await readFile(path.join(tempDir, ".buttondown.json"), "utf8"),
-    );
-    expect(state.syncedImages.img_1.localPath).toBe(
-      path.join(tempDir, "media", "photo.png"),
-    );
-    expect(state.syncedImages.img_1.filename).toBe("photo.png");
-  });
+		// Sync state should preserve the original localPath
+		const state = JSON.parse(
+			await readFile(path.join(tempDir, ".buttondown.json"), "utf8"),
+		);
+		expect(state.syncedImages.img_1.localPath).toBe("media/photo.png");
+		expect(state.syncedImages.img_1.filename).toBe("photo.png");
+	});
 });

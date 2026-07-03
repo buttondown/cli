@@ -1,108 +1,42 @@
-import path from "node:path";
-import fs from "fs-extra";
-import { Box, Text, useApp } from "ink";
+import { Box, Text } from "ink";
 import { useEffect, useState } from "react";
+import { errorMessage } from "../sync/util.js";
+import { createDraft } from "./create-draft.js";
+import { useExitWhenSettled } from "./sync-command.js";
 
 type CreateProps = {
-  directory: string;
-  title: string;
-  json?: boolean;
+	directory: string;
+	title: string;
 };
 
-export default function Create({ directory, title, json }: CreateProps) {
-  const { exit } = useApp();
-  const [status, setStatus] = useState<string>("Creating new draft email...");
-  const [error, setError] = useState<string | null>(null);
-  const [created, setCreated] = useState<boolean>(false);
-  const [filePath, setFilePath] = useState<string>("");
-  const [slug, setSlug] = useState<string>("");
+export default function Create({ directory, title }: CreateProps) {
+	const [status, setStatus] = useState<string>("Creating new draft email...");
+	const [error, setError] = useState<string | null>(null);
+	const [created, setCreated] = useState<boolean>(false);
 
-  useEffect(() => {
-    const createDraft = async () => {
-      try {
-        const emailsDir = path.join(directory, "emails");
-        await fs.ensureDir(emailsDir);
+	useEffect(() => {
+		const run = async () => {
+			try {
+				const { filePath } = await createDraft(directory, title);
+				setStatus(`Created new draft email: ${filePath}`);
+				setCreated(true);
+			} catch (error_) {
+				setError(errorMessage(error_));
+			}
+		};
 
-        const newSlug = title
-          .toLowerCase()
-          .replaceAll(/[^a-z\d]+/g, "-")
-          .replaceAll(/(^-|-$)/g, "");
+		run();
+	}, [directory, title]);
 
-        if (!newSlug) {
-          setError("Title must contain at least one alphanumeric character");
-          return;
-        }
+	useExitWhenSettled(created || error !== null, error !== null);
 
-        const newFilePath = path.join(emailsDir, `${newSlug}.md`);
-
-        if (await fs.pathExists(newFilePath)) {
-          setError(
-            `Email with slug "${newSlug}" already exists at ${newFilePath}`,
-          );
-          return;
-        }
-
-        const date = new Date().toISOString();
-        const content = `---
-subject: ${title}
-status: draft
-email_type: public
-slug: ${newSlug}
-created: ${date}
-modified: ${date}
----
-
-Write your email content here...
-`;
-
-        await fs.writeFile(newFilePath, content);
-
-        setFilePath(newFilePath);
-        setSlug(newSlug);
-        setStatus(`Created new draft email: ${newFilePath}`);
-        setCreated(true);
-      } catch (error_) {
-        setError(error_ instanceof Error ? error_.message : String(error_));
-      }
-    };
-
-    createDraft();
-  }, [directory, title]);
-
-  useEffect(() => {
-    if (created || error) {
-      const timer = setTimeout(() => {
-        exit();
-      }, 500);
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [created, error, exit]);
-
-  if (json && created) {
-    return (
-      <Text>
-        {JSON.stringify({
-          status: "created",
-          path: filePath,
-          slug,
-          title,
-        })}
-      </Text>
-    );
-  }
-  if (json && error) {
-    return <Text>{JSON.stringify({ status: "error", error })}</Text>;
-  }
-
-  return (
-    <Box flexDirection="column">
-      {error ? (
-        <Text color="red">Error: {error}</Text>
-      ) : (
-        <Text color="green">{status}</Text>
-      )}
-    </Box>
-  );
+	return (
+		<Box flexDirection="column">
+			{error ? (
+				<Text color="red">Error: {error}</Text>
+			) : (
+				<Text color="green">{status}</Text>
+			)}
+		</Box>
+	);
 }

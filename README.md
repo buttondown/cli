@@ -99,13 +99,12 @@ Emails are stored as `.md` files with frontmatter:
 ```markdown
 ---
 id: email-id
-subject: My Newsletter Issue #1
+subject: "My Newsletter Issue #1"
 status: draft
 email_type: public
 slug: newsletter-issue-1
 publish_date: 2025-04-27T09:00:00Z
-created: 2025-04-25T15:32:18Z
-modified: 2025-04-26T10:45:22Z
+editor_mode: plaintext
 attachments:
   - attachment-id-1
   - attachment-id-2
@@ -120,7 +119,9 @@ This is the content of my email...
 ![My image](https://buttondown.s3.amazonaws.com/images/123456-example.png)
 ```
 
-When writing your emails, you can reference images that you've uploaded using the CLI. Once you've pushed images to Buttondown using `buttondown push`, you can reference them in your emails by their URL.
+The optional `editor_mode` field records whether the email is written in Markdown (`plaintext`) or HTML (`fancy`); pulling fills it in from the remote email and pushing preserves it, so syncing never changes how an email renders.
+
+When writing your emails, you can reference local images with relative paths (e.g. `![chart](../media/chart.png)`); `buttondown push` uploads any new ones and rewrites the references to their hosted URLs before the email reaches Buttondown.
 
 ## Commands
 
@@ -133,11 +134,16 @@ When writing your emails, you can reference images that you've uploaded using th
 ## Options
 
 - `--api-key, -k` - Your Buttondown API key (for login)
+- `--base-url, -b` - API base URL (default: https://api.buttondown.com/v1)
 - `--directory, -d` - Directory to store or read Buttondown content (default: ./buttondown)
-- `--title, -t` - Title for new email (with create command)
-- `--force, -f` - Force operation without confirmation
+- `--dry-run` - Preview changes without uploading (push only)
+- `--force, -f` - Overwrite existing credentials (login only)
 - `--help` - Show help message
+- `--json` - Output a single machine-readable JSON line
+- `--title, -t` - Title for new email (with create command)
 - `--version` - Show version number
+
+All commands exit non-zero when something fails (including partial failures), so the CLI is safe to use in scripts and CI.
 
 ## License
 

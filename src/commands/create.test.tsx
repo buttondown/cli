@@ -7,36 +7,36 @@ import { render } from "ink-testing-library";
 import Create from "./create.js";
 
 describe("create", () => {
-  let tempDir: string;
+	let tempDir: string;
 
-  beforeEach(async () => {
-    tempDir = await mkdtemp(path.join(tmpdir(), "create-test-"));
-  });
+	beforeEach(async () => {
+		tempDir = await mkdtemp(path.join(tmpdir(), "create-test-"));
+	});
 
-  afterEach(async () => {
-    if (tempDir) {
-      await rm(tempDir, { recursive: true, force: true });
-    }
-  });
+	afterEach(async () => {
+		if (tempDir) {
+			await rm(tempDir, { recursive: true, force: true });
+		}
+	});
 
-  function renderCreate(title: string) {
-    render(<Create directory={tempDir} title={title} />);
-    return delay(500);
-  }
+	function _renderCreate(title: string) {
+		render(<Create directory={tempDir} title={title} />);
+		return delay(500);
+	}
 
-  test("should reject titles that produce empty slugs", async () => {
-    const { lastFrame } = render(
-      <Create directory={tempDir} title="🎉 ✨ 🚀" />,
-    );
+	test("should reject titles that produce empty slugs", async () => {
+		const { lastFrame } = render(
+			<Create directory={tempDir} title="🎉 ✨ 🚀" />,
+		);
 
-    await delay(500);
+		await delay(500);
 
-    expect(lastFrame()).toContain(
-      "Title must contain at least one alphanumeric character",
-    );
+		expect(lastFrame()).toContain(
+			"Title must contain at least one alphanumeric character",
+		);
 
-    const emailsDir = path.join(tempDir, "emails");
-    const files = await readdir(emailsDir);
-    expect(files).toHaveLength(0);
-  });
+		const emailsDir = path.join(tempDir, "emails");
+		const files = await readdir(emailsDir);
+		expect(files).toHaveLength(0);
+	});
 });
