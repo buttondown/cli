@@ -7156,7 +7156,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    SubscriberInputValidationErrorCode: "email_already_exists" | "email_blocked" | "email_empty" | "email_invalid" | "invalid_input" | "ip_address_spammy" | "metadata_invalid" | "newsletter_not_accepting_subscribers" | "payment_failed" | "promo_code_invalid" | "rate_limited" | "subscriber_already_exists" | "subscriber_blocked" | "subscriber_id_invalid" | "subscriber_suppressed" | "tag_invalid";
+    SubscriberInputValidationErrorCode: "currency_mismatch" | "email_already_exists" | "email_blocked" | "email_empty" | "email_invalid" | "invalid_input" | "ip_address_spammy" | "metadata_invalid" | "newsletter_not_accepting_subscribers" | "payment_failed" | "promo_code_invalid" | "rate_limited" | "subscriber_already_exists" | "subscriber_blocked" | "subscriber_id_invalid" | "subscriber_suppressed" | "tag_invalid";
     /**
      * APIRequestSource 
      * @description An enumeration. 
