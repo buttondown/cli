@@ -5148,7 +5148,7 @@ export interface components {
        * @description The body of the snippet, substituted wherever the snippet is referenced. Interpreted according to `mode`.
        */
       content: string;
-      /** @description The editor mode for the snippet, which controls how `content` is rendered: `fancy` (Markdown), `plaintext`, or `naked` (raw HTML with no processing). */
+      /** @description The editor mode for the snippet, which controls how `content` is rendered: `fancy` (rich text, stored as HTML), `plaintext` (Markdown), or `naked` (raw HTML with no processing). */
       mode: components["schemas"]["SnippetMode"];
       /**
        * Reference Count 
@@ -5179,7 +5179,7 @@ export interface components {
        */
       content?: string;
       /**
-       * @description The editor mode for the snippet, which controls how `content` is rendered: `fancy` (Markdown), `plaintext`, or `naked` (raw HTML with no processing). 
+       * @description The editor mode for the snippet, which controls how `content` is rendered: `fancy` (rich text, stored as HTML), `plaintext` (Markdown), or `naked` (raw HTML with no processing). 
        * @default fancy 
        * @example fancy
        */
@@ -5206,7 +5206,7 @@ export interface components {
        */
       content?: string | null;
       /**
-       * @description The editor mode for the snippet, which controls how `content` is rendered: `fancy` (Markdown), `plaintext`, or `naked` (raw HTML with no processing). 
+       * @description The editor mode for the snippet, which controls how `content` is rendered: `fancy` (rich text, stored as HTML), `plaintext` (Markdown), or `naked` (raw HTML with no processing). 
        * @example fancy
        */
       mode?: components["schemas"]["SnippetMode"] | null;
