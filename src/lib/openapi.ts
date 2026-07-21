@@ -6294,7 +6294,7 @@ export interface components {
      * @description The action that is triggered when the automation is successfully run. 
      * @enum {string}
      */
-    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_arena_post" | "create_bluesky_post" | "create_linkedin_post" | "create_mastodon_post" | "create_tumblr_post" | "create_twitter_post" | "create_export" | "create_gift_subscriber" | "send_post_request" | "send_confirmation_reminder" | "update_email_type";
+    AutomationActionType: "add_tags" | "remove_tags" | "send_email" | "add_metadata" | "remove_metadata" | "change_email_address" | "gift_premium_subscription" | "ungift_premium_subscription" | "send_discord_invitation" | "send_github_invitation" | "create_subscriber" | "unsubscribe_subscriber" | "shopify_unsubscribe" | "shopify_resubscribe" | "shopify_set_tags" | "shopify_create_customer" | "send_notification" | "forward_reply" | "create_arena_post" | "create_bluesky_post" | "create_linkedin_post" | "create_mastodon_post" | "create_tumblr_post" | "create_twitter_post" | "create_export" | "create_gift_subscriber" | "send_post_request" | "send_confirmation_reminder" | "update_email_type";
     /**
      * AnnouncementBarVisibility 
      * @description An enumeration. 
