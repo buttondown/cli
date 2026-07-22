@@ -451,6 +451,11 @@ export interface paths {
   };
   "/newsletters/{id}": {
     /**
+     * Retrieve Newsletter 
+     * @description Retrieve a specific newsletter by its ID
+     */
+    get: operations["retrieve_newsletter"];
+    /**
      * Delete Newsletter 
      * @description Delete a newsletter
      */
@@ -460,6 +465,20 @@ export interface paths {
      * @description Update a newsletter's settings
      */
     patch: operations["update_newsletter"];
+  };
+  "/newsletters/{id}/sending-domain": {
+    /**
+     * Retrieve Sending Domain 
+     * @description Retrieve the DNS verification status and required records for a newsletter's custom sending domain. While `is_checking` is true, a background re-verification is in flight; poll until it flips to false. Pass `force=true` to trigger a re-check.
+     */
+    get: operations["retrieve_sending_domain"];
+  };
+  "/newsletters/{id}/hosting-domain": {
+    /**
+     * Retrieve Hosting Domain 
+     * @description Retrieve the DNS verification status for a newsletter's custom hosting domain. This synchronously re-verifies the domain's DNS records.
+     */
+    get: operations["retrieve_hosting_domain"];
   };
   "/notes": {
     /**
@@ -3832,6 +3851,12 @@ export interface components {
       status?: "in_progress" | null;
     };
     /**
+     * HostingDomainStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    HostingDomainStatus: "none" | "invalid" | "valid";
+    /**
      * Newsletter 
      * @description You will likely not need to interact with your newsletter settings
      * programmatically, but if you do, this is the endpoint for you. You can
@@ -4061,6 +4086,11 @@ export interface components {
        */
       header?: string;
       /**
+       * @description The DNS verification status of your custom hosting domain. Read-only; see `/newsletters/{id}/hosting-domain` for the underlying records. 
+       * @default none
+       */
+      hosting_domain_status?: components["schemas"]["HostingDomainStatus"];
+      /**
        * Icon 
        * @description URL to your newsletter's icon image, used as a favicon and in various UI contexts.
        */
@@ -4100,6 +4130,11 @@ export interface components {
        * @default
        */
       reply_to_address?: string;
+      /**
+       * @description The DNS verification status of your custom sending domain. Read-only; see `/newsletters/{id}/sending-domain` for the underlying records. 
+       * @default none
+       */
+      sending_domain_status?: components["schemas"]["SendingDomainStatus"];
       /**
        * Sharing Networks 
        * @description A list of social networks to show share buttons for on your archive pages. 
@@ -4173,6 +4208,12 @@ export interface components {
        */
       web_css?: string;
     };
+    /**
+     * SendingDomainStatus 
+     * @description An enumeration. 
+     * @enum {string}
+     */
+    SendingDomainStatus: "none" | "invalid" | "awaiting_ssl" | "failing" | "deliberately_cold" | "valid";
     /** SocialAccountSchema */
     SocialAccountSchema: {
       /** @description The type of social media account. */
@@ -4795,6 +4836,149 @@ export interface components {
        * @example .container { max-width: 800px; }
        */
       web_css?: string | null;
+    };
+    /** ApexAliasProvider */
+    ApexAliasProvider: {
+      /**
+       * Id 
+       * @description Stable identifier for the DNS provider (e.g. `cloudflare`).
+       */
+      id: string;
+      /**
+       * Name 
+       * @description Human-readable name of the DNS provider.
+       */
+      name: string;
+      /**
+       * Apex Alias Support 
+       * @description How the provider supports pointing an apex/root domain at a CNAME target (e.g. CNAME flattening or ALIAS records).
+       */
+      apex_alias_support: string;
+      /**
+       * Wording Kind 
+       * @description Which copy variant to show for this provider's setup instructions.
+       */
+      wording_kind: string;
+      /**
+       * Nameserver Regexes 
+       * @description Patterns matched against a domain's nameservers to detect this provider.
+       */
+      nameserver_regexes: (string)[];
+      /**
+       * Support Doc Url 
+       * @description Link to the provider's own DNS documentation, when available.
+       */
+      support_doc_url: string | null;
+      /**
+       * Side Notes 
+       * @description Provider-specific caveats to surface alongside the setup guidance.
+       */
+      side_notes: string;
+      /**
+       * Buttondown Guide Url 
+       * @description A first-party Buttondown setup guide for this provider, when one exists.
+       */
+      buttondown_guide_url?: string | null;
+    };
+    /** RequirementRecord */
+    RequirementRecord: {
+      /**
+       * Record Type 
+       * @description The DNS record type to create (e.g. `CNAME`, `TXT`, `MX`).
+       */
+      record_type: string;
+      /**
+       * Name 
+       * @description The host/name the DNS record should be created at.
+       */
+      name: string;
+      /**
+       * Is Valid 
+       * @description Whether the record is currently present and correct in DNS.
+       */
+      is_valid: boolean;
+      /**
+       * Required Value 
+       * @description The value the DNS record must point to.
+       */
+      required_value: string;
+      /**
+       * Current Values 
+       * @description The values currently observed at this record, if any.
+       */
+      current_values: (string)[];
+      /**
+       * Context 
+       * @description `manual` if the customer must create this record themselves; `managed` if Buttondown provisions it. 
+       * @enum {string}
+       */
+      context: "managed" | "manual";
+    };
+    /** SendingDomainRecord */
+    SendingDomainRecord: {
+      /**
+       * Id 
+       * @description The ESP-side identifier for the domain, when available.
+       */
+      id: string;
+      /**
+       * Domain 
+       * @description The custom sending domain being verified.
+       */
+      domain: string;
+      status: components["schemas"]["SendingDomainStatus"];
+      /**
+       * Warnings 
+       * @description Human-readable warnings about the domain's DNS setup (e.g. a record left proxied through Cloudflare).
+       */
+      warnings: (Record<string, unknown>)[];
+      /**
+       * Requirements 
+       * @description The DNS records required for the domain, each with its current verification state.
+       */
+      requirements: (components["schemas"]["RequirementRecord"])[];
+      /**
+       * Existing Mail Provider 
+       * @description The third-party mail provider already handling this domain's inbound mail, when detected; its MX record is then omitted from `requirements`.
+       */
+      existing_mail_provider?: string | null;
+      detected_dns_provider?: components["schemas"]["ApexAliasProvider"] | null;
+      /**
+       * Checked Date 
+       * @description When the record was last computed. Null until the first verification completes.
+       */
+      checked_date?: string | null;
+      /**
+       * Is Checking 
+       * @description Whether a background re-verification is currently in flight. Clients poll while this is true. 
+       * @default false
+       */
+      is_checking?: boolean;
+    };
+    /** HostingDomainRecord */
+    HostingDomainRecord: {
+      /**
+       * Domain 
+       * @description The custom hosting domain being verified.
+       */
+      domain: string;
+      /**
+       * Record Type 
+       * @description The DNS record type the domain should use (typically `CNAME`).
+       */
+      record_type: string;
+      /**
+       * Data 
+       * @description The record values currently observed at the domain, if any.
+       */
+      data: (string)[];
+      /**
+       * Nameservers 
+       * @description The domain's nameservers, used to detect its DNS provider.
+       */
+      nameservers?: (string)[];
+      apex_alias_provider?: components["schemas"]["ApexAliasProvider"] | null;
+      status: components["schemas"]["HostingDomainStatus"];
     };
     /** Note */
     Note: {
@@ -11697,6 +11881,61 @@ export interface operations {
     };
   };
   /**
+   * Retrieve Newsletter 
+   * @description Retrieve a specific newsletter by its ID
+   */
+  retrieve_newsletter: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Newsletter"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
    * Delete Newsletter 
    * @description Delete a newsletter
    */
@@ -11801,6 +12040,126 @@ export interface operations {
           "application/json": components["schemas"]["ValidationErrorMessage"];
         };
       };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Retrieve Sending Domain 
+   * @description Retrieve the DNS verification status and required records for a newsletter's custom sending domain. While `is_checking` is true, a background re-verification is in flight; poll until it flips to false. Pass `force=true` to trigger a re-check.
+   */
+  retrieve_sending_domain: {
+    parameters: {
+      query: {
+        /** @description When true, trigger a fresh DNS re-verification instead of serving the last-known record. */
+        force?: boolean;
+      };
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SendingDomainRecord"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Retrieve Hosting Domain 
+   * @description Retrieve the DNS verification status for a newsletter's custom hosting domain. This synchronously re-verifies the domain's DNS records.
+   */
+  retrieve_hosting_domain: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["HostingDomainRecord"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Conflict */
+      409: never;
       /** @description Too Many Requests */
       429: {
         headers: {

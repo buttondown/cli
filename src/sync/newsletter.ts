@@ -42,7 +42,9 @@ export const REMOTE_NEWSLETTER_RESOURCE: Resource<Newsletter, Newsletter> = {
 				body: omit(value, [
 					"api_key",
 					"creation_date",
+					"hosting_domain_status",
 					"id",
+					"sending_domain_status",
 					"sharing_networks",
 					"sort",
 				]),
