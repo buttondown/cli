@@ -6208,7 +6208,7 @@ export interface components {
      * or not analytics can be calculated.) 
      * @enum {string}
      */
-    EmailSource: "api" | "import" | "app" | "external_feed";
+    EmailSource: "api" | "import" | "app" | "external_feed" | "smtp";
     /**
      * Status 
      * @description Represents the state of an email.
