@@ -3852,7 +3852,7 @@ export interface components {
     };
     /**
      * HostingDomainStatus 
-     * @description An enumeration. 
+     * @description The DNS verification status of a newsletter's custom hosting domain. 
      * @enum {string}
      */
     HostingDomainStatus: "none" | "invalid" | "valid";
@@ -4210,7 +4210,7 @@ export interface components {
     };
     /**
      * SendingDomainStatus 
-     * @description An enumeration. 
+     * @description The DNS verification status of a newsletter's custom sending domain. 
      * @enum {string}
      */
     SendingDomainStatus: "none" | "invalid" | "awaiting_ssl" | "failing" | "deliberately_cold" | "valid";
