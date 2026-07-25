@@ -2481,7 +2481,7 @@ export interface components {
       subscriber_import_id?: string | null;
       /**
        * Tags 
-       * @description A list of [tag](https://docs.buttondown.com/api-tags-introduction) names applied to the subscriber. Tags that don't already exist will be created.
+       * @description A list of [tag](https://docs.buttondown.com/api-tags-introduction) names applied to the subscriber. Tags that don't already exist will be created, which requires a plan that includes tags (Basic or higher).
        */
       tags: (string)[];
       /**
@@ -5445,7 +5445,7 @@ export interface components {
       };
       /**
        * Tags 
-       * @description A list of [tag](https://docs.buttondown.com/api-tags-introduction) names applied to the subscriber. Tags that don't already exist will be created. 
+       * @description A list of [tag](https://docs.buttondown.com/api-tags-introduction) names applied to the subscriber. Tags that don't already exist will be created, which requires a plan that includes tags (Basic or higher). 
        * @default []
        */
       tags?: (string)[];
@@ -5573,7 +5573,7 @@ export interface components {
       }) | null;
       /**
        * Tags 
-       * @description A list of [tag](https://docs.buttondown.com/api-tags-introduction) names applied to the subscriber. Tags that don't already exist will be created.
+       * @description A list of [tag](https://docs.buttondown.com/api-tags-introduction) names applied to the subscriber. Tags that don't already exist will be created, which requires a plan that includes tags (Basic or higher).
        */
       tags?: (string)[] | null;
       /**
