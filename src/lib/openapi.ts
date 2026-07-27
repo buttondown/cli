@@ -4192,7 +4192,7 @@ export interface components {
       timezone?: string;
       /**
        * Tint Color 
-       * @description The accent color for your newsletter, used in emails and on your archive page. Must be a valid hex color code. 
+       * @description The accent color for your newsletter's emails, applied to links and buttons. Your archive's accent color is set separately, by its theme. Must be a valid hex color code. 
        * @default #0069FF
        */
       tint_color?: string;
@@ -4486,7 +4486,7 @@ export interface components {
       timezone?: string;
       /**
        * Tint Color 
-       * @description The accent color for your newsletter, used in emails and on your archive page. Must be a valid hex color code. 
+       * @description The accent color for your newsletter's emails, applied to links and buttons. Your archive's accent color is set separately, by its theme. Must be a valid hex color code. 
        * @default #0069FF 
        * @example #0069FF
        */
@@ -4820,7 +4820,7 @@ export interface components {
       timezone?: string | null;
       /**
        * Tint Color 
-       * @description The accent color for your newsletter, used in emails and on your archive page. Must be a valid hex color code. 
+       * @description The accent color for your newsletter's emails, applied to links and buttons. Your archive's accent color is set separately, by its theme. Must be a valid hex color code. 
        * @example #0069FF
        */
       tint_color?: string | null;
