@@ -1451,11 +1451,11 @@ export interface components {
      * {
      *     "field": "subscriber.tags",
      *     "operator": "contains",
-     *     "value": "executive"
+     *     "value": "sub_tag_0j6hb7h40j6hb7h40j6hb7h40j"
      * }
      * ```
      * 
-     * The field is the path to the field on the subscriber to evaluate. The operator is the operator to use when evaluating the filter. The value is the value to compare the field to.
+     * The field is the path to the field on the subscriber to evaluate. The operator is the operator to use when evaluating the filter. The value is the value to compare the field to. Tag filters require the tag's ID (either a UUID or TypeID), not its name.
      */
     Filter: {
       /** Field */
@@ -1473,21 +1473,21 @@ export interface components {
      * 
      * Filters are fractal; they can be nested in groups, and groups can be nested in other groups. This is accomplished through a tree-like structure. Every "FilterGroup" has a "predicate" field, which is either "and" or "or", which determines how the filters and groups within the group are combined, a "groups" field, which is a list of "FilterGroup" objects (that's that recursive bit!), and a "filters" field, which are the leaf-level filters themselves.
      * 
-     * Let's say you want a simple filter: all subscribers who have a tag called "executive". You can do that like this:
+     * Let's say you want a simple filter: all subscribers who have a tag whose ID is `sub_tag_0j6hb7h40j6hb7h40j6hb7h40j`. You can do that like this:
      * 
      * ```json
      * {
-     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}],
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "sub_tag_0j6hb7h40j6hb7h40j6hb7h40j"}],
      *     "groups": [],
      *     "predicate": "and"
      * }
      * ```
      * 
-     * Now, let's say you want to filter for subscribers who have a tag called "executive" and a tag called "general-electric". You can do that like this:
+     * Now, let's say you want to filter for subscribers who have that tag and a tag whose ID is `sub_tag_0j6hb7h40j6hb7h40j6hb7h40k`. You can do that like this:
      * 
      * ```json
      * {
-     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "sub_tag_0j6hb7h40j6hb7h40j6hb7h40j"}, {"field": "subscriber.tags", "operator": "contains", "value": "sub_tag_0j6hb7h40j6hb7h40j6hb7h40k"}],
      *     "groups": [],
      *     "predicate": "and"
      * }
@@ -1497,20 +1497,20 @@ export interface components {
      * 
      * ```json
      * {
-     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "sub_tag_0j6hb7h40j6hb7h40j6hb7h40j"}, {"field": "subscriber.tags", "operator": "contains", "value": "sub_tag_0j6hb7h40j6hb7h40j6hb7h40k"}],
      *     "groups": [],
      *     "predicate": "or"
      * }
      * ```
      * 
-     * Now, let's say you want to filter for subscribers who have a tag called "executive" _or_ a tag called "general-electric" and a tag called "admin". This is where the whole nested thing comes in handy. You can do that like this:
+     * Now, let's say you want to filter for subscribers who have the first tag _or_ both the second tag and a third tag whose ID is `sub_tag_0j6hb7h40j6hb7h40j6hb7h40m`. This is where the whole nested thing comes in handy. You can do that like this:
      * 
      * ```json
      * {
-     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "executive"}],
+     *     "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "sub_tag_0j6hb7h40j6hb7h40j6hb7h40j"}],
      *     "groups": [
      *         {
-     *             "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "admin"}, {"field": "subscriber.tags", "operator": "contains", "value": "general-electric"}],
+     *             "filters": [{"field": "subscriber.tags", "operator": "contains", "value": "sub_tag_0j6hb7h40j6hb7h40j6hb7h40k"}, {"field": "subscriber.tags", "operator": "contains", "value": "sub_tag_0j6hb7h40j6hb7h40j6hb7h40m"}],
      *             "groups": [],
      *             "predicate": "and"
      *         }
