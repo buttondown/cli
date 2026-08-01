@@ -4879,6 +4879,12 @@ export interface components {
        * @description A first-party Buttondown setup guide for this provider, when one exists.
        */
       buttondown_guide_url?: string | null;
+      /**
+       * Supports Nameserver Delegation
+       * @description Whether the provider lets customers delegate a child zone with NS records.
+       * @default true
+       */
+      supports_nameserver_delegation?: boolean;
     };
     /** RequirementRecord */
     RequirementRecord: {
