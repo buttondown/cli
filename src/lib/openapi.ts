@@ -4880,8 +4880,8 @@ export interface components {
        */
       buttondown_guide_url?: string | null;
       /**
-       * Supports Nameserver Delegation
-       * @description Whether the provider lets customers delegate a child zone with NS records.
+       * Supports Nameserver Delegation 
+       * @description Whether the provider lets customers delegate a child zone with NS records. 
        * @default true
        */
       supports_nameserver_delegation?: boolean;
