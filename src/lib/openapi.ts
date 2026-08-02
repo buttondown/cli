@@ -3322,9 +3322,9 @@ export interface components {
       weekday?: ("monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday") | null;
       /**
        * Monthday 
-       * @description Day of the month when emails should be generated. Accepts a weekday name (first such day of the month), `firstday`, or `lastday`. Required when cadence is `monthly`.
+       * @description Day of the month when emails should be generated. Accepts a numeric day (`1`-`31`, clamped to the last day for shorter months), a weekday name (first such day of the month), `firstday`, or `lastday`. Required when cadence is `monthly`.
        */
-      monthday?: ("monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday" | "firstday" | "lastday") | null;
+      monthday?: ("monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday" | "firstday" | "lastday") | string | null;
     };
     /** ExternalFeedInput */
     ExternalFeedInput: {
