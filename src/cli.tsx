@@ -3,11 +3,11 @@ import { render } from "ink";
 import meow from "meow";
 import Create from "./commands/create.js";
 import {
-	runCreateJson,
-	runLoginJson,
-	runLogoutJson,
-	runPullJson,
-	runPushJson,
+  runCreateJson,
+  runLoginJson,
+  runLogoutJson,
+  runPullJson,
+  runPushJson,
 } from "./commands/json-runners.js";
 import Login from "./commands/login.js";
 import Logout from "./commands/logout.js";
@@ -16,7 +16,7 @@ import Push from "./commands/push.js";
 import createConfig from "./config.js";
 
 const COMMAND_HELP: Record<string, string> = {
-	login: `
+  login: `
   Usage
     $ buttondown login [options]
 
@@ -30,7 +30,7 @@ const COMMAND_HELP: Record<string, string> = {
     $ buttondown login --api-key=btn_abc123 --force
     $ buttondown login
 `,
-	logout: `
+  logout: `
   Usage
     $ buttondown logout [options]
 
@@ -40,7 +40,7 @@ const COMMAND_HELP: Record<string, string> = {
   Examples
     $ buttondown logout
 `,
-	pull: `
+  pull: `
   Usage
     $ buttondown pull [options]
 
@@ -55,7 +55,7 @@ const COMMAND_HELP: Record<string, string> = {
     $ buttondown pull --directory=./my-newsletter
     $ buttondown pull --api-key=btn_abc123 --directory=./content
 `,
-	push: `
+  push: `
   Usage
     $ buttondown push [options]
 
@@ -72,7 +72,7 @@ const COMMAND_HELP: Record<string, string> = {
     $ buttondown push --dry-run
     $ buttondown push --api-key=btn_abc123 --dry-run --json
 `,
-	create: `
+  create: `
   Usage
     $ buttondown create [options]
 
@@ -88,7 +88,7 @@ const COMMAND_HELP: Record<string, string> = {
 };
 
 const cli = meow(
-	`
+  `
   Usage
     $ buttondown <command> [options]
 
@@ -119,164 +119,164 @@ const cli = meow(
 
   Run 'buttondown <command> --help' for details on a specific command.
 `,
-	{
-		importMeta: import.meta,
-		// A typo'd flag must fail loudly: silently ignoring e.g. --dryrun would
-		// run a real, mutating push.
-		allowUnknownFlags: false,
-		flags: {
-			apiKey: {
-				type: "string",
-				shortFlag: "k",
-			},
-			baseUrl: {
-				type: "string",
-				shortFlag: "b",
-				default: "https://api.buttondown.com/v1",
-			},
-			directory: {
-				type: "string",
-				shortFlag: "d",
-				default: "./buttondown",
-			},
-			dryRun: {
-				type: "boolean",
-				default: false,
-			},
-			force: {
-				type: "boolean",
-				shortFlag: "f",
-				default: false,
-			},
-			json: {
-				type: "boolean",
-				default: false,
-			},
-			title: {
-				type: "string",
-				shortFlag: "t",
-			},
-			help: {
-				type: "boolean",
-				shortFlag: "h",
-			},
-			version: {
-				type: "boolean",
-			},
-		},
-	},
+  {
+    importMeta: import.meta,
+    // A typo'd flag must fail loudly: silently ignoring e.g. --dryrun would
+    // run a real, mutating push.
+    allowUnknownFlags: false,
+    flags: {
+      apiKey: {
+        type: "string",
+        shortFlag: "k",
+      },
+      baseUrl: {
+        type: "string",
+        shortFlag: "b",
+        default: "https://api.buttondown.com/v1",
+      },
+      directory: {
+        type: "string",
+        shortFlag: "d",
+        default: "./buttondown",
+      },
+      dryRun: {
+        type: "boolean",
+        default: false,
+      },
+      force: {
+        type: "boolean",
+        shortFlag: "f",
+        default: false,
+      },
+      json: {
+        type: "boolean",
+        default: false,
+      },
+      title: {
+        type: "string",
+        shortFlag: "t",
+      },
+      help: {
+        type: "boolean",
+        shortFlag: "h",
+      },
+      version: {
+        type: "boolean",
+      },
+    },
+  },
 );
 
 const [command] = cli.input;
 
 // Per-command --help
 if (cli.flags.help && command && COMMAND_HELP[command]) {
-	console.log(COMMAND_HELP[command]);
-	process.exit(0);
+  console.log(COMMAND_HELP[command]);
+  process.exit(0);
 }
 
 if (!command && !cli.flags.help && !cli.flags.version) {
-	cli.showHelp();
-	process.exit(0);
+  cli.showHelp();
+  process.exit(0);
 }
 
 const resolveApiKey = (commandName: string): string => {
-	const config = createConfig();
-	const apiKey = cli.flags.apiKey ?? config.get("apiKey");
-	if (!apiKey) {
-		console.error(
-			`Error: No API key specified.
+  const config = createConfig();
+  const apiKey = cli.flags.apiKey ?? config.get("apiKey");
+  if (!apiKey) {
+    console.error(
+      `Error: No API key specified.
   buttondown ${commandName} --api-key <your-api-key>
   Or run 'buttondown login --api-key <your-api-key>' first.`,
-		);
-		process.exit(1);
-	}
-	return apiKey;
+    );
+    process.exit(1);
+  }
+  return apiKey;
 };
 
 switch (command) {
-	case "login": {
-		if (cli.flags.json) {
-			await runLoginJson(cli.flags.apiKey, {
-				force: cli.flags.force,
-				baseUrl: cli.flags.baseUrl,
-			});
-			break;
-		}
-		render(
-			<Login
-				apiKey={cli.flags.apiKey}
-				force={cli.flags.force}
-				baseUrl={cli.flags.baseUrl}
-			/>,
-		);
-		break;
-	}
+  case "login": {
+    if (cli.flags.json) {
+      await runLoginJson(cli.flags.apiKey, {
+        force: cli.flags.force,
+        baseUrl: cli.flags.baseUrl,
+      });
+      break;
+    }
+    render(
+      <Login
+        apiKey={cli.flags.apiKey}
+        force={cli.flags.force}
+        baseUrl={cli.flags.baseUrl}
+      />,
+    );
+    break;
+  }
 
-	case "logout": {
-		if (cli.flags.json) {
-			runLogoutJson();
-			break;
-		}
-		render(<Logout />);
-		break;
-	}
+  case "logout": {
+    if (cli.flags.json) {
+      runLogoutJson();
+      break;
+    }
+    render(<Logout />);
+    break;
+  }
 
-	case "pull": {
-		const configuration = {
-			directory: cli.flags.directory,
-			baseUrl: cli.flags.baseUrl,
-			apiKey: resolveApiKey("pull"),
-			username: createConfig().get("username"),
-		};
-		if (cli.flags.json) {
-			await runPullJson(configuration);
-			break;
-		}
-		render(<Pull {...configuration} />);
-		break;
-	}
+  case "pull": {
+    const configuration = {
+      directory: cli.flags.directory,
+      baseUrl: cli.flags.baseUrl,
+      apiKey: resolveApiKey("pull"),
+      username: createConfig().get("username"),
+    };
+    if (cli.flags.json) {
+      await runPullJson(configuration);
+      break;
+    }
+    render(<Pull {...configuration} />);
+    break;
+  }
 
-	case "push": {
-		const configuration = {
-			directory: cli.flags.directory,
-			baseUrl: cli.flags.baseUrl,
-			apiKey: resolveApiKey("push"),
-			username: createConfig().get("username"),
-			dryRun: cli.flags.dryRun,
-		};
-		if (cli.flags.json) {
-			await runPushJson(configuration);
-			break;
-		}
-		render(<Push {...configuration} />);
-		break;
-	}
+  case "push": {
+    const configuration = {
+      directory: cli.flags.directory,
+      baseUrl: cli.flags.baseUrl,
+      apiKey: resolveApiKey("push"),
+      username: createConfig().get("username"),
+      dryRun: cli.flags.dryRun,
+    };
+    if (cli.flags.json) {
+      await runPushJson(configuration);
+      break;
+    }
+    render(<Push {...configuration} />);
+    break;
+  }
 
-	case "create": {
-		if (!cli.flags.title) {
-			console.error(
-				`Error: No title specified.
+  case "create": {
+    if (!cli.flags.title) {
+      console.error(
+        `Error: No title specified.
   buttondown create --title "My New Email"
   buttondown create --title "Launch Announcement" --directory ./my-newsletter`,
-			);
-			process.exit(1);
-		}
+      );
+      process.exit(1);
+    }
 
-		if (cli.flags.json) {
-			await runCreateJson(cli.flags.directory, cli.flags.title);
-			break;
-		}
-		render(<Create directory={cli.flags.directory} title={cli.flags.title} />);
-		break;
-	}
+    if (cli.flags.json) {
+      await runCreateJson(cli.flags.directory, cli.flags.title);
+      break;
+    }
+    render(<Create directory={cli.flags.directory} title={cli.flags.title} />);
+    break;
+  }
 
-	default: {
-		if (command) {
-			console.error(
-				`Unknown command: ${command}\n  Run 'buttondown --help' for available commands.`,
-			);
-			process.exit(1);
-		}
-	}
+  default: {
+    if (command) {
+      console.error(
+        `Unknown command: ${command}\n  Run 'buttondown --help' for available commands.`,
+      );
+      process.exit(1);
+    }
+  }
 }

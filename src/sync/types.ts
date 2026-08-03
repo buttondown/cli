@@ -4,64 +4,64 @@ import { createClient } from "../lib/openapi-core.js";
 import { errorMessage } from "./util.js";
 
 export type Configuration = {
-	baseUrl: string;
-	apiKey: string;
-	username?: string;
-	directory: string;
+  baseUrl: string;
+  apiKey: string;
+  username?: string;
+  directory: string;
 };
 
 export type OperationResult = {
-	updated: number;
-	created: number;
-	deleted: number;
-	failed: number;
-	errors: string[];
+  updated: number;
+  created: number;
+  deleted: number;
+  failed: number;
+  errors: string[];
 };
 
 export const emptyResult = (): OperationResult => ({
-	updated: 0,
-	created: 0,
-	deleted: 0,
-	failed: 0,
-	errors: [],
+  updated: 0,
+  created: 0,
+  deleted: 0,
+  failed: 0,
+  errors: [],
 });
 
 export type SetHooks = {
-	/** Called after a successful create with the server-assigned id. */
-	onCreated?: (item: unknown, id: string) => Promise<void>;
+  /** Called after a successful create with the server-assigned id. */
+  onCreated?: (item: unknown, id: string) => Promise<void>;
 };
 
 export type Resource<Model, SerializedModel> = {
-	get(configuration: Configuration): Promise<Model | null>;
-	set(
-		value: Model,
-		configuration: Configuration,
-		hooks?: SetHooks,
-	): Promise<OperationResult>;
-	serialize: (r: Model) => SerializedModel;
-	deserialize: (s: SerializedModel) => Model;
+  get(configuration: Configuration): Promise<Model | null>;
+  set(
+    value: Model,
+    configuration: Configuration,
+    hooks?: SetHooks,
+  ): Promise<OperationResult>;
+  serialize: (r: Model) => SerializedModel;
+  deserialize: (s: SerializedModel) => Model;
 };
 
 export const constructClient = (configuration: Configuration) => {
-	return createClient<paths>({
-		base: configuration.baseUrl,
-		middlewares: [
-			async (request, next) => {
-				request.headers.set("authorization", `Token ${configuration.apiKey}`);
-				request.headers.set(
-					"user-agent",
-					`buttondown-cli/${PACKAGE_JSON.version}`,
-				);
-				return next(request);
-			},
-		],
-	});
+  return createClient<paths>({
+    base: configuration.baseUrl,
+    middlewares: [
+      async (request, next) => {
+        request.headers.set("authorization", `Token ${configuration.apiKey}`);
+        request.headers.set(
+          "user-agent",
+          `buttondown-cli/${PACKAGE_JSON.version}`,
+        );
+        return next(request);
+      },
+    ],
+  });
 };
 
 export type ResourceGroup<A, B, C> = {
-	remote: Resource<A, B>;
-	local: Resource<B, C>;
-	name: string;
+  remote: Resource<A, B>;
+  local: Resource<B, C>;
+  name: string;
 };
 
 export const PAGE_SIZE = 100;
@@ -72,12 +72,12 @@ export const PAGE_SIZE = 100;
  * client rejects unexpected body fields at compile time.
  */
 export function omit<T extends object, K extends keyof T>(
-	obj: T,
-	keys: readonly K[],
+  obj: T,
+  keys: readonly K[],
 ): Omit<T, K> {
-	return Object.fromEntries(
-		Object.entries(obj).filter(([key]) => !keys.includes(key as K)),
-	) as Omit<T, K>;
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key]) => !keys.includes(key as K)),
+  ) as Omit<T, K>;
 }
 
 /**
@@ -87,15 +87,15 @@ export function omit<T extends object, K extends keyof T>(
  * 422 validation details) when the call did not succeed.
  */
 export function throwIfError<T extends { error?: unknown }>(
-	result: T,
-	context: string,
+  result: T,
+  context: string,
 ): asserts result is T & { error?: undefined } {
-	if (result.error === undefined) return;
-	const detail =
-		typeof result.error === "string"
-			? result.error
-			: JSON.stringify(result.error);
-	throw new Error(`${context}: ${detail}`);
+  if (result.error === undefined) return;
+  const detail =
+    typeof result.error === "string"
+      ? result.error
+      : JSON.stringify(result.error);
+  throw new Error(`${context}: ${detail}`);
 }
 
 /**
@@ -105,28 +105,28 @@ export function throwIfError<T extends { error?: unknown }>(
  * truncated list.
  */
 export async function paginatedList<T>(
-	context: string,
-	fetchPage: (
-		page: number,
-		pageSize: number,
-	) => Promise<{ data?: { results?: T[] }; error?: unknown }>,
+  context: string,
+  fetchPage: (
+    page: number,
+    pageSize: number,
+  ) => Promise<{ data?: { results?: T[] }; error?: unknown }>,
 ): Promise<T[]> {
-	const items: T[] = [];
-	let page = 1;
-	let hasMore = true;
-	while (hasMore) {
-		const response = await fetchPage(page, PAGE_SIZE);
-		throwIfError(response, context);
-		const results = response.data?.results;
-		if (results?.length) {
-			items.push(...results);
-			hasMore = results.length === PAGE_SIZE;
-		} else {
-			hasMore = false;
-		}
-		page++;
-	}
-	return items;
+  const items: T[] = [];
+  let page = 1;
+  let hasMore = true;
+  while (hasMore) {
+    const response = await fetchPage(page, PAGE_SIZE);
+    throwIfError(response, context);
+    const results = response.data?.results;
+    if (results?.length) {
+      items.push(...results);
+      hasMore = results.length === PAGE_SIZE;
+    } else {
+      hasMore = false;
+    }
+    page++;
+  }
+  return items;
 }
 
 /**
@@ -136,33 +136,33 @@ export async function paginatedList<T>(
  * remote resource or validation error can't wedge the whole push.
  */
 export async function bulkSet<T extends { id?: string | undefined }>(
-	items: T[],
-	spec: {
-		update: (item: T & { id: string }) => Promise<void>;
-		/** Returns the server-assigned id of the created resource, if any. */
-		create: (item: T) => Promise<string | undefined>;
-		label?: (item: T) => string;
-	},
-	hooks?: SetHooks,
+  items: T[],
+  spec: {
+    update: (item: T & { id: string }) => Promise<void>;
+    /** Returns the server-assigned id of the created resource, if any. */
+    create: (item: T) => Promise<string | undefined>;
+    label?: (item: T) => string;
+  },
+  hooks?: SetHooks,
 ): Promise<OperationResult> {
-	const result = emptyResult();
-	for (const item of items) {
-		const label = spec.label?.(item) ?? item.id ?? "(new)";
-		try {
-			if (item.id) {
-				await spec.update(item as T & { id: string });
-				result.updated++;
-			} else {
-				const id = await spec.create(item);
-				result.created++;
-				if (id && hooks?.onCreated) {
-					await hooks.onCreated(item, id);
-				}
-			}
-		} catch (error) {
-			result.failed++;
-			result.errors.push(`${label}: ${errorMessage(error)}`);
-		}
-	}
-	return result;
+  const result = emptyResult();
+  for (const item of items) {
+    const label = spec.label?.(item) ?? item.id ?? "(new)";
+    try {
+      if (item.id) {
+        await spec.update(item as T & { id: string });
+        result.updated++;
+      } else {
+        const id = await spec.create(item);
+        result.created++;
+        if (id && hooks?.onCreated) {
+          await hooks.onCreated(item, id);
+        }
+      }
+    } catch (error) {
+      result.failed++;
+      result.errors.push(`${label}: ${errorMessage(error)}`);
+    }
+  }
+  return result;
 }

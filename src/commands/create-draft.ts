@@ -8,38 +8,38 @@ import { composeFrontmatterDocument } from "../sync/frontmatter.js";
  * or newlines can't produce a file the CLI later fails to parse.
  */
 export async function createDraft(
-	directory: string,
-	title: string,
+  directory: string,
+  title: string,
 ): Promise<{ filePath: string; slug: string }> {
-	const emailsDir = path.join(directory, "emails");
-	await fs.ensureDir(emailsDir);
+  const emailsDir = path.join(directory, "emails");
+  await fs.ensureDir(emailsDir);
 
-	const slug = title
-		.toLowerCase()
-		.replaceAll(/[^a-z\d]+/g, "-")
-		.replaceAll(/(^-|-$)/g, "");
+  const slug = title
+    .toLowerCase()
+    .replaceAll(/[^a-z\d]+/g, "-")
+    .replaceAll(/(^-|-$)/g, "");
 
-	if (!slug) {
-		throw new Error("Title must contain at least one alphanumeric character");
-	}
+  if (!slug) {
+    throw new Error("Title must contain at least one alphanumeric character");
+  }
 
-	const filePath = path.join(emailsDir, `${slug}.md`);
+  const filePath = path.join(emailsDir, `${slug}.md`);
 
-	if (await fs.pathExists(filePath)) {
-		throw new Error(`Email with slug "${slug}" already exists at ${filePath}`);
-	}
+  if (await fs.pathExists(filePath)) {
+    throw new Error(`Email with slug "${slug}" already exists at ${filePath}`);
+  }
 
-	const content = composeFrontmatterDocument(
-		{
-			subject: title,
-			status: "draft",
-			slug,
-			editor_mode: "plaintext",
-		},
-		"Write your email content here...\n",
-	);
+  const content = composeFrontmatterDocument(
+    {
+      subject: title,
+      status: "draft",
+      slug,
+      editor_mode: "plaintext",
+    },
+    "Write your email content here...\n",
+  );
 
-	await fs.writeFile(filePath, content);
+  await fs.writeFile(filePath, content);
 
-	return { filePath, slug };
+  return { filePath, slug };
 }

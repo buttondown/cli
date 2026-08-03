@@ -7,8 +7,8 @@ import { describe, expect, it } from "bun:test";
 // - sync/newsletter.test.ts
 
 describe("sync", () => {
-	it("should export resources", async () => {
-		const { RESOURCES } = await import("./sync/index.js");
-		expect(RESOURCES).toHaveLength(5);
-	});
+  it("should export resources", async () => {
+    const { RESOURCES } = await import("./sync/index.js");
+    expect(RESOURCES).toHaveLength(5);
+  });
 });
