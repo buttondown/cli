@@ -2049,10 +2049,14 @@ export interface components {
     };
     /**
      * ArchivalMode 
-     * @description Governs who can view this email in the archive. 
+     * @description Governs who can view this email in the archive.
+     * 
+     * `ARCHIVE_ONLY` is the odd one out: the email is publicly archived but
+     * is not email content at all (e.g. an imported blog post), so it is
+     * excluded from email-rendering contexts like "recent issues" widgets. 
      * @enum {string}
      */
-    ArchivalMode: "disabled" | "enabled" | "enabled_for_paid_subscribers" | "enabled_for_subscribers";
+    ArchivalMode: "archive_only" | "disabled" | "enabled" | "enabled_for_paid_subscribers" | "enabled_for_subscribers";
     /**
      * Callout 
      * @description Surfacing-time flags about an email that the UI uses to render contextual
@@ -2167,7 +2171,7 @@ export interface components {
       archival_mode: components["schemas"]["ArchivalMode"];
       /**
        * @deprecated 
-       * @description The type of email. Defaults to `PUBLIC`. 
+       * @description The type of email. Defaults to `PUBLIC`. Deprecated: this is a legacy single-axis view derived from `archival_mode` (archive visibility) and `filters` (audience); prefer setting those directly. Because it is derived, it does not always round-trip: writing it alongside an explicit `archival_mode` that disagrees will report the value implied by the two underlying fields, and writing a value that already matches the derived one is a no-op. 
        * @default public
        */
       email_type?: components["schemas"]["EmailType"];
@@ -2723,7 +2727,7 @@ export interface components {
       archival_mode?: components["schemas"]["ArchivalMode"];
       /**
        * @deprecated 
-       * @description The type of email. Defaults to `PUBLIC`. 
+       * @description The type of email. Defaults to `PUBLIC`. Deprecated: this is a legacy single-axis view derived from `archival_mode` (archive visibility) and `filters` (audience); prefer setting those directly. Because it is derived, it does not always round-trip: writing it alongside an explicit `archival_mode` that disagrees will report the value implied by the two underlying fields, and writing a value that already matches the derived one is a no-op. 
        * @default public
        */
       email_type?: components["schemas"]["EmailType"];
@@ -2851,7 +2855,7 @@ export interface components {
       archival_mode?: components["schemas"]["ArchivalMode"] | null;
       /**
        * @deprecated 
-       * @description The type of email. Defaults to `PUBLIC`.
+       * @description The type of email. Defaults to `PUBLIC`. Deprecated: this is a legacy single-axis view derived from `archival_mode` (archive visibility) and `filters` (audience); prefer setting those directly. Because it is derived, it does not always round-trip: writing it alongside an explicit `archival_mode` that disagrees will report the value implied by the two underlying fields, and writing a value that already matches the derived one is a no-op.
        */
       email_type?: components["schemas"]["EmailType"] | null;
       /** @description The status of the email (e.g. `draft`, `about_to_send`, `sent`, `scheduled`). */
@@ -6411,8 +6415,10 @@ export interface components {
     EmailStatus: "draft" | "managed_by_rss" | "about_to_send" | "scheduled" | "in_flight" | "paused" | "deleted" | "errored" | "sent" | "imported" | "throttled" | "resending" | "transactional" | "suppressed";
     /**
      * Type 
-     * @description Represents the audience of an email, and to whom it is visible both in the initial
-     * email and in online archives. 
+     * @description The legacy single-axis representation of an email's audience and
+     * archive visibility. No longer stored: `filters` owns the audience
+     * axis and `archival_mode` owns the archive axis, and the deprecated
+     * API field is derived from those (see `email_type` below). 
      * @enum {string}
      */
     EmailType: "public" | "private" | "premium" | "free" | "churned" | "archival";
