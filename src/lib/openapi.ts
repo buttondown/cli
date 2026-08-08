@@ -532,6 +532,35 @@ export interface paths {
      */
     get: operations["list_public_emails"];
   };
+  "/segments": {
+    /**
+     * List Segments 
+     * @description List all segments
+     */
+    get: operations["list_segments"];
+    /**
+     * Create Segment 
+     * @description Create a new segment
+     */
+    post: operations["create_segment"];
+  };
+  "/segments/{id}": {
+    /**
+     * Retrieve Segment 
+     * @description Retrieve a specific segment by its ID
+     */
+    get: operations["retrieve_segment"];
+    /**
+     * Delete Segment 
+     * @description Delete a segment
+     */
+    delete: operations["delete_segment"];
+    /**
+     * Update Segment 
+     * @description Update a segment's properties
+     */
+    patch: operations["update_segment"];
+  };
   "/snippets": {
     /**
      * List Snippets 
@@ -5314,6 +5343,101 @@ export interface components {
       /** Absolute Url */
       absolute_url: string;
     };
+    /**
+     * Segment 
+     * @description A saved, reusable audience — a named set of subscriber filters that can
+     * be applied as the audience of an email.
+     */
+    Segment: {
+      /**
+       * Id 
+       * @description A unique TypeID associated with the object.
+       */
+      id: string;
+      /**
+       * Creation Date 
+       * Format: date-time 
+       * @description The date and time at which the object was first created.
+       */
+      creation_date: string;
+      /**
+       * Name 
+       * @description A human-readable name for the segment.
+       */
+      name: string;
+      /**
+       * Description 
+       * @description An optional free-form description of the segment, shown alongside its name when picking an email's audience.
+       */
+      description: string;
+      /** @description The tag- and metadata-based filter rules defining which subscribers belong to this segment. */
+      filters: components["schemas"]["EmailFilterGroup"];
+    };
+    /** ErrorMessage[SegmentErrorCode] */
+    ErrorMessage_SegmentErrorCode_: {
+      /** @description The error code. */
+      code?: components["schemas"]["SegmentErrorCode"];
+      /**
+       * Detail 
+       * @description A human-readable description of the error.
+       */
+      detail: string;
+      /**
+       * Metadata 
+       * @description Additional context about the error. When present, a `documentation_url` key links to docs explaining how to resolve it. 
+       * @default {}
+       */
+      metadata?: {
+        [key: string]: string | undefined;
+      };
+    };
+    /**
+     * SegmentErrorCode 
+     * @description Error codes returned when creating or updating a segment fails. 
+     * @enum {string}
+     */
+    SegmentErrorCode: "name_already_exists";
+    /**
+     * SegmentInput 
+     * @description Input schema for creating a new segment.
+     */
+    SegmentInput: {
+      /**
+       * Name 
+       * @description A human-readable name for the segment. 
+       * @example Executives
+       */
+      name: string;
+      /**
+       * Description 
+       * @description An optional free-form description of the segment, shown alongside its name when picking an email's audience. 
+       * @default  
+       * @example Leadership at customer accounts
+       */
+      description?: string;
+      /** @description The tag- and metadata-based filter rules defining which subscribers belong to this segment. */
+      filters: components["schemas"]["EmailFilterGroup"];
+    };
+    /**
+     * SegmentUpdateInput 
+     * @description Input schema for updating an existing segment. All fields are optional.
+     */
+    SegmentUpdateInput: {
+      /**
+       * Name 
+       * @description A human-readable name for the segment. 
+       * @example Executives
+       */
+      name?: string | null;
+      /**
+       * Description 
+       * @description An optional free-form description of the segment, shown alongside its name when picking an email's audience. 
+       * @example Leadership at customer accounts
+       */
+      description?: string | null;
+      /** @description The tag- and metadata-based filter rules defining which subscribers belong to this segment. */
+      filters?: components["schemas"]["EmailFilterGroup"] | null;
+    };
     /** Snippet */
     Snippet: {
       /**
@@ -7039,6 +7163,29 @@ export interface components {
        * @description The list of results for this page.
        */
       results: (components["schemas"]["PublicEmail"])[];
+      /**
+       * Next 
+       * @description The URL to the next page of results, if any.
+       */
+      next?: string | null;
+      /**
+       * Previous 
+       * @description The URL to the previous page of results, if any.
+       */
+      previous?: string | null;
+      /**
+       * Count 
+       * @description The total number of results across all pages.
+       */
+      count: number;
+    };
+    /** Page[Segment] */
+    SegmentPage: {
+      /**
+       * Results 
+       * @description The list of results for this page.
+       */
+      results: (components["schemas"]["Segment"])[];
       /**
        * Next 
        * @description The URL to the next page of results, if any.
@@ -12597,6 +12744,291 @@ export interface operations {
       };
       /** @description Not Found */
       404: never;
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * List Segments 
+   * @description List all segments
+   */
+  list_segments: {
+    parameters: {
+      query: {
+        /** @description The page number of the paginated response. */
+        page?: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SegmentPage"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Create Segment 
+   * @description Create a new segment
+   */
+  create_segment: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SegmentInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Segment"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_SegmentErrorCode_"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Retrieve Segment 
+   * @description Retrieve a specific segment by its ID
+   */
+  retrieve_segment: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Segment"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Delete Segment 
+   * @description Delete a segment
+   */
+  delete_segment: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: never;
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          /** @description Seconds to wait before retrying. */
+          "Retry-After"?: number;
+          /** @description Requests permitted per minute. */
+          "X-RateLimit-Limit"?: number;
+          /** @description Requests remaining in the current window. */
+          "X-RateLimit-Remaining"?: number;
+          /** @description Unix timestamp at which the window resets. */
+          "X-RateLimit-Reset"?: number;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+    };
+  };
+  /**
+   * Update Segment 
+   * @description Update a segment's properties
+   */
+  update_segment: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SegmentUpdateInput"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Segment"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage_SegmentErrorCode_"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorMessage"];
+        };
+      };
+      /** @description Unprocessable Entity */
+      422: {
+        content: {
+          "application/json": components["schemas"]["ValidationErrorMessage"];
+        };
+      };
       /** @description Too Many Requests */
       429: {
         headers: {
