@@ -6459,9 +6459,9 @@ export interface components {
      * These event types power lots of things within Buttondown. They're used to trigger automations, webhooks,
      * and analytics.
      * 
-     * (Note that Buttondown also has a different thing we call "events"; those are `EmailEvents` and are used
-     * for tracking aggregate details about an email. Alas, we shouldn't have used the term "event" for two different
-     * things, but it's too late to go back now!)
+     * (Note that the `/v1/events` API speaks an older, shorter vocabulary for subscriber engagement —
+     * `clicked` rather than `subscriber.clicked` — a relic of a previous events system. Each of those
+     * names maps onto one of the `subscriber.*` types below.)
      * 
      * In general, our event namespacing tries to hew to the following pattern:
      * 
