@@ -13583,7 +13583,7 @@ export interface operations {
          * Defaults to "no_op", which will return a 400 error if a subscriber with the same email address already exists. Other values include:
          * 
          * - "overwrite", which will overwrite the existing subscriber's data with the new one. This cannot change terminal subscriber types (unsubscribed, blocked, complained, undeliverable); those requests return a 400.
-         * - "add", which will merge the new subscriber data into the existing one. For unsubscribed subscribers, this also resubscribes them as regular.
+         * - "add", which will merge the new subscriber data into the existing one. For unsubscribed subscribers, this resubscribes them as regular when type is omitted, or as unactivated and sends a new confirmation email when type is "unactivated".
          */
         "X-Buttondown-Collision-Behavior"?: components["schemas"]["CollisionBehavior"];
         /** @description Bypass the firewall for this subscriber creation. Subject to aggressive rate limiting (5 per hour per newsletter). */
