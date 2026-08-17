@@ -10392,6 +10392,8 @@ export interface operations {
         automation_id?: string;
         /** @description If provided, only return events for the given subscriber. */
         subscriber_id?: string;
+        /** @description The number of results per page. */
+        page_size?: number;
         /** @description The page number of the paginated response. */
         page?: number;
       };
