@@ -3556,6 +3556,11 @@ export interface components {
        */
       surveys: (string)[];
       /**
+       * Tags 
+       * @description IDs of tags applied to subscribers who sign up through this form.
+       */
+      tags: (string)[];
+      /**
        * Admin 
        * @description If true, the form acts as an admin-only signup form — it skips confirmation and can accept additional subscriber fields.
        */
@@ -3586,7 +3591,7 @@ export interface components {
      * these values are meant to be parseable by code or client logic. 
      * @enum {string}
      */
-    CreateFormErrorCode: "slug_already_exists";
+    CreateFormErrorCode: "slug_already_exists" | "tag_not_found";
     /** ErrorMessage[CreateFormErrorCode] */
     ErrorMessage_CreateFormErrorCode_: {
       /** @description The error code. */
@@ -3647,6 +3652,12 @@ export interface components {
        */
       surveys?: (string)[];
       /**
+       * Tags 
+       * @description IDs of tags applied to subscribers who sign up through this form. 
+       * @example []
+       */
+      tags?: (string)[];
+      /**
        * Admin 
        * @description If true, the form acts as an admin-only signup form — it skips confirmation and can accept additional subscriber fields. 
        * @default false 
@@ -3692,6 +3703,11 @@ export interface components {
        * @description IDs of surveys to attach to this form. Responses are associated with the submitting subscriber.
        */
       surveys?: (string)[] | null;
+      /**
+       * Tags 
+       * @description IDs of tags applied to subscribers who sign up through this form.
+       */
+      tags?: (string)[] | null;
       /**
        * Admin 
        * @description If true, the form acts as an admin-only signup form — it skips confirmation and can accept additional subscriber fields.
