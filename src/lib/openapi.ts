@@ -7521,7 +7521,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    APIRequestSource: "api" | "app" | "axios" | "carrd" | "cli" | "curl" | "go" | "make" | "netlify" | "node" | "pipedream" | "powershell" | "python" | "ruby" | "wordpress" | "zapier";
+    APIRequestSource: "api" | "app" | "axios" | "carrd" | "claude" | "cli" | "curl" | "cursor" | "gemini" | "go" | "llm" | "make" | "netlify" | "node" | "openai" | "perplexity" | "pipedream" | "powershell" | "python" | "ruby" | "windsurf" | "wordpress" | "zapier";
     /**
      * AutomationAttemptStatus 
      * @description An enumeration. 
