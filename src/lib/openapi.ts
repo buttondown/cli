@@ -11656,6 +11656,8 @@ export interface operations {
   list_imports: {
     parameters: {
       query: {
+        /** @description The ordering to apply to the results. */
+        ordering?: "creation_date" | "-creation_date";
         /** @description The page number of the paginated response. */
         page?: number;
       };
