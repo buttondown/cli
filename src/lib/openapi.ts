@@ -3997,8 +3997,6 @@ export interface components {
        * @default
        */
       custom_expired_trial_notification_subject?: string;
-      /** @description The email template to use for expired trial notification emails. If not set, uses the newsletter's default template. */
-      custom_expired_trial_notification_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
       /**
        * Custom Gift Subscription Email Body 
        * @description Custom body content for the email sent when someone receives a gift subscription. Supports template tags. 
@@ -4102,14 +4100,6 @@ export interface components {
        * @default
        */
       email_domain?: string;
-      /**
-       * Email Theme Configuration 
-       * @description A dictionary of CSS token overrides for the email theme. 
-       * @default {}
-       */
-      email_theme_configuration?: {
-        [key: string]: string | undefined;
-      };
       /**
        * Enabled Features 
        * @description A list of features enabled for your newsletter. Common values include 'archives', 'portal', 'surveys', 'comments', 'paid_subscriptions', 'automations', 'webhooks', 'tracking', and 'referrals'. 
@@ -4385,17 +4375,6 @@ export interface components {
        */
       email_domain?: string;
       /**
-       * Email Theme Configuration 
-       * @description A dictionary of CSS token overrides for the email theme. 
-       * @default {} 
-       * @example {
-       *   "primary-color": "#0069FF"
-       * }
-       */
-      email_theme_configuration?: {
-        [key: string]: string | undefined;
-      };
-      /**
        * Enabled Features 
        * @description A list of features enabled for your newsletter. Common values include 'archives', 'portal', 'surveys', 'comments', 'paid_subscriptions', 'automations', 'webhooks', 'tracking', and 'referrals'. 
        * @default [] 
@@ -4626,11 +4605,6 @@ export interface components {
        */
       custom_expired_trial_notification_subject?: string | null;
       /**
-       * @description The email template to use for expired trial notification emails. If not set, uses the newsletter's default template. 
-       * @example modern
-       */
-      custom_expired_trial_notification_template?: components["schemas"]["NewsletterEmailTemplate"] | null;
-      /**
        * Custom Gift Subscription Email Body 
        * @description Custom body content for the email sent when someone receives a gift subscription. Supports template tags.
        */
@@ -4734,16 +4708,6 @@ export interface components {
        * @example mail.sheinhardt.com
        */
       email_domain?: string | null;
-      /**
-       * Email Theme Configuration 
-       * @description A dictionary of CSS token overrides for the email theme. 
-       * @example {
-       *   "primary-color": "#0069FF"
-       * }
-       */
-      email_theme_configuration?: ({
-        [key: string]: string | undefined;
-      }) | null;
       /**
        * Enabled Features 
        * @description A list of features enabled for your newsletter. Common values include 'archives', 'portal', 'surveys', 'comments', 'paid_subscriptions', 'automations', 'webhooks', 'tracking', and 'referrals'. 
