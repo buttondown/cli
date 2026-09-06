@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 #MISE description="Lint TypeScript files"
-#MISE sources=["cli/src/**/*"]
+#MISE sources=["src/**/*"]
 bun lint:fix
 bunx tsc --noEmit

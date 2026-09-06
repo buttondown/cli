@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 #MISE description="Build the CLI"
-#MISE sources=["cli/src/**/*", "cli/package.json"]
+#MISE sources=["src/**/*", "package.json"]
 bun run build

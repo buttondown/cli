@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 #MISE description="Run tests"
-#MISE sources=["cli/src/**/*"]
+#MISE sources=["src/**/*"]
 FORCE_COLOR=1 bun test src/*
