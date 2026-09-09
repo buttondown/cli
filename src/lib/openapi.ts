@@ -5709,6 +5709,12 @@ export interface components {
        */
       email_which_prompted_unsubscription_id?: string | null;
     };
+    /**
+     * AutomationAttemptError 
+     * @description Error codes for skipped or failed automation attempts. 
+     * @enum {string}
+     */
+    AutomationAttemptError: "action_malformed" | "action_malformed__missing_recipient" | "action_malformed__missing_tag_ids" | "action_malformed__missing_url" | "action_malformed__unsupported_action_type" | "EMAIL_ALREADY_SENT" | "EMAIL_DOES_NOT_EXIST" | "EMAIL_EMPTY" | "EMAIL_INVALID_STATUS" | "event_malformed" | "ID_DOES_NOT_EXIST" | "INVALID_SUBSCRIBER" | "arena.misconfigured" | "bluesky.misconfigured" | "misconfigured__discord" | "misconfigured__github" | "misconfigured__linkedin" | "mastodon.misconfigured" | "misconfigured__shopify" | "tumblr.misconfigured" | "twitter.misconfigured" | "NEWSLETTER_DISABLED" | "not_found" | "rate_limit" | "unauthorized" | "stripe_subscription_does_not_exist" | "SUBSCRIBER_INVALID" | "TAG_ALREADY_EXISTS" | "unexpected_error";
     /** AutomationForSubscriber */
     AutomationForSubscriber: {
       /**
@@ -5741,6 +5747,8 @@ export interface components {
       actions: ({
           [key: string]: unknown | undefined;
         })[];
+      /** @description Code for why the attempt was skipped or failed; null when it succeeded, hasn't run yet, or was skipped by hand. */
+      error?: components["schemas"]["AutomationAttemptError"] | null;
     };
     /** ErrorMessage[UpdateAutomationAttemptErrorCode] */
     ErrorMessage_UpdateAutomationAttemptErrorCode_: {
