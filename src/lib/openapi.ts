@@ -3557,7 +3557,10 @@ export interface components {
       surveys: (string)[];
       /**
        * Tags 
-       * @description IDs of tags applied to subscribers who sign up through this form.
+       * @description UUIDs or TypeIDs of tags applied to subscribers who sign up through this form. 
+       * @example [
+       *   "sub_tag_0k28edc3fw896bp4mrhc535z5k"
+       * ]
        */
       tags: (string)[];
       /**
@@ -3648,13 +3651,17 @@ export interface components {
       /**
        * Surveys 
        * @description IDs of surveys to attach to this form. Responses are associated with the submitting subscriber. 
-       * @example []
+       * @example [
+       *   "srv_01h8abcdefghjkmnpqrstvwxyz"
+       * ]
        */
       surveys?: (string)[];
       /**
        * Tags 
-       * @description IDs of tags applied to subscribers who sign up through this form. 
-       * @example []
+       * @description UUIDs or TypeIDs of tags applied to subscribers who sign up through this form. 
+       * @example [
+       *   "sub_tag_0k28edc3fw896bp4mrhc535z5k"
+       * ]
        */
       tags?: (string)[];
       /**
@@ -3700,12 +3707,18 @@ export interface components {
       success_body?: string | null;
       /**
        * Surveys 
-       * @description IDs of surveys to attach to this form. Responses are associated with the submitting subscriber.
+       * @description IDs of surveys to attach to this form. Responses are associated with the submitting subscriber. 
+       * @example [
+       *   "srv_01h8abcdefghjkmnpqrstvwxyz"
+       * ]
        */
       surveys?: (string)[] | null;
       /**
        * Tags 
-       * @description IDs of tags applied to subscribers who sign up through this form.
+       * @description UUIDs or TypeIDs of tags applied to subscribers who sign up through this form. 
+       * @example [
+       *   "sub_tag_0k28edc3fw896bp4mrhc535z5k"
+       * ]
        */
       tags?: (string)[] | null;
       /**
