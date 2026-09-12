@@ -3853,7 +3853,7 @@ export interface components {
      * @description An enumeration. 
      * @enum {string}
      */
-    ImportStatus: "failed" | "in_progress" | "not_started" | "succeeded" | "validating";
+    ImportStatus: "failed" | "in_progress" | "no_op" | "not_started" | "succeeded" | "validating";
     /**
      * ImportType 
      * @description An enumeration. 
