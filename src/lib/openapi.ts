@@ -9168,27 +9168,17 @@ export interface operations {
   list_comments: {
     parameters: {
       query: {
+        /** @description If provided, only return comments created on or before the given date. */
+        date__end?: string;
+        /** @description If provided, only return comments created on or after the given date. */
+        date__start?: string;
         /**
-         * @description If provided, only return comments for the given [email](https://docs.buttondown.com/api-emails-introduction). 
+         * @description If provided, only return comments for the given [email(s)](https://docs.buttondown.com/api-emails-introduction). 
          * @example [
          *   "em_01h8xg4j3k2m1n0p9q8r7s6t5v"
          * ]
          */
-        email_id?: string;
-        /**
-         * @description If provided, only return comments for the given [subscriber](https://docs.buttondown.com/api-subscribers-introduction). 
-         * @example [
-         *   "sub_01h8xg4j3k2m1n0p9q8r7s6t5v"
-         * ]
-         */
-        subscriber_id?: string;
-        /**
-         * @description If provided, only return comments that are replies to the given parent comment. 
-         * @example [
-         *   "com_01h8xg4j3k2m1n0p9q8r7s6t5v"
-         * ]
-         */
-        parent_id?: string;
+        email_id?: (string)[];
         /** @description If provided, expand the given field. (Only supported fields: 'subscriber', 'email'). */
         expand?: ("subscriber" | "email")[];
         /**
@@ -9196,8 +9186,27 @@ export interface operations {
          * @example -creation_date
          */
         ordering?: "creation_date" | "-creation_date" | "email" | "-email" | "subscriber" | "-subscriber";
-        /** @description If provided, only return comments with the given status. Only the newsletter owner can filter by status; subscribers always see active comments. */
-        status?: components["schemas"]["CommentStatus"];
+        /**
+         * @description If provided, only return comments that are replies to the given parent comment. 
+         * @example [
+         *   "com_01h8xg4j3k2m1n0p9q8r7s6t5v"
+         * ]
+         */
+        parent_id?: string;
+        /**
+         * @description If provided, only return comments with the given status(es); otherwise only active comments are returned. Only the newsletter owner can filter by status; subscribers always see active comments. 
+         * @example [
+         *   "active"
+         * ]
+         */
+        status?: (components["schemas"]["CommentStatus"])[];
+        /**
+         * @description If provided, only return comments for the given [subscriber](https://docs.buttondown.com/api-subscribers-introduction). 
+         * @example [
+         *   "sub_01h8xg4j3k2m1n0p9q8r7s6t5v"
+         * ]
+         */
+        subscriber_id?: string;
         /** @description The page number of the paginated response. */
         page?: number;
       };
